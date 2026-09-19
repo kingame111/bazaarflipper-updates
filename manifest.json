@@ -1,26 +1,28 @@
 {
-  "version": "0.5.6",
-  "publishedAt": "2026-09-19T08:17:00Z",
+  "version": "0.5.7",
+  "publishedAt": "2026-09-19T09:10:00Z",
   "notes": [
-    "Adds a persistent laptop-only Unsynced counter showing pending snapshots and rows.",
-    "The counter refreshes automatically every 3 seconds and is hidden on the desktop.",
-    "No database, pairing, configuration or collected history is modified by this update."
+    "Laptop collector RAM guard lowered from 1536 MB free to 256 MB free so snapshots are not skipped unnecessarily.",
+    "Laptop SQLite temporary work now uses disk-backed temp storage to reduce RAM pressure.",
+    "Desktop keeps the existing RAM protection. Sync counter fixes from v0.5.5 are included."
   ],
   "files": [
     {
-      "path": "public/index.html",
-      "url": "./releases/0.5.6/public/index.html",
-      "sha256": "372663f73ce64368d9762287f4acc8cf73a2b8b076929b49c97267319e0edc9f"
-    },
-    {
-      "path": "public/pending-sync.js",
-      "url": "./releases/0.5.6/public/pending-sync.js",
-      "sha256": "723f5962d2e9c3e0f173d0413b287fa6a3049e511dbb8807cfe9be0d1a85dafe"
+      "path": "server.mjs",
+      "sha256": "71f683390bbb8c27d16554c463dc2a15b89f4ff58cba5f35990a7622a0f76dd8"
     },
     {
       "path": "package.json",
-      "url": "./releases/0.5.6/package.json",
-      "sha256": "1124ada56b7391e4da0ae38d6031e587cd4a0312492d71e00d3f45602dd505c1"
+      "sha256": "e9657e6ac934e944317c3803ba2581a8751f170968adbbb723ca20ffbc888e55"
     }
-  ]
+  ],
+  "bundle": {
+    "parts": [
+      "./releases/0.5.7/part-001.txt",
+      "./releases/0.5.7/part-002.txt",
+      "./releases/0.5.7/part-003.txt"
+    ],
+    "encoding": "gzip-base64",
+    "sha256": "2699d24dec9e450f4e1c53b9209f0d485d6c61a58bdf27c578ea71df4d07f7ec"
+  }
 }
