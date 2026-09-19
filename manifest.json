@@ -1,21 +1,26 @@
 {
-  "version": "0.5.5",
-  "publishedAt": "2026-09-19T07:45:00Z",
+  "version": "0.5.6",
+  "publishedAt": "2026-09-19T08:17:00Z",
   "notes": [
-    "Fixes Sync now so sent, acknowledged and deleted counters describe only the current sync instead of repeating cumulative totals.",
-    "If a sync request arrives while another sync is already running, the current-run counters now correctly return zero.",
-    "This hotfix uses the updater's automatic v0.5.4 backup to apply the two sync-counter corrections without touching the local database, config or handoff pairing."
+    "Adds a persistent laptop-only Unsynced counter showing pending snapshots and rows.",
+    "The counter refreshes automatically every 3 seconds and is hidden on the desktop.",
+    "No database, pairing, configuration or collected history is modified by this update."
   ],
   "files": [
     {
-      "path": "server.mjs",
-      "url": "./releases/0.5.5/server.mjs",
-      "sha256": "65209181920a36b1accc30f2482194cf2627038dc179ecaba24c5161975d4714"
+      "path": "public/index.html",
+      "url": "./releases/0.5.6/public/index.html",
+      "sha256": "372663f73ce64368d9762287f4acc8cf73a2b8b076929b49c97267319e0edc9f"
+    },
+    {
+      "path": "public/pending-sync.js",
+      "url": "./releases/0.5.6/public/pending-sync.js",
+      "sha256": "723f5962d2e9c3e0f173d0413b287fa6a3049e511dbb8807cfe9be0d1a85dafe"
     },
     {
       "path": "package.json",
-      "url": "./releases/0.5.5/package.json",
-      "sha256": "ee7200434c9fc440d91b648273e972a62f71c3b648ae44384e9f061c4b31883e"
+      "url": "./releases/0.5.6/package.json",
+      "sha256": "1124ada56b7391e4da0ae38d6031e587cd4a0312492d71e00d3f45602dd505c1"
     }
   ]
 }
