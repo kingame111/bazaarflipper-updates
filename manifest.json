@@ -1,0 +1,8 @@
+{
+  "version": "0.5.1",
+  "publishedAt": "2026-09-19T02:56:23.677Z",
+  "notes": [
+    "GitHub-based self-update channel enabled. No Vercel dependency."
+  ],
+  "files": []
+}
