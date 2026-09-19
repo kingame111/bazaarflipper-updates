@@ -1,28 +1,34 @@
 {
-  "version": "0.5.7",
-  "publishedAt": "2026-09-19T09:10:00Z",
+  "version": "0.5.8",
+  "publishedAt": "2026-09-20T00:34:00+03:00",
   "notes": [
-    "Laptop collector RAM guard lowered from 1536 MB free to 256 MB free so snapshots are not skipped unnecessarily.",
-    "Laptop SQLite temporary work now uses disk-backed temp storage to reduce RAM pressure.",
-    "Desktop keeps the existing RAM protection. Sync counter fixes from v0.5.5 are included."
+    "Desktop no longer crashes when the laptop peer is offline, unreachable, or times out during automatic sync.",
+    "Automatic sync failures are recorded as sync errors while the desktop server and website continue running.",
+    "Windows updater restart now launches BazaarFlipper through start-bazaarflip.bat in a visible console, so closing that console also stops the local website.",
+    "Includes the v0.5.7 laptop 256 MB RAM guard and disk-backed SQLite temp storage."
   ],
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "71f683390bbb8c27d16554c463dc2a15b89f4ff58cba5f35990a7622a0f76dd8"
+      "sha256": "0cb9b739ec4b4f3a432e4f4e82630197b71d575bcf6825fa7580e72ad6cad4cb"
     },
     {
       "path": "package.json",
-      "sha256": "e9657e6ac934e944317c3803ba2581a8751f170968adbbb723ca20ffbc888e55"
+      "sha256": "3b97c7d7db3273d9f117d561d59b343649983e2ae9f3972d63ecd37c750ec0ca"
+    },
+    {
+      "path": "src/apply-update.mjs",
+      "sha256": "b11c0fa4972ec674aaaef3f8142a68e1e4b2b330fa1fe8f45fcafd7f4ee45117"
     }
   ],
   "bundle": {
     "parts": [
-      "./releases/0.5.7/part-001.txt",
-      "./releases/0.5.7/part-002.txt",
-      "./releases/0.5.7/part-003.txt"
+      "./releases/0.5.8/part-001.txt",
+      "./releases/0.5.8/part-002.txt",
+      "./releases/0.5.8/part-003.txt",
+      "./releases/0.5.8/part-004.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "2699d24dec9e450f4e1c53b9209f0d485d6c61a58bdf27c578ea71df4d07f7ec"
+    "sha256": "d89df43ab2e09c967960bacb5f014fd38fab165e0016d172522a1615b494abf2"
   }
 }
