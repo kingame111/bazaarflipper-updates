@@ -1,36 +1,31 @@
 {
-  "version": "0.5.3",
-  "publishedAt": "2026-09-19T06:10:13.094Z",
+  "version": "0.5.4",
+  "publishedAt": "2026-09-19T07:12:00Z",
   "notes": [
-    "Adds a Check for updates button for immediate GitHub update checks.",
-    "Includes the v0.5.2 Dual Collector improvements for direct upgrades from v0.5.1."
+    "Laptop is collector-only: pending snapshots are sent to the desktop, acknowledged, then deleted locally.",
+    "Laptop never downloads desktop history. If disk space becomes critically low, the oldest unsynced snapshots are dropped first so newer data can continue collecting.",
+    "Sync now forces an immediate laptop-to-desktop catch-up."
   ],
   "files": [
-    {"path":"config.example.json","sha256":"ff10b64a55491d42d42dcaa8facc04a789986c03056287613d462b0f91ca5f2f"},
-    {"path":"GITHUB-UPDATES.md","sha256":"3a0fc72f80bba238aecc885fe14b70a7d41180e981ed461962bfde63200f6926"},
-    {"path":"README.md","sha256":"c9770297444a643276a543214a57067eaef1199f01b71cddff40f631daf2f4c6"},
-    {"path":"package.json","sha256":"f00e58998d62a9d0f9240628d319f3213b01aa11630ced749ef021d669f85d45"},
-    {"path":"server.mjs","sha256":"31149050b9b83eeb95174cb370905437a3bf570971fcb1a9170972a2930f6379"},
-    {"path":"switch-collector.bat","sha256":"96c946d9a50585397b98c0e9c0298650d5b50c6e4a5511e72a34c7004844b268"},
-    {"path":"tests/db.test.mjs","sha256":"abf1d3d3f31ce56e77b44b2f2205392b27e596c3278f38d18cc81445e1e45ad7"},
-    {"path":"public/app.js","sha256":"0df8568fb1ad56308564de585f41bedb866473140e525833b85b13f44cc3de9f"},
-    {"path":"public/index.html","sha256":"629bf286a7f6b870a1e00207ab12dc094bcdf604589d3a41582eac8d0de507eb"},
-    {"path":"src/state.mjs","sha256":"0e4ba6789f64501f7ce36473d77027c300b74e551d67858b2bba1b702e75d94f"},
-    {"path":"src/db.mjs","sha256":"218a946857fd079fe9f46c1880944a5a492befdf3b9219f1060d29a1ea73f20b"}
+    {"path":"server.mjs","sha256":"c377bb8901984f3a49b39a964fc6db71fb736821df116ae0050d8685e4c37a53"},
+    {"path":"package.json","sha256":"7f6305ff9f68646e656a9a39aee012a85d08b752ae58c52772d40dc3b9751a0b"},
+    {"path":"config.example.json","sha256":"f0b5660ee962649cf529a35b75f0c9c4dd39afc92a27c1d542e446e0d4e72b78"},
+    {"path":"public/app.js","sha256":"da0eb86032f87ca6fa1a888a760d31d76697e67a50839b39ddff2a563e1ac28e"},
+    {"path":"public/index.html","sha256":"40703104cda84ec9c4756d608b43a0951017c2c9c1986c90145a7e856aa44856"},
+    {"path":"src/db.mjs","sha256":"0984b65cc81f846fa2784d56f9049230ba6a1b5b02dae085212582ca251c9a5f"}
   ],
   "bundle": {
     "parts": [
-      "./releases/0.5.3/minimal-001.txt",
-      "./releases/0.5.3/minimal-002.txt",
-      "./releases/0.5.3/minimal-003.txt",
-      "./releases/0.5.3/minimal-004.txt",
-      "./releases/0.5.3/minimal-005.txt",
-      "./releases/0.5.3/minimal-006.txt",
-      "./releases/0.5.3/minimal-007.txt",
-      "./releases/0.5.3/minimal-008.txt",
-      "./releases/0.5.3/minimal-009.txt"
+      "./releases/0.5.4/final-001.txt",
+      "./releases/0.5.4/final-002.txt",
+      "./releases/0.5.4/final-003.txt",
+      "./releases/0.5.4/final-004a.txt",
+      "./releases/0.5.4/final-004b.txt",
+      "./releases/0.5.4/final-005.txt",
+      "./releases/0.5.4/final-006.txt",
+      "./releases/0.5.4/final-007.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "18ccfa643b6d6fdc64df7b38244778d58d88bd44ea37f92a5be4e14661bad164"
+    "sha256": "0ede1c581cab3d323b8953f5c62d6383f1e3decaeac1421fb646e5c0ee17d316"
   }
 }
