@@ -1,8 +1,28 @@
 {
-  "version": "0.5.1",
-  "publishedAt": "2026-09-19T02:56:23.677Z",
+  "version": "0.5.2",
+  "publishedAt": "2026-09-19T05:48:00Z",
   "notes": [
-    "GitHub-based self-update channel enabled. No Vercel dependency."
+    "Dual Collector: desktop and laptop collect simultaneously and merge history peer-to-peer.",
+    "Duplicate Hypixel snapshots are deduplicated automatically.",
+    "Sync now forces an immediate catch-up."
   ],
-  "files": []
+  "files": [
+    {"path":"server.mjs","sha256":"31149050b9b83eeb95174cb370905437a3bf570971fcb1a9170972a2930f6379"},
+    {"path":"package.json","sha256":"f9bdf0d8c7af0f66a7953ecd5634cc7765fee1b8dab2468f126579f30588a92b"},
+    {"path":"config.example.json","sha256":"ff10b64a55491d42d42dcaa8facc04a789986c03056287613d462b0f91ca5f2f"},
+    {"path":"public/app.js","sha256":"4cd18b4f0c555b94121d50251596074802cec9cffddd06cb86f27ea3ff44b867"},
+    {"path":"public/index.html","sha256":"9bf874b402f3be83895160f5af83e2be7764df3f24e6195aaf799dd2dd1211c3"},
+    {"path":"src/db.mjs","sha256":"218a946857fd079fe9f46c1880944a5a492befdf3b9219f1060d29a1ea73f20b"},
+    {"path":"src/state.mjs","sha256":"0e4ba6789f64501f7ce36473d77027c300b74e551d67858b2bba1b702e75d94f"},
+    {"path":"switch-collector.bat","sha256":"96c946d9a50585397b98c0e9c0298650d5b50c6e4a5511e72a34c7004844b268"}
+  ],
+  "bundle": {
+    "parts": [
+      "./releases/0.5.2/bundle.chunk-001.txt",
+      "./releases/0.5.2/bundle.chunk-002.txt",
+      "./releases/0.5.2/bundle.chunk-003.txt"
+    ],
+    "encoding": "gzip-base64",
+    "sha256": "c67e9106a80cb490fdb97922d4f2e7076747f217d6e449d95fd6d9fd6225bf08"
+  }
 }
