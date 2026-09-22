@@ -73,6 +73,7 @@ function render(data){
       <td><span class="name">${r.name}</span><span class="family">${r.family}</span></td>
       <td>T${r.tier}</td>
       <td class="${r.netDay>=0?'profit':'loss'}">${fmtCoins(r.netDay)}</td>
+      <td class="${Number(r.currentVs7dPercent)>=0?'profit':'loss'}">${Number.isFinite(r.currentVs7dPercent)?fmtPct(r.currentVs7dPercent):'N/A'}</td>
       <td>${fmtCoins(r.grossDay)}</td><td>${fmtCoins(r.expensesDay)}</td>
       <td class="${setup==='N/A'?'na':''}">${setup}</td><td class="${pay==='N/A'?'na':''}">${pay}</td>
       <td class="${roi==='N/A'?'na':''}">${roi}</td>
@@ -92,6 +93,9 @@ function showDetail(r){
       <div><span>Net / day</span><strong class="${r.netDay>=0?'profit':'loss'}">${fmtCoins(r.netDay)}</strong></div>
       <div><span>Setup total</span><strong>${r.setupComplete?fmtCoins(r.setupCost):'N/A'}</strong></div>
       <div><span>Payback</span><strong>${fmtDays(r.paybackDays)}</strong></div>
+      <div><span>LIVE net / day</span><strong>${fmtCoins(r.liveNetDay)}</strong></div>
+      <div><span>7d expected net / day</span><strong>${fmtCoins(r.expected7dNetDay)}</strong></div>
+      <div><span>LIVE vs 7d</span><strong>${Number.isFinite(r.currentVs7dPercent)?fmtPct(r.currentVs7dPercent):'—'}</strong></div>
       <div><span>7d price coverage</span><strong>${fmtPct((r.historicalCoverage||0)*100)}</strong></div>
       <div><span>Price CV</span><strong>${fmtPct((r.stabilityCv||0)*100)}</strong></div>
     </div>
