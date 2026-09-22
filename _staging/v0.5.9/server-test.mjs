@@ -99,4 +99,32 @@ assert(source.includes('db.close()'));
 assert(source.includes('releaseInstanceLock()'));
 assert(source.includes('BazaarFlipper stopped safely'));
 
+
+const classifyStart=source.indexOf('function classifyRuntimeError(error)');
+const classifyEnd=source.indexOf('function currentBazaarHealth',classifyStart);
+assert(classifyStart>=0 && classifyEnd>classifyStart,'classifyRuntimeError not found');
+const classifyFn=Function(`${source.slice(classifyStart,classifyEnd)}; return classifyRuntimeError;`)();
+assert.equal(classifyFn(Object.assign(new Error('This operation was aborted'),{name:'AbortError'})),'ABORT');
+assert.equal(classifyFn(new Error('Peer request timed out after 20000 ms')),'TIMEOUT');
+assert.equal(classifyFn(new Error('connect ECONNREFUSED 127.0.0.1')),'CONNECTION_REFUSED');
+assert.equal(classifyFn(new Error('getaddrinfo ENOTFOUND laptop')),'DNS');
+assert.equal(classifyFn(new Error('HTTP 403')),'AUTH');
+assert.equal(classifyFn(new Error('HTTP 500')),'HTTP');
+
+assert(source.includes("mode='STARTING'") || source.includes("?'STARTING':"));
+assert(source.includes("'LAST_GOOD_SNAPSHOT'"));
+assert(source.includes("'LIVE'"));
+assert(source.includes('[bazaar] RECOVERED'));
+assert(source.includes('consecutiveFailures'));
+assert(source.includes('snapshotAgeMs'));
+assert(source.includes('marketSnapshotAgeMs'));
+assert(source.includes('[sync] LAPTOP->DESKTOP success'));
+assert(source.includes('[sync] LAPTOP->DESKTOP failed'));
+assert(source.includes('[sync] DESKTOP->LAPTOP trigger failed'));
+assert(source.includes('this does NOT mean laptop push data was lost'));
+assert(source.includes('[sync] DESKTOP import accepted'));
+assert(source.includes('[startup] poll='));
+assert(source.includes('[shutdown] database checkpoint complete'));
+assert(source.includes('[shutdown] servers stopped; BazaarFlipper stopped safely'));
+
 console.log('v0.5.9 server behavior tests: PASS');
