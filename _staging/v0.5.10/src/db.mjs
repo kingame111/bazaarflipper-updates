@@ -2,7 +2,7 @@ import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 import path from 'node:path';
 
-export function openDatabase(filePath) {
+export function openDatabase(filePath, options = {}) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   const db = new DatabaseSync(filePath);
   db.exec('PRAGMA journal_mode = WAL;');
@@ -55,6 +55,11 @@ export function openDatabase(filePath) {
   `);
 
 
+  if (!options.deferExtendedHistory) ensureExtendedHistorySchema(db);
+  return db;
+}
+
+export function ensureExtendedHistorySchema(db) {
   const existingHistoryColumns = new Set(db.prepare('PRAGMA table_info(history)').all().map((row) => String(row.name)));
   const historyColumns = [
     ['weighted_buy_price', 'REAL NOT NULL DEFAULT 0'], ['weighted_sell_price', 'REAL NOT NULL DEFAULT 0'],
@@ -63,7 +68,7 @@ export function openDatabase(filePath) {
     ['buy_depth_5pct', 'REAL NOT NULL DEFAULT 0'], ['sell_depth_5pct', 'REAL NOT NULL DEFAULT 0']
   ];
   for (const [name, definition] of historyColumns) if (!existingHistoryColumns.has(name)) db.exec(`ALTER TABLE history ADD COLUMN ${name} ${definition};`);
-
+  
   db.exec(`
     CREATE TABLE IF NOT EXISTS history_snapshot_meta (
       bucket_ts INTEGER NOT NULL, origin_id TEXT NOT NULL, source_ts INTEGER NOT NULL,
@@ -104,8 +109,8 @@ export function openDatabase(filePath) {
     INSERT OR IGNORE INTO history_snapshot_meta (bucket_ts, origin_id, source_ts, collected_at, ingested_at, product_count, effective_tax_rate, schema_version)
       SELECT ts, origin_id, ts, received_at, received_at, 0, 0, 1 FROM history_snapshots;
   `);
-  return db;
-}
+  
+
 
 export function insertHistorySnapshot(db,timestamp,rows,originId='LOCAL',meta={}){
  const insert=db.prepare(`INSERT OR IGNORE INTO history (ts,product_id,best_buy_order,best_sell_offer,sell_moving_week,buy_moving_week,sell_volume,buy_volume,sell_orders,buy_orders,weighted_buy_price,weighted_sell_price,best_buy_amount,best_sell_amount,buy_depth_1pct,sell_depth_1pct,buy_depth_5pct,sell_depth_5pct) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
