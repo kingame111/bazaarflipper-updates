@@ -16,6 +16,8 @@ jobs:
           node --check _staging/v0.5.9/server.mjs
           node --check _staging/v0.5.9/src/db.mjs
           node --check _staging/v0.5.9/test.mjs
+          node --check _staging/v0.5.9/server-test.mjs
+          node --check _staging/v0.5.9/bundle-test.mjs
       - name: Database migration/sync/rollup tests
         working-directory: _staging/v0.5.9
         run: |
@@ -28,3 +30,6 @@ jobs:
           grep -q "history_daily" _staging/v0.5.9/src/db.mjs
           grep -q "server-instance.lock" _staging/v0.5.9/server.mjs
           grep -q "BazaarFlipper stopped safely" _staging/v0.5.9/server.mjs
+      - name: Bundle integrity test
+        working-directory: _staging/v0.5.9
+        run: node bundle-test.mjs
