@@ -1,0 +1,34 @@
+name: BazaarFlipper v0.6.1 history worker tests
+on:
+  push:
+    branches: [v0.6.1-history-worker]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check _staging/v0.6.1/server.mjs
+          node --check _staging/v0.6.1/src/db.mjs
+          node --check _staging/v0.6.1/src/history-stats-worker.mjs
+          node --check _staging/v0.6.1/src/minions.mjs
+          node --check _staging/v0.6.1/src/minion-data.mjs
+          node --check _staging/v0.6.1/public/minions.js
+          node --check _staging/v0.6.1/minions.test.mjs
+          node --check _staging/v0.6.1/history-worker.test.mjs
+      - name: Minion regressions
+        working-directory: _staging/v0.6.1
+        run: node --test minions.test.mjs
+      - name: History worker regressions
+        working-directory: _staging/v0.6.1
+        run: node --test history-worker.test.mjs
+      - name: Server and UI integration
+        working-directory: _staging/v0.6.1
+        run: |
+          node -e "const fs=require('fs');const s=fs.readFileSync('server.mjs','utf8');if(s.includes('loadHistoryStats(')||!s.includes('historyStatsLoading'))process.exit(1)"
+          node -e "const fs=require('fs');const h=fs.readFileSync('public/index.html','utf8');if(!h.includes('/minions.html')||!h.includes('v0.6.1'))process.exit(1)"
