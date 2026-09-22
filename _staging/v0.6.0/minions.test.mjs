@@ -184,3 +184,30 @@ test('two Minion Expanders produce 10.25 percent stacked collection bonus',()=>{
   const r=calculateMinionRankings({...opts({upgrade1:'MINION_EXPANDER',upgrade2:'MINION_EXPANDER'}),search:'Snow Minion'},ctx()).rows[0];
   assert(Math.abs(r.speedBonusPercent-10.25)<1e-9);
 });
+
+
+test('optimizer respects both exact setup budget and slot cap',()=>{
+  const minion=MINION_DATA.definitions['Carrot Minion'];
+  const recipe=minion.tiers[11].recipe;
+  const market={};
+  for(const entry of recipe){
+    if(String(entry.item).toUpperCase()!=='COINS') market[entry.item]=book(9,10);
+  }
+  const base=calculateMinionRankings({...opts({tier:11}),search:'Carrot Minion',optimizerSlots:3},ctx(market)).rows[0];
+  assert(base.setupComplete);
+  const budget=base.setupPerMinion*2+Math.max(0.01,base.setupPerMinion*0.001);
+  const result=calculateMinionRankings({...opts({tier:11}),search:'Carrot Minion',optimizerSlots:3,optimizerBudget:budget},ctx(market));
+  assert.equal(result.optimizer.recommendations.length,1);
+  const pick=result.optimizer.recommendations[0];
+  assert.equal(pick.quantity,2);
+  assert(pick.investment<=budget);
+  assert(Math.abs(pick.totalNetDay-base.netPerMinionDay*2)<1e-6);
+});
+
+test('optimizer with zero budget uses selected slot count without inventing a budget cap',()=>{
+  const result=calculateMinionRankings({...opts(),search:'Snow Minion',optimizerSlots:17,optimizerBudget:0},ctx());
+  const pick=result.optimizer.recommendations[0];
+  assert(pick);
+  assert.equal(pick.quantity,17);
+  assert.equal(result.optimizer.budget,0);
+});
