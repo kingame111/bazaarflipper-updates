@@ -1,12 +1,13 @@
 {
-  "version": "0.6.1",
-  "publishedAt": "2026-09-22T09:05:00+03:00",
+  "version": "0.6.2",
+  "publishedAt": "2026-09-22T09:30:00+03:00",
   "notes": [
-    "Fixes the v0.6.0 UI freeze caused by synchronous 7-day history aggregation on the main Node thread.",
-    "Moves all 7-day history-stat calculations to a dedicated Worker so Bazaar LIVE, the UI and API remain responsive while historical calculations run.",
-    "Removes synchronous history aggregation after snapshots, laptop sync imports and full database imports; background refresh is throttled to every 30 minutes unless a forced refresh is required.",
-    "Exposes background-history loading/error state through status APIs.",
-    "Includes the full Minion Calculator feature set from v0.6.0 and the safer v0.5.10 updater."
+    "Updates the Minion Calculator catalog from 59 to 61 current minion families by adding Lily Pad Minion and Sunflower Minion.",
+    "Lily Pad Minion includes all 12 current action speeds, recursive Enchanted/Condensed Lily Pad compaction, and exact setup recipes through T11; T12 setup cost remains unavailable instead of being guessed.",
+    "Sunflower Minion includes all 12 action speeds, Sunflower/Moonflower recursive compaction, and a normal-operation 50/50 long-run day/night production model; Dayswitch/Nightswitch remain explicitly unmodeled.",
+    "Removes the low-information Confidence sort and badges from the Minion Calculator UI; 7-day coverage and price CV remain available in the detail view.",
+    "Clarifies that setup cost is one-time and never deducted from daily net profit; only recurring consumable fuel is counted as a daily expense.",
+    "Carries the v0.6.1 background history-worker freeze fix and safer updater."
   ],
   "files": [
     {
@@ -15,7 +16,7 @@
     },
     {
       "path": "package.json",
-      "sha256": "1852a93a429d24ea48f8bd5d7c0a629d85afc535074c0f3c6a05ff0c3e7769a0"
+      "sha256": "51c3804b256efa7cb3abb618ca1f4d87465ec981ee67debd2bfc8c328213f772"
     },
     {
       "path": "config.example.json",
@@ -35,23 +36,23 @@
     },
     {
       "path": "src/minions.mjs",
-      "sha256": "d548133af45f64bacda04ad5a5abadb3df9628665facf76842bf2e9060fd8ac0"
+      "sha256": "35ce055ee9c18e4d87f612b5cc40573790c0372da356528569ab07fc09e47e2f"
     },
     {
       "path": "src/minion-data.mjs",
-      "sha256": "28a2e4afffe0e7efa360fa63484724e327f626e68839f82d2e9343d2534f272b"
+      "sha256": "425e4a8b358dac798a07a1dff5a90d46bc19d50717e2174d0d2502af5b57699c"
     },
     {
       "path": "public/index.html",
-      "sha256": "7e67f3a0d9e90c869cd0382ae74a57542b400144af0be5aa46ee6eb32f8f8166"
+      "sha256": "ad225b8a59fcc21fd0aaee660885940733625d4507a309e9664a7f86c3717187"
     },
     {
       "path": "public/minions.html",
-      "sha256": "b3a425ed78288b1cb8fb59d8f57f354132be2b7bb0fcd53ada1e1894eddfe4c5"
+      "sha256": "efca899fbca58bfa673515f9d04f6229f82f7ff2af3a47f3c42d4e96c1725201"
     },
     {
       "path": "public/minions.js",
-      "sha256": "1b41afa0e808da129673ef666a2bf822f76f3ac3479906db219906d4673bc40c"
+      "sha256": "32af87d2dbda7ff03347a0fe867bb2cbf32951d474b18cb5b5de44c42c8dc429"
     },
     {
       "path": "public/minions.css",
@@ -60,21 +61,22 @@
   ],
   "bundle": {
     "parts": [
-      "./releases/0.6.1/part-001.txt",
-      "./releases/0.6.1/part-002.txt",
-      "./releases/0.6.1/part-003.txt",
-      "./releases/0.6.1/part-004.txt",
-      "./releases/0.6.1/part-005.txt",
-      "./releases/0.6.1/part-006.txt",
-      "./releases/0.6.1/part-007.txt",
-      "./releases/0.6.1/part-008.txt",
-      "./releases/0.6.1/part-009.txt",
-      "./releases/0.6.1/part-010.txt",
-      "./releases/0.6.1/part-011.txt",
-      "./releases/0.6.1/part-012.txt",
-      "./releases/0.6.1/part-013.txt"
+      "./releases/0.6.2/part-001.txt",
+      "./releases/0.6.2/part-002.txt",
+      "./releases/0.6.2/part-003.txt",
+      "./releases/0.6.2/part-004.txt",
+      "./releases/0.6.2/part-005.txt",
+      "./releases/0.6.2/part-006.txt",
+      "./releases/0.6.2/part-007.txt",
+      "./releases/0.6.2/part-008.txt",
+      "./releases/0.6.2/part-009.txt",
+      "./releases/0.6.2/part-010.txt",
+      "./releases/0.6.2/part-011.txt",
+      "./releases/0.6.2/part-012.txt",
+      "./releases/0.6.2/part-013.txt",
+      "./releases/0.6.2/part-014.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "2951d91cbfb3bb8a7fb3bb0dda406dcc6d3c2d37635ef1916e78c90504d2d0ec"
+    "sha256": "7e70e7efc768ab6d8b71e8fcdc5caf0e2229c0638ea23bf36900dc0efab55c80"
   }
 }
