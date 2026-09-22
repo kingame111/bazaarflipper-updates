@@ -173,6 +173,7 @@ function resetRuntimeMarketState() {
   state.historyWrites = 0;
   state.dynamicsWrites = 0;
   state.skippedForLowMemory = 0;
+  state.bazaarHealth = { consecutiveFailures:0,lastFailureAt:null,lastRecoveryAt:null,lastErrorType:null };
   previousMarket.clear();
   previousSnapshotTs = null;
 }
@@ -281,8 +282,18 @@ async function pollBazaar() {
   try {
     const data = await fetchBazaarResilient(config.requestTimeoutSeconds * 1000);
     state.lastFetchDurationMs = Math.round(performance.now() - started);
-    state.lastSuccessfulFetchAt = Date.now();
+    const fetchedAt = Date.now();
+    const previousFailures = Number(state.bazaarHealth.consecutiveFailures) || 0;
+    const previousErrorType = state.bazaarHealth.lastErrorType;
+    state.lastSuccessfulFetchAt = fetchedAt;
     state.lastError = null;
+    state.bazaarHealth.consecutiveFailures = 0;
+    state.bazaarHealth.lastErrorType = null;
+    if (previousFailures > 0) {
+      state.bazaarHealth.lastRecoveryAt = fetchedAt;
+      const sourceAge = Number(data.lastUpdated) ? Math.max(0, fetchedAt - Number(data.lastUpdated)) : null;
+      console.log(`[bazaar] RECOVERED after ${previousFailures} failure(s) [${previousErrorType || 'UNKNOWN'}]; mode=LIVE sourceAge=${formatAge(sourceAge)} fetch=${state.lastFetchDurationMs}ms`);
+    }
 
     if (state.lastHypixelUpdate === data.lastUpdated) return;
 
@@ -346,6 +357,7 @@ async function pollBazaar() {
         lastHistoryWrite = now;
         state.historyWrites += 1;
         state.dynamicsWrites += 1;
+        console.log(`[bazaar] snapshot saved; mode=LIVE source=${new Date(sourceTs).toISOString()} sourceAge=${formatAge(Math.max(0, now-sourceTs))} products=${historyRows.length} fetch=${state.lastFetchDurationMs}ms origin=${localOriginId}`);
         historyStats = handoff.role === 'LAPTOP' ? new Map() : loadHistoryStats(db, now, config.historyIntervalSeconds);
         enforceLaptopStoragePolicy();
       } else {
@@ -364,7 +376,11 @@ async function pollBazaar() {
   } catch (error) {
     state.lastFetchDurationMs = Math.round(performance.now() - started);
     state.lastError = error instanceof Error ? error.message : String(error);
-    console.error('[bazaar] refresh failed:', state.lastError);
+    state.bazaarHealth.consecutiveFailures = (Number(state.bazaarHealth.consecutiveFailures) || 0) + 1;
+    state.bazaarHealth.lastFailureAt = Date.now();
+    state.bazaarHealth.lastErrorType = classifyRuntimeError(error);
+    const health = currentBazaarHealth();
+    console.error(`[bazaar] refresh failed [${state.bazaarHealth.lastErrorType}]; mode=${health.mode}; consecutive=${health.consecutiveFailures}; lastGoodAge=${formatAge(health.ageMs)}; lastMarketAge=${formatAge(health.marketAgeMs)}; fetch=${state.lastFetchDurationMs}ms; error=${state.lastError}`);
   } finally {
     runningPoll = false;
   }
@@ -437,6 +453,10 @@ function statusPayload() {
     lastSuccessfulFetchAt: state.lastSuccessfulFetchAt,
     lastFetchDurationMs: state.lastFetchDurationMs,
     lastError: state.lastError,
+    bazaarHealth: currentBazaarHealth(),
+    dataMode: currentBazaarHealth().mode,
+    snapshotAgeMs: currentBazaarHealth().ageMs,
+    marketSnapshotAgeMs: currentBazaarHealth().marketAgeMs,
     productCount: state.flips.length,
     reverseNpcCount: state.reverseNpcFlips.length,
     itemMetadataCount: itemMeta.size,
@@ -560,45 +580,75 @@ function uploadDatabaseToPeer() {
 
 async function syncLaptopToDesktop(manual=false){
   if(handoff.role!=='LAPTOP') throw new Error('Only the LAPTOP sends pending snapshots to the desktop.');
-  if(syncRunning) return {ok:true,busy:true,cumulative:{...state.dualSync},sentSnapshots:0,sentRows:0,acknowledgedSnapshots:0,deletedRows:0,pendingSync:pendingSync()};
-  syncRunning=true; state.dualSync.lastSyncAt=Date.now();
-  try{ let sentSnapshots=0,sentRows=0,acknowledgedSnapshots=0,deletedRows=0; const maxBatches=manual?500:8;
-    for(let i=0;i<maxBatches;i++){ const snaps=exportPendingHistorySnapshots(db,localOriginId,Number(config.syncBatchSnapshots)||12); if(!snaps.length) break;
+  if(syncRunning) {
+    const pending=pendingSync();
+    console.log(`[sync] push already running; pendingSnapshots=${pending.snapshots} pendingRows=${pending.rows}`);
+    return {ok:true,busy:true,cumulative:{...state.dualSync},sentSnapshots:0,sentRows:0,acknowledgedSnapshots:0,deletedRows:0,pendingSync:pending};
+  }
+  syncRunning=true;
+  state.dualSync.lastSyncAt=Date.now();
+  const before=pendingSync();
+  try{
+    let sentSnapshots=0,sentRows=0,acknowledgedSnapshots=0,deletedRows=0;
+    const maxBatches=manual?500:8;
+    for(let i=0;i<maxBatches;i++){
+      const snaps=exportPendingHistorySnapshots(db,localOriginId,Number(config.syncBatchSnapshots)||12);
+      if(!snaps.length) break;
       const result=await fetchPeerJson('/handoff/sync/import',{method:'POST',body:JSON.stringify({sourceRole:'LAPTOP',snapshots:snaps})},90000);
       if(!result?.ok) throw new Error('Desktop did not confirm history import.');
-      const ack=acknowledgeHistorySnapshots(db,snaps,localOriginId); sentSnapshots+=snaps.length; sentRows+=snaps.reduce((a,x)=>a+x.rows.length,0); acknowledgedSnapshots+=ack.snapshotsDeleted; deletedRows+=ack.rowsDeleted;
+      const ack=acknowledgeHistorySnapshots(db,snaps,localOriginId);
+      sentSnapshots+=snaps.length;
+      sentRows+=snaps.reduce((a,x)=>a+x.rows.length,0);
+      acknowledgedSnapshots+=ack.snapshotsDeleted;
+      deletedRows+=ack.rowsDeleted;
     }
     if(acknowledgedSnapshots) compactDatabase(db);
-    Object.assign(state.dualSync,{lastSuccessAt:Date.now(),lastError:null,peerReachable:true}); state.dualSync.sentSnapshots+=sentSnapshots; state.dualSync.sentRows+=sentRows; state.dualSync.acknowledgedSnapshots+=acknowledgedSnapshots; state.dualSync.deletedRows+=deletedRows;
+    const after=pendingSync();
+    const now=Date.now();
+    Object.assign(state.dualSync,{lastSuccessAt:now,lastTransferAt:now,lastError:null,lastErrorType:null,peerReachable:true});
+    state.dualSync.sentSnapshots+=sentSnapshots;
+    state.dualSync.sentRows+=sentRows;
+    state.dualSync.acknowledgedSnapshots+=acknowledgedSnapshots;
+    state.dualSync.deletedRows+=deletedRows;
     historyStats=new Map();
-    return {
-      ok:true,
-      cumulative:{...state.dualSync},
-      sentSnapshots,
-      sentRows,
-      acknowledgedSnapshots,
-      deletedRows,
-      pendingSync:pendingSync()
-    };
-  }catch(error){state.dualSync.lastError=error instanceof Error?error.message:String(error); state.dualSync.peerReachable=false; if(manual) throw error; return {ok:false,error:state.dualSync.lastError,pendingSync:pendingSync()};}
-  finally{syncRunning=false;}
+    if(sentSnapshots>0 || manual) console.log(`[sync] LAPTOP->DESKTOP success; snapshots=${sentSnapshots} rows=${sentRows} acknowledged=${acknowledgedSnapshots}; pending ${before.snapshots}->${after.snapshots} snapshots, ${before.rows}->${after.rows} rows`);
+    return {ok:true,cumulative:{...state.dualSync},sentSnapshots,sentRows,acknowledgedSnapshots,deletedRows,pendingSync:after};
+  }catch(error){
+    const message=error instanceof Error?error.message:String(error);
+    const type=classifyRuntimeError(error);
+    state.dualSync.lastError=message;
+    state.dualSync.lastErrorType=type;
+    state.dualSync.peerReachable=false;
+    const pending=pendingSync();
+    console.warn(`[sync] LAPTOP->DESKTOP failed [${type}]; pendingSnapshots=${pending.snapshots} pendingRows=${pending.rows}; data kept locally; error=${message}`);
+    if(manual) throw error;
+    return {ok:false,error:message,errorType:type,pendingSync:pending};
+  } finally {
+    syncRunning=false;
+  }
 }
 
 async function syncHistoryWithPeer(manual=false){
   if(!dualCollectorEnabled) throw new Error('Dual collector is not configured.');
   if(handoff.role==='LAPTOP') return syncLaptopToDesktop(manual);
   state.dualSync.lastSyncAt=Date.now();
+  state.dualSync.lastTriggerAt=Date.now();
+  const wasReachable=state.dualSync.peerReachable;
   try {
     const result=await fetchPeerJson(`/handoff/sync/push?wait=${manual?'1':'0'}`,{method:'POST'},manual?10*60*1000:20000);
-    Object.assign(state.dualSync,{lastSuccessAt:Date.now(),lastError:null,peerReachable:true});
+    Object.assign(state.dualSync,{lastSuccessAt:Date.now(),lastError:null,lastErrorType:null,peerReachable:true});
+    if(wasReachable===false) console.log('[sync] DESKTOP->LAPTOP trigger RECOVERED; peer reachable again');
+    if(manual) console.log(`[sync] manual DESKTOP->LAPTOP trigger completed; started=${Boolean(result?.started)} busy=${Boolean(result?.busy)}`);
     return result;
   } catch(error) {
     const message=error instanceof Error?error.message:String(error);
+    const type=classifyRuntimeError(error);
     state.dualSync.lastError=message;
+    state.dualSync.lastErrorType=type;
     state.dualSync.peerReachable=false;
+    console.warn(`[sync] DESKTOP->LAPTOP trigger failed [${type}]; this does NOT mean laptop push data was lost; desktop continues; error=${message}`);
     if(manual) throw error;
-    console.warn(`[sync] laptop unavailable; desktop continues running: ${message}`);
-    return {ok:false,error:message,pendingSync:pendingSync()};
+    return {ok:false,error:message,errorType:type,pendingSync:pendingSync()};
   }
 }
 
@@ -753,7 +803,7 @@ async function handleHandoffRequest(req, res) {
   if (url.pathname === '/handoff/sync/push' && req.method === 'POST') {
     if (handoff.role !== 'LAPTOP') return sendJson(res,{error:'Only the LAPTOP pushes pending snapshots.'},409);
     if (url.searchParams.get('wait') === '1') return sendJson(res, await syncLaptopToDesktop(true));
-    const wasRunning=syncRunning;if(!wasRunning)void syncLaptopToDesktop(false).catch((error)=>console.warn(`[sync] laptop push failed: ${error instanceof Error?error.message:String(error)}`));
+    const wasRunning=syncRunning;if(!wasRunning)void syncLaptopToDesktop(false).catch((error)=>console.warn(`[sync] background laptop push wrapper failed [${classifyRuntimeError(error)}]: ${error instanceof Error?error.message:String(error)}`));
     return sendJson(res,{ok:true,started:!wasRunning,busy:wasRunning,pendingSync:pendingSync()});
   }
   if (url.pathname === '/handoff/sync/import' && req.method === 'POST') {
@@ -762,7 +812,11 @@ async function handleHandoffRequest(req, res) {
     if(String(body?.sourceRole||'').toUpperCase()!=='LAPTOP') return sendJson(res,{error:'Desktop accepts synced history only from LAPTOP.'},409);
     const imported=importHistorySnapshots(db,body?.snapshots,'LAPTOP');
     if(imported.snapshotsRecorded||imported.rowsInserted) historyStats=loadHistoryStats(db,Date.now(),config.historyIntervalSeconds);
-    state.dualSync.receivedSnapshots=(state.dualSync.receivedSnapshots||0)+imported.snapshotsRecorded; state.dualSync.receivedRows=(state.dualSync.receivedRows||0)+imported.rowsInserted;
+    state.dualSync.receivedSnapshots=(state.dualSync.receivedSnapshots||0)+imported.snapshotsRecorded;
+    state.dualSync.receivedRows=(state.dualSync.receivedRows||0)+imported.rowsInserted;
+    const receivedSnapshots=Array.isArray(body?.snapshots)?body.snapshots.length:0;
+    const receivedRows=Array.isArray(body?.snapshots)?body.snapshots.reduce((sum,snap)=>sum+(Array.isArray(snap?.rows)?snap.rows.length:0),0):0;
+    console.log(`[sync] DESKTOP import accepted; receivedSnapshots=${receivedSnapshots} receivedRows=${receivedRows} insertedRows=${imported.rowsInserted} newSnapshotMarkers=${imported.snapshotsRecorded}`);
     return sendJson(res,{ok:true,...imported});
   }
 
@@ -819,7 +873,8 @@ const handoffServer = http.createServer((req, res) => {
 server.listen(port, host, async () => {
   console.log(`BazaarFlipper v${APP_VERSION} local server: http://${host}:${port}`);
   console.log(`Project root: ${projectRoot}`);
-  console.log(`Collector role: ${handoff.role} Â· ${collectorActive ? 'ACTIVE' : 'PASSIVE'}${dualCollectorEnabled ? ' Â· DUAL SYNC' : ''}`);
+  console.log(`Collector role: ${handoff.role} · ${collectorActive ? 'ACTIVE' : 'PASSIVE'}${dualCollectorEnabled ? ' · DUAL SYNC' : ''}`);
+  console.log(`[startup] poll=${config.pollIntervalSeconds}s history=${config.historyIntervalSeconds}s rawRetention=${config.historyRetentionDays}d hourlyRetention=${Number(config.hourlyHistoryRetentionDays)||730}d syncBatch=${Number(config.syncBatchSnapshots)||12} syncInterval=${Number(config.syncIntervalSeconds)||60}s`);
   await refreshMayorTaxContext();
   void refreshUpdateStatus();
   if (collectorActive) {
@@ -848,5 +903,5 @@ handoffServer.listen(handoffPort, '0.0.0.0', () => {
   console.log(`Handoff listener: port ${handoffPort} (${handoff.token ? 'token protected' : 'NOT CONFIGURED'})`);
 });
 
-async function gracefulShutdown(signal='shutdown'){if(shuttingDown)return;shuttingDown=true;collectorActive=false;console.log(`[shutdown] requested by ${signal}; stopping collector, sync and servers`);for(const timer of runtimeTimers){try{clearTimeout(timer);clearInterval(timer);}catch{}}const deadline=Date.now()+5000;while((runningPoll||syncRunning)&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));await Promise.allSettled([new Promise(r=>{try{server.close(()=>r());server.closeAllConnections?.();}catch{r();}}),new Promise(r=>{try{handoffServer.close(()=>r());handoffServer.closeAllConnections?.();}catch{r();}})]);try{checkpointDatabase(db);}catch{}try{db.close();}catch{}releaseInstanceLock();try{console.log('[shutdown] database closed; BazaarFlipper stopped safely');}catch{}try{logStream.end();}catch{}process.exit(0);}
+async function gracefulShutdown(signal='shutdown'){if(shuttingDown)return;shuttingDown=true;collectorActive=false;console.log(`[shutdown] requested by ${signal}; stopping collector, sync and servers`);for(const timer of runtimeTimers){try{clearTimeout(timer);clearInterval(timer);}catch{}}const deadline=Date.now()+5000;while((runningPoll||syncRunning)&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));await Promise.allSettled([new Promise(r=>{try{server.close(()=>r());server.closeAllConnections?.();}catch{r();}}),new Promise(r=>{try{handoffServer.close(()=>r());handoffServer.closeAllConnections?.();}catch{r();}})]);try{checkpointDatabase(db);console.log('[shutdown] database checkpoint complete');}catch{}try{db.close();console.log('[shutdown] database closed');}catch{}releaseInstanceLock();try{console.log('[shutdown] servers stopped; BazaarFlipper stopped safely');}catch{}try{logStream.end();}catch{}process.exit(0);}
 for(const signal of ['SIGINT','SIGTERM','SIGBREAK','SIGHUP'])process.on(signal,()=>{void gracefulShutdown(signal);});
