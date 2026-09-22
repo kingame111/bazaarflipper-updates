@@ -110,7 +110,7 @@ function compactDrop(drop, useCompactor) {
   const pairs = Object.entries(drop.enchanted).filter(([,ratio]) => safe(ratio) > 0);
   if (!pairs.length) return { item: drop.item, amountMultiplier: 1, npc: drop.npc, compacted: false };
   const [item, ratio] = pairs[0];
-  return { item, amountMultiplier: 1 / safe(ratio), npc: 0, compacted: true, ratio: safe(ratio) };
+  return { item, amountMultiplier: 1 / safe(ratio), npc: Math.max(0,safe(drop.npc))*safe(ratio), compacted: true, ratio: safe(ratio) };
 }
 
 function conditionMatches(upgrade, minion) {
@@ -145,6 +145,9 @@ function normalizeUpgrades(ids, minion) {
 function recipeCost(tierInfo, market) {
   if (!tierInfo?.exactRecipe || !Array.isArray(tierInfo.recipe)) {
     return { cost: null, complete: false, missing: ['Exact tier recipe unavailable'] };
+  }
+  if (!tierInfo.recipe.length) {
+    return { cost: null, complete: false, missing: ['Base minion acquisition cost unavailable'] };
   }
   let cost = 0;
   const missing = [];
@@ -293,16 +296,18 @@ export function calculateMinion(minion, options, context) {
   let weightedCv = 0;
   let historicalRevenue = 0;
   let fallbackRevenue = 0;
+  let unpricedOutputs = 0;
   const outputDetails = generated.map((g) => {
     const quote = saleQuote(g.item,g.npc,context);
     const revenue = g.unitsPerDay * quote.price;
     grossPerMinionDay += revenue;
-    if (quote.usedHistorical) {
+    if (quote.historicalSamples > 0 && revenue > 0) {
       historicalRevenue += revenue;
       weightedCoverage += revenue * quote.historicalCoverage;
       weightedCv += revenue * quote.historicalCv;
     }
-    if (quote.historicalFallback) fallbackRevenue += revenue;
+    if (quote.price <= 0 && g.unitsPerDay > 0) unpricedOutputs += 1;
+    if (upper(context.priceMode)==='7D' && quote.historicalFallback) fallbackRevenue += revenue;
     return { ...g, quote, revenuePerDay:revenue };
   });
 
@@ -326,6 +331,7 @@ export function calculateMinion(minion, options, context) {
   let confidenceScore = 1;
   if (!setupComplete) confidenceScore -= 0.10;
   if (!fuelExpense.available) confidenceScore -= 0.10;
+  if (unpricedOutputs > 0) confidenceScore -= Math.min(0.35,unpricedOutputs/Math.max(1,generated.length)*0.35);
   if (upper(context.priceMode)==='7D') {
     confidenceScore *= Math.max(0.20,histCoverage);
     if (fallbackRevenue > 0) confidenceScore -= Math.min(0.35,fallbackRevenue/Math.max(1,grossPerMinionDay)*0.35);
@@ -362,6 +368,7 @@ export function calculateMinion(minion, options, context) {
     stabilityCv:cv,
     confidenceScore,
     confidence:confidenceLabel(confidenceScore),
+    unpricedOutputs,
     warnings,
     outputDetails
   };
