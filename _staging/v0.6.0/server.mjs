@@ -778,7 +778,9 @@ async function handleMainRequest(req, res) {
       horizonDays: numberParam('horizonDays', 1),
       family: url.searchParams.get('family') || 'ALL',
       search: url.searchParams.get('search') || '',
-      sort: url.searchParams.get('sort') || 'NET'
+      sort: url.searchParams.get('sort') || 'NET',
+      optimizerBudget: numberParam('optimizerBudget', 0),
+      optimizerSlots: numberParam('optimizerSlots', 25)
     };
     const result = calculateMinionRankings(options, {
       market: latestBazaarProducts,
