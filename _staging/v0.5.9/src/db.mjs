@@ -348,22 +348,73 @@ export function importHandoffDatabase(db, sourcePath) {
   const escaped = sourcePath.replace(/'/g, "''");
   db.exec(`ATTACH DATABASE '${escaped}' AS incoming;`);
   try {
+    const hasIncomingTable = (name) => Boolean(
+      db.prepare("SELECT 1 AS yes FROM incoming.sqlite_master WHERE type='table' AND name=?").get(name)?.yes
+    );
+    const incomingColumns = (name) => new Set(
+      hasIncomingTable(name) ? db.prepare(`PRAGMA incoming.table_info(${name})`).all().map((row) => String(row.name)) : []
+    );
+
     const sourceRows = Number(db.prepare('SELECT COUNT(*) AS n FROM incoming.history').get()?.n || 0);
     const sourceStats = Number(db.prepare('SELECT COUNT(*) AS n FROM incoming.competition_stats').get()?.n || 0);
+    const hcols = incomingColumns('history');
+    const historyColumns = [
+      'ts','product_id','best_buy_order','best_sell_offer','sell_moving_week','buy_moving_week',
+      'sell_volume','buy_volume','sell_orders','buy_orders',
+      'weighted_buy_price','weighted_sell_price','best_buy_amount','best_sell_amount',
+      'buy_depth_1pct','sell_depth_1pct','buy_depth_5pct','sell_depth_5pct'
+    ];
+    const legacyHistoryColumns = new Set([
+      'ts','product_id','best_buy_order','best_sell_offer','sell_moving_week','buy_moving_week',
+      'sell_volume','buy_volume','sell_orders','buy_orders'
+    ]);
+    const incomingHistorySelect = historyColumns.map((name) =>
+      hcols.has(name) ? name : (legacyHistoryColumns.has(name) ? name : `0 AS ${name}`)
+    ).join(', ');
+
+    const copyRollupTable = (table) => {
+      if (!hasIncomingTable(table)) return 0;
+      const cols = db.prepare(`PRAGMA table_info(${table})`).all().map((row) => String(row.name));
+      const sourceCols = incomingColumns(table);
+      if (!cols.every((name) => sourceCols.has(name))) return 0;
+      db.exec(`INSERT OR REPLACE INTO ${table} (${cols.join(',')}) SELECT ${cols.join(',')} FROM incoming.${table};`);
+      return Number(db.prepare(`SELECT COUNT(*) AS n FROM incoming.${table}`).get()?.n || 0);
+    };
+
+    let importedHourly = 0, importedDaily = 0, importedCompetitionDaily = 0, importedMeta = 0;
 
     db.exec('BEGIN IMMEDIATE;');
     try {
       db.exec(`
-        INSERT OR IGNORE INTO history (
-          ts, product_id, best_buy_order, best_sell_offer,
-          sell_moving_week, buy_moving_week,
-          sell_volume, buy_volume, sell_orders, buy_orders
-        )
-        SELECT ts, product_id, best_buy_order, best_sell_offer,
-               sell_moving_week, buy_moving_week,
-               sell_volume, buy_volume, sell_orders, buy_orders
+        INSERT OR IGNORE INTO history (${historyColumns.join(',')})
+        SELECT ${incomingHistorySelect}
         FROM incoming.history;
       `);
+
+      if (hasIncomingTable('history_snapshots')) {
+        db.exec(`
+          INSERT OR IGNORE INTO history_snapshots (ts, origin_id, received_at)
+          SELECT ts, origin_id, received_at FROM incoming.history_snapshots;
+        `);
+      }
+
+      if (hasIncomingTable('history_snapshot_meta')) {
+        db.exec(`
+          INSERT OR REPLACE INTO history_snapshot_meta (
+            bucket_ts, origin_id, source_ts, collected_at, ingested_at,
+            product_count, effective_tax_rate, schema_version
+          )
+          SELECT bucket_ts, origin_id, source_ts, collected_at, ingested_at,
+                 product_count, effective_tax_rate, schema_version
+          FROM incoming.history_snapshot_meta;
+        `);
+        importedMeta = Number(db.prepare('SELECT COUNT(*) AS n FROM incoming.history_snapshot_meta').get()?.n || 0);
+      }
+
+      importedHourly = copyRollupTable('history_hourly');
+      importedDaily = copyRollupTable('history_daily');
+      importedCompetitionDaily = copyRollupTable('competition_daily');
+
       db.exec('DELETE FROM competition_stats;');
       db.exec(`
         INSERT INTO competition_stats (
@@ -382,25 +433,36 @@ export function importHandoffDatabase(db, sourcePath) {
 
     const missingRows = Number(db.prepare(`
       SELECT COUNT(*) AS n FROM (
-        SELECT ts, product_id, best_buy_order, best_sell_offer,
-               sell_moving_week, buy_moving_week,
-               sell_volume, buy_volume, sell_orders, buy_orders
-        FROM incoming.history
+        SELECT ${incomingHistorySelect} FROM incoming.history
         EXCEPT
-        SELECT ts, product_id, best_buy_order, best_sell_offer,
-               sell_moving_week, buy_moving_week,
-               sell_volume, buy_volume, sell_orders, buy_orders
-        FROM history
+        SELECT ${historyColumns.join(',')} FROM history
       )
     `).get()?.n || 0);
+
+    const missingMeta = hasIncomingTable('history_snapshot_meta')
+      ? Number(db.prepare(`
+          SELECT COUNT(*) AS n FROM (
+            SELECT bucket_ts, origin_id, source_ts, collected_at, ingested_at, product_count, effective_tax_rate, schema_version
+            FROM incoming.history_snapshot_meta
+            EXCEPT
+            SELECT bucket_ts, origin_id, source_ts, collected_at, ingested_at, product_count, effective_tax_rate, schema_version
+            FROM history_snapshot_meta
+          )
+        `).get()?.n || 0)
+      : 0;
 
     const statsAfter = competitionCount(db);
     return {
       sourceHistoryRows: sourceRows,
       sourceCompetitionRows: sourceStats,
       missingHistoryRows: missingRows,
+      missingMetadataRows: missingMeta,
+      importedMetadataRows: importedMeta,
+      importedHourlyRows: importedHourly,
+      importedDailyRows: importedDaily,
+      importedCompetitionDailyRows: importedCompetitionDaily,
       competitionRowsAfter: statsAfter,
-      verified: missingRows === 0 && statsAfter === sourceStats
+      verified: missingRows === 0 && missingMeta === 0 && statsAfter === sourceStats
     };
   } finally {
     try { db.exec('DETACH DATABASE incoming;'); } catch {}
