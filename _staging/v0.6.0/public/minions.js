@@ -2,7 +2,7 @@ const $=(id)=>document.getElementById(id);
 const fmtCoins=(n)=>Number.isFinite(Number(n))?new Intl.NumberFormat('en-US',{maximumFractionDigits:Math.abs(n)<100?2:0}).format(Number(n)):'—';
 const fmtPct=(n)=>Number.isFinite(Number(n))?`${Number(n).toFixed(1)}%`:'—';
 const fmtDays=(n)=>Number.isFinite(Number(n))?`${Number(n)<1?(Number(n)*24).toFixed(1)+'h':Number(n).toFixed(1)+'d'}`:'—';
-const controls=['tier','count','fuel','upgrade1','upgrade2','sellMethod','priceMode','horizonDays','family','search','sort','tax','optimizerBudget','optimizerSlots','beacon','crystal','otherSpeed'];
+const controls=['tier','count','fuel','upgrade1','upgrade2','sellMethod','priceMode','horizonDays','collectionIntervalDays','family','search','sort','tax','optimizerBudget','optimizerSlots','beacon','crystal','otherSpeed'];
 let catalog=null,lastData=null,timer=null;
 
 function option(select,value,label){const o=document.createElement('option');o.value=value;o.textContent=label;select.appendChild(o)}
@@ -113,6 +113,7 @@ function showDetail(r){
       <div><span>Base action</span><strong>${r.baseSecondsPerAction.toFixed(2)}s</strong></div>
       <div><span>Effective action</span><strong>${r.effectiveSecondsPerAction.toFixed(2)}s</strong></div>
       <div><span>Cycles / day / minion</span><strong>${fmtCoins(r.cyclesPerDay)}</strong></div>
+      <div><span>Collection interval</span><strong>${Number(r.collectionIntervalDays||1)<1?(Number(r.collectionIntervalDays||1)*24).toFixed(1)+'h':Number(r.collectionIntervalDays||1).toFixed(1)+'d'}</strong></div>
       <div><span>Net / day</span><strong class="${r.netDay>=0?'profit':'loss'}">${fmtCoins(r.netDay)}</strong></div>
       <div><span>Setup total</span><strong>${r.setupComplete?fmtCoins(r.setupCost):'N/A'}</strong></div>
       <div><span>Payback</span><strong>${fmtDays(r.paybackDays)}</strong></div>
