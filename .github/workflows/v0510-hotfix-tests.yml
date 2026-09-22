@@ -18,9 +18,13 @@ jobs:
           node --check _staging/v0.5.10/src/apply-update.mjs
           node --check _staging/v0.5.10/test.mjs
           node --check _staging/v0.5.10/hotfix-test.mjs
+          node --check _staging/v0.5.10/bundle-test.mjs
       - name: Database regressions
         working-directory: _staging/v0.5.10
         run: node test.mjs
       - name: Deferred startup and updater tests
         working-directory: _staging/v0.5.10
         run: node hotfix-test.mjs
+      - name: Bundle integrity
+        working-directory: _staging/v0.5.10
+        run: node bundle-test.mjs
