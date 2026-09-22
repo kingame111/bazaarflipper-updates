@@ -8598,6 +8598,97 @@ export const MINION_DATA = {
   ],
   "sourceNotes": {
     "fishing": "Fishing speeds aligned to current NEU generator lore on 2026-09-22; drop probabilities use the current community-wiki corrected distribution.",
-    "minionExpander": "Two Minion Expanders stack multiplicatively for 10.25% collection-rate increase."
+    "minionExpander": "Two Minion Expanders stack multiplicatively for 10.25% collection-rate increase.",
+    "compaction": "Recursive Super Compactor chains include only pure single-input recipes verified against NEU/current wiki data; mixed-ingredient crafts are intentionally excluded."
+  },
+  "compactionNext": {
+    "ENCHANTED_BLAZE_POWDER": {
+      "item": "ENCHANTED_BLAZE_ROD",
+      "ratio": 160
+    },
+    "ENCHANTED_CACTUS_GREEN": {
+      "item": "ENCHANTED_CACTUS",
+      "ratio": 160
+    },
+    "ENCHANTED_COAL": {
+      "item": "ENCHANTED_COAL_BLOCK",
+      "ratio": 160
+    },
+    "ENCHANTED_DIAMOND": {
+      "item": "ENCHANTED_DIAMOND_BLOCK",
+      "ratio": 160
+    },
+    "ENCHANTED_EMERALD": {
+      "item": "ENCHANTED_EMERALD_BLOCK",
+      "ratio": 160
+    },
+    "ENCHANTED_RAW_FISH": {
+      "item": "ENCHANTED_COOKED_FISH",
+      "ratio": 160
+    },
+    "ENCHANTED_GLOWSTONE_DUST": {
+      "item": "ENCHANTED_GLOWSTONE",
+      "ratio": 160
+    },
+    "ENCHANTED_GOLD": {
+      "item": "ENCHANTED_GOLD_BLOCK",
+      "ratio": 160
+    },
+    "ENCHANTED_HARD_STONE": {
+      "item": "CONCENTRATED_STONE",
+      "ratio": 576
+    },
+    "ENCHANTED_IRON": {
+      "item": "ENCHANTED_IRON_BLOCK",
+      "ratio": 160
+    },
+    "ENCHANTED_LAPIS_LAZULI": {
+      "item": "ENCHANTED_LAPIS_LAZULI_BLOCK",
+      "ratio": 160
+    },
+    "ENCHANTED_MELON": {
+      "item": "ENCHANTED_MELON_BLOCK",
+      "ratio": 160
+    },
+    "ENCHANTED_MYCELIUM": {
+      "item": "ENCHANTED_MYCELIUM_CUBE",
+      "ratio": 160
+    },
+    "ENCHANTED_PORK": {
+      "item": "ENCHANTED_GRILLED_PORK",
+      "ratio": 160
+    },
+    "ENCHANTED_POTATO": {
+      "item": "ENCHANTED_BAKED_POTATO",
+      "ratio": 160
+    },
+    "ENCHANTED_QUARTZ": {
+      "item": "ENCHANTED_QUARTZ_BLOCK",
+      "ratio": 160
+    },
+    "ENCHANTED_RABBIT": {
+      "item": "ENCHANTED_COOKED_RABBIT",
+      "ratio": 160
+    },
+    "ENCHANTED_RED_SAND": {
+      "item": "ENCHANTED_RED_SAND_CUBE",
+      "ratio": 160
+    },
+    "ENCHANTED_REDSTONE": {
+      "item": "ENCHANTED_REDSTONE_BLOCK",
+      "ratio": 160
+    },
+    "ENCHANTED_MUTTON": {
+      "item": "ENCHANTED_COOKED_MUTTON",
+      "ratio": 160
+    },
+    "ENCHANTED_SLIME_BALL": {
+      "item": "ENCHANTED_SLIME_BLOCK",
+      "ratio": 160
+    },
+    "ENCHANTED_SUGAR": {
+      "item": "ENCHANTED_SUGAR_CANE",
+      "ratio": 160
+    }
   }
 };
