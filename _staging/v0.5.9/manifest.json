@@ -1,18 +1,19 @@
 {
   "version": "0.5.9",
-  "publishedAt": "2026-09-22T02:55:00+03:00",
+  "publishedAt": "2026-09-22T03:50:00+03:00",
   "notes": [
-    "History schema expanded for future analysis: exact source/collection/ingestion times, all Bazaar products, weighted prices, top-level liquidity and 1%/5% market depth.",
-    "30-day raw history now rolls into hourly history, then into a permanent daily archive instead of being discarded.",
-    "Dual sync is faster and automatic desktop-triggered sync no longer blocks on the whole laptop transfer.",
-    "Full database handoff now preserves v0.5.9 metadata, liquidity fields and rollups.",
-    "Transient Bazaar aborts are retried with a safer minimum request timeout while hard errors still fail immediately.",
-    "Graceful shutdown stops timers, collection and sync, and a single-instance lock prevents duplicate BazaarFlipper servers."
+    "Expanded diagnostics: Bazaar health is logged as LIVE/LAST_GOOD_SNAPSHOT with snapshot age, failure class, consecutive failures and recovery events.",
+    "Sync logs distinguish desktop trigger reachability from actual laptop transfer, and report rows/snapshots moved plus remaining backlog.",
+    "History schema expanded for future analysis with precise timestamps, all Bazaar products, weighted prices, liquidity and 1%/5% market depth.",
+    "30-day raw history rolls into hourly history, then into permanent daily history instead of being discarded.",
+    "Dual sync throughput is increased; transient Bazaar aborts get limited retries and a safer minimum timeout.",
+    "Full database handoff preserves v0.5.9 metadata and rollups.",
+    "Graceful shutdown stops timers, collection and sync; a single-instance lock prevents duplicate BazaarFlipper servers."
   ],
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "cbc12127f185f00b0fd314e06db4e5bb91b1cbb3fba16d853a357f820fd485a6"
+      "sha256": "b7c6f886237f2e930a10791c2968ce92604e6fe89bdbfd4642df2c0600e60b84"
     },
     {
       "path": "src/db.mjs",
@@ -44,9 +45,11 @@
       "./releases/0.5.9/part-013.txt",
       "./releases/0.5.9/part-014.txt",
       "./releases/0.5.9/part-015.txt",
-      "./releases/0.5.9/part-016.txt"
+      "./releases/0.5.9/part-016.txt",
+      "./releases/0.5.9/part-017.txt",
+      "./releases/0.5.9/part-018.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "e9b4a2a6eab4b230b1fcc88827b81d8859263b262e073bbfd1e26babfd3dcdfe"
+    "sha256": "73cf2bad1530f4766a53f5482928b75f6f322a8fbc06447799a48afb1172ee9c"
   }
 }
