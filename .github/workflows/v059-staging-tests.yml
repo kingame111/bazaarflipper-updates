@@ -18,7 +18,9 @@ jobs:
           node --check _staging/v0.5.9/test.mjs
       - name: Database migration/sync/rollup tests
         working-directory: _staging/v0.5.9
-        run: node test.mjs
+        run: |
+          node test.mjs
+          node server-test.mjs
       - name: Static safety checks
         run: |
           grep -q "historyRowsFromProducts(data.products)" _staging/v0.5.9/server.mjs
