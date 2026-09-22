@@ -8373,6 +8373,360 @@ export const MINION_DATA = {
       ],
       "confidence": "HIGH"
     },
+    "Sunflower Minion": {
+          "id": "SUNFLOWER_GENERATOR",
+          "name": "Sunflower Minion",
+          "family": "Farming",
+          "mobSpawning": false,
+          "tiers": {
+                "1": {
+                      "speed": 24,
+                      "recipe": [
+                            {
+                                  "item": "DOUBLE_PLANT",
+                                  "amount": 128
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "2": {
+                      "speed": 23,
+                      "recipe": [
+                            {
+                                  "item": "DOUBLE_PLANT",
+                                  "amount": 384
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "3": {
+                      "speed": 22,
+                      "recipe": [
+                            {
+                                  "item": "DOUBLE_PLANT",
+                                  "amount": 896
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "4": {
+                      "speed": 21,
+                      "recipe": [
+                            {
+                                  "item": "DOUBLE_PLANT",
+                                  "amount": 896
+                            },
+                            {
+                                  "item": "ENCHANTED_SUNFLOWER",
+                                  "amount": 8
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "5": {
+                      "speed": 20,
+                      "recipe": [
+                            {
+                                  "item": "DOUBLE_PLANT",
+                                  "amount": 896
+                            },
+                            {
+                                  "item": "ENCHANTED_SUNFLOWER",
+                                  "amount": 32
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "6": {
+                      "speed": 19,
+                      "recipe": [
+                            {
+                                  "item": "DOUBLE_PLANT",
+                                  "amount": 896
+                            },
+                            {
+                                  "item": "ENCHANTED_SUNFLOWER",
+                                  "amount": 96
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "7": {
+                      "speed": 18,
+                      "recipe": [
+                            {
+                                  "item": "DOUBLE_PLANT",
+                                  "amount": 896
+                            },
+                            {
+                                  "item": "ENCHANTED_SUNFLOWER",
+                                  "amount": 224
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "8": {
+                      "speed": 17,
+                      "recipe": [
+                            {
+                                  "item": "DOUBLE_PLANT",
+                                  "amount": 896
+                            },
+                            {
+                                  "item": "ENCHANTED_SUNFLOWER",
+                                  "amount": 480
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "9": {
+                      "speed": 16,
+                      "recipe": [
+                            {
+                                  "item": "DOUBLE_PLANT",
+                                  "amount": 896
+                            },
+                            {
+                                  "item": "ENCHANTED_SUNFLOWER",
+                                  "amount": 992
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "10": {
+                      "speed": 15,
+                      "recipe": [
+                            {
+                                  "item": "DOUBLE_PLANT",
+                                  "amount": 896
+                            },
+                            {
+                                  "item": "ENCHANTED_SUNFLOWER",
+                                  "amount": 992
+                            },
+                            {
+                                  "item": "COMPACTED_SUNFLOWER",
+                                  "amount": 8
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "11": {
+                      "speed": 14,
+                      "recipe": [
+                            {
+                                  "item": "DOUBLE_PLANT",
+                                  "amount": 896
+                            },
+                            {
+                                  "item": "ENCHANTED_SUNFLOWER",
+                                  "amount": 992
+                            },
+                            {
+                                  "item": "COMPACTED_SUNFLOWER",
+                                  "amount": 24
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "12": {
+                      "speed": 13,
+                      "recipe": null,
+                      "exactRecipe": false
+                }
+          },
+          "drops": [
+                {
+                      "item": "DOUBLE_PLANT",
+                      "amount": 3,
+                      "chance": 0.5,
+                      "npc": 4,
+                      "enchanted": {
+                            "ENCHANTED_SUNFLOWER": 160
+                      }
+                },
+                {
+                      "item": "MOONFLOWER",
+                      "amount": 3,
+                      "chance": 0.5,
+                      "npc": 4,
+                      "enchanted": {
+                            "ENCHANTED_MOONFLOWER": 160
+                      }
+                }
+          ],
+          "confidence": "HIGH",
+          "warnings": [
+                "Normal operation is modeled as a 50/50 long-run day/night split: Sunflowers by day and Moonflowers by night. Dayswitch and Nightswitch are not yet modeled."
+          ]
+    },
+    "Lily Pad Minion": {
+          "id": "LILY_PAD_GENERATOR",
+          "name": "Lily Pad Minion",
+          "family": "Fishing",
+          "mobSpawning": false,
+          "tiers": {
+                "1": {
+                      "speed": 37.5,
+                      "recipe": [
+                            {
+                                  "item": "WATER_LILY",
+                                  "amount": 64
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "2": {
+                      "speed": 37.5,
+                      "recipe": [
+                            {
+                                  "item": "WATER_LILY",
+                                  "amount": 192
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "3": {
+                      "speed": 33.5,
+                      "recipe": [
+                            {
+                                  "item": "WATER_LILY",
+                                  "amount": 448
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "4": {
+                      "speed": 33.5,
+                      "recipe": [
+                            {
+                                  "item": "WATER_LILY",
+                                  "amount": 960
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "5": {
+                      "speed": 29.5,
+                      "recipe": [
+                            {
+                                  "item": "WATER_LILY",
+                                  "amount": 960
+                            },
+                            {
+                                  "item": "ENCHANTED_WATER_LILY",
+                                  "amount": 8
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "6": {
+                      "speed": 29.5,
+                      "recipe": [
+                            {
+                                  "item": "WATER_LILY",
+                                  "amount": 960
+                            },
+                            {
+                                  "item": "ENCHANTED_WATER_LILY",
+                                  "amount": 40
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "7": {
+                      "speed": 25.5,
+                      "recipe": [
+                            {
+                                  "item": "WATER_LILY",
+                                  "amount": 960
+                            },
+                            {
+                                  "item": "ENCHANTED_WATER_LILY",
+                                  "amount": 104
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "8": {
+                      "speed": 25.5,
+                      "recipe": [
+                            {
+                                  "item": "WATER_LILY",
+                                  "amount": 960
+                            },
+                            {
+                                  "item": "ENCHANTED_WATER_LILY",
+                                  "amount": 232
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "9": {
+                      "speed": 21.5,
+                      "recipe": [
+                            {
+                                  "item": "WATER_LILY",
+                                  "amount": 960
+                            },
+                            {
+                                  "item": "ENCHANTED_WATER_LILY",
+                                  "amount": 488
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "10": {
+                      "speed": 21.5,
+                      "recipe": [
+                            {
+                                  "item": "WATER_LILY",
+                                  "amount": 960
+                            },
+                            {
+                                  "item": "ENCHANTED_WATER_LILY",
+                                  "amount": 1000
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "11": {
+                      "speed": 17.5,
+                      "recipe": [
+                            {
+                                  "item": "WATER_LILY",
+                                  "amount": 960
+                            },
+                            {
+                                  "item": "ENCHANTED_WATER_LILY",
+                                  "amount": 1000
+                            },
+                            {
+                                  "item": "CONDENSED_WATER_LILY",
+                                  "amount": 8
+                            }
+                      ],
+                      "exactRecipe": true
+                },
+                "12": {
+                      "speed": 15,
+                      "recipe": null,
+                      "exactRecipe": false
+                }
+          },
+          "drops": [
+                {
+                      "item": "WATER_LILY",
+                      "amount": 1,
+                      "chance": 1,
+                      "npc": 10,
+                      "enchanted": {
+                            "ENCHANTED_WATER_LILY": 160
+                      }
+                }
+          ],
+          "confidence": "HIGH"
+    },
     "Inferno Minion": {
       "id": "INFERNO_GENERATOR",
       "name": "Inferno Minion",
@@ -8594,7 +8948,9 @@ export const MINION_DATA = {
     "Speeds/drop distributions seeded from maintained community datasets and cross-checked against current NEU/Hypixel Wiki examples.",
     "Fuel values are taken from current NEU item lore.",
     "Even-tier speed uses the preceding odd tier where community data omits the duplicate speed; exact setup recipe is intentionally left unavailable.",
-    "Inferno is withheld from ranking until its special fuel/RNG model is implemented."
+    "Inferno is withheld from ranking until its special fuel/RNG model is implemented.",
+    "Lily Pad Minion and Sunflower Minion were added to keep the catalog aligned with the 61 current minion families.",
+    "Sunflower normal production uses a 50/50 long-run day/night split; Dayswitch/Nightswitch are intentionally not modeled yet."
   ],
   "sourceNotes": {
     "fishing": "Fishing speeds aligned to current NEU generator lore on 2026-09-22; drop probabilities use the current community-wiki corrected distribution.",
@@ -8602,6 +8958,18 @@ export const MINION_DATA = {
     "compaction": "Recursive Super Compactor chains include only pure single-input recipes verified against NEU/current wiki data; mixed-ingredient crafts are intentionally excluded."
   },
   "compactionNext": {
+    "ENCHANTED_WATER_LILY": {
+      "item": "CONDENSED_WATER_LILY",
+      "ratio": 160
+    },
+    "ENCHANTED_SUNFLOWER": {
+      "item": "COMPACTED_SUNFLOWER",
+      "ratio": 160
+    },
+    "ENCHANTED_MOONFLOWER": {
+      "item": "COMPACTED_MOONFLOWER",
+      "ratio": 160
+    },
     "ENCHANTED_BLAZE_POWDER": {
       "item": "ENCHANTED_BLAZE_ROD",
       "ratio": 160
