@@ -64,7 +64,7 @@ function render(data){
     : `${opt.slots} slots · budget ignored`;
   $('optimizerRows').innerHTML='';
   if(!recommendations.length){
-    $('optimizerRows').innerHTML='<tr><td colspan="8" class="na">No profitable setup with exact cost fits the selected budget/slots.</td></tr>';
+    $('optimizerRows').innerHTML='<tr><td colspan="7" class="na">No profitable setup with exact cost fits the selected budget/slots.</td></tr>';
   }else{
     recommendations.forEach((r,i)=>{
       const tr=document.createElement('tr');
@@ -74,8 +74,7 @@ function render(data){
         <td>${Number.isFinite(r.investment)?fmtCoins(r.investment):'N/A'}</td>
         <td class="profit">${fmtCoins(r.totalNetDay)}</td>
         <td>${fmtDays(r.paybackDays)}</td>
-        <td>${Number.isFinite(r.unusedBudget)?fmtCoins(r.unusedBudget):'—'}</td>
-        <td><span class="badge ${r.confidence}">${r.confidence}</span></td>`;
+        <td>${Number.isFinite(r.unusedBudget)?fmtCoins(r.unusedBudget):'—'}</td>`;
       $('optimizerRows').appendChild(tr);
     });
   }
@@ -100,7 +99,7 @@ function render(data){
       <td>${fmtCoins(r.grossDay)}</td><td>${fmtCoins(r.expensesDay)}</td>
       <td class="${setup==='N/A'?'na':''}">${setup}</td><td class="${pay==='N/A'?'na':''}">${pay}</td>
       <td class="${roi==='N/A'?'na':''}">${roi}</td>
-      <td>+${fmtPct(r.speedBonusPercent)}</td><td><span class="badge ${r.confidence}">${r.confidence}</span></td>`;
+      <td>+${fmtPct(r.speedBonusPercent)}</td>`;
     tr.addEventListener('click',()=>showDetail(r));
     $('rows').appendChild(tr);
   });
@@ -115,7 +114,8 @@ function showDetail(r){
       <div><span>Cycles / day / minion</span><strong>${fmtCoins(r.cyclesPerDay)}</strong></div>
       <div><span>Collection interval</span><strong>${Number(r.collectionIntervalDays||1)<1?(Number(r.collectionIntervalDays||1)*24).toFixed(1)+'h':Number(r.collectionIntervalDays||1).toFixed(1)+'d'}</strong></div>
       <div><span>Net / day</span><strong class="${r.netDay>=0?'profit':'loss'}">${fmtCoins(r.netDay)}</strong></div>
-      <div><span>Setup total</span><strong>${r.setupComplete?fmtCoins(r.setupCost):'N/A'}</strong></div>
+      <div><span>Setup total · one-time</span><strong>${r.setupComplete?fmtCoins(r.setupCost):'N/A'}</strong></div>
+      <div><span>Recurring expenses / day</span><strong>${fmtCoins(r.expensesDay)}</strong></div>
       <div><span>Payback</span><strong>${fmtDays(r.paybackDays)}</strong></div>
       <div><span>LIVE net / day</span><strong>${fmtCoins(r.liveNetDay)}</strong></div>
       <div><span>7d expected net / day</span><strong>${fmtCoins(r.expected7dNetDay)}</strong></div>
