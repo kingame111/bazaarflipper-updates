@@ -211,3 +211,19 @@ test('optimizer with zero budget uses selected slot count without inventing a bu
   assert.equal(pick.quantity,17);
   assert.equal(result.optimizer.budget,0);
 });
+
+
+test('Super Compactor recursively compacts Quartz over a long collection interval and keeps leftovers',()=>{
+  const day=calculateMinionRankings({...opts({tier:11,upgrade1:'SUPER_COMPACTOR_3000',collectionIntervalDays:1}),search:'Quartz Minion'},ctx()).rows[0];
+  assert(!day.outputDetails.some(x=>x.item==='ENCHANTED_QUARTZ_BLOCK'));
+  assert(day.outputDetails.some(x=>x.item==='ENCHANTED_QUARTZ'));
+
+  const week=calculateMinionRankings({...opts({tier:11,upgrade1:'SUPER_COMPACTOR_3000',collectionIntervalDays:7}),search:'Quartz Minion'},ctx()).rows[0];
+  const block=week.outputDetails.find(x=>x.item==='ENCHANTED_QUARTZ_BLOCK');
+  const enchanted=week.outputDetails.find(x=>x.item==='ENCHANTED_QUARTZ');
+  assert(block,'7-day collection should reach Enchanted Quartz Block');
+  assert(enchanted,'intermediate Enchanted Quartz remainder must be preserved');
+  assert.equal(block.ratio,25600);
+  const rawEquivalent=week.outputDetails.reduce((sum,x)=>sum+x.unitsPerDay*x.ratio,0);
+  assert(Math.abs(rawEquivalent-week.cyclesPerDay)<1e-6,'recursive compaction must conserve raw output');
+});
