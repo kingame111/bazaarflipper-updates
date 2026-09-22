@@ -16,9 +16,6 @@ jobs:
           node --check _staging/v0.5.9/server.mjs
           node --check _staging/v0.5.9/src/db.mjs
           node --check _staging/v0.5.9/test.mjs
-      - name: Install SQLite driver
-        working-directory: _staging/v0.5.9
-        run: npm install --no-save better-sqlite3@11
       - name: Database migration/sync/rollup tests
         working-directory: _staging/v0.5.9
         run: node test.mjs
