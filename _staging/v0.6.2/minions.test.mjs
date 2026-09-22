@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import { MINION_DATA } from './src/minion-data.mjs';
 import { calculateMinion, calculateMinionRankings, minionCatalog } from './src/minions.mjs';
 
@@ -11,9 +12,9 @@ const book=(buy,sell)=>({
 const ctx=(market={},history=new Map(),taxRate=0,itemMeta=new Map())=>({market,historyStats:history,taxRate,itemMeta,marketUpdatedAt:123});
 const opts=(extra={})=>({tier:11,count:1,fuel:'NONE',upgrade1:'NONE',upgrade2:'NONE',sellMethod:'NPC',priceMode:'LIVE',horizonDays:1,...extra});
 
-test('catalog exposes standard minions and intentionally unsupported Inferno',()=>{
+test('catalog exposes all 61 current minion families and intentionally unsupported Inferno',()=>{
   const catalog=minionCatalog();
-  assert.equal(catalog.minions.length,59);
+  assert.equal(catalog.minions.length,61);
   assert(catalog.minions.some(x=>x.name==='Vampire Minion'));
   assert(catalog.minions.some(x=>x.name==='Voidling Minion'));
   assert(catalog.minions.some(x=>x.name==='Inferno Minion'&&x.special==='INFERNO'));
@@ -226,4 +227,63 @@ test('Super Compactor recursively compacts Quartz over a long collection interva
   assert.equal(block.ratio,25600);
   const rawEquivalent=week.outputDetails.reduce((sum,x)=>sum+x.unitsPerDay*x.ratio,0);
   assert(Math.abs(rawEquivalent-week.cyclesPerDay)<1e-6,'recursive compaction must conserve raw output');
+});
+
+
+test('Lily Pad Minion T11 uses current 17.5s speed and one Lily Pad per cycle',()=>{
+  const r=calculateMinionRankings({...opts({tier:11}),search:'Lily Pad Minion'},ctx()).rows[0];
+  assert(r);
+  assert.equal(r.supported,true);
+  assert.equal(r.baseSecondsPerAction,17.5);
+  const lily=r.outputDetails.find(x=>x.rawItem==='WATER_LILY');
+  assert(lily);
+  assert(Math.abs(lily.rawUnitsPerDay-r.cyclesPerDay)<1e-7);
+});
+
+test('Lily Pad Super Compactor recursively reaches Condensed Lily Pad and conserves output',()=>{
+  const r=calculateMinionRankings({...opts({tier:11,upgrade1:'SUPER_COMPACTOR_3000',collectionIntervalDays:14}),search:'Lily Pad Minion'},ctx()).rows[0];
+  const condensed=r.outputDetails.find(x=>x.item==='CONDENSED_WATER_LILY');
+  assert(condensed,'14-day interval should reach Condensed Lily Pad');
+  assert.equal(condensed.ratio,25600);
+  const rawEquivalent=r.outputDetails
+    .filter(x=>x.rawItem==='WATER_LILY')
+    .reduce((sum,x)=>sum+x.unitsPerDay*x.ratio,0);
+  assert(Math.abs(rawEquivalent-r.cyclesPerDay)<1e-6);
+});
+
+test('Sunflower Minion T11 models normal day/night output as a 50/50 expected split',()=>{
+  const r=calculateMinionRankings({...opts({tier:11}),search:'Sunflower Minion'},ctx()).rows[0];
+  assert(r);
+  assert.equal(r.supported,true);
+  assert.equal(r.baseSecondsPerAction,14);
+  const sun=r.outputDetails.find(x=>x.rawItem==='DOUBLE_PLANT');
+  const moon=r.outputDetails.find(x=>x.rawItem==='MOONFLOWER');
+  assert(sun&&moon);
+  assert(Math.abs(sun.rawUnitsPerDay-r.cyclesPerDay*1.5)<1e-7);
+  assert(Math.abs(moon.rawUnitsPerDay-r.cyclesPerDay*1.5)<1e-7);
+  assert(r.warnings.some(x=>/50\/50.*day\/night/i.test(x)));
+});
+
+test('permanent setup purchases never reduce daily net profit',()=>{
+  const market={
+    ENCHANTED_LAVA_BUCKET:book(100,120),
+    FLYCATCHER_UPGRADE:book(100,120)
+  };
+  const r=calculateMinionRankings({
+    ...opts({tier:1,fuel:'ENCHANTED_LAVA_BUCKET',upgrade1:'FLYCATCHER_UPGRADE'}),
+    search:'Snow Minion'
+  },ctx(market)).rows[0];
+  assert.equal(r.setupComplete,true);
+  assert.equal(r.setupCost,240);
+  assert.equal(r.expensesDay,0);
+  assert.equal(r.netDay,r.grossDay);
+});
+
+test('minion UI labels recurring cost separately and contains no confidence control or column',()=>{
+  const html=fs.readFileSync('./public/minions.html','utf8');
+  const js=fs.readFileSync('./public/minions.js','utf8');
+  assert(html.includes('Recurring / day'));
+  assert(html.includes('Setup (one-time)'));
+  assert(!/Confidence/i.test(html));
+  assert(!/r\.confidence/i.test(js));
 });
