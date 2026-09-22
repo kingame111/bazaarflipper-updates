@@ -2,11 +2,12 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import { DatabaseSync } from 'node:sqlite';
 import {
   openDatabase, insertHistorySnapshot, exportPendingHistorySnapshots,
   importHistorySnapshots, acknowledgeHistorySnapshots, pendingHistoryStats,
   cleanupHistory, saveCompetitionStats, loadCompetitionStats, loadHistoryStats,
-  checkpointDatabase
+  checkpointDatabase, importHandoffDatabase
 } from './src/db.mjs';
 
 const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'bz-v059-'));
@@ -15,6 +16,49 @@ const targetPath=path.join(tmp,'target.sqlite');
 
 function columns(db,table){return new Set(db.prepare(`PRAGMA table_info(${table})`).all().map(r=>r.name));}
 function count(db,table){return Number(db.prepare(`SELECT COUNT(*) n FROM ${table}`).get().n);}
+
+
+const legacyPath=path.join(tmp,'legacy-v058.sqlite');
+{
+  const legacy=new DatabaseSync(legacyPath);
+  legacy.exec(`
+    CREATE TABLE history (
+      ts INTEGER NOT NULL, product_id TEXT NOT NULL,
+      best_buy_order REAL NOT NULL, best_sell_offer REAL NOT NULL,
+      sell_moving_week REAL NOT NULL, buy_moving_week REAL NOT NULL,
+      sell_volume REAL NOT NULL, buy_volume REAL NOT NULL,
+      sell_orders INTEGER NOT NULL, buy_orders INTEGER NOT NULL,
+      PRIMARY KEY (ts, product_id)
+    );
+    CREATE TABLE history_snapshots (
+      ts INTEGER PRIMARY KEY, origin_id TEXT NOT NULL, received_at INTEGER NOT NULL
+    );
+    CREATE TABLE competition_stats (
+      product_id TEXT PRIMARY KEY, observed_ms REAL NOT NULL,
+      entry_better_events REAL NOT NULL, exit_better_events REAL NOT NULL,
+      margin_samples INTEGER NOT NULL, margin_mean REAL NOT NULL,
+      margin_m2 REAL NOT NULL, updated_ts INTEGER NOT NULL
+    );
+    CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+  `);
+  legacy.prepare('INSERT INTO history VALUES (?,?,?,?,?,?,?,?,?,?)').run(1000,'LEGACY',1,2,3,4,5,6,7,8);
+  legacy.prepare('INSERT INTO history_snapshots VALUES (?,?,?)').run(1000,'DESKTOP',1500);
+  legacy.close();
+}
+{
+  const migrated=openDatabase(legacyPath);
+  try {
+    const cols=columns(migrated,'history');
+    for(const c of ['weighted_buy_price','weighted_sell_price','best_buy_amount','best_sell_amount','buy_depth_1pct','sell_depth_1pct','buy_depth_5pct','sell_depth_5pct']) assert(cols.has(c),`migration missing ${c}`);
+    const legacyRow=migrated.prepare('SELECT * FROM history WHERE product_id=?').get('LEGACY');
+    assert.equal(legacyRow.best_buy_order,1);
+    assert.equal(legacyRow.weighted_buy_price,0);
+    const migratedMeta=migrated.prepare('SELECT * FROM history_snapshot_meta WHERE bucket_ts=? AND origin_id=?').get(1000,'DESKTOP');
+    assert(migratedMeta);
+    assert.equal(migratedMeta.schema_version,1);
+    assert.equal(migratedMeta.source_ts,1000);
+  } finally { migrated.close(); }
+}
 
 const source=openDatabase(sourcePath);
 try {
@@ -102,6 +146,24 @@ try {
     const daily=target.prepare('SELECT * FROM history_daily WHERE product_id=?').get('A');
     assert(daily);
     assert(daily.samples>=2);
+
+
+    // Full DB handoff preserves v0.5.9-only fields and metadata.
+    checkpointDatabase(source);
+    const handoffPath=path.join(tmp,'handoff-target.sqlite');
+    const handoffTarget=openDatabase(handoffPath);
+    try {
+      const full=importHandoffDatabase(handoffTarget,sourcePath);
+      assert.equal(full.verified,true);
+      const copied=handoffTarget.prepare('SELECT * FROM history WHERE ts=? AND product_id=?').get(bucketTs,'A');
+      assert(copied);
+      assert.equal(copied.weighted_buy_price,101);
+      assert.equal(copied.buy_depth_5pct,400);
+      const copiedMeta=handoffTarget.prepare('SELECT * FROM history_snapshot_meta WHERE bucket_ts=? AND origin_id=?').get(bucketTs,'LAPTOP');
+      assert(copiedMeta);
+      assert.equal(copiedMeta.source_ts,sourceTs);
+      assert.equal(copiedMeta.collected_at,collectedAt);
+    } finally { handoffTarget.close(); }
 
     // Acknowledgement removes source pending snapshot and metadata together.
     const before=pendingHistoryStats(source,'LAPTOP');
