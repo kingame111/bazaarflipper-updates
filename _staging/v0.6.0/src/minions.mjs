@@ -103,14 +103,51 @@ function acquisitionQuote(itemId, market) {
   return { price, available: price > 0 };
 }
 
-function compactDrop(drop, useCompactor) {
+function compactDropStream(drop, rawUnitsPerDay, useCompactor, collectionIntervalDays = 1) {
+  const perDay = Math.max(0, safe(rawUnitsPerDay));
+  const interval = Math.max(1 / 24, Math.min(30, safe(collectionIntervalDays, 1)));
   if (!useCompactor || !drop?.enchanted || typeof drop.enchanted !== 'object') {
-    return { item: drop.item, amountMultiplier: 1, npc: drop.npc, compacted: false };
+    return [{ item:drop.item, unitsPerDay:perDay, npc:Math.max(0,safe(drop.npc)), compacted:false, ratio:1, compactionLevel:0 }];
   }
-  const pairs = Object.entries(drop.enchanted).filter(([,ratio]) => safe(ratio) > 0);
-  if (!pairs.length) return { item: drop.item, amountMultiplier: 1, npc: drop.npc, compacted: false };
-  const [item, ratio] = pairs[0];
-  return { item, amountMultiplier: 1 / safe(ratio), npc: Math.max(0,safe(drop.npc))*safe(ratio), compacted: true, ratio: safe(ratio) };
+  const first = Object.entries(drop.enchanted).find(([,ratio]) => safe(ratio) > 0);
+  if (!first) return [{ item:drop.item, unitsPerDay:perDay, npc:Math.max(0,safe(drop.npc)), compacted:false, ratio:1, compactionLevel:0 }];
+
+  const stages=[{item:drop.item,ratioFromPrev:1,npc:Math.max(0,safe(drop.npc)),cumulativeRatio:1}];
+  let currentItem=drop.item, currentNpc=Math.max(0,safe(drop.npc)), cumulative=1;
+  let [nextItem,nextRatioRaw]=first;
+  let nextRatio=safe(nextRatioRaw);
+  const seen=new Set([currentItem]);
+
+  while(nextItem && nextRatio>0 && !seen.has(nextItem) && stages.length<8){
+    cumulative*=nextRatio;
+    currentNpc*=nextRatio;
+    stages.push({item:nextItem,ratioFromPrev:nextRatio,npc:currentNpc,cumulativeRatio:cumulative});
+    seen.add(nextItem);
+    const more=MINION_DATA.compactionNext?.[nextItem];
+    currentItem=nextItem;
+    if(!more) break;
+    nextItem=more.item;
+    nextRatio=safe(more.ratio);
+  }
+
+  let units=perDay*interval;
+  const outputs=[];
+  for(let i=0;i<stages.length-1;i++){
+    const ratio=stages[i+1].ratioFromPrev;
+    const made=Math.floor((units+1e-9)/ratio);
+    const remainder=Math.max(0,units-made*ratio);
+    if(remainder>1e-9) outputs.push({
+      item:stages[i].item,unitsPerDay:remainder/interval,npc:stages[i].npc,
+      compacted:i>0,ratio:stages[i].cumulativeRatio,compactionLevel:i
+    });
+    units=made;
+  }
+  const last=stages[stages.length-1];
+  if(units>1e-9) outputs.push({
+    item:last.item,unitsPerDay:units/interval,npc:last.npc,
+    compacted:stages.length>1,ratio:last.cumulativeRatio,compactionLevel:stages.length-1
+  });
+  return outputs;
 }
 
 function conditionMatches(upgrade, minion) {
@@ -217,7 +254,8 @@ export function minionCatalog() {
       upgrade2: 'DIAMOND_SPREADING',
       sellMethod: 'BEST',
       priceMode: 'LIVE',
-      horizonDays: 1
+      horizonDays: 1,
+      collectionIntervalDays: 1
     }
   };
 }
@@ -234,6 +272,7 @@ export function calculateMinion(minion, options, context) {
 
   const tier = Math.max(1, Math.min(12, Math.floor(safe(options.tier, 11))));
   const count = Math.max(1, Math.min(100, Math.floor(safe(options.count, 1))));
+  const collectionIntervalDays = Math.max(1/24, Math.min(30, safe(options.collectionIntervalDays, 1)));
   const tierInfo = minion.tiers?.[tier];
   if (!tierInfo || !(safe(tierInfo.speed) > 0)) {
     return { id:minion.id, name:minion.name, family:minion.family, tier, supported:false, reason:`Tier ${tier} is not available for this minion.` };
@@ -273,16 +312,17 @@ export function calculateMinion(minion, options, context) {
   const addDrop = (drop, cycles, source, outputMultiplier = 1) => {
     if (!drop || !(safe(drop.amount) > 0) || !(safe(drop.chance,1) > 0) || !(cycles > 0)) return;
     const baseUnits = cycles * safe(drop.amount) * safe(drop.chance,1) * outputMultiplier;
-    const compacted = compactDrop(drop,useCompactor);
-    generated.push({
+    const stream=compactDropStream(drop,baseUnits,useCompactor,collectionIntervalDays);
+    for(const part of stream) generated.push({
       source,
       rawItem:drop.item,
-      item:compacted.item,
+      item:part.item,
       rawUnitsPerDay:baseUnits,
-      unitsPerDay:baseUnits*compacted.amountMultiplier,
-      npc:compacted.npc,
-      compacted:compacted.compacted,
-      ratio:compacted.ratio || 1
+      unitsPerDay:part.unitsPerDay,
+      npc:part.npc,
+      compacted:part.compacted,
+      ratio:part.ratio || 1,
+      compactionLevel:part.compactionLevel || 0
     });
   };
 
@@ -351,6 +391,7 @@ export function calculateMinion(minion, options, context) {
     family:minion.family,
     tier,
     count,
+    collectionIntervalDays,
     supported:true,
     baseSecondsPerAction:safe(tierInfo.speed),
     effectiveSecondsPerAction:secondsPerAction,
