@@ -1,0 +1,116 @@
+{
+  "version": "0.6.0",
+  "publishedAt": "2026-09-22T08:20:00+03:00",
+  "notes": [
+    "Adds a Minion Calculator page with 59 minion definitions, tier/fuel/upgrade controls, LIVE and local 7-day pricing, NPC/Instant/Sell Order/Auto sale routes, setup cost, payback, ROI, stability and confidence.",
+    "Adds a budget-and-slot setup optimizer that excludes unknown setup costs instead of guessing them.",
+    "Super Compactor 3000 now uses discrete recursive compaction over the selected collection interval and preserves intermediate/raw leftovers.",
+    "Corrects Fishing Minion current speeds/drop distribution and duplicate Minion Expander stacking.",
+    "Inferno Minion is intentionally shown as unsupported until its special fuel/RNG/multi-minion model is implemented."
+  ],
+  "files": [
+    {
+      "path": "server.mjs",
+      "sha256": "5a9928c13d9f4917497d9ab05d469d2cd723d434886e8ce98f1bae2a94b2fae8"
+    },
+    {
+      "path": "package.json",
+      "sha256": "2c5980911d31aa013bf5c5a608b8516ebf8fa6b42330c8c6850c13645918d60a"
+    },
+    {
+      "path": "src/minions.mjs",
+      "sha256": "d548133af45f64bacda04ad5a5abadb3df9628665facf76842bf2e9060fd8ac0"
+    },
+    {
+      "path": "src/minion-data.mjs",
+      "sha256": "28a2e4afffe0e7efa360fa63484724e327f626e68839f82d2e9343d2534f272b"
+    },
+    {
+      "path": "public/index.html",
+      "sha256": "7d385408d22a7447a0a63319159f108fb4709f331d86fb4151b22f27f9ad7c27"
+    },
+    {
+      "path": "public/minions.html",
+      "sha256": "b3a425ed78288b1cb8fb59d8f57f354132be2b7bb0fcd53ada1e1894eddfe4c5"
+    },
+    {
+      "path": "public/minions.js",
+      "sha256": "1b41afa0e808da129673ef666a2bf822f76f3ac3479906db219906d4673bc40c"
+    },
+    {
+      "path": "public/minions.css",
+      "sha256": "6bf8c2d5edc769d4ee1425a52985563260bbf47ed120cd1c7dc65c86bf99cec2"
+    }
+  ],
+  "bundle": {
+    "parts": [
+      "./releases/0.6.0/part-001.txt",
+      "./releases/0.6.0/part-002.txt",
+      "./releases/0.6.0/part-003.txt",
+      "./releases/0.6.0/part-004.txt",
+      "./releases/0.6.0/part-005.txt",
+      "./releases/0.6.0/part-006.txt",
+      "./releases/0.6.0/part-007.txt",
+      "./releases/0.6.0/part-008.txt",
+      "./releases/0.6.0/part-009.txt",
+      "./releases/0.6.0/part-010.txt",
+      "./releases/0.6.0/part-011.txt",
+      "./releases/0.6.0/part-012.txt",
+      "./releases/0.6.0/part-013.txt",
+      "./releases/0.6.0/part-014.txt",
+      "./releases/0.6.0/part-015.txt",
+      "./releases/0.6.0/part-016.txt",
+      "./releases/0.6.0/part-017.txt",
+      "./releases/0.6.0/part-018.txt",
+      "./releases/0.6.0/part-019.txt",
+      "./releases/0.6.0/part-020.txt",
+      "./releases/0.6.0/part-021.txt",
+      "./releases/0.6.0/part-022.txt",
+      "./releases/0.6.0/part-023.txt",
+      "./releases/0.6.0/part-024.txt",
+      "./releases/0.6.0/part-025.txt",
+      "./releases/0.6.0/part-026.txt",
+      "./releases/0.6.0/part-027.txt",
+      "./releases/0.6.0/part-028.txt",
+      "./releases/0.6.0/part-029.txt",
+      "./releases/0.6.0/part-030.txt",
+      "./releases/0.6.0/part-031.txt",
+      "./releases/0.6.0/part-032.txt",
+      "./releases/0.6.0/part-033.txt",
+      "./releases/0.6.0/part-034.txt",
+      "./releases/0.6.0/part-035.txt",
+      "./releases/0.6.0/part-036.txt",
+      "./releases/0.6.0/part-037.txt",
+      "./releases/0.6.0/part-038.txt",
+      "./releases/0.6.0/part-039.txt",
+      "./releases/0.6.0/part-040.txt",
+      "./releases/0.6.0/part-041.txt",
+      "./releases/0.6.0/part-042.txt",
+      "./releases/0.6.0/part-043.txt",
+      "./releases/0.6.0/part-044.txt",
+      "./releases/0.6.0/part-045.txt",
+      "./releases/0.6.0/part-046.txt",
+      "./releases/0.6.0/part-047.txt",
+      "./releases/0.6.0/part-048.txt",
+      "./releases/0.6.0/part-049.txt",
+      "./releases/0.6.0/part-050.txt",
+      "./releases/0.6.0/part-051.txt",
+      "./releases/0.6.0/part-052.txt",
+      "./releases/0.6.0/part-053.txt",
+      "./releases/0.6.0/part-054.txt",
+      "./releases/0.6.0/part-055.txt",
+      "./releases/0.6.0/part-056.txt",
+      "./releases/0.6.0/part-057.txt",
+      "./releases/0.6.0/part-058.txt",
+      "./releases/0.6.0/part-059.txt",
+      "./releases/0.6.0/part-060.txt",
+      "./releases/0.6.0/part-061.txt",
+      "./releases/0.6.0/part-062.txt",
+      "./releases/0.6.0/part-063.txt",
+      "./releases/0.6.0/part-064.txt",
+      "./releases/0.6.0/part-065.txt"
+    ],
+    "encoding": "gzip-base64",
+    "sha256": "a1d4364fbdfefcab79ed687df73c3e342003c5354988f6abb9a2e6948be7b056"
+  }
+}
