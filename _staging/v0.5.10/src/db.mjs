@@ -109,8 +109,7 @@ export function ensureExtendedHistorySchema(db) {
     INSERT OR IGNORE INTO history_snapshot_meta (bucket_ts, origin_id, source_ts, collected_at, ingested_at, product_count, effective_tax_rate, schema_version)
       SELECT ts, origin_id, ts, received_at, received_at, 0, 0, 1 FROM history_snapshots;
   `);
-  
-
+}
 
 export function insertHistorySnapshot(db,timestamp,rows,originId='LOCAL',meta={}){
  const insert=db.prepare(`INSERT OR IGNORE INTO history (ts,product_id,best_buy_order,best_sell_offer,sell_moving_week,buy_moving_week,sell_volume,buy_volume,sell_orders,buy_orders,weighted_buy_price,weighted_sell_price,best_buy_amount,best_sell_amount,buy_depth_1pct,sell_depth_1pct,buy_depth_5pct,sell_depth_5pct) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
