@@ -44,3 +44,4 @@ try{
   fs.rmSync(tmp,{recursive:true,force:true});
 }
 console.log('v0.5.10 hotfix tests: PASS');
+
