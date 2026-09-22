@@ -1,0 +1,31 @@
+name: BazaarFlipper v0.5.9 staging tests
+on:
+  push:
+    branches: [v0.5.9-history]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check
+        run: |
+          node --check _staging/v0.5.9/server.mjs
+          node --check _staging/v0.5.9/src/db.mjs
+          node --check _staging/v0.5.9/test.mjs
+      - name: Install SQLite driver
+        working-directory: _staging/v0.5.9
+        run: npm install --no-save better-sqlite3@11
+      - name: Database migration/sync/rollup tests
+        working-directory: _staging/v0.5.9
+        run: node test.mjs
+      - name: Static safety checks
+        run: |
+          grep -q "historyRowsFromProducts(data.products)" _staging/v0.5.9/server.mjs
+          grep -q "history_hourly" _staging/v0.5.9/src/db.mjs
+          grep -q "history_daily" _staging/v0.5.9/src/db.mjs
+          grep -q "server-instance.lock" _staging/v0.5.9/server.mjs
+          grep -q "BazaarFlipper stopped safely" _staging/v0.5.9/server.mjs
