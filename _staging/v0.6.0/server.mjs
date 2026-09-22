@@ -776,6 +776,7 @@ async function handleMainRequest(req, res) {
       sellMethod: url.searchParams.get('sellMethod') || 'BEST',
       priceMode: url.searchParams.get('priceMode') || 'LIVE',
       horizonDays: numberParam('horizonDays', 1),
+      collectionIntervalDays: numberParam('collectionIntervalDays', 1),
       family: url.searchParams.get('family') || 'ALL',
       search: url.searchParams.get('search') || '',
       sort: url.searchParams.get('sort') || 'NET',
