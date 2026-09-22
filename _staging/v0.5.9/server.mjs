@@ -109,7 +109,42 @@ let shuttingDown=false;
 const runtimeTimers=[];
 const keepTimer=(timer)=>{runtimeTimers.push(timer);timer.unref?.();return timer;};
 
-state.dualSync = { lastSyncAt:null,lastSuccessAt:null,lastError:null,sentSnapshots:0,sentRows:0,acknowledgedSnapshots:0,deletedRows:0,droppedBeforeSync:Number(getMeta(db,'laptop_dropped_before_sync')||0),peerReachable:null };
+state.dualSync = { lastSyncAt:null,lastSuccessAt:null,lastError:null,lastErrorType:null,lastTriggerAt:null,lastTransferAt:null,sentSnapshots:0,sentRows:0,acknowledgedSnapshots:0,deletedRows:0,droppedBeforeSync:Number(getMeta(db,'laptop_dropped_before_sync')||0),peerReachable:null };
+state.bazaarHealth = { consecutiveFailures:0,lastFailureAt:null,lastRecoveryAt:null,lastErrorType:null };
+
+function formatAge(ms) {
+  if (!Number.isFinite(Number(ms)) || Number(ms) < 0) return 'unknown';
+  const seconds=Math.floor(Number(ms)/1000);
+  if(seconds<60)return `${seconds}s`;
+  const minutes=Math.floor(seconds/60);
+  if(minutes<60)return `${minutes}m ${seconds%60}s`;
+  const hours=Math.floor(minutes/60);
+  return `${hours}h ${minutes%60}m`;
+}
+
+function classifyRuntimeError(error) {
+  const name=String(error?.name||'');
+  const message=String(error?.message||error||'');
+  if(name==='AbortError'||/aborted/i.test(message)) return 'ABORT';
+  if(/timed out|timeout|ETIMEDOUT/i.test(message)) return 'TIMEOUT';
+  if(/ECONNREFUSED/i.test(message)) return 'CONNECTION_REFUSED';
+  if(/ECONNRESET/i.test(message)) return 'CONNECTION_RESET';
+  if(/EAI_AGAIN|ENOTFOUND/i.test(message)) return 'DNS';
+  if(/HTTP\s*401|HTTP\s*403|unauthor/i.test(message)) return 'AUTH';
+  if(/HTTP\s*\d+/i.test(message)) return 'HTTP';
+  if(/fetch failed|network/i.test(message)) return 'NETWORK';
+  return 'OTHER';
+}
+
+function currentBazaarHealth(now=Date.now()) {
+  const lastGood=Number(state.lastSuccessfulFetchAt)||0;
+  const lastMarket=Number(state.lastHypixelUpdate)||0;
+  const ageMs=lastGood?Math.max(0,now-lastGood):null;
+  const marketAgeMs=lastMarket?Math.max(0,now-lastMarket):null;
+  const staleThresholdMs=Math.max(60_000,(Number(config.pollIntervalSeconds)||15)*3000);
+  const mode=!lastGood?'STARTING':(state.bazaarHealth.consecutiveFailures>0||ageMs>staleThresholdMs?'LAST_GOOD_SNAPSHOT':'LIVE');
+  return {mode,ageMs,marketAgeMs,staleThresholdMs,consecutiveFailures:state.bazaarHealth.consecutiveFailures,lastFailureAt:state.bazaarHealth.lastFailureAt,lastRecoveryAt:state.bazaarHealth.lastRecoveryAt,lastErrorType:state.bazaarHealth.lastErrorType};
+}
 
 function diskStats(){ try{ const st=fs.statfsSync(projectRoot); const block=Number(st.bsize||st.frsize||4096); return {freeBytes:Number(st.bavail)*block,totalBytes:Number(st.blocks)*block}; }catch{return {freeBytes:null,totalBytes:null};} }
 function pendingSync(){ return handoff.role==='LAPTOP' ? pendingHistoryStats(db, localOriginId) : {snapshots:0,rows:0,oldestTs:null,newestTs:null}; }
