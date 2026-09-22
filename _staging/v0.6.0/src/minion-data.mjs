@@ -2479,7 +2479,7 @@ export const MINION_DATA = {
       "mobSpawning": false,
       "tiers": {
         "1": {
-          "speed": 78,
+          "speed": 75,
           "recipe": [
             {
               "item": "RAW_FISH",
@@ -2489,12 +2489,12 @@ export const MINION_DATA = {
           "exactRecipe": true
         },
         "2": {
-          "speed": 78,
+          "speed": 75,
           "recipe": null,
           "exactRecipe": false
         },
         "3": {
-          "speed": 72,
+          "speed": 67,
           "recipe": [
             {
               "item": "RAW_FISH",
@@ -2504,12 +2504,12 @@ export const MINION_DATA = {
           "exactRecipe": true
         },
         "4": {
-          "speed": 72,
+          "speed": 67,
           "recipe": null,
           "exactRecipe": false
         },
         "5": {
-          "speed": 68,
+          "speed": 59,
           "recipe": [
             {
               "item": "RAW_FISH",
@@ -2523,12 +2523,12 @@ export const MINION_DATA = {
           "exactRecipe": true
         },
         "6": {
-          "speed": 68,
+          "speed": 59,
           "recipe": null,
           "exactRecipe": false
         },
         "7": {
-          "speed": 62.5,
+          "speed": 51,
           "recipe": [
             {
               "item": "RAW_FISH",
@@ -2542,12 +2542,12 @@ export const MINION_DATA = {
           "exactRecipe": true
         },
         "8": {
-          "speed": 62.5,
+          "speed": 51,
           "recipe": null,
           "exactRecipe": false
         },
         "9": {
-          "speed": 53,
+          "speed": 43,
           "recipe": [
             {
               "item": "RAW_FISH",
@@ -2610,7 +2610,7 @@ export const MINION_DATA = {
         {
           "item": "RAW_FISH",
           "amount": 1,
-          "chance": 0.5,
+          "chance": 0.6666666666666666,
           "npc": 6,
           "enchanted": {
             "ENCHANTED_RAW_FISH": 160
@@ -2619,7 +2619,7 @@ export const MINION_DATA = {
         {
           "item": "RAW_FISH:1",
           "amount": 1,
-          "chance": 0.25,
+          "chance": 0.16666666666666666,
           "npc": 10,
           "enchanted": {
             "ENCHANTED_RAW_SALMON": 160
@@ -2628,7 +2628,7 @@ export const MINION_DATA = {
         {
           "item": "RAW_FISH:3",
           "amount": 1,
-          "chance": 0.12,
+          "chance": 0.08,
           "npc": 15,
           "enchanted": {
             "ENCHANTED_PUFFERFISH": 160
@@ -2637,7 +2637,7 @@ export const MINION_DATA = {
         {
           "item": "RAW_FISH:2",
           "amount": 1,
-          "chance": 0.04,
+          "chance": 0.02666666666666667,
           "npc": 20,
           "enchanted": {
             "ENCHANTED_CLOWNFISH": 160
@@ -2646,7 +2646,7 @@ export const MINION_DATA = {
         {
           "item": "PRISMARINE_CRYSTALS",
           "amount": 1,
-          "chance": 0.03,
+          "chance": 0.02,
           "npc": 5,
           "enchanted": {
             "ENCHANTED_PRISMARINE_CRYSTALS": 80
@@ -2655,7 +2655,7 @@ export const MINION_DATA = {
         {
           "item": "PRISMARINE_SHARD",
           "amount": 1,
-          "chance": 0.03,
+          "chance": 0.02,
           "npc": 5,
           "enchanted": {
             "ENCHANTED_PRISMARINE_SHARD": 80
@@ -2664,7 +2664,7 @@ export const MINION_DATA = {
         {
           "item": "SPONGE",
           "amount": 1,
-          "chance": 0.03,
+          "chance": 0.02,
           "npc": 5,
           "enchanted": {
             "ENCHANTED_SPONGE": 40
@@ -8499,7 +8499,8 @@ export const MINION_DATA = {
     "MINION_EXPANDER": {
       "name": "Minion Expander",
       "speed": 0.05,
-      "allowDuplicate": true
+      "allowDuplicate": true,
+      "specialStack": "MULTIPLICATIVE_SAME_ID"
     },
     "FLYCATCHER_UPGRADE": {
       "name": "Flycatcher",
@@ -8594,5 +8595,9 @@ export const MINION_DATA = {
     "Fuel values are taken from current NEU item lore.",
     "Even-tier speed uses the preceding odd tier where community data omits the duplicate speed; exact setup recipe is intentionally left unavailable.",
     "Inferno is withheld from ranking until its special fuel/RNG model is implemented."
-  ]
+  ],
+  "sourceNotes": {
+    "fishing": "Fishing speeds aligned to current NEU generator lore on 2026-09-22; drop probabilities use the current community-wiki corrected distribution.",
+    "minionExpander": "Two Minion Expanders stack multiplicatively for 10.25% collection-rate increase."
+  }
 };
