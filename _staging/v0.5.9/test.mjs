@@ -13,10 +13,6 @@ const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'bz-v059-'));
 const sourcePath=path.join(tmp,'source.sqlite');
 const targetPath=path.join(tmp,'target.sqlite');
 
-function createLegacyV058Database(file){
-  const Database=(await import('better-sqlite3')).default;
-}
-
 function columns(db,table){return new Set(db.prepare(`PRAGMA table_info(${table})`).all().map(r=>r.name));}
 function count(db,table){return Number(db.prepare(`SELECT COUNT(*) n FROM ${table}`).get().n);}
 
