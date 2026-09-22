@@ -280,7 +280,7 @@ export function calculateMinion(minion, options, context) {
 
   const fuelId = upper(options.fuel || 'NONE');
   let fuel = MINION_DATA.fuels[fuelId] || MINION_DATA.fuels.NONE;
-  const warnings = [];
+  const warnings = Array.isArray(minion.warnings) ? [...minion.warnings] : [];
   if (fuel.condition?.family && String(fuel.condition.family).toLowerCase() !== String(minion.family).toLowerCase()) {
     warnings.push(`${fuel.name} is not compatible with ${minion.family} minions; fuel bonus ignored.`);
     fuel = MINION_DATA.fuels.NONE;
