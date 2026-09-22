@@ -214,6 +214,29 @@ async function refreshUpdateStatus() {
   return state.update;
 }
 
+function isTransientBazaarFetchError(error) {
+  const name = String(error?.name || '');
+  const message = String(error?.message || error || '');
+  return name === 'AbortError' || /aborted|timeout|timed out|fetch failed|ECONNRESET|ETIMEDOUT|EAI_AGAIN/i.test(message);
+}
+
+async function fetchBazaarResilient(timeoutMs, fetcher = fetchBazaar, sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))) {
+  const requestTimeoutMs = Math.max(20_000, Number(timeoutMs) || 0);
+  let lastError = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      return await fetcher(requestTimeoutMs);
+    } catch (error) {
+      lastError = error;
+      if (!isTransientBazaarFetchError(error) || attempt === 2) throw error;
+      const delayMs = 350 * (attempt + 1);
+      console.warn(`[bazaar] transient fetch failure; retrying in ${delayMs} ms: ${error instanceof Error ? error.message : String(error)}`);
+      await sleep(delayMs);
+    }
+  }
+  throw lastError;
+}
+
 async function pollBazaar() {
   if (!collectorActive || runningPoll) return;
   runningPoll = true;
@@ -221,7 +244,7 @@ async function pollBazaar() {
   state.lastFetchAt = Date.now();
 
   try {
-    const data = await fetchBazaar(config.requestTimeoutSeconds * 1000);
+    const data = await fetchBazaarResilient(config.requestTimeoutSeconds * 1000);
     state.lastFetchDurationMs = Math.round(performance.now() - started);
     state.lastSuccessfulFetchAt = Date.now();
     state.lastError = null;
