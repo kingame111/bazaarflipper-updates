@@ -1,0 +1,29 @@
+name: BazaarFlipper v0.6.0 minion tests
+on:
+  push:
+    branches: [v0.6.0-minions]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check _staging/v0.6.0/server.mjs
+          node --check _staging/v0.6.0/src/minion-data.mjs
+          node --check _staging/v0.6.0/src/minions.mjs
+          node --check _staging/v0.6.0/public/minions.js
+          node --check _staging/v0.6.0/minions.test.mjs
+      - name: Minion calculation tests
+        working-directory: _staging/v0.6.0
+        run: node --test minions.test.mjs
+      - name: Server and UI integration assertions
+        working-directory: _staging/v0.6.0
+        run: |
+          node -e "const fs=require('fs');const s=fs.readFileSync('server.mjs','utf8');if(!s.includes('/api/minions')||!s.includes('latestBazaarProducts = data.products || {}'))process.exit(1)"
+          node -e "const fs=require('fs');const h=fs.readFileSync('public/minions.html','utf8');const j=fs.readFileSync('public/minions.js','utf8');if(!h.includes('Minion Calculator')||!j.includes('/api/minions'))process.exit(1)"
+          node -e "const fs=require('fs');const h=fs.readFileSync('public/index.html','utf8');if(!h.includes('/minions.html')||!h.includes('v0.6.0'))process.exit(1)"
