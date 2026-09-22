@@ -1,34 +1,55 @@
 {
-  "version": "0.5.8",
-  "publishedAt": "2026-09-20T00:34:00+03:00",
+  "version": "0.5.9",
+  "publishedAt": "2026-09-22T03:50:00+03:00",
   "notes": [
-    "Desktop no longer crashes when the laptop peer is offline, unreachable, or times out during automatic sync.",
-    "Automatic sync failures are recorded as sync errors while the desktop server and website continue running.",
-    "Windows updater restart now launches BazaarFlipper through start-bazaarflip.bat in a visible console, so closing that console also stops the local website.",
-    "Includes the v0.5.7 laptop 256 MB RAM guard and disk-backed SQLite temp storage."
+    "Expanded diagnostics: Bazaar health is logged as LIVE/LAST_GOOD_SNAPSHOT with snapshot age, failure class, consecutive failures and recovery events.",
+    "Sync logs distinguish desktop trigger reachability from actual laptop transfer, and report rows/snapshots moved plus remaining backlog.",
+    "History schema expanded for future analysis with precise timestamps, all Bazaar products, weighted prices, liquidity and 1%/5% market depth.",
+    "30-day raw history rolls into hourly history, then into permanent daily history instead of being discarded.",
+    "Dual sync throughput is increased; transient Bazaar aborts get limited retries and a safer minimum timeout.",
+    "Full database handoff preserves v0.5.9 metadata and rollups.",
+    "Graceful shutdown stops timers, collection and sync; a single-instance lock prevents duplicate BazaarFlipper servers."
   ],
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "0cb9b739ec4b4f3a432e4f4e82630197b71d575bcf6825fa7580e72ad6cad4cb"
+      "sha256": "b7c6f886237f2e930a10791c2968ce92604e6fe89bdbfd4642df2c0600e60b84"
+    },
+    {
+      "path": "src/db.mjs",
+      "sha256": "65d2ee8a802bd63e107dcc4a87697df0ee288c223939e58dc52b6e008a6a911e"
+    },
+    {
+      "path": "config.example.json",
+      "sha256": "254a822ddb97bd9f9537c3be6da9075ead9db0d5dbe2253648b9c7c46eb77e98"
     },
     {
       "path": "package.json",
-      "sha256": "3b97c7d7db3273d9f117d561d59b343649983e2ae9f3972d63ecd37c750ec0ca"
-    },
-    {
-      "path": "src/apply-update.mjs",
-      "sha256": "b11c0fa4972ec674aaaef3f8142a68e1e4b2b330fa1fe8f45fcafd7f4ee45117"
+      "sha256": "b7ca40e588c40a5f7cd4661f4385be20b44278f4109ba5372306895ecf0c0614"
     }
   ],
   "bundle": {
     "parts": [
-      "./releases/0.5.8/part-001.txt",
-      "./releases/0.5.8/part-002.txt",
-      "./releases/0.5.8/part-003.txt",
-      "./releases/0.5.8/part-004.txt"
+      "./releases/0.5.9/part-001.txt",
+      "./releases/0.5.9/part-002.txt",
+      "./releases/0.5.9/part-003.txt",
+      "./releases/0.5.9/part-004.txt",
+      "./releases/0.5.9/part-005.txt",
+      "./releases/0.5.9/part-006.txt",
+      "./releases/0.5.9/part-007.txt",
+      "./releases/0.5.9/part-008.txt",
+      "./releases/0.5.9/part-009.txt",
+      "./releases/0.5.9/part-010.txt",
+      "./releases/0.5.9/part-011.txt",
+      "./releases/0.5.9/part-012.txt",
+      "./releases/0.5.9/part-013.txt",
+      "./releases/0.5.9/part-014.txt",
+      "./releases/0.5.9/part-015.txt",
+      "./releases/0.5.9/part-016.txt",
+      "./releases/0.5.9/part-017.txt",
+      "./releases/0.5.9/part-018.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "d89df43ab2e09c967960bacb5f014fd38fab165e0016d172522a1615b494abf2"
+    "sha256": "73cf2bad1530f4766a53f5482928b75f6f322a8fbc06447799a48afb1172ee9c"
   }
 }
