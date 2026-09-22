@@ -166,3 +166,21 @@ test('all modeled rows remain finite and never emit NaN with missing market data
   }
 });
 
+
+
+test('Fishing Minion uses corrected current speed and drop distribution',()=>{
+  const minion=MINION_DATA.definitions['Fishing Minion'];
+  assert.equal(minion.tiers[1].speed,75);
+  assert.equal(minion.tiers[3].speed,67);
+  assert.equal(minion.tiers[9].speed,43);
+  assert.equal(minion.tiers[11].speed,35);
+  const chances=Object.fromEntries(minion.drops.map(d=>[d.item,d.chance]));
+  assert(Math.abs(chances.RAW_FISH-2/3)<1e-12);
+  assert(Math.abs(chances['RAW_FISH:1']-1/6)<1e-12);
+  assert(Math.abs(Object.values(chances).reduce((a,b)=>a+b,0)-1)<1e-12);
+});
+
+test('two Minion Expanders produce 10.25 percent stacked collection bonus',()=>{
+  const r=calculateMinionRankings({...opts({upgrade1:'MINION_EXPANDER',upgrade2:'MINION_EXPANDER'}),search:'Snow Minion'},ctx()).rows[0];
+  assert(Math.abs(r.speedBonusPercent-10.25)<1e-9);
+});
