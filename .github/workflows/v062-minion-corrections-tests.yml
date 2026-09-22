@@ -1,0 +1,52 @@
+name: BazaarFlipper v0.6.2 minion corrections tests
+permissions:
+  contents: write
+on:
+  push:
+    branches: [v0.6.2-history-worker]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check _staging/v0.6.2/server.mjs
+          node --check _staging/v0.6.2/src/db.mjs
+          node --check _staging/v0.6.2/src/history-stats-worker.mjs
+          node --check _staging/v0.6.2/src/minions.mjs
+          node --check _staging/v0.6.2/src/minion-data.mjs
+          node --check _staging/v0.6.2/public/minions.js
+          node --check _staging/v0.6.2/minions.test.mjs
+          node --check _staging/v0.6.2/history-worker.test.mjs
+          node --check _staging/v0.6.2/build-release.mjs
+          node --check _staging/v0.6.2/bundle-test.mjs
+      - name: Minion regressions
+        working-directory: _staging/v0.6.2
+        run: node --test minions.test.mjs
+      - name: History worker regressions
+        working-directory: _staging/v0.6.2
+        run: node --test history-worker.test.mjs
+      - name: Server and UI integration
+        working-directory: _staging/v0.6.2
+        run: |
+          node -e "const fs=require('fs');const s=fs.readFileSync('server.mjs','utf8');if(s.includes('loadHistoryStats(')||!s.includes('historyStatsLoading'))process.exit(1)"
+          node -e "const fs=require('fs');const h=fs.readFileSync('public/index.html','utf8');if(!h.includes('/minions.html')||!h.includes('v0.6.2'))process.exit(1)"
+      - name: Build release bundle
+        working-directory: _staging/v0.6.2
+        run: node build-release.mjs
+      - name: Bundle integrity
+        working-directory: _staging/v0.6.2
+        run: node bundle-test.mjs
+      - name: Commit generated bundle
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add _staging/v0.6.2/manifest.json releases/0.6.2
+          git diff --cached --quiet || git commit -m "Build BazaarFlipper v0.6.2 bundle [skip ci]"
+          git push
