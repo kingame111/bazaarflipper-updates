@@ -165,3 +165,4 @@ test('all modeled rows remain finite and never emit NaN with missing market data
     }
   }
 });
+
