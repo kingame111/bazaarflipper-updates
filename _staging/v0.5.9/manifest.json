@@ -1,0 +1,52 @@
+{
+  "version": "0.5.9",
+  "publishedAt": "2026-09-22T02:55:00+03:00",
+  "notes": [
+    "History schema expanded for future analysis: exact source/collection/ingestion times, all Bazaar products, weighted prices, top-level liquidity and 1%/5% market depth.",
+    "30-day raw history now rolls into hourly history, then into a permanent daily archive instead of being discarded.",
+    "Dual sync is faster and automatic desktop-triggered sync no longer blocks on the whole laptop transfer.",
+    "Full database handoff now preserves v0.5.9 metadata, liquidity fields and rollups.",
+    "Transient Bazaar aborts are retried with a safer minimum request timeout while hard errors still fail immediately.",
+    "Graceful shutdown stops timers, collection and sync, and a single-instance lock prevents duplicate BazaarFlipper servers."
+  ],
+  "files": [
+    {
+      "path": "server.mjs",
+      "sha256": "cbc12127f185f00b0fd314e06db4e5bb91b1cbb3fba16d853a357f820fd485a6"
+    },
+    {
+      "path": "src/db.mjs",
+      "sha256": "65d2ee8a802bd63e107dcc4a87697df0ee288c223939e58dc52b6e008a6a911e"
+    },
+    {
+      "path": "config.example.json",
+      "sha256": "254a822ddb97bd9f9537c3be6da9075ead9db0d5dbe2253648b9c7c46eb77e98"
+    },
+    {
+      "path": "package.json",
+      "sha256": "b7ca40e588c40a5f7cd4661f4385be20b44278f4109ba5372306895ecf0c0614"
+    }
+  ],
+  "bundle": {
+    "parts": [
+      "./releases/0.5.9/part-001.txt",
+      "./releases/0.5.9/part-002.txt",
+      "./releases/0.5.9/part-003.txt",
+      "./releases/0.5.9/part-004.txt",
+      "./releases/0.5.9/part-005.txt",
+      "./releases/0.5.9/part-006.txt",
+      "./releases/0.5.9/part-007.txt",
+      "./releases/0.5.9/part-008.txt",
+      "./releases/0.5.9/part-009.txt",
+      "./releases/0.5.9/part-010.txt",
+      "./releases/0.5.9/part-011.txt",
+      "./releases/0.5.9/part-012.txt",
+      "./releases/0.5.9/part-013.txt",
+      "./releases/0.5.9/part-014.txt",
+      "./releases/0.5.9/part-015.txt",
+      "./releases/0.5.9/part-016.txt"
+    ],
+    "encoding": "gzip-base64",
+    "sha256": "e9b4a2a6eab4b230b1fcc88827b81d8859263b262e073bbfd1e26babfd3dcdfe"
+  }
+}
