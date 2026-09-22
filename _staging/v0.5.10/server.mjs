@@ -10,6 +10,7 @@ import { checkForUpdate, stageUpdate } from './src/updater.mjs';
 import { spawn } from 'node:child_process';
 import {
   openDatabase,
+  ensureExtendedHistorySchema,
   insertHistorySnapshot,
   cleanupHistory,
   getHistory,
@@ -85,8 +86,8 @@ const localOriginId = handoff.role === 'LAPTOP' ? 'LAPTOP' : 'DESKTOP';
 const dbPath = path.join(dataDir, 'bazaar.sqlite');
 bootLog('[boot] opening/migrating SQLite database');
 const dbOpenStarted=Date.now();
-const db = openDatabase(dbPath);
-bootLog(`[boot] SQLite ready in ${Date.now()-dbOpenStarted}ms`);
+const db = openDatabase(dbPath,{deferExtendedHistory:true});
+bootLog(`[boot] core SQLite ready in ${Date.now()-dbOpenStarted}ms; extended migration deferred`);
 if (handoff.role === 'LAPTOP') {
   try { db.exec('PRAGMA temp_store = FILE;'); } catch {}
 }
@@ -95,7 +96,7 @@ bootLog('[boot] loading competition stats');
 let dynamics = loadCompetitionStats(db);
 bootLog(`[boot] competition stats loaded count=${dynamics.size}`);
 let historyStats = new Map();
-let initialHistoryLoadPending = handoff.role !== 'LAPTOP';
+let historySchemaReady = false;
 const previousMarket = new Map();
 
 const logPath = path.join(logsDir, 'server.log');
@@ -470,6 +471,7 @@ function statusPayload() {
     lastSuccessfulFetchAt: state.lastSuccessfulFetchAt,
     lastFetchDurationMs: state.lastFetchDurationMs,
     lastError: state.lastError,
+    historySchemaReady,
     bazaarHealth: currentBazaarHealth(),
     dataMode: currentBazaarHealth().mode,
     snapshotAgeMs: currentBazaarHealth().ageMs,
@@ -887,49 +889,62 @@ const handoffServer = http.createServer((req, res) => {
   handleHandoffRequest(req, res).catch((error) => sendJson(res, { error: error instanceof Error ? error.message : String(error) }, 500));
 });
 
-server.listen(port, host, async () => {
-  bootLog(`[boot] HTTP server listening on ${host}:${port}`);
+server.listen(port, host, () => {
+  bootLog(`[boot] HTTP server listening on ${host}:${port}; health check can pass before extended migration`);
   console.log(`BazaarFlipper v${APP_VERSION} local server: http://${host}:${port}`);
   console.log(`Project root: ${projectRoot}`);
   console.log(`Collector role: ${handoff.role} · ${collectorActive ? 'ACTIVE' : 'PASSIVE'}${dualCollectorEnabled ? ' · DUAL SYNC' : ''}`);
-  console.log(`[startup] poll=${config.pollIntervalSeconds}s history=${config.historyIntervalSeconds}s rawRetention=${config.historyRetentionDays}d hourlyRetention=${Number(config.hourlyHistoryRetentionDays)||730}d syncBatch=${Number(config.syncBatchSnapshots)||12} syncInterval=${Number(config.syncIntervalSeconds)||60}s`);
-  if(initialHistoryLoadPending){
-    keepTimer(setTimeout(()=>{
-      const started=Date.now();
-      try{
-        bootLog('[boot] deferred history stats load begin');
+  console.log(`[startup] core server ready; extended history migration deferred by 5s`);
+
+  const completeStartup = async () => {
+    try {
+      const migrationStarted=Date.now();
+      bootLog('[boot] extended history migration begin');
+      ensureExtendedHistorySchema(db);
+      historySchemaReady=true;
+      bootLog(`[boot] extended history migration complete in ${Date.now()-migrationStarted}ms`);
+
+      if(handoff.role!=='LAPTOP'){
+        const historyStarted=Date.now();
+        bootLog('[boot] initial history stats load begin');
         historyStats=loadHistoryStats(db,Date.now(),config.historyIntervalSeconds);
-        initialHistoryLoadPending=false;
-        bootLog(`[boot] deferred history stats load complete in ${Date.now()-started}ms products=${historyStats.size}`);
-        console.log(`[history] initial stats loaded in ${Date.now()-started}ms; products=${historyStats.size}`);
-      }catch(error){
-        bootLog(`[boot] deferred history stats load failed: ${error instanceof Error?error.stack||error.message:String(error)}`);
-        console.error('[history] initial stats load failed:',error instanceof Error?error.message:String(error));
+        bootLog(`[boot] initial history stats load complete in ${Date.now()-historyStarted}ms products=${historyStats.size}`);
+        console.log(`[history] initial stats loaded in ${Date.now()-historyStarted}ms; products=${historyStats.size}`);
       }
-    },10000));
-  }
-  await refreshMayorTaxContext();
-  void refreshUpdateStatus();
-  if (collectorActive) {
-    await refreshItems();
-    await pollBazaar();
-  }
-  keepTimer(setInterval(pollBazaar, config.pollIntervalSeconds * 1000));
-  keepTimer(setInterval(refreshItems, 6 * 60 * 60 * 1000));
-  keepTimer(setInterval(refreshMayorTaxContext, 15 * 60 * 1000));
-  keepTimer(setInterval(refreshUpdateStatus, Math.max(5, Number(config.updateCheckMinutes) || 30) * 60 * 1000));
-  if (dualCollectorEnabled) {
-    const runAutoSync = () => {
-      void syncHistoryWithPeer(false).catch((error) => {
-        const message = error instanceof Error ? error.message : String(error);
-        state.dualSync.lastError = message;
-        state.dualSync.peerReachable = false;
-        console.warn(`[sync] automatic sync failed without stopping the server: ${message}`);
-      });
-    };
-    keepTimer(setTimeout(runAutoSync,5000));
-    keepTimer(setInterval(runAutoSync,Math.max(30,Number(config.syncIntervalSeconds)||60)*1000));
-  }
+
+      await refreshMayorTaxContext();
+      void refreshUpdateStatus();
+      if (collectorActive) {
+        await refreshItems();
+        await pollBazaar();
+      }
+      keepTimer(setInterval(pollBazaar, config.pollIntervalSeconds * 1000));
+      keepTimer(setInterval(refreshItems, 6 * 60 * 60 * 1000));
+      keepTimer(setInterval(refreshMayorTaxContext, 15 * 60 * 1000));
+      keepTimer(setInterval(refreshUpdateStatus, Math.max(5, Number(config.updateCheckMinutes) || 30) * 60 * 1000));
+      if (dualCollectorEnabled) {
+        const runAutoSync = () => {
+          void syncHistoryWithPeer(false).catch((error) => {
+            const message = error instanceof Error ? error.message : String(error);
+            const type = classifyRuntimeError(error);
+            state.dualSync.lastError = message;
+            state.dualSync.lastErrorType = type;
+            state.dualSync.peerReachable = false;
+            console.warn(`[sync] automatic sync wrapper failed [${type}]; server continues; error=${message}`);
+          });
+        };
+        keepTimer(setTimeout(runAutoSync,5000));
+        keepTimer(setInterval(runAutoSync,Math.max(30,Number(config.syncIntervalSeconds)||60)*1000));
+      }
+      bootLog('[boot] full startup complete');
+      console.log('[startup] full initialization complete');
+    } catch(error) {
+      bootLog(`[fatal] deferred startup failed: ${error instanceof Error?error.stack||error.message:String(error)}`);
+      console.error('[startup] deferred initialization failed:',error instanceof Error?error.message:String(error));
+    }
+  };
+
+  keepTimer(setTimeout(()=>{void completeStartup();},5000));
 });
 
 handoffServer.listen(handoffPort, '0.0.0.0', () => {
