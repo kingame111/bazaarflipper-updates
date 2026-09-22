@@ -391,7 +391,17 @@ export function calculateMinionRankings(options = {}, context = {}) {
   for (const minion of Object.values(MINION_DATA.definitions)) {
     if (family !== 'all' && String(minion.family).toLowerCase() !== family) continue;
     if (search && !String(minion.name).toLowerCase().includes(search)) continue;
-    rows.push(calculateMinion(minion,options,ctx));
+    const liveRow = calculateMinion(minion,options,{...ctx,priceMode:'LIVE'});
+    const expected7dRow = calculateMinion(minion,options,{...ctx,priceMode:'7D'});
+    const row = priceMode === '7D' ? expected7dRow : liveRow;
+    if (row.supported) {
+      row.liveNetDay = liveRow.netDay;
+      row.expected7dNetDay = expected7dRow.netDay;
+      row.currentVs7dPercent = Math.abs(expected7dRow.netDay) > 1e-9
+        ? ((liveRow.netDay - expected7dRow.netDay) / Math.abs(expected7dRow.netDay)) * 100
+        : null;
+    }
+    rows.push(row);
   }
   const sort = upper(options.sort || 'NET');
   const metric = (row) => {
@@ -400,6 +410,8 @@ export function calculateMinionRankings(options = {}, context = {}) {
     if (sort === 'ROI') return safe(row.roi30dPercent,-Infinity);
     if (sort === 'GROSS') return safe(row.grossDay,-Infinity);
     if (sort === 'CONFIDENCE') return safe(row.confidenceScore,-Infinity);
+    if (sort === 'STABILITY') return -safe(row.stabilityCv,Infinity);
+    if (sort === 'VS7D') return safe(row.currentVs7dPercent,-Infinity);
     return safe(row.netDay,-Infinity);
   };
   rows.sort((a,b)=>metric(b)-metric(a) || String(a.name).localeCompare(String(b.name)));
