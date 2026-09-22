@@ -2,7 +2,7 @@ const $=(id)=>document.getElementById(id);
 const fmtCoins=(n)=>Number.isFinite(Number(n))?new Intl.NumberFormat('en-US',{maximumFractionDigits:Math.abs(n)<100?2:0}).format(Number(n)):'—';
 const fmtPct=(n)=>Number.isFinite(Number(n))?`${Number(n).toFixed(1)}%`:'—';
 const fmtDays=(n)=>Number.isFinite(Number(n))?`${Number(n)<1?(Number(n)*24).toFixed(1)+'h':Number(n).toFixed(1)+'d'}`:'—';
-const controls=['tier','count','fuel','upgrade1','upgrade2','sellMethod','priceMode','horizonDays','family','search','sort','tax','beacon','crystal','otherSpeed'];
+const controls=['tier','count','fuel','upgrade1','upgrade2','sellMethod','priceMode','horizonDays','family','search','sort','tax','optimizerBudget','optimizerSlots','beacon','crystal','otherSpeed'];
 let catalog=null,lastData=null,timer=null;
 
 function option(select,value,label){const o=document.createElement('option');o.value=value;o.textContent=label;select.appendChild(o)}
@@ -56,6 +56,29 @@ function render(data){
   $('mRows').textContent=supported.length;$('mCoverage').textContent=`${(data.rows||[]).length-supported.length} special/unsupported`;
   $('resultCount').textContent=`${(data.rows||[]).length} minions`;
   $('updatedText').textContent=`Calculated ${new Date(data.generatedAt).toLocaleTimeString()} · horizon ${data.horizonDays} day(s)`;
+
+  const opt=data.optimizer||{};
+  const recommendations=opt.recommendations||[];
+  $('optimizerMeta').textContent=opt.budget>0
+    ? `Budget ${fmtCoins(opt.budget)} · ${opt.slots} slots · exact setup costs only`
+    : `${opt.slots} slots · budget ignored`;
+  $('optimizerRows').innerHTML='';
+  if(!recommendations.length){
+    $('optimizerRows').innerHTML='<tr><td colspan="8" class="na">No profitable setup with exact cost fits the selected budget/slots.</td></tr>';
+  }else{
+    recommendations.forEach((r,i)=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${i+1}</td>
+        <td><span class="name">${r.name} T${r.tier}</span><span class="family">${r.family}</span></td>
+        <td>${r.quantity}</td>
+        <td>${Number.isFinite(r.investment)?fmtCoins(r.investment):'N/A'}</td>
+        <td class="profit">${fmtCoins(r.totalNetDay)}</td>
+        <td>${fmtDays(r.paybackDays)}</td>
+        <td>${Number.isFinite(r.unusedBudget)?fmtCoins(r.unusedBudget):'—'}</td>
+        <td><span class="badge ${r.confidence}">${r.confidence}</span></td>`;
+      $('optimizerRows').appendChild(tr);
+    });
+  }
 
   $('rows').innerHTML='';
   (data.rows||[]).forEach((r,i)=>{
