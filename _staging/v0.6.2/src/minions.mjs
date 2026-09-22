@@ -456,7 +456,6 @@ export function calculateMinionRankings(options = {}, context = {}) {
     if (sort === 'PAYBACK') return row.paybackDays == null ? Infinity : -row.paybackDays;
     if (sort === 'ROI') return safe(row.roi30dPercent,-Infinity);
     if (sort === 'GROSS') return safe(row.grossDay,-Infinity);
-    if (sort === 'CONFIDENCE') return safe(row.confidenceScore,-Infinity);
     if (sort === 'STABILITY') return -safe(row.stabilityCv,Infinity);
     if (sort === 'VS7D') return safe(row.currentVs7dPercent,-Infinity);
     return safe(row.netDay,-Infinity);
