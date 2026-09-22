@@ -422,6 +422,32 @@ export function calculateMinionRankings(options = {}, context = {}) {
   };
   rows.sort((a,b)=>metric(b)-metric(a) || String(a.name).localeCompare(String(b.name)));
   const horizonDays = Math.max(1/24,Math.min(365,safe(options.horizonDays,1)));
+  const optimizerSlots = Math.max(1,Math.min(100,Math.floor(safe(options.optimizerSlots,options.count||1))));
+  const optimizerBudget = Math.max(0,safe(options.optimizerBudget,0));
+  const optimizer = rows
+    .filter((r)=>r.supported && r.netPerMinionDay>0)
+    .map((r)=>{
+      const exactSetup = r.setupComplete && Number.isFinite(r.setupPerMinion) && r.setupPerMinion>0;
+      const affordable = optimizerBudget>0
+        ? (exactSetup ? Math.floor(optimizerBudget/r.setupPerMinion) : 0)
+        : optimizerSlots;
+      const quantity=Math.max(0,Math.min(optimizerSlots,affordable));
+      if(!quantity) return null;
+      const investment=exactSetup ? r.setupPerMinion*quantity : null;
+      const totalNetDay=r.netPerMinionDay*quantity;
+      return {
+        id:r.id,name:r.name,family:r.family,tier:r.tier,quantity,
+        totalNetDay,netPerMinionDay:r.netPerMinionDay,
+        investment,setupPerMinion:r.setupPerMinion,setupComplete:r.setupComplete,
+        paybackDays:investment!=null&&totalNetDay>0?investment/totalNetDay:null,
+        confidence:r.confidence,confidenceScore:r.confidenceScore,
+        unusedBudget:optimizerBudget>0&&investment!=null?Math.max(0,optimizerBudget-investment):null
+      };
+    })
+    .filter(Boolean)
+    .sort((a,b)=>b.totalNetDay-a.totalNetDay || b.confidenceScore-a.confidenceScore)
+    .slice(0,10);
+
   return {
     generatedAt:Date.now(),
     marketUpdatedAt:context.marketUpdatedAt || null,
@@ -429,7 +455,8 @@ export function calculateMinionRankings(options = {}, context = {}) {
     sellMethod,
     horizonDays,
     taxPercent:ctx.taxRate*100,
-    options:{...options,horizonDays},
+    optimizer:{budget:optimizerBudget,slots:optimizerSlots,recommendations:optimizer},
+    options:{...options,horizonDays,optimizerBudget,optimizerSlots},
     rows:rows.map((r)=>r.supported?{...r,horizon:{days:horizonDays,gross:r.grossDay*horizonDays,expenses:r.expensesDay*horizonDays,net:r.netDay*horizonDays}}:r),
     catalog:minionCatalog()
   };
