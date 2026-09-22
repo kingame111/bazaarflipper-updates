@@ -250,9 +250,15 @@ export function calculateMinion(minion, options, context) {
   const { selected: upgrades, warnings: upgradeWarnings } = normalizeUpgrades([options.upgrade1, options.upgrade2], minion);
   warnings.push(...upgradeWarnings);
 
+  const expanderCount = upgrades.filter((u)=>u.id==='MINION_EXPANDER').length;
+  const expanderBonus = expanderCount > 0 ? Math.pow(1.05,expanderCount)-1 : 0;
+  const ordinaryUpgradeSpeed = upgrades
+    .filter((u)=>u.id!=='MINION_EXPANDER')
+    .reduce((sum,u)=>sum+Math.max(0,safe(u.speed)),0);
   const speedBonus = Math.max(0,
     safe(fuel.speed) +
-    upgrades.reduce((sum,u)=>sum+Math.max(0,safe(u.speed)),0) +
+    ordinaryUpgradeSpeed +
+    expanderBonus +
     clamp(options.beaconPercent,0,100)/100 +
     clamp(options.crystalPercent,0,100)/100 +
     clamp(options.otherSpeedPercent,0,500)/100
