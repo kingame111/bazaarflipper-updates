@@ -90,8 +90,7 @@
             <option value="GROSS">Gross revenue</option>
             <option value="PAYBACK">Fastest payback</option>
             <option value="ROI">30-day ROI</option>
-            <option value="CONFIDENCE">Confidence</option>
-            <option value="STABILITY">Most stable price</option>
+                        <option value="STABILITY">Most stable price</option>
             <option value="VS7D">Highest LIVE vs 7d</option>
           </select>
         </label>
@@ -136,8 +135,8 @@
 
     <section class="notice panel">
       <strong>What the model includes</strong>
-      <span>Minion action speed, every-other-action production, fuel resource multipliers/costs, Super Compactor, Diamond Spreading, Corrupt Soil, Soulflow engines, upgrade speed bonuses, Bazaar tax, LIVE or local 7-day prices, setup cost and payback.</span>
-      <span class="muted">Inferno is intentionally not ranked until its special fuel/RNG model is complete. Exact setup cost is withheld for tiers where an exact recipe is unavailable.</span>
+      <span>Minion action speed, every-other-action production, recurring consumable-fuel costs, Super Compactor, Diamond Spreading, Corrupt Soil, Soulflow engines, upgrade speed bonuses, Bazaar tax, LIVE or local 7-day prices, one-time setup cost and payback.</span>
+      <span class="muted">One-time setup cost is never subtracted from daily net profit. Only recurring consumable fuel is a daily expense. Inferno is intentionally not ranked until its special fuel/RNG model is complete. Sunflower uses a normal day/night expected-value model; Dayswitch/Nightswitch are not yet modeled. Exact setup cost is withheld where an exact recipe is unavailable.</span>
     </section>
 
     <section class="panel optimizerPanel">
@@ -146,7 +145,7 @@
       </div>
       <div class="tableWrap">
         <table>
-          <thead><tr><th>#</th><th>Setup</th><th>Minions</th><th>Investment</th><th>Net / day</th><th>Payback</th><th>Unused budget</th><th>Confidence</th></tr></thead>
+          <thead><tr><th>#</th><th>Setup</th><th>Minions</th><th>Investment</th><th>Net / day</th><th>Payback</th><th>Unused budget</th></tr></thead>
           <tbody id="optimizerRows"></tbody>
         </table>
       </div>
@@ -163,8 +162,8 @@
           <thead>
             <tr>
               <th>#</th><th>Minion</th><th>Tier</th><th>Net / day</th><th>LIVE vs 7d</th><th>Gross / day</th>
-              <th>Fuel / day</th><th>Setup</th><th>Payback</th><th>30d ROI</th>
-              <th>Speed</th><th>Confidence</th>
+              <th>Recurring / day</th><th>Setup (one-time)</th><th>Payback</th><th>30d ROI</th>
+              <th>Speed</th>
             </tr>
           </thead>
           <tbody id="rows"></tbody>
@@ -175,7 +174,7 @@
     <section class="panel methodology">
       <strong>Model notes</strong>
       <p>Revenue is calculated per production cycle and scaled by your number of minions. Super Compactor output is compacted discretely over the selected collection interval, including intermediate leftovers. Bazaar selling uses the selected sell method after the effective Bazaar tax. “Auto” chooses the best available net sale route per output item.</p>
-      <p>7-day mode uses the local price history collected by BazaarFlipper. If an output lacks enough 7-day data, the row identifies the fallback and lowers confidence instead of silently inventing a historical price.</p>
+      <p>7-day mode uses the local price history collected by BazaarFlipper. Price coverage and price CV are shown in the detail view so historical reliability is visible directly instead of being compressed into a generic confidence badge.</p>
     </section>
   </main>
 
