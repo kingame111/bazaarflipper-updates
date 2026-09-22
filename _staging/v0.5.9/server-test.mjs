@@ -57,6 +57,30 @@ assert.equal(b.bestSellOffer,60,'quick_status fallback must work');
 assert.equal(b.buyDepth1Pct,0);
 assert.equal(b.sellDepth5Pct,0);
 
+
+const resilientStart=source.indexOf('function isTransientBazaarFetchError(error)');
+const resilientEnd=source.indexOf('async function pollBazaar()',resilientStart);
+assert(resilientStart>=0 && resilientEnd>resilientStart,'Bazaar retry helper not found');
+const retrySource=source.slice(resilientStart,resilientEnd);
+const retryApi=Function(`${retrySource}; return {isTransientBazaarFetchError,fetchBazaarResilient};`)();
+assert.equal(retryApi.isTransientBazaarFetchError(Object.assign(new Error('This operation was aborted'),{name:'AbortError'})),true);
+assert.equal(retryApi.isTransientBazaarFetchError(new Error('HTTP 403')),false);
+let attempts=0, seenTimeout=0;
+const retryResult=await retryApi.fetchBazaarResilient(12000,async(timeout)=>{
+  attempts+=1; seenTimeout=timeout;
+  if(attempts<3){const e=new Error('This operation was aborted');e.name='AbortError';throw e;}
+  return {ok:true};
+},async()=>{});
+assert.deepEqual(retryResult,{ok:true});
+assert.equal(attempts,3);
+assert.equal(seenTimeout,20000);
+let hardAttempts=0;
+await assert.rejects(
+  retryApi.fetchBazaarResilient(12000,async()=>{hardAttempts+=1;throw new Error('HTTP 403');},async()=>{}),
+  /HTTP 403/
+);
+assert.equal(hardAttempts,1);
+
 assert(!source.includes('insertHistorySnapshot(db, ts, flips'),'history must not depend on filtered flips');
 assert(source.includes('historyRowsFromProducts(data.products)'));
 assert(source.includes('sourceTs = Number(data.lastUpdated) || now'));
