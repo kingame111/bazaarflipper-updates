@@ -91,6 +91,12 @@
             <option value="1">1.00% — perk II</option>
           </select>
         </label>
+        <label>Optimizer budget
+          <input id="optimizerBudget" type="number" min="0" step="100000" value="0" placeholder="0 = ignore budget" />
+        </label>
+        <label>Optimizer slots
+          <input id="optimizerSlots" type="number" min="1" max="100" value="25" />
+        </label>
       </div>
 
       <details class="advanced">
@@ -121,6 +127,19 @@
       <strong>What the model includes</strong>
       <span>Minion action speed, every-other-action production, fuel resource multipliers/costs, Super Compactor, Diamond Spreading, Corrupt Soil, Soulflow engines, upgrade speed bonuses, Bazaar tax, LIVE or local 7-day prices, setup cost and payback.</span>
       <span class="muted">Inferno is intentionally not ranked until its special fuel/RNG model is complete. Exact setup cost is withheld for tiers where an exact recipe is unavailable.</span>
+    </section>
+
+    <section class="panel optimizerPanel">
+      <div class="tableHead optimizerHead">
+        <div><strong>Setup optimizer</strong><small id="optimizerMeta">Best uniform setups for your budget and available minion slots.</small></div>
+      </div>
+      <div class="tableWrap">
+        <table>
+          <thead><tr><th>#</th><th>Setup</th><th>Minions</th><th>Investment</th><th>Net / day</th><th>Payback</th><th>Unused budget</th><th>Confidence</th></tr></thead>
+          <tbody id="optimizerRows"></tbody>
+        </table>
+      </div>
+      <p class="optimizerNote">The optimizer compares one minion type/tier per setup. When a budget is entered, rows without an exact setup cost are excluded rather than guessed.</p>
     </section>
 
     <section class="panel tablePanel">
