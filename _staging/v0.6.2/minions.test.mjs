@@ -266,15 +266,16 @@ test('Sunflower Minion T11 models normal day/night output as a 50/50 expected sp
 
 test('permanent setup purchases never reduce daily net profit',()=>{
   const market={
+    CARROT_ITEM:book(9,10),
     ENCHANTED_LAVA_BUCKET:book(100,120),
     FLYCATCHER_UPGRADE:book(100,120)
   };
   const r=calculateMinionRankings({
     ...opts({tier:1,fuel:'ENCHANTED_LAVA_BUCKET',upgrade1:'FLYCATCHER_UPGRADE'}),
-    search:'Snow Minion'
+    search:'Carrot Minion'
   },ctx(market)).rows[0];
   assert.equal(r.setupComplete,true);
-  assert.equal(r.setupCost,240);
+  assert.equal(r.setupCost,1520);
   assert.equal(r.expensesDay,0);
   assert.equal(r.netDay,r.grossDay);
 });
