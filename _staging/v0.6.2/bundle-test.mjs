@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 
 const root=process.cwd();
 const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'),'utf8'));
-assert.equal(manifest.version,'0.6.1');
+assert.equal(manifest.version,'0.6.2');
 const repoRoot=path.resolve(root,'../..');
 const joined=manifest.bundle.parts.map((p)=>fs.readFileSync(path.join(repoRoot,p.replace(/^\.\//,'')),'utf8').trim()).join('');
 const gz=Buffer.from(joined,'base64');
@@ -20,4 +20,4 @@ for(const file of manifest.files){
   assert.equal(sha(bundled),file.sha256,`hash mismatch ${file.path}`);
   assert.equal(Buffer.compare(bundled,actual),0,`bundle mismatch ${file.path}`);
 }
-console.log('v0.6.1 bundle integrity: PASS');
+console.log('v0.6.2 bundle integrity: PASS');
