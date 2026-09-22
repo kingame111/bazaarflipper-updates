@@ -1,0 +1,26 @@
+name: BazaarFlipper v0.5.10 hotfix tests
+on:
+  push:
+    branches: [v0.5.10-hotfix]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check
+        run: |
+          node --check _staging/v0.5.10/server.mjs
+          node --check _staging/v0.5.10/src/db.mjs
+          node --check _staging/v0.5.10/src/apply-update.mjs
+          node --check _staging/v0.5.10/test.mjs
+          node --check _staging/v0.5.10/hotfix-test.mjs
+      - name: Database regressions
+        working-directory: _staging/v0.5.10
+        run: node test.mjs
+      - name: Deferred startup and updater tests
+        working-directory: _staging/v0.5.10
+        run: node hotfix-test.mjs
