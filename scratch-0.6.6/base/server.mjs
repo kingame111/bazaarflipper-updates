@@ -837,7 +837,9 @@ async function handleMainRequest(req, res) {
       : config.defaultTaxPercent / 100;
     const taxRate = effectiveTaxRate(personalTaxRate);
     const numberParam = (name, fallback) => {
-      const value = Number(url.searchParams.get(name));
+      const raw = url.searchParams.get(name);
+      if (raw == null || String(raw).trim() === '') return fallback;
+      const value = Number(raw);
       return Number.isFinite(value) ? value : fallback;
     };
     const options = {
