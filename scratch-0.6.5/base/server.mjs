@@ -174,7 +174,7 @@ function refreshHistoryStatsAsync(reason='scheduled',force=false){
   });
 }
 
-state.dualSync = { lastSyncAt:null,lastSuccessAt:null,lastError:null,lastErrorType:null,lastTriggerAt:null,lastTransferAt:null,sentSnapshots:0,sentRows:0,acknowledgedSnapshots:0,deletedRows:0,droppedBeforeSync:Number(getMeta(db,'laptop_dropped_before_sync')||0),peerReachable:null };
+state.dualSync = { lastSyncAt:null,lastSuccessAt:null,lastError:null,lastErrorType:null,lastTriggerAt:null,lastTransferAt:null,sentSnapshots:0,sentRows:0,acknowledgedSnapshots:0,deletedRows:0,receivedSnapshots:0,receivedRows:0,duplicateSnapshotsIgnored:0,duplicateRowsIgnored:0,droppedBeforeSync:Number(getMeta(db,'laptop_dropped_before_sync')||0),peerReachable:null };
 state.bazaarHealth = { consecutiveFailures:0,lastFailureAt:null,lastRecoveryAt:null,lastErrorType:null };
 
 function formatAge(ms) {
@@ -513,15 +513,22 @@ function median(values) {
 }
 
 function historyReliabilitySummary() {
-  const stats=[...historyStats.values()].filter(s=>Number(s?.samples7d)>0);
-  const threshold=0.80;
-  const reliable=stats.filter(s=>Number(s.coverage7d)>=threshold && Number(s.lastTs7d)>=Number(s.firstTs7d));
-  return {
-    threshold,windowDays:7,products:stats.length,reliableProducts:reliable.length,
-    reliableShare:stats.length?reliable.length/stats.length:0,
-    reliableDepthMs:reliable.length?median(reliable.map(s=>Math.max(0,Number(s.lastTs7d)-Number(s.firstTs7d)))):0,
-    coverage:reliable.length?median(reliable.map(s=>Math.max(0,Math.min(1,Number(s.coverage7d)||0)))):0
-  };
+  const threshold=0.80, intervalMs=Math.max(30,Number(config.historyIntervalSeconds)||300)*1000;
+  const newest=Number(db.prepare('SELECT MAX(bucket_ts) newest FROM history_snapshot_meta').get()?.newest)||0;
+  const cutoff=Math.max(0,newest-7*86400000);
+  const stamps=db.prepare('SELECT DISTINCT bucket_ts ts FROM history_snapshot_meta WHERE bucket_ts>=? ORDER BY bucket_ts ASC').all(cutoff).map(r=>Number(r.ts)).filter(Number.isFinite);
+  let reliableDepthMs=0,coverage=0,reliableSince=null;
+  if(stamps.length){
+    const last=stamps[stamps.length-1];
+    for(let i=stamps.length-1;i>=0;i--){
+      const span=Math.max(intervalMs,last-stamps[i]+intervalMs),expected=Math.max(1,Math.round(span/intervalMs)),actual=stamps.length-i,c=Math.min(1,actual/expected);
+      if(c>=threshold){reliableDepthMs=span;coverage=c;reliableSince=stamps[i];}
+    }
+  }
+  const d=Math.max(1,Math.min(7,Math.ceil(reliableDepthMs/86400000)||1));
+  const stats=[...historyStats.values()].filter(x=>Number(x?.[`samples${d}d`])>0);
+  const reliable=stats.filter(x=>Number(x?.[`coverage${d}d`])>=threshold);
+  return {threshold,windowDays:7,products:stats.length,reliableProducts:reliable.length,reliableShare:stats.length?reliable.length/stats.length:0,reliableDepthMs,coverage,reliableSince,newestSnapshotTs:newest||null,snapshotCount:stamps.length};
 }
 
 function statusPayload() {
@@ -604,7 +611,7 @@ function serveStatic(req, res) {
   if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) return false;
   const ext = path.extname(filePath).toLowerCase();
   const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
-  res.writeHead(200, { 'content-type': types[ext] || 'application/octet-stream', 'cache-control': ['.html', '.js', '.css'].includes(ext) ? 'no-cache' : 'public, max-age=3600' });
+  res.writeHead(200, { 'content-type': types[ext] || 'application/octet-stream', 'cache-control': ['.html', '.js', '.css'].includes(ext) ? 'no-store, max-age=0' : 'public, max-age=3600' });
   fs.createReadStream(filePath).pipe(res);
   return true;
 }
@@ -843,6 +850,7 @@ async function handleMainRequest(req, res) {
       sellMethod: url.searchParams.get('sellMethod') || 'BEST',
       priceMode: url.searchParams.get('priceMode') || 'LIVE',
       collectionIntervalDays: numberParam('collectionIntervalDays', 1),
+      compareDays: Math.max(1, Math.min(7, Math.round(numberParam('compareDays', 7)))),
       family: url.searchParams.get('family') || 'ALL',
       search: url.searchParams.get('search') || '',
       sort: url.searchParams.get('sort') || 'NET',
@@ -957,6 +965,8 @@ async function handleHandoffRequest(req, res) {
     if(imported.snapshotsRecorded||imported.rowsInserted) void refreshHistoryStatsAsync('sync-import',true);
     state.dualSync.receivedSnapshots=(state.dualSync.receivedSnapshots||0)+imported.snapshotsRecorded;
     state.dualSync.receivedRows=(state.dualSync.receivedRows||0)+imported.rowsInserted;
+    state.dualSync.duplicateSnapshotsIgnored=(state.dualSync.duplicateSnapshotsIgnored||0)+(imported.duplicateSnapshots||0);
+    state.dualSync.duplicateRowsIgnored=(state.dualSync.duplicateRowsIgnored||0)+(imported.duplicateRows||0);
     const receivedSnapshots=Array.isArray(body?.snapshots)?body.snapshots.length:0;
     const receivedRows=Array.isArray(body?.snapshots)?body.snapshots.reduce((sum,snap)=>sum+(Array.isArray(snap?.rows)?snap.rows.length:0),0):0;
     console.log(`[sync] DESKTOP import accepted; receivedSnapshots=${receivedSnapshots} receivedRows=${receivedRows} insertedRows=${imported.rowsInserted} newSnapshotMarkers=${imported.snapshotsRecorded}`);
