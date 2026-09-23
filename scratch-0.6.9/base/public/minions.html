@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>BazaarFlipper · Minion Calculator</title>
-  <link rel="stylesheet" href="/minions.css?v=0.6.8" />
+  <link rel="stylesheet" href="/minions.css?v=0.6.9" />
 </head>
 <body>
   <main class="shell">
@@ -43,6 +43,11 @@
         <label>Fuel
           <select id="fuel"></select>
         </label>
+        <div class="excludeField">
+          <span>Exclude upgrades</span>
+          <button id="excludeUpgradesBtn" class="selectLike" type="button">None excluded</button>
+          <div id="excludeUpgradesMenu" class="excludeMenu" hidden></div>
+        </div>
         <label>Sell method
           <select id="sellMethod">
             <option value="BEST">Auto — best net price</option>
@@ -129,7 +134,7 @@
     <section class="notice panel">
       <strong>What the model includes</strong>
       <span>Minion action speed, every-other-action production, recurring consumable-fuel costs, Super Compactor, Diamond Spreading, Corrupt Soil, Soulflow engines, upgrade speed bonuses, Bazaar tax, LIVE or selected local-history prices, one-time setup cost and payback.</span>
-      <span class="muted">One-time setup cost is never subtracted from daily net profit. Only recurring consumable fuel is a daily expense. Inferno is intentionally not ranked until its special fuel/RNG model is complete. Sunflower uses a normal day/night expected-value model; Dayswitch/Nightswitch are not yet modeled. Exact setup cost is withheld where an exact recipe is unavailable.</span>
+      <span class="muted">One-time setup cost is never subtracted from daily net profit. Only recurring consumable fuel is a daily expense. Inferno is intentionally not ranked until its special fuel/RNG model is complete. Sunflower uses a normal day/night expected-value model; Dayswitch/Nightswitch are not yet modeled. Setup pricing uses the live Bazaar price when available and otherwise falls back to verified crafting recipes. Exact setup cost is withheld only when a required component still cannot be priced.</span>
     </section>
 
     <section class="panel tablePanel">
@@ -172,6 +177,6 @@
     <button id="closeDialog" class="dialogClose" aria-label="Close">×</button>
     <div id="detail"></div>
   </dialog>
-  <script type="module" src="/minions.js?v=0.6.8"></script>
+  <script type="module" src="/minions.js?v=0.6.9"></script>
 </body>
 </html>
