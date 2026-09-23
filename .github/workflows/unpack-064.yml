@@ -1,0 +1,46 @@
+name: unpack-064-for-065
+
+on:
+  push:
+    branches: [v0.6.5-dev]
+    paths:
+      - '.github/workflows/unpack-064.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v0.6.5-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unpack v0.6.4 bundle
+        shell: python
+        run: |
+          import base64, gzip, json, pathlib, shutil
+          root = pathlib.Path('.')
+          manifest = json.loads((root/'manifest.json').read_text(encoding='utf-8'))
+          data = ''.join((root/p.replace('./','')).read_text(encoding='utf-8') for p in manifest['bundle']['parts'])
+          bundle = json.loads(gzip.decompress(base64.b64decode(data)).decode('utf-8'))
+          out = root/'scratch-0.6.5'/'base'
+          if out.exists():
+              shutil.rmtree(out)
+          for rel, enc in bundle['files'].items():
+              dest = out/rel
+              dest.parent.mkdir(parents=True, exist_ok=True)
+              dest.write_bytes(base64.b64decode(enc))
+          (root/'scratch-0.6.5'/'bundle-meta.json').write_text(
+              json.dumps({k:v for k,v in bundle.items() if k != 'files'}, indent=2), encoding='utf-8'
+          )
+      - name: Commit unpacked source
+        run: |
+          git config user.name "bazaarflipper-update-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add scratch-0.6.5
+          git commit -m "chore: unpack v0.6.4 source for v0.6.5" || exit 0
+          git push origin HEAD:v0.6.5-dev
