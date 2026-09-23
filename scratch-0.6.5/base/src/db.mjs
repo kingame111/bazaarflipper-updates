@@ -155,8 +155,31 @@ export function exportPendingHistorySnapshots(db,originId='LAPTOP',limit=4){
 
 export function importHistorySnapshots(db,snapshots=[],originId='LAPTOP'){
  const ins=db.prepare(`INSERT OR IGNORE INTO history (ts,product_id,best_buy_order,best_sell_offer,sell_moving_week,buy_moving_week,sell_volume,buy_volume,sell_orders,buy_orders,weighted_buy_price,weighted_sell_price,best_buy_amount,best_sell_amount,buy_depth_1pct,sell_depth_1pct,buy_depth_5pct,sell_depth_5pct) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
- const marker=db.prepare('INSERT OR IGNORE INTO history_snapshots (ts,origin_id,received_at) VALUES (?,?,?)'),meta=db.prepare(`INSERT INTO history_snapshot_meta (bucket_ts,origin_id,source_ts,collected_at,ingested_at,product_count,effective_tax_rate,schema_version) VALUES (?,?,?,?,?,?,?,?) ON CONFLICT(bucket_ts,origin_id) DO UPDATE SET source_ts=excluded.source_ts,collected_at=excluded.collected_at,ingested_at=excluded.ingested_at,product_count=excluded.product_count,effective_tax_rate=excluded.effective_tax_rate,schema_version=excluded.schema_version`);
- let rowsInserted=0,snapshotsRecorded=0;db.exec('BEGIN IMMEDIATE;');try{for(const snap of Array.isArray(snapshots)?snapshots:[]){const ts=Number(snap?.ts);if(!Number.isFinite(ts))continue;const sourceOrigin=String(snap?.originId||originId||'LAPTOP'),list=Array.isArray(snap?.rows)?snap.rows:[];for(const x of list){const r=Array.isArray(x)?{productId:x[0],bestBuyOrder:x[1],bestSellOffer:x[2],sellMovingWeek:x[3],buyMovingWeek:x[4],sellVolume:x[5],buyVolume:x[6],sellOrders:x[7],buyOrders:x[8]}:x;if(!r?.productId)continue;const y=ins.run(ts,String(r.productId),Number(r.bestBuyOrder)||0,Number(r.bestSellOffer)||0,Number(r.sellMovingWeek)||0,Number(r.buyMovingWeek)||0,Number(r.sellVolume)||0,Number(r.buyVolume)||0,Number(r.sellOrders)||0,Number(r.buyOrders)||0,Number(r.weightedBuyPrice)||0,Number(r.weightedSellPrice)||0,Number(r.bestBuyAmount)||0,Number(r.bestSellAmount)||0,Number(r.buyDepth1Pct)||0,Number(r.sellDepth1Pct)||0,Number(r.buyDepth5Pct)||0,Number(r.sellDepth5Pct)||0);rowsInserted+=Number(y.changes)||0;}snapshotsRecorded+=Number(marker.run(ts,sourceOrigin,Date.now()).changes)||0;const m=snap?.meta||{};meta.run(ts,sourceOrigin,Number(m.sourceTs)||ts,Number(m.collectedAt)||ts,Date.now(),Math.max(0,Number(m.productCount)||list.length),Math.max(0,Number(m.effectiveTaxRate)||0),Math.max(1,Number(m.schemaVersion)||1));}db.exec('COMMIT;');}catch(e){db.exec('ROLLBACK;');throw e;}return{rowsInserted,snapshotsRecorded};
+ const marker=db.prepare('INSERT OR IGNORE INTO history_snapshots (ts,origin_id,received_at) VALUES (?,?,?)');
+ const meta=db.prepare(`INSERT INTO history_snapshot_meta (bucket_ts,origin_id,source_ts,collected_at,ingested_at,product_count,effective_tax_rate,schema_version) VALUES (?,?,?,?,?,?,?,?) ON CONFLICT(bucket_ts,origin_id) DO UPDATE SET source_ts=excluded.source_ts,collected_at=excluded.collected_at,ingested_at=excluded.ingested_at,product_count=excluded.product_count,effective_tax_rate=excluded.effective_tax_rate,schema_version=excluded.schema_version`);
+ const seen=db.prepare('SELECT 1 yes FROM sync_imported_snapshots WHERE origin_id=? AND ts=?');
+ const markSeen=db.prepare('INSERT OR IGNORE INTO sync_imported_snapshots (origin_id,ts,received_at,row_count) VALUES (?,?,?,?)');
+ let rowsInserted=0,snapshotsRecorded=0,duplicateSnapshots=0,duplicateRows=0;
+ db.exec('BEGIN IMMEDIATE;');
+ try{
+  for(const snap of Array.isArray(snapshots)?snapshots:[]){
+   const ts=Number(snap?.ts);if(!Number.isFinite(ts))continue;
+   const sourceOrigin=String(snap?.originId||originId||'LAPTOP'),list=Array.isArray(snap?.rows)?snap.rows:[];
+   if(seen.get(sourceOrigin,ts)){duplicateSnapshots++;duplicateRows+=list.length;continue;}
+   for(const x of list){
+    const r=Array.isArray(x)?{productId:x[0],bestBuyOrder:x[1],bestSellOffer:x[2],sellMovingWeek:x[3],buyMovingWeek:x[4],sellVolume:x[5],buyVolume:x[6],sellOrders:x[7],buyOrders:x[8]}:x;
+    if(!r?.productId)continue;
+    const y=ins.run(ts,String(r.productId),Number(r.bestBuyOrder)||0,Number(r.bestSellOffer)||0,Number(r.sellMovingWeek)||0,Number(r.buyMovingWeek)||0,Number(r.sellVolume)||0,Number(r.buyVolume)||0,Number(r.sellOrders)||0,Number(r.buyOrders)||0,Number(r.weightedBuyPrice)||0,Number(r.weightedSellPrice)||0,Number(r.bestBuyAmount)||0,Number(r.bestSellAmount)||0,Number(r.buyDepth1Pct)||0,Number(r.sellDepth1Pct)||0,Number(r.buyDepth5Pct)||0,Number(r.sellDepth5Pct)||0);
+    rowsInserted+=Number(y.changes)||0;
+   }
+   snapshotsRecorded+=Number(marker.run(ts,sourceOrigin,Date.now()).changes)||0;
+   markSeen.run(sourceOrigin,ts,Date.now(),list.length);
+   const m=snap?.meta||{};
+   meta.run(ts,sourceOrigin,Number(m.sourceTs)||ts,Number(m.collectedAt)||ts,Date.now(),Math.max(0,Number(m.productCount)||list.length),Math.max(0,Number(m.effectiveTaxRate)||0),Math.max(1,Number(m.schemaVersion)||1));
+  }
+  db.exec('COMMIT;');
+ }catch(e){db.exec('ROLLBACK;');throw e;}
+ return{rowsInserted,snapshotsRecorded,duplicateSnapshots,duplicateRows};
 }
 
 export function acknowledgeHistorySnapshots(db, snapshots = [], originId = 'LAPTOP') {
