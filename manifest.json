@@ -1,22 +1,23 @@
 {
-  "version": "0.6.4",
-  "publishedAt": "2026-09-22T11:12:00+03:00",
+  "version": "0.6.5",
+  "publishedAt": "2026-09-23T04:11:48+03:00",
   "notes": [
-    "Removes the separate Minion Setup Optimizer ranking, its budget/slot controls, and the Horizon control so the Minion Calculator has one settings-driven ranking.",
-    "Shows each minion's two selected best-upgrade slots directly in the main table; clicking a row still opens every compatible upgrade alternative.",
-    "Adds data freshness and measured reliable-history depth to both the Bazaar Scanner and Minion Calculator. Reliable history requires at least 80% 7-day coverage.",
-    "Adds per-minion historical data coverage warnings below 80% and shows the net-profit gap to the next-best minion.",
-    "Renames Collect every to Collection interval; daily profit remains the main comparison while collection interval still controls compaction behavior.",
-    "Carries the v0.6.3 automatic upgrade optimizer and Gravel/Flint Shovel correction."
+    "Adds a 1\u20137 day selector for LIVE comparison in the Minion Calculator; the selected window changes the calculation, sorting and labels.",
+    "Adds customizable Minion table columns with persistence and reusable saved views.",
+    "Moves reliable-history depth into a separate bubble beside LIVE with a detailed reliability dialog.",
+    "Measures reliable-history depth from actual stored snapshot continuity instead of requiring a complete 7-day window.",
+    "Adds a compact data diagnostics dialog for market freshness and local-history status.",
+    "Adds sync-import duplicate protection and duplicate counters for retransmitted snapshots.",
+    "Prevents stale browser JS/CSS after updates with no-store headers and versioned Minion assets."
   ],
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "6b3a9babb506c102b139be063cf14e53d8101040c70398784bb8b392e87fee4e"
+      "sha256": "5af0b92691ee25e3061a0cd1668fe5716b1545f9bf14acf80939b5ae7c3f3448"
     },
     {
       "path": "package.json",
-      "sha256": "33bfee8b5eb71c6a90e6a6a0529785d21b777ac3994cd856436e62228d7be300"
+      "sha256": "e0ad3501099497b8d3faafa6ff3bb66dcd431a914358faaa158ad7f03810f924"
     },
     {
       "path": "config.example.json",
@@ -24,7 +25,7 @@
     },
     {
       "path": "src/db.mjs",
-      "sha256": "aeb938a10ad05007da9e4570bc1d774a593bc3e36843c37b74486ea8d4d12608"
+      "sha256": "2d19bb6937dad33d52d4f68429c8b949ef007a6c67b859aba6283b31bd63eca1"
     },
     {
       "path": "src/apply-update.mjs",
@@ -36,7 +37,7 @@
     },
     {
       "path": "src/minions.mjs",
-      "sha256": "0fcad773b908acc8ac6df4d91f9ded0c210a18b2c500bcb0d25b32ee4ef0ea30"
+      "sha256": "ead6d25a85073ad4c3de0bc27e180c03e3ee5759604b6ef91de92b25ccbca8ca"
     },
     {
       "path": "src/minion-data.mjs",
@@ -48,98 +49,35 @@
     },
     {
       "path": "public/minions.html",
-      "sha256": "8959920e886f31624894e2b8987505c945f7367a50c6183d4f06f26d7b056e82"
+      "sha256": "979623e37bd13b93e9beb57d6673bd16157fc1fb4cd2a11325bd624edb5927b3"
     },
     {
       "path": "public/minions.js",
-      "sha256": "84dc4358046a4af1dffa96e3bb8a03f2ecdcbeb443412a1d35003a37eac39fef"
+      "sha256": "47d8cf42e8be771d403bf5de32ddc377e2a2e44198e3ac0497cd98db04d420ae"
     },
     {
       "path": "public/minions.css",
-      "sha256": "ef06a5c23c365599cd28d31b4fea927424e63614bb512a51431d0e1fa35b1f79"
+      "sha256": "20e14a934c7c65feba7fa78d0ba47bb907d2b52731416525132c224590662841"
     }
   ],
   "bundle": {
     "parts": [
-      "./releases/0.6.4/part-001.txt",
-      "./releases/0.6.4/part-002.txt",
-      "./releases/0.6.4/part-003.txt",
-      "./releases/0.6.4/part-004.txt",
-      "./releases/0.6.4/part-005.txt",
-      "./releases/0.6.4/part-006.txt",
-      "./releases/0.6.4/part-007.txt",
-      "./releases/0.6.4/part-008.txt",
-      "./releases/0.6.4/part-009.txt",
-      "./releases/0.6.4/part-010.txt",
-      "./releases/0.6.4/part-011.txt",
-      "./releases/0.6.4/part-012.txt",
-      "./releases/0.6.4/part-013.txt",
-      "./releases/0.6.4/part-014.txt",
-      "./releases/0.6.4/part-015.txt",
-      "./releases/0.6.4/part-016.txt",
-      "./releases/0.6.4/part-017.txt",
-      "./releases/0.6.4/part-018.txt",
-      "./releases/0.6.4/part-019.txt",
-      "./releases/0.6.4/part-020.txt",
-      "./releases/0.6.4/part-021.txt",
-      "./releases/0.6.4/part-022.txt",
-      "./releases/0.6.4/part-023.txt",
-      "./releases/0.6.4/part-024.txt",
-      "./releases/0.6.4/part-025.txt",
-      "./releases/0.6.4/part-026.txt",
-      "./releases/0.6.4/part-027.txt",
-      "./releases/0.6.4/part-028.txt",
-      "./releases/0.6.4/part-029.txt",
-      "./releases/0.6.4/part-030.txt",
-      "./releases/0.6.4/part-031.txt",
-      "./releases/0.6.4/part-032.txt",
-      "./releases/0.6.4/part-033.txt",
-      "./releases/0.6.4/part-034.txt",
-      "./releases/0.6.4/part-035.txt",
-      "./releases/0.6.4/part-036.txt",
-      "./releases/0.6.4/part-037.txt",
-      "./releases/0.6.4/part-038.txt",
-      "./releases/0.6.4/part-039.txt",
-      "./releases/0.6.4/part-040.txt",
-      "./releases/0.6.4/part-041.txt",
-      "./releases/0.6.4/part-042.txt",
-      "./releases/0.6.4/part-043.txt",
-      "./releases/0.6.4/part-044.txt",
-      "./releases/0.6.4/part-045.txt",
-      "./releases/0.6.4/part-046.txt",
-      "./releases/0.6.4/part-047.txt",
-      "./releases/0.6.4/part-048.txt",
-      "./releases/0.6.4/part-049.txt",
-      "./releases/0.6.4/part-050.txt",
-      "./releases/0.6.4/part-051.txt",
-      "./releases/0.6.4/part-052.txt",
-      "./releases/0.6.4/part-053.txt",
-      "./releases/0.6.4/part-054.txt",
-      "./releases/0.6.4/part-055.txt",
-      "./releases/0.6.4/part-056.txt",
-      "./releases/0.6.4/part-057.txt",
-      "./releases/0.6.4/part-058.txt",
-      "./releases/0.6.4/part-059.txt",
-      "./releases/0.6.4/part-060.txt",
-      "./releases/0.6.4/part-061.txt",
-      "./releases/0.6.4/part-062.txt",
-      "./releases/0.6.4/part-063.txt",
-      "./releases/0.6.4/part-064.txt",
-      "./releases/0.6.4/part-065.txt",
-      "./releases/0.6.4/part-066.txt",
-      "./releases/0.6.4/part-067.txt",
-      "./releases/0.6.4/part-068.txt",
-      "./releases/0.6.4/part-069.txt",
-      "./releases/0.6.4/part-070.txt",
-      "./releases/0.6.4/part-071.txt",
-      "./releases/0.6.4/part-072.txt",
-      "./releases/0.6.4/part-073.txt",
-      "./releases/0.6.4/part-074.txt",
-      "./releases/0.6.4/part-075.txt",
-      "./releases/0.6.4/part-076.txt",
-      "./releases/0.6.4/part-077.txt"
+      "./releases/0.6.5/part-001.txt",
+      "./releases/0.6.5/part-002.txt",
+      "./releases/0.6.5/part-003.txt",
+      "./releases/0.6.5/part-004.txt",
+      "./releases/0.6.5/part-005.txt",
+      "./releases/0.6.5/part-006.txt",
+      "./releases/0.6.5/part-007.txt",
+      "./releases/0.6.5/part-008.txt",
+      "./releases/0.6.5/part-009.txt",
+      "./releases/0.6.5/part-010.txt",
+      "./releases/0.6.5/part-011.txt",
+      "./releases/0.6.5/part-012.txt",
+      "./releases/0.6.5/part-013.txt",
+      "./releases/0.6.5/part-014.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "b374730889a0f1781c94a1da312c3598a799f2ac8cd34c07d2eccaed27fc8289"
+    "sha256": "b5e65d62939e6fb5b93f6be25efe5b48f5a8cb063a99707dcff54660c0e2839d"
   }
 }
