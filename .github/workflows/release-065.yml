@@ -1,0 +1,73 @@
+name: release-065
+
+on:
+  push:
+    branches: [v0.6.5-dev]
+    paths:
+      - '.github/workflows/release-065.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v0.6.5-dev
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Syntax checks
+        run: |
+          cd scratch-0.6.5/base
+          node --check server.mjs
+          node --check src/db.mjs
+          node --check src/minions.mjs
+          node --check public/minions.js
+      - name: Build update bundle
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64,gzip,hashlib,json,datetime,shutil
+          repo=Path('.')
+          src=repo/'scratch-0.6.5'/'base'
+          files=['server.mjs','package.json','config.example.json','src/db.mjs','src/apply-update.mjs','src/history-stats-worker.mjs','src/minions.mjs','src/minion-data.mjs','public/index.html','public/minions.html','public/minions.js','public/minions.css']
+          payload={'files':{}}
+          for rel in files:
+              payload['files'][rel]=base64.b64encode((src/rel).read_bytes()).decode()
+          zipped=gzip.compress(json.dumps(payload,separators=(',',':')).encode(),compresslevel=9)
+          b64=base64.b64encode(zipped).decode()
+          out=repo/'releases'/'0.6.5'
+          if out.exists(): shutil.rmtree(out)
+          out.mkdir(parents=True)
+          parts=[]
+          for i in range(0,len(b64),8000):
+              name=f'part-{i//8000+1:03d}.txt'
+              (out/name).write_text(b64[i:i+8000],encoding='utf-8')
+              parts.append(f'./releases/0.6.5/{name}')
+          manifest={'version':'0.6.5','publishedAt':datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=3))).isoformat(timespec='seconds'),'notes':[
+            'Adds a 1–7 day selector for LIVE comparison in the Minion Calculator; the selected window changes the calculation, sorting and labels.',
+            'Adds customizable Minion table columns with persistence and reusable saved views.',
+            'Moves reliable-history depth into a separate bubble beside LIVE with a detailed reliability dialog.',
+            'Measures reliable-history depth from actual stored snapshot continuity instead of requiring a complete 7-day window.',
+            'Adds a compact data diagnostics dialog for market freshness and local-history status.',
+            'Adds sync-import duplicate protection and duplicate counters for retransmitted snapshots.',
+            'Prevents stale browser JS/CSS after updates with no-store headers and versioned Minion assets.'
+          ],'files':[],'bundle':{'parts':parts,'encoding':'gzip-base64','sha256':hashlib.sha256(zipped).hexdigest()}}
+          for rel in files:
+              manifest['files'].append({'path':rel,'sha256':hashlib.sha256((src/rel).read_bytes()).hexdigest()})
+          (repo/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
+          PY
+      - name: Commit release only
+        run: |
+          git config user.name 'bazaarflipper-update-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git rm -rf scratch-0.6.5 .github/workflows
+          git add manifest.json releases/0.6.5
+          git commit -m 'release: BazaarFlipper v0.6.5'
+          git push origin HEAD:v0.6.5-dev
