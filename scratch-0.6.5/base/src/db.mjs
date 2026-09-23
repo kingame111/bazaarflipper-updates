@@ -52,6 +52,14 @@ export function openDatabase(filePath, options = {}) {
       key TEXT PRIMARY KEY,
       value TEXT NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS sync_imported_snapshots (
+      origin_id TEXT NOT NULL,
+      ts INTEGER NOT NULL,
+      received_at INTEGER NOT NULL,
+      row_count INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (origin_id, ts)
+    );
   `);
 
 
@@ -310,6 +318,24 @@ export function loadHistoryStats(db, nowTs = Date.now(), historyIntervalSeconds 
       ref24hMid: oneDay.get(row.productId)?.mid || 0,
       ref24hTs: oneDay.get(row.productId)?.ts || 0
     });
+  }
+  for (let days=1; days<=6; days++) {
+    const windowMs=days*dayMs;
+    const expected=Math.max(1,Math.round(windowMs/(Math.max(30,Number(historyIntervalSeconds)||300)*1000)));
+    const agg=db.prepare(`SELECT product_id AS productId, COUNT(*) AS samples, MIN(ts) AS firstTs, MAX(ts) AS lastTs,
+      AVG(best_buy_order) AS avgBuy, AVG(best_sell_offer) AS avgSell,
+      AVG((best_buy_order+best_sell_offer)/2.0) AS avgMid,
+      AVG(((best_buy_order+best_sell_offer)/2.0)*((best_buy_order+best_sell_offer)/2.0)) AS avgMidSq
+      FROM history WHERE ts>=? GROUP BY product_id`).all(nowTs-windowMs);
+    for (const row of agg) {
+      const h=map.get(row.productId)||{};
+      const samples=Number(row.samples)||0, first=Number(row.firstTs)||nowTs, last=Number(row.lastTs)||first;
+      const avgMid=Number(row.avgMid)||0, avgSq=Number(row.avgMidSq)||0, std=Math.sqrt(Math.max(0,avgSq-avgMid*avgMid));
+      h[`samples${days}d`]=samples; h[`firstTs${days}d`]=first; h[`lastTs${days}d`]=last;
+      h[`coverage${days}d`]=Math.min(Math.max(0,Math.min(1,(last-first+1)/windowMs)),Math.max(0,Math.min(1,samples/expected)));
+      h[`avgBuy${days}d`]=Number(row.avgBuy)||0; h[`avgSell${days}d`]=Number(row.avgSell)||0;
+      h[`avgMid${days}d`]=avgMid; h[`cvMid${days}d`]=avgMid>0?std/avgMid:0; map.set(row.productId,h);
+    }
   }
   return map;
 }
