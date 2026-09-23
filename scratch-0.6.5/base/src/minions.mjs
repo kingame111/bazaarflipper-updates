@@ -24,14 +24,15 @@ function currentPrice(productId, market) {
   };
 }
 
-function historyPrice(productId, historyStats) {
+function historyPrice(productId, historyStats, days=7) {
   const h = historyStats?.get?.(productId);
+  const d=Math.max(1,Math.min(7,Math.round(safe(days,7))));
   return {
-    instantSell: safe(h?.avgBuy7d),
-    sellOrder: safe(h?.avgSell7d),
-    coverage: clamp(h?.coverage7d, 0, 1),
-    cv: Math.max(0, safe(h?.cvMid7d)),
-    samples: Math.max(0, safe(h?.samples7d))
+    instantSell: safe(h?.[`avgBuy${d}d`]),
+    sellOrder: safe(h?.[`avgSell${d}d`]),
+    coverage: clamp(h?.[`coverage${d}d`], 0, 1),
+    cv: Math.max(0, safe(h?.[`cvMid${d}d`])),
+    samples: Math.max(0, safe(h?.[`samples${d}d`]))
   };
 }
 
@@ -50,7 +51,7 @@ function getNpcPrice(itemId, fallbackNpc, itemMeta) {
 
 function saleQuote(itemId, fallbackNpc, ctx) {
   const live = currentPrice(itemId, ctx.market);
-  const hist = historyPrice(itemId, ctx.historyStats);
+  const hist = historyPrice(itemId, ctx.historyStats, ctx.historyDays);
   const mode = upper(ctx.priceMode) === '7D' ? '7D' : 'LIVE';
   const taxFactor = 1 - clamp(ctx.taxRate, 0, 0.25);
   const npc = getNpcPrice(itemId, fallbackNpc, ctx.itemMeta);
@@ -470,7 +471,8 @@ export function calculateMinionRankings(options = {}, context = {}) {
     itemMeta:context.itemMeta || new Map(),
     taxRate:clamp(context.taxRate,0,0.25),
     priceMode,
-    sellMethod
+    sellMethod,
+    historyDays:Math.max(1,Math.min(7,Math.round(safe(options.compareDays,7))))
   };
   const family = String(options.family || 'ALL').toLowerCase();
   const search = String(options.search || '').trim().toLowerCase();
@@ -478,15 +480,19 @@ export function calculateMinionRankings(options = {}, context = {}) {
   for (const minion of Object.values(MINION_DATA.definitions)) {
     if (family !== 'all' && String(minion.family).toLowerCase() !== family) continue;
     if (search && !String(minion.name).toLowerCase().includes(search)) continue;
+    const compareDays=Math.max(1,Math.min(7,Math.round(safe(options.compareDays,7))));
     const liveRow = calculateBestUpgradeSetup(minion,options,{...ctx,priceMode:'LIVE'});
-    const expected7dRow = calculateBestUpgradeSetup(minion,options,{...ctx,priceMode:'7D'});
-    const row = priceMode === '7D' ? expected7dRow : liveRow;
+    const expectedHistoryRow = calculateBestUpgradeSetup(minion,options,{...ctx,priceMode:'7D',historyDays:compareDays});
+    const row = priceMode === '7D' ? expectedHistoryRow : liveRow;
     if (row.supported) {
+      row.compareDays=compareDays;
       row.liveNetDay = liveRow.netDay;
-      row.expected7dNetDay = expected7dRow.netDay;
-      row.currentVs7dPercent = Math.abs(expected7dRow.netDay) > 1e-9
-        ? ((liveRow.netDay - expected7dRow.netDay) / Math.abs(expected7dRow.netDay)) * 100
+      row.expectedHistoryNetDay = expectedHistoryRow.netDay;
+      row.expected7dNetDay = expectedHistoryRow.netDay;
+      row.currentVsHistoryPercent = Math.abs(expectedHistoryRow.netDay) > 1e-9
+        ? ((liveRow.netDay - expectedHistoryRow.netDay) / Math.abs(expectedHistoryRow.netDay)) * 100
         : null;
+      row.currentVs7dPercent = row.currentVsHistoryPercent;
     }
     rows.push(row);
   }
@@ -505,7 +511,7 @@ export function calculateMinionRankings(options = {}, context = {}) {
     if (sort === 'ROI') return safe(row.roi30dPercent,-Infinity);
     if (sort === 'GROSS') return safe(row.grossDay,-Infinity);
     if (sort === 'STABILITY') return -safe(row.stabilityCv,Infinity);
-    if (sort === 'VS7D') return safe(row.currentVs7dPercent,-Infinity);
+    if (sort === 'VS7D') return safe(row.currentVsHistoryPercent,-Infinity);
     return safe(row.netDay,-Infinity);
   };
   rows.sort((a,b)=>metric(b)-metric(a) || String(a.name).localeCompare(String(b.name)));
