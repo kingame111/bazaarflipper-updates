@@ -1,0 +1,160 @@
+name: release-069
+on:
+  push:
+    branches: [v0.6.9-dev]
+    paths: ['.github/workflows/release-069.yml']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: v0.6.9-dev}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Syntax checks
+        run: |
+          cd scratch-0.6.9/base
+          node --check server.mjs
+          node --check src/minions.mjs
+          node --check public/minions.js
+      - name: Minion setup pricing and exclusion regression
+        run: |
+          cd scratch-0.6.9/base
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { calculateMinion, calculateMinionRankings } from './src/minions.mjs';
+          import { MINION_DATA } from './src/minion-data.mjs';
+
+          const ids=new Set();
+          const add=(id)=>{
+            if(!id)return;
+            const s=String(id);
+            if(s.toUpperCase()==='COINS')return;
+            ids.add(s);
+          };
+          for(const m of Object.values(MINION_DATA.definitions||{})){
+            for(const t of Object.values(m.tiers||{}))for(const e of t.recipe||[])add(e.item);
+            for(const d of m.drops||[]){add(d.item);for(const x of Object.keys(d.enchanted||{}))add(x);}
+          }
+          for(const [id,f] of Object.entries(MINION_DATA.fuels||{})){add(f.itemId||id);}
+          for(const [id,u] of Object.entries(MINION_DATA.upgrades||{})){
+            for(const e of u.recipe||[])add(e.item);
+            for(const d of u.extraDrops||[]){add(d.item);for(const x of Object.keys(d.enchanted||{}))add(x);}
+            if(u.cooldownDrop){add(u.cooldownDrop.item);for(const x of Object.keys(u.cooldownDrop.enchanted||{}))add(x);}
+            for(const t of u.dropTransforms||[]){add(t.from);add(t.to);for(const x of Object.keys(t.enchanted||{}))add(x);}
+          }
+          for(const recipe of Object.values(MINION_DATA.setupRecipes||{}))for(const e of recipe||[])add(e.item);
+          for(const [id,n] of Object.entries(MINION_DATA.compactionNext||{})){add(id);add(n.item);}
+
+          const upgradeIds=new Set(Object.keys(MINION_DATA.upgrades||{}));
+          const market={};
+          for(const id of ids){
+            if(upgradeIds.has(id)) continue; // force craft fallback for upgrades
+            market[id]={
+              product_id:id,
+              buy_summary:[{pricePerUnit:90,amount:100000}],
+              sell_summary:[{pricePerUnit:100,amount:100000}],
+              quick_status:{buyPrice:90,sellPrice:100}
+            };
+          }
+          market.ENCHANTED_LAVA_BUCKET={
+            product_id:'ENCHANTED_LAVA_BUCKET',
+            buy_summary:[{pricePerUnit:100000,amount:1000}],
+            sell_summary:[{pricePerUnit:110000,amount:1000}],
+            quick_status:{buyPrice:100000,sellPrice:110000}
+          };
+
+          const history=new Map();
+          for(const id of Object.keys(market)){
+            const h={};
+            for(let d=1;d<=7;d++){
+              h['samples'+d+'d']=d*288;
+              h['coverage'+d+'d']=1;
+              h['avgBuy'+d+'d']=85;
+              h['avgSell'+d+'d']=95;
+              h['cvMid'+d+'d']=0.02;
+            }
+            history.set(id,h);
+          }
+          const ctx={market,historyStats:history,itemMeta:new Map(),taxRate:0.0125,priceMode:'LIVE',sellMethod:'BEST',historyDays:5};
+          const rabbit=MINION_DATA.definitions['Rabbit Minion'];
+          const fixed=calculateMinion(rabbit,{
+            tier:11,count:1,fuel:'ENCHANTED_LAVA_BUCKET',
+            upgrade1:'FLYCATCHER_UPGRADE',upgrade2:'BERBERIS_FUEL_INJECTOR',
+            collectionIntervalDays:1,beaconPercent:0,crystalPercent:0,otherSpeedPercent:0
+          },ctx);
+          assert.equal(fixed.setupComplete,true,'craft fallback should price Rabbit setup');
+          assert.ok(fixed.setupCost>0,'setup cost should be positive');
+          const fly=fixed.setupBreakdown.find(x=>x.item==='FLYCATCHER_UPGRADE');
+          const berb=fixed.setupBreakdown.find(x=>x.item==='BERBERIS_FUEL_INJECTOR');
+          assert.equal(fly?.source,'CRAFT','Flycatcher should use craft fallback when direct Bazaar quote is absent');
+          assert.equal(berb?.source,'CRAFT','Berberis Fuel Injector should use craft fallback when direct Bazaar quote is absent');
+          assert.ok(Number.isFinite(fixed.paybackDays),'payback should calculate when setup becomes priceable');
+
+          const base={
+            tier:11,count:1,fuel:'ENCHANTED_LAVA_BUCKET',sellMethod:'BEST',priceMode:'LIVE',
+            compareDays:5,collectionIntervalDays:1,family:'ALL',search:'',sort:'NET',
+            beaconPercent:0,crystalPercent:0,otherSpeedPercent:0
+          };
+          const excluded=['FLYCATCHER_UPGRADE','SOULFLOW_ENGINE','CORRUPT_SOIL'];
+          const ranked=calculateMinionRankings({...base,excludedUpgrades:excluded},ctx);
+          assert.ok(ranked.rows.some(r=>r.supported),'expected supported rows');
+          for(const row of ranked.rows.filter(r=>r.supported)){
+            const chosen=new Set((row.upgrades||[]).map(x=>x.id));
+            for(const id of excluded) assert.equal(chosen.has(id),false,`excluded upgrade ${id} must never be selected`);
+          }
+          assert.deepEqual(ranked.options.excludedUpgrades,excluded,'multiple exclusions must survive API options');
+          console.log('setup pricing + multi-exclusion regression passed');
+          NODE
+      - name: Build update bundle
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64,gzip,hashlib,json,datetime,shutil
+          repo=Path('.');src=repo/'scratch-0.6.9'/'base'
+          files=[
+            'server.mjs','package.json','config.example.json',
+            'src/db.mjs','src/apply-update.mjs','src/history-stats-worker.mjs','src/minions.mjs','src/minion-data.mjs',
+            'public/index.html','public/minions.html','public/minions.js','public/minions.css',
+            'start-bazaarflip.bat'
+          ]
+          payload={'files':{rel:base64.b64encode((src/rel).read_bytes()).decode() for rel in files}}
+          zipped=gzip.compress(json.dumps(payload,separators=(',',':')).encode(),compresslevel=9)
+          b64=base64.b64encode(zipped).decode();out=repo/'releases'/'0.6.9'
+          if out.exists():shutil.rmtree(out)
+          out.mkdir(parents=True)
+          parts=[]
+          for i in range(0,len(b64),8000):
+            name=f'part-{i//8000+1:03d}.txt'
+            (out/name).write_text(b64[i:i+8000],encoding='utf-8')
+            parts.append(f'./releases/0.6.9/{name}')
+          notes=[
+            'Adds a multi-select Exclude upgrades control to Minion Setup, so one or more upgrades such as Flycatcher can be removed from optimizer consideration.',
+            'Persists excluded upgrades locally and includes them in saved table views.',
+            'Improves one-time setup pricing: use a direct Bazaar acquisition price when available, otherwise price verified crafting recipes recursively from their ingredients.',
+            'Adds verified recipes for the Minion upgrades currently modeled, including Flycatcher, Corrupt Soil, Soulflow engines, Berberis Fuel Injector, Super Compactor 3000, Diamond Spreading, Minion Expander and Enchanted Egg.',
+            'Shows a setup-cost breakdown in the Minion detail dialog with the price source for every component (Bazaar, Craft or Coins).',
+            'Keeps N/A only when a required setup component genuinely still cannot be priced from available market/recipe data.'
+          ]
+          manifest={
+            'version':'0.6.9',
+            'publishedAt':datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=3))).isoformat(timespec='seconds'),
+            'notes':notes,'files':[],
+            'bundle':{'parts':parts,'encoding':'gzip-base64','sha256':hashlib.sha256(zipped).hexdigest()}
+          }
+          for rel in files:
+            manifest['files'].append({'path':rel,'sha256':hashlib.sha256((src/rel).read_bytes()).hexdigest()})
+          (repo/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
+          PY
+      - name: Commit release
+        run: |
+          git config user.name bazaarflipper-update-bot
+          git config user.email actions@users.noreply.github.com
+          git rm -rf scratch-0.6.9 .github/workflows
+          git add manifest.json releases/0.6.9
+          git commit -m "release: BazaarFlipper v0.6.9"
+          git push origin HEAD:v0.6.9-dev
