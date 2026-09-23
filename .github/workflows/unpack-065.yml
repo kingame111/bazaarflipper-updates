@@ -1,0 +1,34 @@
+name: unpack-065-for-066
+on:
+  push:
+    branches: [v0.6.6-dev]
+    paths: ['.github/workflows/unpack-065.yml']
+permissions:
+  contents: write
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: v0.6.6-dev}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Unpack
+        shell: python
+        run: |
+          import base64,gzip,json,pathlib,shutil
+          root=pathlib.Path('.')
+          m=json.loads((root/'manifest.json').read_text())
+          data=''.join((root/p.replace('./','')).read_text() for p in m['bundle']['parts'])
+          obj=json.loads(gzip.decompress(base64.b64decode(data)).decode())
+          out=root/'scratch-0.6.6'/'base'
+          if out.exists(): shutil.rmtree(out)
+          for rel,enc in obj['files'].items():
+              dest=out/rel; dest.parent.mkdir(parents=True,exist_ok=True); dest.write_bytes(base64.b64decode(enc))
+      - name: Commit
+        run: |
+          git config user.name bazaarflipper-update-bot
+          git config user.email actions@users.noreply.github.com
+          git add scratch-0.6.6
+          git commit -m "chore: unpack v0.6.5 for v0.6.6" || exit 0
+          git push origin HEAD:v0.6.6-dev
