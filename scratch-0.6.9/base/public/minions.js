@@ -7,7 +7,7 @@ const fmtAgo=(ts)=>{const age=Math.max(0,Date.now()-Number(ts||0));return !ts?'�
 const upgradeNames=(r)=>{const names=(r.upgrades||[]).map(x=>x.name);while(names.length<2)names.push('Empty');return names.slice(0,2);};
 const controls=['tier','count','fuel','sellMethod','priceMode','compareDays','collectionIntervalDays','family','search','sort','tax','beacon','crystal','otherSpeed'];
 let catalog=null,lastData=null,timer=null,requestSeq=0,lastHistoryLoadedAt=null,statusTimer=null;
-const COLUMN_KEY='bazaarflipper.minions.columns.v2',OLD_COLUMN_KEY='bazaarflipper.minions.columns.v1',VIEW_KEY='bazaarflipper.minions.views.v2',COMPARE_KEY='bazaarflipper.minions.compareDays.v1';
+const COLUMN_KEY='bazaarflipper.minions.columns.v2',OLD_COLUMN_KEY='bazaarflipper.minions.columns.v1',VIEW_KEY='bazaarflipper.minions.views.v2',COMPARE_KEY='bazaarflipper.minions.compareDays.v1',EXCLUDED_KEY='bazaarflipper.minions.excludedUpgrades.v1';
 const columnNames=['#','Minion','Best upgrades','Tier','Net / day','LIVE comparison','Data coverage','Gross / day','Bazaar tax / day','Recurring / day','Setup (one-time)','Payback','30d ROI','Speed'];
 const headerHelp=[
   'Current rank after applying the selected sort. Rank changes when filters, tier, fuel, price model or comparison window change.',
@@ -37,6 +37,8 @@ function loadVisibleColumns(){
 }
 function normalizeColumns(v){const x=v.slice(0,columnNames.length);while(x.length<columnNames.length)x.push(true);x[1]=true;return x;}
 let visibleColumns=loadVisibleColumns();
+let excludedUpgrades=new Set();
+try{excludedUpgrades=new Set(JSON.parse(localStorage.getItem(EXCLUDED_KEY)||'[]').map(x=>String(x).toUpperCase()));}catch{}
 
 function option(select,value,label){const o=document.createElement('option');o.value=value;o.textContent=label;select.appendChild(o)}
 function populateCatalog(c){
@@ -49,10 +51,12 @@ function populateCatalog(c){
     const families=[...new Set((c.minions||[]).map(x=>x.family).filter(Boolean))].sort();
     for(const f of families) option($('family'),f,f);
   }
+  buildExcludedUpgradesMenu();
 }
 function params(){
   const p=new URLSearchParams();
   for(const id of controls)p.set(id,$(id).value);
+  p.set('excludedUpgrades',[...excludedUpgrades].sort().join(','));
   return p;
 }
 async function load(){
@@ -74,6 +78,33 @@ async function load(){
     $('statusDot').classList.remove('live');
   }finally{if(seq===requestSeq)$('refreshBtn').disabled=false}
 }
+function updateExcludedButton(){
+  const count=excludedUpgrades.size;
+  $('excludeUpgradesBtn').textContent=count?(`${count} excluded`):'None excluded';
+  $('excludeUpgradesBtn').title=count?[...excludedUpgrades].map(id=>catalog?.upgrades?.find(x=>x.id===id)?.name||id).join(', '):'All compatible upgrades may be considered';
+}
+function buildExcludedUpgradesMenu(){
+  const menu=$('excludeUpgradesMenu');
+  if(!menu||!catalog)return;
+  menu.innerHTML='';
+  const list=(catalog.upgrades||[]).filter(x=>x.id!=='NONE').sort((a,b)=>a.name.localeCompare(b.name));
+  for(const up of list){
+    const label=document.createElement('label');
+    const cb=document.createElement('input');
+    cb.type='checkbox';cb.checked=excludedUpgrades.has(up.id);
+    cb.addEventListener('change',()=>{
+      if(cb.checked)excludedUpgrades.add(up.id);else excludedUpgrades.delete(up.id);
+      localStorage.setItem(EXCLUDED_KEY,JSON.stringify([...excludedUpgrades].sort()));
+      updateExcludedButton();schedule(0);
+    });
+    label.append(cb,document.createTextNode(up.name));menu.appendChild(label);
+  }
+  const actions=document.createElement('div');actions.className='excludeActions';
+  const clear=document.createElement('button');clear.type='button';clear.textContent='Clear all';
+  clear.onclick=()=>{excludedUpgrades.clear();localStorage.removeItem(EXCLUDED_KEY);buildExcludedUpgradesMenu();updateExcludedButton();schedule(0);};
+  actions.appendChild(clear);menu.appendChild(actions);updateExcludedButton();
+}
+
 function applyHistoryWindowAvailability(hr){
   const depth=Number(hr?.reliableDepthMs)||0;
   if(!(depth>0))return false;
@@ -161,6 +192,7 @@ function render(data){
 function showDetail(r){
   const alternatives=(r.upgradeAlternatives||[]).map((a,i)=>`<tr><td>${i===0?'Best':a.rank}</td><td>${(a.upgrades||[]).map(x=>x.name).join(' + ')||'No upgrades'}</td><td class="${a.netPerMinionDay>=0?'profit':'loss'}">${fmtCoins(a.netPerMinionDay)}</td><td>${fmtCoins(a.grossPerMinionDay)}</td><td>${fmtCoins(a.bazaarTaxPerMinionDay)}</td><td>${fmtCoins(a.expensesPerMinionDay)}</td><td>${a.deltaFromBestPerMinionDay===0?'—':fmtCoins(a.deltaFromBestPerMinionDay)}</td></tr>`).join('');
   const outputs=(r.outputDetails||[]).map(o=>`<tr><td>${o.item}<span class="family">${o.source}${o.compacted?' · compacted':''}</span></td><td>${fmtCoins(o.unitsPerDay)}</td><td>${o.quote.method}</td><td>${fmtCoins(o.quote.raw)}</td><td>${fmtCoins(o.grossRevenuePerDay)}</td><td>${fmtCoins(o.bazaarTaxPerDay)}</td><td>${fmtCoins(o.revenuePerDay)}</td></tr>`).join('');
+  const setupRows=(r.setupBreakdown||[]).map(x=>`<tr><td>${x.name||x.item}</td><td>${x.kind||'ITEM'}</td><td>${fmtCoins(x.amount)}</td><td>${x.source||'—'}</td><td>${x.unitPrice==null?'N/A':fmtCoins(x.unitPrice)}</td><td>${x.total==null?'N/A':fmtCoins(x.total)}</td></tr>`).join('');
   const warnings=[...(r.warnings||[]),...(r.setupComplete?[]:[`Setup/ROI incomplete: ${(r.setupMissing||[]).join(', ')||'exact recipe unavailable'}`])];
   if(Number(r.historicalCoverage||0)<0.8)warnings.push(`Historical price coverage is only ${(Number(r.historicalCoverage||0)*100).toFixed(0)}% for the selected ${r.compareDays||7}-day window.`);
   $('detail').innerHTML=`<div class="detailTitle"><h2>${r.name} T${r.tier}</h2><p>${r.count} minion(s) · ${r.fuel.name} · ${r.upgrades.map(x=>x.name).join(' + ')||'no upgrades'}</p></div>
@@ -181,6 +213,9 @@ function showDetail(r){
       <div><span>${r.compareDays||7}d price coverage</span><strong>${fmtPct((r.historicalCoverage||0)*100)}</strong></div>
       <div><span>Price CV</span><strong>${fmtPct((r.stabilityCv||0)*100)}</strong></div>
     </div>
+    <h3>Setup cost breakdown · per minion</h3>
+    <p class="family">Pricing uses a direct Bazaar purchase when available; otherwise a verified crafting recipe is priced recursively from its ingredients.</p>
+    <table class="detailOutputs"><thead><tr><th>Component</th><th>Type</th><th>Qty</th><th>Price source</th><th>Unit cost</th><th>Total</th></tr></thead><tbody>${setupRows||'<tr><td colspan="6">No setup-cost components</td></tr>'}</tbody></table>
     <h3>Upgrade comparison</h3>
     <p class="family">All alternatives below use the selected price model. LIVE-vs-history always re-prices the exact same winning setup rather than comparing two different setups.</p>
     <table class="detailOutputs"><thead><tr><th>Rank</th><th>Upgrade setup</th><th>Net / minion / day</th><th>Gross</th><th>Bazaar tax</th><th>Recurring cost</th><th>vs best</th></tr></thead><tbody>${alternatives||'<tr><td colspan="7">No compatible upgrade setup</td></tr>'}</tbody></table>
@@ -257,10 +292,11 @@ $('refreshBtn').addEventListener('click',load);
 $('closeDialog').addEventListener('click',()=>$('detailDialog').close());
 $('detailDialog').addEventListener('click',(e)=>{if(e.target===$('detailDialog'))$('detailDialog').close()});
 $('columnsBtn').onclick=()=>{$('columnsMenu').hidden=!$('columnsMenu').hidden;};
-$('saveViewBtn').onclick=()=>{const n=prompt('Name this table view:');if(!n)return;const v=views();v[n]={columns:visibleColumns,sort:$('sort').value,compareDays:$('compareDays').value};localStorage.setItem(VIEW_KEY,JSON.stringify(v));refreshViews();};
-$('viewPreset').onchange=()=>{const v=views()[$('viewPreset').value];if(!v)return;if(v.columns)visibleColumns=normalizeColumns(v.columns);if(v.sort)$('sort').value=v.sort;if(v.compareDays)$('compareDays').value=v.compareDays;buildColumnsMenu();applyColumnVisibility();load();};
+$('excludeUpgradesBtn').onclick=()=>{$('excludeUpgradesMenu').hidden=!$('excludeUpgradesMenu').hidden;};
+$('saveViewBtn').onclick=()=>{const n=prompt('Name this table view:');if(!n)return;const v=views();v[n]={columns:visibleColumns,sort:$('sort').value,compareDays:$('compareDays').value,excludedUpgrades:[...excludedUpgrades]};localStorage.setItem(VIEW_KEY,JSON.stringify(v));refreshViews();};
+$('viewPreset').onchange=()=>{const v=views()[$('viewPreset').value];if(!v)return;if(v.columns)visibleColumns=normalizeColumns(v.columns);if(v.sort)$('sort').value=v.sort;if(v.compareDays)$('compareDays').value=v.compareDays;if(Array.isArray(v.excludedUpgrades)){excludedUpgrades=new Set(v.excludedUpgrades.map(x=>String(x).toUpperCase()));localStorage.setItem(EXCLUDED_KEY,JSON.stringify([...excludedUpgrades]));buildExcludedUpgradesMenu();}buildColumnsMenu();applyColumnVisibility();load();};
 $('historyCard').onclick=()=>$('historyDialog').showModal();$('dataDetailsBtn').onclick=()=>$('dataDialog').showModal();
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());
 const rc=localStorage.getItem(COMPARE_KEY);if(rc)$('compareDays').value=rc;
-buildColumnsMenu();refreshViews();initHeaderHelp();
+buildColumnsMenu();refreshViews();initHeaderHelp();updateExcludedButton();
 load();pollStatus();statusTimer=setInterval(pollStatus,10000);
