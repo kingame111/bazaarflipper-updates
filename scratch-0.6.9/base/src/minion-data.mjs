@@ -9007,9 +9007,6 @@ export const MINION_DATA = {
       {"item":"ENCHANTED_REDSTONE","amount":1}
     ]
   },
-  "setupFallbackPrices": {
-    "STICK": 0.5
-  },
   "notes": [
     "Speeds/drop distributions seeded from maintained community datasets and cross-checked against current NEU/Hypixel Wiki examples.",
     "Fuel values are taken from current NEU item lore.",
