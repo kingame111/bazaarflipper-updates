@@ -37,39 +37,45 @@ function copyFileAtomic(source, target) {
   fs.renameSync(temp, target);
 }
 
-function launchServer() {
+function launchServer(mode='direct') {
   const logFd=fs.openSync(startupLog,'a');
   try {
-    if (process.platform === 'win32') {
+    let child;
+    if (mode === 'batch' && process.platform === 'win32') {
       const batchPath = path.join(projectRoot, 'start-bazaarflip.bat');
       const command = `call "${batchPath.replace(/"/g, '""')}"`;
-      const child = spawn('cmd.exe', ['/d', '/c', command], {
+      child = spawn('cmd.exe', ['/d', '/c', command], {
         cwd: projectRoot,
         detached: true,
         stdio: ['ignore',logFd,logFd],
-        windowsHide: false
+        windowsHide: true
       });
-      child.unref();
-      return child.pid;
+    } else {
+      child = spawn(process.execPath, [path.join(projectRoot, 'server.mjs')], {
+        cwd: projectRoot,
+        detached: true,
+        stdio: ['ignore',logFd,logFd],
+        windowsHide: true
+      });
     }
-    const child = spawn(process.execPath, [path.join(projectRoot, 'server.mjs')], {
-      cwd: projectRoot,
-      detached: true,
-      stdio: ['ignore',logFd,logFd]
-    });
     child.unref();
+    log(`launch requested mode=${mode} pid=${child.pid||'unknown'} exec=${mode==='direct'?process.execPath:'cmd.exe'}`);
     return child.pid;
   } finally {
     try { fs.closeSync(logFd); } catch {}
   }
 }
 
-async function healthCheck(expectedVersion) {
+async function healthCheck(expectedVersion, timeoutMs=180000) {
   const started=Date.now();
-  let lastError='';
-  for (let i = 0; i < 240; i += 1) {
+  let lastError='', firstResponseLogged=false;
+  while (Date.now()-started < timeoutMs) {
     try {
       const response = await fetch(`http://${host}:${port}/api/status`, { cache: 'no-store' });
+      if (!firstResponseLogged) {
+        log(`first health response after ${Date.now()-started}ms: HTTP ${response.status}`);
+        firstResponseLogged=true;
+      }
       if (response.ok) {
         const body = await response.json();
         if (!expectedVersion || body.version === expectedVersion) {
@@ -119,11 +125,19 @@ async function main() {
     }
 
     log(`files copied; launching v${manifest.version}`);
-    const newPid = launchServer();
-    if (!(await healthCheck(String(manifest.version)))) {
+    let newPid = launchServer('direct');
+    let healthy = await healthCheck(String(manifest.version), 90000);
+    if (!healthy && process.platform === 'win32') {
+      log('direct Windows restart did not become healthy in 90s; trying batch fallback before rollback');
       terminate(newPid);
       await sleep(1000);
-      throw new Error(`v${manifest.version} failed health check after 120 seconds; see ${startupLog}`);
+      newPid = launchServer('batch');
+      healthy = await healthCheck(String(manifest.version), 90000);
+    }
+    if (!healthy) {
+      terminate(newPid);
+      await sleep(1000);
+      throw new Error(`v${manifest.version} failed health check after restart attempts; see ${startupLog}`);
     }
 
     fs.writeFileSync(path.join(projectRoot, 'data', 'last-update.json'), JSON.stringify({
