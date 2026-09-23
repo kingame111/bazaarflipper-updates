@@ -1,23 +1,25 @@
 {
-  "version": "0.6.5",
-  "publishedAt": "2026-09-23T04:11:48+03:00",
+  "version": "0.6.6",
+  "publishedAt": "2026-09-23T05:01:15+03:00",
   "notes": [
-    "Adds a 1\u20137 day selector for LIVE comparison in the Minion Calculator; the selected window changes the calculation, sorting and labels.",
-    "Adds customizable Minion table columns with persistence and reusable saved views.",
-    "Moves reliable-history depth into a separate bubble beside LIVE with a detailed reliability dialog.",
-    "Measures reliable-history depth from actual stored snapshot continuity instead of requiring a complete 7-day window.",
-    "Adds a compact data diagnostics dialog for market freshness and local-history status.",
-    "Adds sync-import duplicate protection and duplicate counters for retransmitted snapshots.",
-    "Prevents stale browser JS/CSS after updates with no-store headers and versioned Minion assets."
+    "Adds Bazaar-style hover explanations to every Minion Calculator table column.",
+    "Fixes the first-load Tier mismatch that could show Tier 11 in the control while calculating Tier 1 rows.",
+    "Compares LIVE and historical prices using the exact same winning minion setup instead of optimizing two different setups.",
+    "Prevents Soulflow Engine and Lesser Soulflow Engine from being equipped together.",
+    "Splits true gross revenue, Bazaar tax, recurring cost and net profit into separate values.",
+    "Automatically refreshes History products and Reliable history when the background history calculation finishes.",
+    "Limits the LIVE comparison selector to the number of reliable history days currently available.",
+    "Adds stale-request guards so older calculations cannot overwrite newer settings.",
+    "Improves Windows update restart reliability by launching server.mjs directly, with batch fallback and detailed restart logging."
   ],
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "5af0b92691ee25e3061a0cd1668fe5716b1545f9bf14acf80939b5ae7c3f3448"
+      "sha256": "831c3d5d616835e16ade864a3de0664f5fd6f6a16e3a90e5d9c44c764210ead3"
     },
     {
       "path": "package.json",
-      "sha256": "e0ad3501099497b8d3faafa6ff3bb66dcd431a914358faaa158ad7f03810f924"
+      "sha256": "d30366cf21af099cc4a7858dc7accc6f5e5b4bfc247defb4404db3280e891646"
     },
     {
       "path": "config.example.json",
@@ -29,7 +31,7 @@
     },
     {
       "path": "src/apply-update.mjs",
-      "sha256": "30e87c15166e0bf9b89f7b9ee1e4473d2192d88ccf6b37e9c9e2260dd8ea553c"
+      "sha256": "7bfc8bb13df755699ac38abeeecaa92597e0b7e3d1e9cb5514a81f82c5d62538"
     },
     {
       "path": "src/history-stats-worker.mjs",
@@ -37,47 +39,48 @@
     },
     {
       "path": "src/minions.mjs",
-      "sha256": "ead6d25a85073ad4c3de0bc27e180c03e3ee5759604b6ef91de92b25ccbca8ca"
+      "sha256": "8c64ff15e265a2f25c7dacde544574608cec3bbea5184db329ffa8cd2313d4b0"
     },
     {
       "path": "src/minion-data.mjs",
-      "sha256": "26297c3b82b0ff1cc1c2677531667b049ee7183c330e2faf8832c8aca95de255"
+      "sha256": "186c81cf1d7966cf058613445fa8d2936bdb0f42fe8075e1a91aa43f373342d4"
     },
     {
       "path": "public/index.html",
-      "sha256": "e8bfd7dcf2dcde57c46294aee8621d34eb317e28138a69f103a0377a8bb98b03"
+      "sha256": "6012726b46de3d559f50d730590be6048d422eefd848c46c5d4a4e419a107ca1"
     },
     {
       "path": "public/minions.html",
-      "sha256": "979623e37bd13b93e9beb57d6673bd16157fc1fb4cd2a11325bd624edb5927b3"
+      "sha256": "8d1f66e2b79ce5ca6fcc950e37472db6ed93f91342d513a75947cff9f7289ac8"
     },
     {
       "path": "public/minions.js",
-      "sha256": "47d8cf42e8be771d403bf5de32ddc377e2a2e44198e3ac0497cd98db04d420ae"
+      "sha256": "062b791241f676dbfc33ab10c5c6a056acc0c2095ef9882f9dae02c24c29b11f"
     },
     {
       "path": "public/minions.css",
-      "sha256": "20e14a934c7c65feba7fa78d0ba47bb907d2b52731416525132c224590662841"
+      "sha256": "bf72ea311b6b5926aea13df19ade33409719dff777866b1fc27fed153ef2036f"
     }
   ],
   "bundle": {
     "parts": [
-      "./releases/0.6.5/part-001.txt",
-      "./releases/0.6.5/part-002.txt",
-      "./releases/0.6.5/part-003.txt",
-      "./releases/0.6.5/part-004.txt",
-      "./releases/0.6.5/part-005.txt",
-      "./releases/0.6.5/part-006.txt",
-      "./releases/0.6.5/part-007.txt",
-      "./releases/0.6.5/part-008.txt",
-      "./releases/0.6.5/part-009.txt",
-      "./releases/0.6.5/part-010.txt",
-      "./releases/0.6.5/part-011.txt",
-      "./releases/0.6.5/part-012.txt",
-      "./releases/0.6.5/part-013.txt",
-      "./releases/0.6.5/part-014.txt"
+      "./releases/0.6.6/part-001.txt",
+      "./releases/0.6.6/part-002.txt",
+      "./releases/0.6.6/part-003.txt",
+      "./releases/0.6.6/part-004.txt",
+      "./releases/0.6.6/part-005.txt",
+      "./releases/0.6.6/part-006.txt",
+      "./releases/0.6.6/part-007.txt",
+      "./releases/0.6.6/part-008.txt",
+      "./releases/0.6.6/part-009.txt",
+      "./releases/0.6.6/part-010.txt",
+      "./releases/0.6.6/part-011.txt",
+      "./releases/0.6.6/part-012.txt",
+      "./releases/0.6.6/part-013.txt",
+      "./releases/0.6.6/part-014.txt",
+      "./releases/0.6.6/part-015.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "b5e65d62939e6fb5b93f6be25efe5b48f5a8cb063a99707dcff54660c0e2839d"
+    "sha256": "3382c549ee18db21e2d8b6630da21e92ee161702f26a284ac95fb3cfad4687c9"
   }
 }
