@@ -15,3 +15,8 @@
 .columnsMenu{position:absolute;right:26px;z-index:20;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:220px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
 .tablePanel{position:relative}.columnsMenu label{display:flex;gap:8px;padding:5px 2px;color:var(--muted)}.infoDialog{max-width:min(760px,calc(100vw - 30px));width:720px}
 @media(max-width:900px){.statusGroup{justify-content:flex-start}.historyCard,.statusCard{min-width:100%}.tableTools{flex-wrap:wrap}}
+
+.helpHeader{cursor:help;text-decoration:underline dotted rgba(152,167,189,.45);text-underline-offset:4px}
+.hoverTooltip{position:fixed;z-index:1000;max-width:340px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#0b111c;color:var(--text);box-shadow:0 14px 40px rgba(0,0,0,.45);font-size:12px;line-height:1.45;pointer-events:none}
+.hoverTooltip[hidden]{display:none}
+.columnActions{display:flex;gap:8px;margin-top:10px}.columnActions button{flex:1;background:transparent;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:6px;cursor:pointer}
