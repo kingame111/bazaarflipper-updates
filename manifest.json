@@ -1,20 +1,22 @@
 {
-  "version": "0.6.8",
-  "publishedAt": "2026-09-23T05:21:36+03:00",
+  "version": "0.6.9",
+  "publishedAt": "2026-09-23T06:17:11+03:00",
   "notes": [
-    "Adds an updater-safe Windows start-bazaarflip.bat to the update bundle so older 0.6.5 installations can restart the new server instead of rolling back.",
-    "This is a compatibility bridge specifically for desktops stuck on v0.6.5 after the 60-second restart timeout.",
-    "Keeps the direct Node restart updater introduced in v0.6.6 for future updates.",
-    "Includes all Minion Calculator fixes and global-search-rank behavior from v0.6.6 and v0.6.7."
+    "Adds a multi-select Exclude upgrades control to Minion Setup, so one or more upgrades such as Flycatcher can be removed from optimizer consideration.",
+    "Persists excluded upgrades locally and includes them in saved table views.",
+    "Improves one-time setup pricing: use a direct Bazaar acquisition price when available, otherwise price verified crafting recipes recursively from their ingredients.",
+    "Adds verified recipes for the Minion upgrades currently modeled, including Flycatcher, Corrupt Soil, Soulflow engines, Berberis Fuel Injector, Super Compactor 3000, Diamond Spreading, Minion Expander and Enchanted Egg.",
+    "Shows a setup-cost breakdown in the Minion detail dialog with the price source for every component (Bazaar, Craft or Coins).",
+    "Keeps N/A only when a required setup component genuinely still cannot be priced from available market/recipe data."
   ],
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "831c3d5d616835e16ade864a3de0664f5fd6f6a16e3a90e5d9c44c764210ead3"
+      "sha256": "66f74a4768e85560c172374b3cfcf14a0a04506f6c0360ded457d43d97092dad"
     },
     {
       "path": "package.json",
-      "sha256": "7fe507ddc163e4414531063809cb8786359619a647cf49956dc97a0ffac97242"
+      "sha256": "ac1f35197f1ce7194faaf3ac6da3eb4c41554818b1831caf22e36f9bc16ce35d"
     },
     {
       "path": "config.example.json",
@@ -34,27 +36,27 @@
     },
     {
       "path": "src/minions.mjs",
-      "sha256": "6fe4a2550e464c190164775edd039800cf8a9927afb6b5434c47682a39161635"
+      "sha256": "371200ef9e8e4c541759e90ae291c3655e347fab8d97a83808904c65b500c8ad"
     },
     {
       "path": "src/minion-data.mjs",
-      "sha256": "186c81cf1d7966cf058613445fa8d2936bdb0f42fe8075e1a91aa43f373342d4"
+      "sha256": "b29f8944859e76d6d6f0d24dcb5e2efa6c5445e4dbcc038a4a949272fee30853"
     },
     {
       "path": "public/index.html",
-      "sha256": "ec6ca9424c4b40ea355985383b73a170221951b19e276a5a46e1b75fdc648671"
+      "sha256": "8602995f50cb9025460ea4ee84ac181d6babef6dcebcd4c03b9fd674cc3c1080"
     },
     {
       "path": "public/minions.html",
-      "sha256": "7118fa8d7ffbd8037280a3652268cddd2983cfa7b375337fa7917df4bac0a30f"
+      "sha256": "7725b94569162f5a44a824b69095b6684e2af70f7f41b7f5300096543a1063b2"
     },
     {
       "path": "public/minions.js",
-      "sha256": "607caac23496f4a6962bb3ed62b03c874c8178e251e1c6d042a29ff3e22a9a07"
+      "sha256": "d52bfbe3a0fd33caad907d4406b82b4a082e087aeaa215a424c4f34c0bc9ac35"
     },
     {
       "path": "public/minions.css",
-      "sha256": "bf72ea311b6b5926aea13df19ade33409719dff777866b1fc27fed153ef2036f"
+      "sha256": "b7ca9dc09bdcbdb095923079713cd2d6a0476f37078a95d7178fcff826693d76"
     },
     {
       "path": "start-bazaarflip.bat",
@@ -63,23 +65,24 @@
   ],
   "bundle": {
     "parts": [
-      "./releases/0.6.8/part-001.txt",
-      "./releases/0.6.8/part-002.txt",
-      "./releases/0.6.8/part-003.txt",
-      "./releases/0.6.8/part-004.txt",
-      "./releases/0.6.8/part-005.txt",
-      "./releases/0.6.8/part-006.txt",
-      "./releases/0.6.8/part-007.txt",
-      "./releases/0.6.8/part-008.txt",
-      "./releases/0.6.8/part-009.txt",
-      "./releases/0.6.8/part-010.txt",
-      "./releases/0.6.8/part-011.txt",
-      "./releases/0.6.8/part-012.txt",
-      "./releases/0.6.8/part-013.txt",
-      "./releases/0.6.8/part-014.txt",
-      "./releases/0.6.8/part-015.txt"
+      "./releases/0.6.9/part-001.txt",
+      "./releases/0.6.9/part-002.txt",
+      "./releases/0.6.9/part-003.txt",
+      "./releases/0.6.9/part-004.txt",
+      "./releases/0.6.9/part-005.txt",
+      "./releases/0.6.9/part-006.txt",
+      "./releases/0.6.9/part-007.txt",
+      "./releases/0.6.9/part-008.txt",
+      "./releases/0.6.9/part-009.txt",
+      "./releases/0.6.9/part-010.txt",
+      "./releases/0.6.9/part-011.txt",
+      "./releases/0.6.9/part-012.txt",
+      "./releases/0.6.9/part-013.txt",
+      "./releases/0.6.9/part-014.txt",
+      "./releases/0.6.9/part-015.txt",
+      "./releases/0.6.9/part-016.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "f300601793a3dd31d32996ca205f9e028d29585404dc10245693ba546238ae33"
+    "sha256": "5e35acf9b1db4331db51bfe044b4dfc102adf2d8eeec7818e98b907a2bc4a127"
   }
 }
