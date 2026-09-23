@@ -8886,6 +8886,7 @@ export const MINION_DATA = {
     },
     "SOULFLOW_ENGINE": {
       "name": "Soulflow Engine",
+      "exclusiveGroup": "SOULFLOW_ENGINE_LINE",
       "outputMultiplier": 0.5,
       "cooldownDrop": {
         "item": "RAW_SOULFLOW",
@@ -8898,6 +8899,7 @@ export const MINION_DATA = {
     },
     "LESSER_SOULFLOW_ENGINE": {
       "name": "Lesser Soulflow Engine",
+      "exclusiveGroup": "SOULFLOW_ENGINE_LINE",
       "outputMultiplier": 0.5,
       "cooldownDrop": {
         "item": "RAW_SOULFLOW",
