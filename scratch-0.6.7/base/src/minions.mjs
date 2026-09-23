@@ -486,7 +486,6 @@ export function calculateMinionRankings(options = {}, context = {}) {
   const rows=[];
   for (const minion of Object.values(MINION_DATA.definitions)) {
     if (family !== 'all' && String(minion.family).toLowerCase() !== family) continue;
-    if (search && !String(minion.name).toLowerCase().includes(search)) continue;
     const compareDays=Math.max(1,Math.min(7,Math.round(safe(options.compareDays,7))));
     const activeBest = calculateBestUpgradeSetup(minion,options,{...ctx,priceMode,historyDays:compareDays});
     if (!activeBest.supported) {
@@ -528,6 +527,14 @@ export function calculateMinionRankings(options = {}, context = {}) {
     return safe(row.netDay,-Infinity);
   };
   rows.sort((a,b)=>metric(b)-metric(a) || String(a.name).localeCompare(String(b.name)));
+  let rankedPosition=0;
+  for (const row of rows) {
+    if (!row.supported) continue;
+    row.sortRank=++rankedPosition;
+  }
+  const visibleRows = search
+    ? rows.filter((row)=>String(row.name||'').toLowerCase().includes(search))
+    : rows;
   const horizonDays = 1;
 
   return {
@@ -538,7 +545,8 @@ export function calculateMinionRankings(options = {}, context = {}) {
     horizonDays,
     taxPercent:ctx.taxRate*100,
     options:{...options,horizonDays},
-    rows:rows.map((r)=>r.supported?{...r,horizon:{days:horizonDays,gross:r.grossDay*horizonDays,bazaarTax:r.bazaarTaxDay*horizonDays,expenses:r.expensesDay*horizonDays,net:r.netDay*horizonDays}}:r),
+    totalRankedRows:rankedPosition,
+    rows:visibleRows.map((r)=>r.supported?{...r,horizon:{days:horizonDays,gross:r.grossDay*horizonDays,bazaarTax:r.bazaarTaxDay*horizonDays,expenses:r.expensesDay*horizonDays,net:r.netDay*horizonDays}}:r),
     catalog:minionCatalog()
   };
 }
