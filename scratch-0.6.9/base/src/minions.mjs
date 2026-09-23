@@ -104,6 +104,58 @@ function acquisitionQuote(itemId, market) {
   return { price, available: price > 0 };
 }
 
+function setupRecipeFor(itemId) {
+  const id=upper(itemId);
+  const upgrade=MINION_DATA.upgrades?.[id];
+  if (Array.isArray(upgrade?.recipe) && upgrade.recipe.length) return upgrade.recipe;
+  const recipe=MINION_DATA.setupRecipes?.[id];
+  return Array.isArray(recipe) && recipe.length ? recipe : null;
+}
+
+function setupAcquisitionQuote(itemId, context, seen=new Set()) {
+  const id=String(itemId||'').trim();
+  const key=upper(id);
+  if (!id) return {price:0,available:true,source:'NONE',components:[]};
+
+  const direct=acquisitionQuote(id,context.market);
+  if (direct.available) {
+    return {price:direct.price,available:true,source:'BAZAAR',components:[{item:id,amount:1,unitPrice:direct.price,total:direct.price,source:'BAZAAR'}]};
+  }
+
+  const fallback=safe(MINION_DATA.setupFallbackPrices?.[key]);
+  if (fallback>0) {
+    return {price:fallback,available:true,source:'FIXED',components:[{item:id,amount:1,unitPrice:fallback,total:fallback,source:'FIXED'}]};
+  }
+
+  if (seen.has(key)) return {price:0,available:false,source:'CYCLE',missing:[id],components:[]};
+  const recipe=setupRecipeFor(key);
+  if (!recipe) return {price:0,available:false,source:'UNPRICED',missing:[id],components:[]};
+
+  const nextSeen=new Set(seen); nextSeen.add(key);
+  let cost=0;
+  const missing=[];
+  const components=[];
+  for (const entry of recipe) {
+    const amount=Math.max(0,safe(entry?.amount));
+    if (!amount) continue;
+    if (upper(entry?.item)==='COINS') {
+      cost+=amount;
+      components.push({item:'COINS',amount,unitPrice:1,total:amount,source:'COINS'});
+      continue;
+    }
+    const q=setupAcquisitionQuote(entry.item,context,nextSeen);
+    if (!q.available) {
+      missing.push(...(q.missing?.length?q.missing:[entry.item]));
+      continue;
+    }
+    const total=q.price*amount;
+    cost+=total;
+    components.push({item:entry.item,amount,unitPrice:q.price,total,source:q.source});
+  }
+  if (missing.length) return {price:0,available:false,source:'CRAFT',missing:[...new Set(missing)],components};
+  return {price:cost,available:true,source:'CRAFT',components};
+}
+
 function compactDropStream(drop, rawUnitsPerDay, useCompactor, collectionIntervalDays = 1) {
   const perDay = Math.max(0, safe(rawUnitsPerDay));
   const interval = Math.max(1 / 24, Math.min(30, safe(collectionIntervalDays, 1)));
@@ -198,8 +250,15 @@ function upgradePairCompatible(a, b) {
   return true;
 }
 
-function upgradeCombinations(minion) {
-  const eligible = Object.entries(MINION_DATA.upgrades).filter(([id,u]) => id !== 'NONE' && conditionMatches(u,minion)).map(([id,u]) => ({id,...u}));
+function normalizedExcludedUpgrades(value) {
+  const values=Array.isArray(value)?value:String(value||'').split(',');
+  return new Set(values.map(upper).filter(Boolean));
+}
+
+function upgradeCombinations(minion, excluded=new Set()) {
+  const eligible = Object.entries(MINION_DATA.upgrades)
+    .filter(([id,u]) => id !== 'NONE' && !excluded.has(upper(id)) && conditionMatches(u,minion))
+    .map(([id,u]) => ({id,...u}));
   const combinations=[[]];
   for(let i=0;i<eligible.length;i++){
     combinations.push([eligible[i].id]);
@@ -208,46 +267,62 @@ function upgradeCombinations(minion) {
   return combinations;
 }
 
-function recipeCost(tierInfo, market) {
+function recipeCost(tierInfo, context) {
   if (!tierInfo?.exactRecipe || !Array.isArray(tierInfo.recipe)) {
-    return { cost: null, complete: false, missing: ['Exact tier recipe unavailable'] };
+    return { cost: null, complete: false, missing: ['Exact tier recipe unavailable'], details:[] };
   }
   if (!tierInfo.recipe.length) {
-    return { cost: null, complete: false, missing: ['Base minion acquisition cost unavailable'] };
+    return { cost: null, complete: false, missing: ['Base minion acquisition cost unavailable'], details:[] };
   }
   let cost = 0;
   const missing = [];
+  const details=[];
   for (const entry of tierInfo.recipe) {
     const amount = Math.max(0, safe(entry.amount));
     if (!amount) continue;
-    if (String(entry.item).toUpperCase() === 'COINS') {
+    if (upper(entry.item) === 'COINS') {
       cost += amount;
+      details.push({kind:'MINION',item:'COINS',amount,unitPrice:1,total:amount,source:'COINS'});
       continue;
     }
-    const q = acquisitionQuote(entry.item, market);
+    const q = setupAcquisitionQuote(entry.item, context);
     if (!q.available) {
-      missing.push(entry.item);
+      missing.push(...(q.missing?.length?q.missing:[entry.item]));
+      details.push({kind:'MINION',item:entry.item,amount,unitPrice:null,total:null,source:q.source||'UNPRICED'});
       continue;
     }
-    cost += q.price * amount;
+    const total=q.price*amount;
+    cost += total;
+    details.push({kind:'MINION',item:entry.item,amount,unitPrice:q.price,total,source:q.source});
   }
-  return { cost, complete: missing.length === 0, missing };
+  return { cost, complete: missing.length === 0, missing:[...new Set(missing)], details };
 }
 
-function setupExtraCost(fuel, upgrades, market) {
+function setupExtraCost(fuel, upgrades, context) {
   let cost = 0;
   const missing = [];
+  const details=[];
   if (fuel?.duration === -1 && fuel?.itemId) {
-    const q = acquisitionQuote(fuel.itemId, market);
-    if (q.available) cost += q.price;
-    else missing.push(fuel.itemId);
+    const q = setupAcquisitionQuote(fuel.itemId, context);
+    if (q.available) {
+      cost += q.price;
+      details.push({kind:'FUEL',item:fuel.itemId,name:fuel.name,amount:1,unitPrice:q.price,total:q.price,source:q.source});
+    } else {
+      missing.push(...(q.missing?.length?q.missing:[fuel.itemId]));
+      details.push({kind:'FUEL',item:fuel.itemId,name:fuel.name,amount:1,unitPrice:null,total:null,source:q.source||'UNPRICED'});
+    }
   }
   for (const up of upgrades) {
-    const q = acquisitionQuote(up.id, market);
-    if (q.available) cost += q.price;
-    else missing.push(up.id);
+    const q = setupAcquisitionQuote(up.id, context);
+    if (q.available) {
+      cost += q.price;
+      details.push({kind:'UPGRADE',item:up.id,name:up.name,amount:1,unitPrice:q.price,total:q.price,source:q.source});
+    } else {
+      missing.push(...(q.missing?.length?q.missing:[up.id]));
+      details.push({kind:'UPGRADE',item:up.id,name:up.name,amount:1,unitPrice:null,total:null,source:q.source||'UNPRICED'});
+    }
   }
-  return { cost, complete: missing.length === 0, missing };
+  return { cost, complete: missing.length === 0, missing:[...new Set(missing)], details };
 }
 
 function finiteFuelExpensePerDay(fuel, market) {
@@ -397,8 +472,8 @@ export function calculateMinion(minion, options, context) {
   const expensesDay = fuelExpensePerMinionDay * count;
   const netDay = netPerMinionDay * count;
 
-  const recipe = recipeCost(tierInfo,context.market);
-  const extras = setupExtraCost(fuel,upgrades,context.market);
+  const recipe = recipeCost(tierInfo,context);
+  const extras = setupExtraCost(fuel,upgrades,context);
   const setupComplete = recipe.complete && extras.complete;
   const setupPerMinion = recipe.cost == null ? null : recipe.cost + extras.cost;
   const setupCost = setupPerMinion == null ? null : setupPerMinion * count;
@@ -443,7 +518,8 @@ export function calculateMinion(minion, options, context) {
     setupPerMinion,
     setupCost,
     setupComplete,
-    setupMissing:[...(recipe.missing||[]),...(extras.missing||[])],
+    setupMissing:[...new Set([...(recipe.missing||[]),...(extras.missing||[])])],
+    setupBreakdown:[...(recipe.details||[]),...(extras.details||[])],
     paybackDays,
     roi30dPercent,
     historicalCoverage:histCoverage,
@@ -458,7 +534,8 @@ export function calculateMinion(minion, options, context) {
 
 function calculateBestUpgradeSetup(minion, options, context) {
   if (!minion || minion.special) return calculateMinion(minion, options, context);
-  const candidates = upgradeCombinations(minion)
+  const excluded=normalizedExcludedUpgrades(options.excludedUpgrades);
+  const candidates = upgradeCombinations(minion,excluded)
     .map(ids => calculateMinion(minion,{...options,upgrade1:ids[0]||'NONE',upgrade2:ids[1]||'NONE'},context))
     .filter(row => row.supported)
     .sort((a,b) => safe(b.netPerMinionDay,-Infinity)-safe(a.netPerMinionDay,-Infinity) || Number(Boolean(b.setupComplete))-Number(Boolean(a.setupComplete)) || safe(a.setupPerMinion,Infinity)-safe(b.setupPerMinion,Infinity) || a.upgrades.length-b.upgrades.length);
