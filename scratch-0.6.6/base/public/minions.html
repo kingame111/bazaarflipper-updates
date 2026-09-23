@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>BazaarFlipper · Minion Calculator</title>
-  <link rel="stylesheet" href="/minions.css?v=0.6.5" />
+  <link rel="stylesheet" href="/minions.css?v=0.6.6" />
 </head>
 <body>
   <main class="shell">
@@ -54,7 +54,7 @@
         <label>Price model
           <select id="priceMode">
             <option value="LIVE">LIVE Bazaar</option>
-            <option value="7D">7-day expected</option>
+            <option value="7D">Historical expected — selected window</option>
           </select>
         </label>
         <label>LIVE comparison
@@ -128,7 +128,7 @@
 
     <section class="notice panel">
       <strong>What the model includes</strong>
-      <span>Minion action speed, every-other-action production, recurring consumable-fuel costs, Super Compactor, Diamond Spreading, Corrupt Soil, Soulflow engines, upgrade speed bonuses, Bazaar tax, LIVE or local 7-day prices, one-time setup cost and payback.</span>
+      <span>Minion action speed, every-other-action production, recurring consumable-fuel costs, Super Compactor, Diamond Spreading, Corrupt Soil, Soulflow engines, upgrade speed bonuses, Bazaar tax, LIVE or selected local-history prices, one-time setup cost and payback.</span>
       <span class="muted">One-time setup cost is never subtracted from daily net profit. Only recurring consumable fuel is a daily expense. Inferno is intentionally not ranked until its special fuel/RNG model is complete. Sunflower uses a normal day/night expected-value model; Dayswitch/Nightswitch are not yet modeled. Exact setup cost is withheld where an exact recipe is unavailable.</span>
     </section>
 
@@ -148,7 +148,7 @@
           <thead>
             <tr>
               <th>#</th><th>Minion</th><th>Best upgrades</th><th>Tier</th><th>Net / day</th><th id="compareHeader">LIVE vs 7d</th><th id="coverageHeader">Data coverage</th><th>Gross / day</th>
-              <th>Recurring / day</th><th>Setup (one-time)</th><th>Payback</th><th>30d ROI</th>
+              <th>Bazaar tax / day</th><th>Recurring / day</th><th>Setup (one-time)</th><th>Payback</th><th>30d ROI</th>
               <th>Speed</th>
             </tr>
           </thead>
@@ -160,9 +160,11 @@
     <section class="panel methodology">
       <strong>Model notes</strong>
       <p>Revenue is calculated per production cycle and scaled by your number of minions. Super Compactor output is compacted discretely over the selected collection interval, including intermediate leftovers. Daily profit is the single ranking basis; there is no separate optimizer ranking. Bazaar selling uses the selected sell method after the effective Bazaar tax. “Auto” chooses the best available net sale route per output item.</p>
-      <p>7-day mode uses the local price history collected by BazaarFlipper. Price coverage and price CV are shown in the detail view so historical reliability is visible directly instead of being compressed into a single generic badge.</p>
+      <p>Historical mode uses the selected local-price-history window collected by BazaarFlipper. Price coverage and price CV are shown in the detail view so historical reliability is visible directly instead of being compressed into a single generic badge.</p>
     </section>
   </main>
+
+  <div class="hoverTooltip" id="hoverTooltip" role="tooltip" hidden></div>
 
   <dialog id="historyDialog" class="infoDialog"><button class="dialogClose" data-close="historyDialog">×</button><div id="historyDetail"></div></dialog>
   <dialog id="dataDialog" class="infoDialog"><button class="dialogClose" data-close="dataDialog">×</button><div id="dataDetail"></div></dialog>
@@ -170,6 +172,6 @@
     <button id="closeDialog" class="dialogClose" aria-label="Close">×</button>
     <div id="detail"></div>
   </dialog>
-  <script type="module" src="/minions.js?v=0.6.5"></script>
+  <script type="module" src="/minions.js?v=0.6.6"></script>
 </body>
 </html>
