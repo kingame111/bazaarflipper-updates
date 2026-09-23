@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BazaarFlipper · Minion Calculator</title>
+  <link rel="stylesheet" href="/minions.css?v=0.6.5" />
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <a class="back" href="/">← Bazaar Scanner</a>
+        <p class="eyebrow">HYPIXEL SKYBLOCK</p>
+        <h1>Minion <span>Calculator</span></h1>
+        <p class="sub">Rank minion setups with live Bazaar prices, your local 7-day history, fuel costs and setup payback.</p>
+      </div>
+      <div class="statusGroup">
+        <div class="statusCard">
+          <div class="statusLine"><span class="dot" id="statusDot"></span><strong id="statusText">Loading…</strong></div>
+          <small id="statusMeta">Waiting for Bazaar data</small>
+          <small id="modeMeta">—</small>
+          <button id="dataDetailsBtn" class="ghostBtn" type="button">Data details</button>
+        </div>
+        <button id="historyCard" class="historyCard" type="button">
+          <span>Reliable history</span><strong id="historyDepth">—</strong><small id="historyCoverage">Building…</small>
+        </button>
+      </div>
+    </header>
+
+    <section class="panel controls">
+      <div class="sectionHead">
+        <div><strong>Setup</strong><small>Change a setting and the ranking recalculates automatically.</small></div>
+        <button id="refreshBtn" class="primary" type="button">Refresh</button>
+      </div>
+      <div class="grid">
+        <label>Tier
+          <select id="tier"></select>
+        </label>
+        <label>Minions
+          <input id="count" type="number" min="1" max="100" value="1" />
+        </label>
+        <label>Fuel
+          <select id="fuel"></select>
+        </label>
+        <label>Sell method
+          <select id="sellMethod">
+            <option value="BEST">Auto — best net price</option>
+            <option value="ORDER">Sell Order</option>
+            <option value="INSTANT">Instant Sell</option>
+            <option value="NPC">NPC</option>
+          </select>
+        </label>
+        <label>Price model
+          <select id="priceMode">
+            <option value="LIVE">LIVE Bazaar</option>
+            <option value="7D">7-day expected</option>
+          </select>
+        </label>
+        <label>LIVE comparison
+          <select id="compareDays">
+            <option value="1">1 day</option><option value="2">2 days</option><option value="3">3 days</option>
+            <option value="4">4 days</option><option value="5">5 days</option><option value="6">6 days</option>
+            <option value="7" selected>7 days</option>
+          </select>
+        </label>
+        <label>Collection interval
+          <select id="collectionIntervalDays">
+            <option value="0.0416666667">1 hour</option>
+            <option value="0.25">6 hours</option>
+            <option value="0.5">12 hours</option>
+            <option value="1" selected>1 day</option>
+            <option value="3">3 days</option>
+            <option value="7">7 days</option>
+            <option value="14">14 days</option>
+          </select>
+        </label>
+        <label>Family
+          <select id="family">
+            <option value="ALL">All families</option>
+          </select>
+        </label>
+        <label>Search
+          <input id="search" placeholder="Slime, Snow, Fishing…" />
+        </label>
+        <label>Sort
+          <select id="sort">
+            <option value="NET">Net profit</option>
+            <option value="GROSS">Gross revenue</option>
+            <option value="PAYBACK">Fastest payback</option>
+            <option value="ROI">30-day ROI</option>
+                        <option value="STABILITY">Most stable price</option>
+            <option value="VS7D">Highest LIVE vs selected history</option>
+          </select>
+        </label>
+        <label>Personal Bazaar tax %
+          <select id="tax">
+            <option value="1.25">1.25% — base</option>
+            <option value="1.125">1.125% — perk I</option>
+            <option value="1">1.00% — perk II</option>
+          </select>
+        </label>
+      </div>
+
+      <details class="advanced">
+        <summary>External speed bonuses</summary>
+        <div class="grid bonusGrid">
+          <label>Beacon speed %
+            <input id="beacon" type="number" min="0" max="100" step="0.1" value="0" />
+          </label>
+          <label>Crystal speed %
+            <input id="crystal" type="number" min="0" max="100" step="0.1" value="0" />
+          </label>
+          <label>Other speed %
+            <input id="otherSpeed" type="number" min="0" max="500" step="0.1" value="0" />
+          </label>
+        </div>
+        <p class="hint">Enter only bonuses that actually apply to your setup. These are added to fuel/upgrade speed bonuses.</p>
+      </details>
+    </section>
+
+    <section class="metrics">
+      <article><span>Top net / day</span><strong id="mNet">—</strong><small id="mNetName">—</small></article>
+      <article><span>Top gross / day</span><strong id="mGross">—</strong><small id="mGrossName">—</small></article>
+      <article><span>Fastest payback</span><strong id="mPayback">—</strong><small id="mPaybackName">—</small></article>
+      <article><span>Rows modeled</span><strong id="mRows">—</strong><small id="mCoverage">—</small></article>
+    </section>
+
+    <section class="notice panel">
+      <strong>What the model includes</strong>
+      <span>Minion action speed, every-other-action production, recurring consumable-fuel costs, Super Compactor, Diamond Spreading, Corrupt Soil, Soulflow engines, upgrade speed bonuses, Bazaar tax, LIVE or local 7-day prices, one-time setup cost and payback.</span>
+      <span class="muted">One-time setup cost is never subtracted from daily net profit. Only recurring consumable fuel is a daily expense. Inferno is intentionally not ranked until its special fuel/RNG model is complete. Sunflower uses a normal day/night expected-value model; Dayswitch/Nightswitch are not yet modeled. Exact setup cost is withheld where an exact recipe is unavailable.</span>
+    </section>
+
+    <section class="panel tablePanel">
+      <div class="tableHead">
+        <div><strong id="resultCount">0 minions</strong><small id="updatedText">—</small></div>
+        <div class="tableTools">
+          <select id="viewPreset"><option value="">Saved views…</option></select>
+          <button id="saveViewBtn" class="ghostBtn" type="button">Save view</button>
+          <button id="columnsBtn" class="ghostBtn" type="button">Columns</button>
+        </div>
+      </div>
+      <div id="columnsMenu" class="columnsMenu" hidden></div>
+      <small class="tableHelp">Best upgrades are visible here. Click a row to compare every compatible upgrade setup and inspect the output/price breakdown.</small>
+      <div class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Minion</th><th>Best upgrades</th><th>Tier</th><th>Net / day</th><th id="compareHeader">LIVE vs 7d</th><th id="coverageHeader">Data coverage</th><th>Gross / day</th>
+              <th>Recurring / day</th><th>Setup (one-time)</th><th>Payback</th><th>30d ROI</th>
+              <th>Speed</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel methodology">
+      <strong>Model notes</strong>
+      <p>Revenue is calculated per production cycle and scaled by your number of minions. Super Compactor output is compacted discretely over the selected collection interval, including intermediate leftovers. Daily profit is the single ranking basis; there is no separate optimizer ranking. Bazaar selling uses the selected sell method after the effective Bazaar tax. “Auto” chooses the best available net sale route per output item.</p>
+      <p>7-day mode uses the local price history collected by BazaarFlipper. Price coverage and price CV are shown in the detail view so historical reliability is visible directly instead of being compressed into a single generic badge.</p>
+    </section>
+  </main>
+
+  <dialog id="historyDialog" class="infoDialog"><button class="dialogClose" data-close="historyDialog">×</button><div id="historyDetail"></div></dialog>
+  <dialog id="dataDialog" class="infoDialog"><button class="dialogClose" data-close="dataDialog">×</button><div id="dataDetail"></div></dialog>
+  <dialog id="detailDialog">
+    <button id="closeDialog" class="dialogClose" aria-label="Close">×</button>
+    <div id="detail"></div>
+  </dialog>
+  <script type="module" src="/minions.js?v=0.6.5"></script>
+</body>
+</html>
