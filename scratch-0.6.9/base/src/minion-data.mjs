@@ -8831,10 +8831,19 @@ export const MINION_DATA = {
     },
     "SUPER_COMPACTOR_3000": {
       "name": "Super Compactor 3000",
-      "compactor": true
+      "compactor": true,
+      "recipe": [
+        {"item":"ENCHANTED_COBBLESTONE","amount":224},
+        {"item":"ENCHANTED_REDSTONE","amount":32},
+        {"item":"COMPACTOR","amount":1}
+      ]
     },
     "DIAMOND_SPREADING": {
       "name": "Diamond Spreading",
+      "recipe": [
+        {"item":"VINE","amount":8},
+        {"item":"ENCHANTED_DIAMOND","amount":1}
+      ],
       "extraDrops": [
         {
           "item": "DIAMOND",
@@ -8850,16 +8859,28 @@ export const MINION_DATA = {
     "MINION_EXPANDER": {
       "name": "Minion Expander",
       "speed": 0.05,
+      "recipe": [
+        {"item":"ENCHANTED_QUARTZ","amount":16},
+        {"item":"ENCHANTED_REDSTONE","amount":2}
+      ],
       "allowDuplicate": true,
       "specialStack": "MULTIPLICATIVE_SAME_ID"
     },
     "FLYCATCHER_UPGRADE": {
       "name": "Flycatcher",
       "speed": 0.2,
-      "allowDuplicate": true
+      "allowDuplicate": true,
+      "recipe": [
+        {"item":"TARANTULA_SILK","amount":102},
+        {"item":"FLY_SWATTER","amount":1}
+      ]
     },
     "CORRUPT_SOIL": {
       "name": "Corrupt Soil",
+      "recipe": [
+        {"item":"ENCHANTED_MYCELIUM","amount":160},
+        {"item":"CORRUPTED_FRAGMENT","amount":20}
+      ],
       "condition": {
         "mobSpawning": true
       },
@@ -8887,6 +8908,12 @@ export const MINION_DATA = {
     "SOULFLOW_ENGINE": {
       "name": "Soulflow Engine",
       "exclusiveGroup": "SOULFLOW_ENGINE_LINE",
+      "recipe": [
+        {"item":"NULL_ATOM","amount":2},
+        {"item":"LESSER_SOULFLOW_ENGINE","amount":4},
+        {"item":"NULL_OVOID","amount":64},
+        {"item":"REFINED_TITANIUM","amount":12}
+      ],
       "outputMultiplier": 0.5,
       "cooldownDrop": {
         "item": "RAW_SOULFLOW",
@@ -8900,6 +8927,11 @@ export const MINION_DATA = {
     "LESSER_SOULFLOW_ENGINE": {
       "name": "Lesser Soulflow Engine",
       "exclusiveGroup": "SOULFLOW_ENGINE_LINE",
+      "recipe": [
+        {"item":"NULL_OVOID","amount":6},
+        {"item":"ENCHANTED_EYE_OF_ENDER","amount":48},
+        {"item":"ENCHANTED_IRON_BLOCK","amount":8}
+      ],
       "outputMultiplier": 0.5,
       "cooldownDrop": {
         "item": "RAW_SOULFLOW",
@@ -8913,6 +8945,9 @@ export const MINION_DATA = {
     "BERBERIS_FUEL_INJECTOR": {
       "name": "Berberis Fuel Injector",
       "speed": 0.15,
+      "recipe": [
+        {"item":"WILTED_BERBERIS","amount":336}
+      ],
       "condition": {
         "family": "Farming"
       },
@@ -8927,6 +8962,9 @@ export const MINION_DATA = {
     },
     "ENCHANTED_EGG": {
       "name": "Enchanted Egg",
+      "recipe": [
+        {"item":"EGG","amount":144}
+      ],
       "condition": {
         "name": "Chicken Minion"
       },
@@ -8944,6 +8982,10 @@ export const MINION_DATA = {
     },
     "FLINT_SHOVEL": {
       "name": "Flint Shovel",
+      "recipe": [
+        {"item":"FLINT","amount":10},
+        {"item":"STICK","amount":2}
+      ],
       "condition": {
         "name": "Gravel Minion"
       },
@@ -8958,6 +9000,15 @@ export const MINION_DATA = {
         }
       ]
     }
+  },
+  "setupRecipes": {
+    "COMPACTOR": [
+      {"item":"ENCHANTED_COBBLESTONE","amount":7},
+      {"item":"ENCHANTED_REDSTONE","amount":1}
+    ]
+  },
+  "setupFallbackPrices": {
+    "STICK": 0.5
   },
   "notes": [
     "Speeds/drop distributions seeded from maintained community datasets and cross-checked against current NEU/Hypixel Wiki examples.",
