@@ -366,6 +366,7 @@ export function calculateMinion(minion, options, context) {
   }
 
   let grossPerMinionDay = 0;
+  let bazaarTaxPerMinionDay = 0;
   let weightedCoverage = 0;
   let weightedCv = 0;
   let historicalRevenue = 0;
@@ -373,8 +374,11 @@ export function calculateMinion(minion, options, context) {
   let unpricedOutputs = 0;
   const outputDetails = generated.map((g) => {
     const quote = saleQuote(g.item,g.npc,context);
+    const grossRevenue = g.unitsPerDay * Math.max(0, safe(quote.raw));
     const revenue = g.unitsPerDay * quote.price;
-    grossPerMinionDay += revenue;
+    const bazaarTax = Math.max(0, grossRevenue - revenue);
+    grossPerMinionDay += grossRevenue;
+    bazaarTaxPerMinionDay += bazaarTax;
     if (quote.historicalSamples > 0 && revenue > 0) {
       historicalRevenue += revenue;
       weightedCoverage += revenue * quote.historicalCoverage;
@@ -382,13 +386,14 @@ export function calculateMinion(minion, options, context) {
     }
     if (quote.price <= 0 && g.unitsPerDay > 0) unpricedOutputs += 1;
     if (upper(context.priceMode)==='7D' && quote.historicalFallback) fallbackRevenue += revenue;
-    return { ...g, quote, revenuePerDay:revenue };
+    return { ...g, quote, grossRevenuePerDay:grossRevenue, bazaarTaxPerDay:bazaarTax, revenuePerDay:revenue };
   });
 
   const fuelExpense = finiteFuelExpensePerDay(fuel,context.market);
   const fuelExpensePerMinionDay = fuelExpense.cost;
-  const netPerMinionDay = grossPerMinionDay - fuelExpensePerMinionDay;
+  const netPerMinionDay = grossPerMinionDay - bazaarTaxPerMinionDay - fuelExpensePerMinionDay;
   const grossDay = grossPerMinionDay * count;
+  const bazaarTaxDay = bazaarTaxPerMinionDay * count;
   const expensesDay = fuelExpensePerMinionDay * count;
   const netDay = netPerMinionDay * count;
 
@@ -428,9 +433,11 @@ export function calculateMinion(minion, options, context) {
     fuel:{id:fuelId,name:fuel.name,dropMultiplier:fuelDropMultiplier,duration:fuel.duration},
     upgrades:upgrades.map(u=>({id:u.id,name:u.name})),
     grossPerMinionDay,
+    bazaarTaxPerMinionDay,
     fuelExpensePerMinionDay,
     netPerMinionDay,
     grossDay,
+    bazaarTaxDay,
     expensesDay,
     netDay,
     setupPerMinion,
@@ -458,7 +465,7 @@ function calculateBestUpgradeSetup(minion, options, context) {
   const best=candidates[0] || calculateMinion(minion,{...options,upgrade1:'NONE',upgrade2:'NONE'},context);
   const bestNet=safe(best.netPerMinionDay);
   best.upgradeSearchCount=candidates.length;
-  best.upgradeAlternatives=candidates.map((row,index)=>({rank:index+1,upgrades:row.upgrades,grossPerMinionDay:row.grossPerMinionDay,expensesPerMinionDay:row.fuelExpensePerMinionDay,netPerMinionDay:row.netPerMinionDay,totalNetDay:row.netDay,setupPerMinion:row.setupPerMinion,setupComplete:row.setupComplete,speedBonusPercent:row.speedBonusPercent,deltaFromBestPerMinionDay:row.netPerMinionDay-bestNet}));
+  best.upgradeAlternatives=candidates.map((row,index)=>({rank:index+1,upgrades:row.upgrades,grossPerMinionDay:row.grossPerMinionDay,bazaarTaxPerMinionDay:row.bazaarTaxPerMinionDay,expensesPerMinionDay:row.fuelExpensePerMinionDay,netPerMinionDay:row.netPerMinionDay,totalNetDay:row.netDay,setupPerMinion:row.setupPerMinion,setupComplete:row.setupComplete,speedBonusPercent:row.speedBonusPercent,deltaFromBestPerMinionDay:row.netPerMinionDay-bestNet}));
   return best;
 }
 
@@ -481,19 +488,25 @@ export function calculateMinionRankings(options = {}, context = {}) {
     if (family !== 'all' && String(minion.family).toLowerCase() !== family) continue;
     if (search && !String(minion.name).toLowerCase().includes(search)) continue;
     const compareDays=Math.max(1,Math.min(7,Math.round(safe(options.compareDays,7))));
-    const liveRow = calculateBestUpgradeSetup(minion,options,{...ctx,priceMode:'LIVE'});
-    const expectedHistoryRow = calculateBestUpgradeSetup(minion,options,{...ctx,priceMode:'7D',historyDays:compareDays});
-    const row = priceMode === '7D' ? expectedHistoryRow : liveRow;
-    if (row.supported) {
-      row.compareDays=compareDays;
-      row.liveNetDay = liveRow.netDay;
-      row.expectedHistoryNetDay = expectedHistoryRow.netDay;
-      row.expected7dNetDay = expectedHistoryRow.netDay;
-      row.currentVsHistoryPercent = Math.abs(expectedHistoryRow.netDay) > 1e-9
-        ? ((liveRow.netDay - expectedHistoryRow.netDay) / Math.abs(expectedHistoryRow.netDay)) * 100
-        : null;
-      row.currentVs7dPercent = row.currentVsHistoryPercent;
+    const activeBest = calculateBestUpgradeSetup(minion,options,{...ctx,priceMode,historyDays:compareDays});
+    if (!activeBest.supported) {
+      rows.push(activeBest);
+      continue;
     }
+    const setupOptions={...options,upgrade1:activeBest.upgrades?.[0]?.id||'NONE',upgrade2:activeBest.upgrades?.[1]?.id||'NONE'};
+    const liveRow = calculateMinion(minion,setupOptions,{...ctx,priceMode:'LIVE',historyDays:compareDays});
+    const expectedHistoryRow = calculateMinion(minion,setupOptions,{...ctx,priceMode:'7D',historyDays:compareDays});
+    const row = priceMode === '7D' ? expectedHistoryRow : liveRow;
+    row.upgradeSearchCount=activeBest.upgradeSearchCount;
+    row.upgradeAlternatives=activeBest.upgradeAlternatives;
+    row.compareDays=compareDays;
+    row.liveNetDay = liveRow.netDay;
+    row.expectedHistoryNetDay = expectedHistoryRow.netDay;
+    row.expected7dNetDay = expectedHistoryRow.netDay;
+    row.currentVsHistoryPercent = Math.abs(expectedHistoryRow.netDay) > 1e-9
+      ? ((liveRow.netDay - expectedHistoryRow.netDay) / Math.abs(expectedHistoryRow.netDay)) * 100
+      : null;
+    row.currentVs7dPercent = row.currentVsHistoryPercent;
     rows.push(row);
   }
   const netRanked=rows.filter(r=>r.supported).slice().sort((a,b)=>safe(b.netDay,-Infinity)-safe(a.netDay,-Infinity));
@@ -525,7 +538,7 @@ export function calculateMinionRankings(options = {}, context = {}) {
     horizonDays,
     taxPercent:ctx.taxRate*100,
     options:{...options,horizonDays},
-    rows:rows.map((r)=>r.supported?{...r,horizon:{days:horizonDays,gross:r.grossDay*horizonDays,expenses:r.expensesDay*horizonDays,net:r.netDay*horizonDays}}:r),
+    rows:rows.map((r)=>r.supported?{...r,horizon:{days:horizonDays,gross:r.grossDay*horizonDays,bazaarTax:r.bazaarTaxDay*horizonDays,expenses:r.expensesDay*horizonDays,net:r.netDay*horizonDays}}:r),
     catalog:minionCatalog()
   };
 }
