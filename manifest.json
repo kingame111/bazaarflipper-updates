@@ -1,16 +1,10 @@
 {
-  "version": "0.6.6",
-  "publishedAt": "2026-09-23T05:01:15+03:00",
+  "version": "0.6.7",
+  "publishedAt": "2026-09-23T05:06:54+03:00",
   "notes": [
-    "Adds Bazaar-style hover explanations to every Minion Calculator table column.",
-    "Fixes the first-load Tier mismatch that could show Tier 11 in the control while calculating Tier 1 rows.",
-    "Compares LIVE and historical prices using the exact same winning minion setup instead of optimizing two different setups.",
-    "Prevents Soulflow Engine and Lesser Soulflow Engine from being equipped together.",
-    "Splits true gross revenue, Bazaar tax, recurring cost and net profit into separate values.",
-    "Automatically refreshes History products and Reliable history when the background history calculation finishes.",
-    "Limits the LIVE comparison selector to the number of reliable history days currently available.",
-    "Adds stale-request guards so older calculations cannot overwrite newer settings.",
-    "Improves Windows update restart reliability by launching server.mjs directly, with batch fallback and detailed restart logging."
+    "Minion search now filters only what is displayed; it no longer recalculates the ranking using only matching results.",
+    "The # column preserves each minion\u2019s rank from the full selected ranking population, so searching for one minion still shows how profitable it is relative to the others.",
+    "Adds a regression test to ensure search never changes a minion\u2019s global rank."
   ],
   "files": [
     {
@@ -19,7 +13,7 @@
     },
     {
       "path": "package.json",
-      "sha256": "d30366cf21af099cc4a7858dc7accc6f5e5b4bfc247defb4404db3280e891646"
+      "sha256": "5afd715aca412b48fa47bd4c1e575d90f3c89c1b19ac2036441245fac474ffbe"
     },
     {
       "path": "config.example.json",
@@ -39,7 +33,7 @@
     },
     {
       "path": "src/minions.mjs",
-      "sha256": "8c64ff15e265a2f25c7dacde544574608cec3bbea5184db329ffa8cd2313d4b0"
+      "sha256": "6fe4a2550e464c190164775edd039800cf8a9927afb6b5434c47682a39161635"
     },
     {
       "path": "src/minion-data.mjs",
@@ -47,15 +41,15 @@
     },
     {
       "path": "public/index.html",
-      "sha256": "6012726b46de3d559f50d730590be6048d422eefd848c46c5d4a4e419a107ca1"
+      "sha256": "7007fde41ea7aa1476ad317c3f7ca7e71291b2a41355f120a873efe2c9e33f5a"
     },
     {
       "path": "public/minions.html",
-      "sha256": "8d1f66e2b79ce5ca6fcc950e37472db6ed93f91342d513a75947cff9f7289ac8"
+      "sha256": "c578719d52c04795fe77f9de290eac2ba46adda5da0d54af2dab41807ffda445"
     },
     {
       "path": "public/minions.js",
-      "sha256": "062b791241f676dbfc33ab10c5c6a056acc0c2095ef9882f9dae02c24c29b11f"
+      "sha256": "607caac23496f4a6962bb3ed62b03c874c8178e251e1c6d042a29ff3e22a9a07"
     },
     {
       "path": "public/minions.css",
@@ -64,23 +58,23 @@
   ],
   "bundle": {
     "parts": [
-      "./releases/0.6.6/part-001.txt",
-      "./releases/0.6.6/part-002.txt",
-      "./releases/0.6.6/part-003.txt",
-      "./releases/0.6.6/part-004.txt",
-      "./releases/0.6.6/part-005.txt",
-      "./releases/0.6.6/part-006.txt",
-      "./releases/0.6.6/part-007.txt",
-      "./releases/0.6.6/part-008.txt",
-      "./releases/0.6.6/part-009.txt",
-      "./releases/0.6.6/part-010.txt",
-      "./releases/0.6.6/part-011.txt",
-      "./releases/0.6.6/part-012.txt",
-      "./releases/0.6.6/part-013.txt",
-      "./releases/0.6.6/part-014.txt",
-      "./releases/0.6.6/part-015.txt"
+      "./releases/0.6.7/part-001.txt",
+      "./releases/0.6.7/part-002.txt",
+      "./releases/0.6.7/part-003.txt",
+      "./releases/0.6.7/part-004.txt",
+      "./releases/0.6.7/part-005.txt",
+      "./releases/0.6.7/part-006.txt",
+      "./releases/0.6.7/part-007.txt",
+      "./releases/0.6.7/part-008.txt",
+      "./releases/0.6.7/part-009.txt",
+      "./releases/0.6.7/part-010.txt",
+      "./releases/0.6.7/part-011.txt",
+      "./releases/0.6.7/part-012.txt",
+      "./releases/0.6.7/part-013.txt",
+      "./releases/0.6.7/part-014.txt",
+      "./releases/0.6.7/part-015.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "3382c549ee18db21e2d8b6630da21e92ee161702f26a284ac95fb3cfad4687c9"
+    "sha256": "168b78b9aff91486597d662bf0b06f2a5211775ca5e649203dfed7255ccf1946"
   }
 }
