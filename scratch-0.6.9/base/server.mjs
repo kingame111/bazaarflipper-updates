@@ -853,6 +853,7 @@ async function handleMainRequest(req, res) {
       priceMode: url.searchParams.get('priceMode') || 'LIVE',
       collectionIntervalDays: numberParam('collectionIntervalDays', 1),
       compareDays: Math.max(1, Math.min(7, Math.round(numberParam('compareDays', 7)))),
+      excludedUpgrades: String(url.searchParams.get('excludedUpgrades') || '').split(',').map(x=>x.trim().toUpperCase()).filter(Boolean),
       family: url.searchParams.get('family') || 'ALL',
       search: url.searchParams.get('search') || '',
       sort: url.searchParams.get('sort') || 'NET',
