@@ -7,7 +7,8 @@ import {calculateMinion,calculateMinionRankings,minionCatalog} from '../candidat
 const money={
  GHAST_TEAR:20,ENCHANTED_GHAST_TEAR:100,SILVER_FANG:3000,
  DIAMOND_SPREADING:400,ENCHANTED_LAVA_BUCKET:2000,
- FLYCATCHER:1000,CORRUPT_SOIL:2000
+ FLYCATCHER:1000,CORRUPT_SOIL:2000,
+ BUDGET_HOPPER:5000,ENCHANTED_HOPPER:10000
 };
 const market={};
 function q(p){return{buy_summary:[{pricePerUnit:p*0.9}],sell_summary:[{pricePerUnit:p}],quick_status:{buyPrice:p*0.9,sellPrice:p}}}
@@ -25,6 +26,15 @@ assert.equal(r11.recipeSource,'EXPLICIT_STEPS');
 assert.equal(r11.setupComplete,true);
 assert.equal(r11.setupBreakdown.filter(x=>x.item==='SILVER_FANG').length,5);
 assert.equal(r11.setupBreakdown.find(x=>x.tier===11).amount,512);
+assert.equal(r11.storage.capacity,960,'Verified NEU storage for Ghast XI');
+assert.ok(r11.storage.overflowShare>0,'One-day un-compacted Ghast fills before collection');
+const budget=calculateMinion(ghast,{...base,shipping:'BUDGET_HOPPER'},ctx);
+const enchanted=calculateMinion(ghast,{...base,shipping:'ENCHANTED_HOPPER'},ctx);
+assert.ok(budget.netDay>r11.netDay,'Budget Hopper earns overflow');
+assert.ok(enchanted.netDay>budget.netDay,'Enchanted Hopper receives 90% NPC vs 50%');
+assert.equal(budget.setupCost,r11.setupCost+5000,'Hopper must increase one-time setup');
+assert.equal(enchanted.setupCost,r11.setupCost+10000);
+assert.ok(enchanted.outputDetails.some(x=>x.quote.method==='HOPPER'));
 const r12=calculateMinion(ghast,{...base,tier:12},ctx);
 assert.equal(r12.setupCost,exp+1024*3000+2000000);
 assert.equal(r12.setupBreakdown.some(x=>x.item==='COINS'&&x.amount===2000000&&x.tier===12),true);
@@ -81,7 +91,7 @@ assert.ok(cat.minions.length>=61);
 const srv=fs.readFileSync('candidate-src/server.mjs','utf8');
 const html=fs.readFileSync('candidate-src/public/minions.html','utf8');
 const js=fs.readFileSync('candidate-src/public/minions.js','utf8');
-for(const x of ['optimizeFor','horizonDays']) {
+for(const x of ['optimizeFor','horizonDays','shipping']) {
  assert.ok(srv.includes(x),'API '+x);
  assert.ok(html.includes('id="'+x+'"'),'UI '+x);
  assert.ok(js.includes("'"+x+"'"),'UI params '+x);
