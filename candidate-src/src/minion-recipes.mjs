@@ -24,7 +24,7 @@ export function resolveCumulativeTierRecipe(minion, tier) {
     }
     return {
       complete:missing.length===0,
-      source:'EXPLICIT_STEPS',
+      source:minion.recipeSource||'EXPLICIT_STEPS',
       recipe:[...merged].map(([item,amount])=>({item,amount})),
       byTier:details,
       missing
