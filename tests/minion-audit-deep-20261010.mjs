@@ -45,6 +45,9 @@ const ranks=rank({...options,tier:11,sort:'PAYBACK'}, {...ctx,market:emptyMarket
 const eligible=ranks.rows.filter(x=>x.supported&&x.paybackDays!=null);
 const notEligible=ranks.rows.filter(x=>x.supported&&x.paybackDays==null);
 add('PAYBACK sorting partial-market',{first:ranks.rows.slice(0,12).map(x=>({name:x.name,days:x.paybackDays,rank:x.sortRank,setupComplete:x.setupComplete})),eligibleCount:eligible.length,unpricedCount:notEligible.length,naRankBeforeValid:ranks.rows.findIndex(x=>x.supported&&x.paybackDays==null)<ranks.rows.findIndex(x=>x.supported&&x.paybackDays!=null)});
+const tier12=Object.values(D.definitions).filter(m=>m.tiers?.['12']);
+const tier12Coins=tier12.filter(m=>(m.tiers['12'].recipe||[]).some(item=>item.item==='COINS'));
+add('Tier XII coin fees',{t12Minions:tier12.length,t12WithCoinRequirements:tier12Coins.length,missingCoinFees:tier12.filter(m=>!tier12Coins.includes(m)).map(m=>m.name)});
 const rareMissing=[];
 for(const m of Object.values(D.definitions)){if(m.special)continue;let missing=(Object.entries(m.tiers||{})).filter(([tier,v])=>!v.exactRecipe).map(([tier])=>tier);if(missing.length&&missing.join(',')!=='2,4,6,8,10')rareMissing.push({minion:m.name,missing})}
 add('Recipe exception patterns',{exceptions:rareMissing,total:rareMissing.length});
