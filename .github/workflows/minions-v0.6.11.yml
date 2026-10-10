@@ -6,6 +6,7 @@ on:
       - candidate-src/**
       - tests/minions-v0.6.11.test.mjs
       - tests/minion-audit-v0.6.11.mjs
+      - tests/minion-server-smoke.mjs
       - scripts/package-v0.6.11.mjs
       - .github/workflows/minions-v0.6.11.yml
   workflow_dispatch:
@@ -24,6 +25,8 @@ jobs:
           node-version: '24'
       - name: Verify minion economics and data integrity
         run: node tests/minions-v0.6.11.test.mjs
+      - name: Boot local server and smoke-test minion HTTP APIs
+        run: node tests/minion-server-smoke.mjs
       - name: Build complete signed update bundle
         run: node scripts/package-v0.6.11.mjs
       - name: Run complete synthetic setup matrix
