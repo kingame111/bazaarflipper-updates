@@ -1,21 +1,24 @@
 {
-  "version": "0.6.10",
-  "publishedAt": "2026-10-10T09:50:00+03:00",
+  "version": "0.6.11",
+  "publishedAt": "2026-10-10T08:51:29.645Z",
   "notes": [
-    "Reliable history depth and state corrected, avoiding false building status.",
-    "Expensive history refreshes are combined during snapshot imports.",
-    "Automatic laptop sync backs off on failure without deleting unacknowledged data.",
-    "Read-only history diagnostics and clear progress state.",
-    "Full 13-file release, with Minion calculations unchanged."
+    "Initial minion overhaul: independently Bazaar-price each verified Ghast tier ingredient including Silver Fang; add the tier XII NPC fee.",
+    "Import snapshot-pinned NotEnoughUpdates exact upgrade recipes for 58 fully craftable minions through XI; flag non-craftable Tier I and unavailable NPC trades.",
+    "Introduce an extensible per-tier recipe resolver and fail closed for incomplete or unverified recipes.",
+    "Fix Diamond Spreading roll counts per resource item instead of per collection cycle.",
+    "Fix PAYBACK ranking that could prefer N/A over valid setup investment.",
+    "Support dynamic tier counts, NET/PAYBACK/HORIZON optimization and separate incremental upgrade payback.",
+    "Use verified tier storage sizes to cap collection-period production and price Budget/Enchanted Hopper overflows at 50%/90% NPC rates.",
+    "Fix missing-value rendering, label estimated multi-item capacity, and provide upgrade payback breakdown."
   ],
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "4d2922ec11a3950e69ca21b45e3a36ef51181b98fbab01e5b88295eee3b9f74b"
+      "sha256": "cc0650ccca9e7b9d6aa658ce3e35e1eb95f1bd6abae67350681fa06eb8e73ec0"
     },
     {
       "path": "package.json",
-      "sha256": "8924e6cef6356bc69a5ccea420e3122cd0a52f2bed8abf10c9dbdebd05e05d04"
+      "sha256": "22b8988db4019b5bfbdd97c78a47e2e0725547bf33f4e04f4d78af8a46cb10f0"
     },
     {
       "path": "config.example.json",
@@ -35,23 +38,23 @@
     },
     {
       "path": "src/minions.mjs",
-      "sha256": "371200ef9e8e4c541759e90ae291c3655e347fab8d97a83808904c65b500c8ad"
+      "sha256": "dda8ae64eea9179a11c88f2b7d46a2e795bc2e3468b23ef8a0fa33a22cf4bd27"
     },
     {
       "path": "src/minion-data.mjs",
-      "sha256": "b29f8944859e76d6d6f0d24dcb5e2efa6c5445e4dbcc038a4a949272fee30853"
+      "sha256": "3ce5c7c1e8ad8eec2840c52b057640a450eeec72d24e756dd6d5a7304a69873d"
     },
     {
       "path": "public/index.html",
-      "sha256": "2ed60729a9b84c2a3c6e22649c823f475d78fcb4b08636f9d58488b11b2ef815"
+      "sha256": "5be001ff78f7f37ea8e5accf296192462cc078bfd0503c1be22a936ea5f75883"
     },
     {
       "path": "public/minions.html",
-      "sha256": "7725b94569162f5a44a824b69095b6684e2af70f7f41b7f5300096543a1063b2"
+      "sha256": "ae3ee59a714605f4e95f3b4b7dded85a823a9a0719b4e951e52869a14b1ac3f8"
     },
     {
       "path": "public/minions.js",
-      "sha256": "d52bfbe3a0fd33caad907d4406b82b4a082e087aeaa215a424c4f34c0bc9ac35"
+      "sha256": "b4a01563c4488c307a3e2e668a5b1106163fceb8ad3c84f145ad5517275b9e42"
     },
     {
       "path": "public/minions.css",
@@ -60,20 +63,26 @@
     {
       "path": "start-bazaarflip.bat",
       "sha256": "8ea99b849d16f73121d4ac6b60b2b9c8359a4e64fc9cbb2f39b3037d38888bc0"
+    },
+    {
+      "path": "src/minion-recipes.mjs",
+      "sha256": "5e561d5b6431c3353303a7492d5e35b559e96526ae0a266d1b45d32dcf5bb549"
     }
   ],
   "bundle": {
     "parts": [
-      "./releases/0.6.10/part-001.txt",
-      "./releases/0.6.10/part-002.txt",
-      "./releases/0.6.10/part-003.txt",
-      "./releases/0.6.10/part-004.txt",
-      "./releases/0.6.10/part-005.txt",
-      "./releases/0.6.10/part-006.txt",
-      "./releases/0.6.10/part-007.txt",
-      "./releases/0.6.10/part-008.txt"
+      "./releases/0.6.11/part-001.txt",
+      "./releases/0.6.11/part-002.txt",
+      "./releases/0.6.11/part-003.txt",
+      "./releases/0.6.11/part-004.txt",
+      "./releases/0.6.11/part-005.txt",
+      "./releases/0.6.11/part-006.txt",
+      "./releases/0.6.11/part-007.txt",
+      "./releases/0.6.11/part-008.txt",
+      "./releases/0.6.11/part-009.txt",
+      "./releases/0.6.11/part-010.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "29e7538d5ad3eacecfcdb26c1624ebdae288a7c59582d44d976ea8f1bb531100"
+    "sha256": "1af0bb1a042ebaa946452a95eadcfeb0e6c8b06b38406b00937560137a9b8f90"
   }
 }

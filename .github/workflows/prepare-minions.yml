@@ -1,0 +1,46 @@
+name: Prepare minion development files
+on:
+  push:
+    branches: [feature/minions-v0.6.11]
+    paths: [.github/workflows/prepare-minions.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Unpack immutable release
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import {gunzipSync} from 'node:zlib';
+          const m=JSON.parse(fs.readFileSync('manifest.json','utf8'));
+          if(m.version!=='0.6.10')throw Error('Wrong base release '+m.version);
+          const gz=Buffer.from(m.bundle.parts.map(p=>fs.readFileSync(p,'utf8').trim()).join(''),'base64');
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          if(sha(gz)!==m.bundle.sha256)throw Error('Payload hash invalid');
+          const f=JSON.parse(gunzipSync(gz).toString('utf8')).files;
+          for(const e of m.files){
+            const v=Buffer.from(f[e.path],'base64');
+            if(sha(v)!==e.sha256)throw Error('Bad file '+e.path);
+            const p=path.join('candidate-src',e.path);
+            fs.mkdirSync(path.dirname(p),{recursive:true});fs.writeFileSync(p,v);
+          }
+          console.log('Extracted',m.files.length,'verified files');
+          NODE
+      - name: Commit development source
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add candidate-src/
+          git diff --cached --quiet || (git commit -m "Extract verified 0.6.10 source for minion engine overhaul" && git push)
