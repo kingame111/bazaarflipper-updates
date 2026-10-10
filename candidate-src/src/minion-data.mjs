@@ -5096,7 +5096,9 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "MEDIUM"
+      "confidence": "MEDIUM",
+      "starterAcquisition": "EXTERNAL_UNPRICED",
+      "starterPriceWarning": "Tier I is not craftable; auction/gift acquisition cost is unavailable from Bazaar prices."
     },
     "Ghast Minion": {
       "upgradeRecipes": {
@@ -13110,7 +13112,9 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "starterAcquisition": "EXTERNAL_UNPRICED",
+      "starterPriceWarning": "Tier I is not craftable; auction/gift acquisition cost is unavailable from Bazaar prices."
     },
     "Spider Minion": {
       "id": "SPIDER_GENERATOR",
