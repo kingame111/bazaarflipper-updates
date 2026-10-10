@@ -20,8 +20,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 48,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG_2",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -37,8 +42,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 45,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG_2",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -58,8 +68,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 42,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG_2",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_ACACIA_LOG",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -79,8 +98,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 38,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG_2",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_ACACIA_LOG",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -100,8 +128,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 33,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG_2",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_ACACIA_LOG",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -215,7 +252,7 @@ export const MINION_DATA = {
           "speed": 48,
           "recipe": [
             {
-              "item": "LOG:2",
+              "item": "LOG-2",
               "amount": 80
             }
           ],
@@ -224,15 +261,20 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 48,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-2",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
           "speed": 45,
           "recipe": [
             {
-              "item": "LOG:2",
+              "item": "LOG-2",
               "amount": 560
             }
           ],
@@ -241,15 +283,20 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 45,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-2",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
           "speed": 42,
           "recipe": [
             {
-              "item": "LOG:2",
+              "item": "LOG-2",
               "amount": 1072
             },
             {
@@ -262,15 +309,24 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 42,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-2",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_BIRCH_LOG",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
           "speed": 38,
           "recipe": [
             {
-              "item": "LOG:2",
+              "item": "LOG-2",
               "amount": 1072
             },
             {
@@ -283,15 +339,24 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 38,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-2",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_BIRCH_LOG",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
           "speed": 33,
           "recipe": [
             {
-              "item": "LOG:2",
+              "item": "LOG-2",
               "amount": 1072
             },
             {
@@ -304,15 +369,24 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 33,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-2",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_BIRCH_LOG",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
           "speed": 27,
           "recipe": [
             {
-              "item": "LOG:2",
+              "item": "LOG-2",
               "amount": 1072
             },
             {
@@ -428,8 +502,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 33,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "BLAZE_ROD",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -445,8 +524,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 31,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "BLAZE_ROD",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -466,8 +550,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 28.5,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "BLAZE_ROD",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_BLAZE_POWDER",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -487,8 +580,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 25,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "BLAZE_ROD",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_BLAZE_POWDER",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -508,8 +610,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 21,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "BLAZE_ROD",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_BLAZE_POWDER",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -547,7 +658,7 @@ export const MINION_DATA = {
               "amount": 24
             },
             {
-              "item": "Coins",
+              "item": "COINS",
               "amount": 2000000
             }
           ],
@@ -669,8 +780,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 27,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CACTUS",
+              "amount": 384
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -686,8 +802,17 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 25,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CACTUS",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_CACTUS_GREEN",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -707,8 +832,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 23,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CACTUS",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_CACTUS_GREEN",
+              "amount": 96
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -728,8 +862,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 21,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CACTUS",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_CACTUS_GREEN",
+              "amount": 480
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -749,8 +892,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 18,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CACTUS",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_CACTUS_GREEN",
+              "amount": 992
+            },
+            {
+              "item": "ENCHANTED_CACTUS",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -774,21 +930,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 12,
-          "recipe": [
-            {
-              "item": "CACTUS",
-              "amount": 896
-            },
-            {
-              "item": "ENCHANTED_CACTUS_GREEN",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_CACTUS",
-              "amount": 56
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -896,8 +1039,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CARROT_ITEM",
+              "amount": 384
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -913,8 +1061,17 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 18,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CARROT_ITEM",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_CARROT",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -934,8 +1091,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 16,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CARROT_ITEM",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_CARROT",
+              "amount": 96
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -955,8 +1121,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 14,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CARROT_ITEM",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_CARROT",
+              "amount": 480
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -976,8 +1151,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 12,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CARROT_ITEM",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_CARROT",
+              "amount": 992
+            },
+            {
+              "item": "ENCHANTED_GOLDEN_CARROT",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -1001,21 +1189,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 8,
-          "recipe": [
-            {
-              "item": "CARROT_ITEM",
-              "amount": 896
-            },
-            {
-              "item": "ENCHANTED_CARROT",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_GOLDEN_CARROT",
-              "amount": 56
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -1123,8 +1298,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SPIDER_EYE",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 256
         },
         "3": {
@@ -1140,8 +1320,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SPIDER_EYE",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -1161,8 +1346,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SPIDER_EYE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_SPIDER_EYE",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -1182,8 +1376,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SPIDER_EYE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_SPIDER_EYE",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -1203,8 +1406,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 17,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SPIDER_EYE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_SPIDER_EYE",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -1340,8 +1552,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_CHICKEN",
+              "amount": 192
+            }
+          ],
+          "exactRecipe": true,
           "storage": 320
         },
         "3": {
@@ -1357,8 +1574,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_CHICKEN",
+              "amount": 960
+            }
+          ],
+          "exactRecipe": true,
           "storage": 448
         },
         "5": {
@@ -1378,8 +1600,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_CHICKEN",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_RAW_CHICKEN",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -1399,8 +1630,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_CHICKEN",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_RAW_CHICKEN",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -1420,8 +1660,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 18,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_CHICKEN",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_RAW_CHICKEN",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -1441,17 +1690,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 12,
-          "recipe": [
-            {
-              "item": "RAW_CHICKEN",
-              "amount": 960
-            },
-            {
-              "item": "ENCHANTED_RAW_CHICKEN",
-              "amount": 2040
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -1568,8 +1808,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 32,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CLAY_BALL",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -1585,8 +1830,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 30,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CLAY_BALL",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -1606,8 +1856,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 27.5,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CLAY_BALL",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_CLAY_BALL",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -1627,8 +1886,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CLAY_BALL",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_CLAY_BALL",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -1648,8 +1916,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "CLAY_BALL",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_CLAY_BALL",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -1797,8 +2074,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 15,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "COAL",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -1814,8 +2096,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 13,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "COAL",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -1835,8 +2122,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 12,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "COAL",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_COAL",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -1856,8 +2152,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 10,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "COAL",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_COAL",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -1877,8 +2182,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 9,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "COAL",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_COAL",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -1902,25 +2216,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 6,
-          "recipe": [
-            {
-              "item": "COAL",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_COAL",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_COAL_BLOCK",
-              "amount": 24
-            },
-            {
-              "item": "Coins",
-              "amount": 2000000
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -2028,8 +2325,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 14,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "COBBLESTONE",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -2045,8 +2347,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 12,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "COBBLESTONE",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -2066,8 +2373,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 10,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "COBBLESTONE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_COBBLESTONE",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -2087,8 +2403,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 9,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "COBBLESTONE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_COBBLESTONE",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -2108,8 +2433,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 8,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "COBBLESTONE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_COBBLESTONE",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -2129,21 +2463,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 6,
-          "recipe": [
-            {
-              "item": "COBBLESTONE",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_COBBLESTONE",
-              "amount": 2040
-            },
-            {
-              "item": "Coins",
-              "amount": 2000000
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -2242,7 +2563,7 @@ export const MINION_DATA = {
           "speed": 27,
           "recipe": [
             {
-              "item": "INK_SACK:3",
+              "item": "INK_SACK-3",
               "amount": 80
             }
           ],
@@ -2251,15 +2572,20 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 27,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "INK_SACK-3",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
           "speed": 25,
           "recipe": [
             {
-              "item": "INK_SACK:3",
+              "item": "INK_SACK-3",
               "amount": 560
             }
           ],
@@ -2268,15 +2594,20 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 25,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "INK_SACK-3",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
           "speed": 23,
           "recipe": [
             {
-              "item": "INK_SACK:3",
+              "item": "INK_SACK-3",
               "amount": 1072
             },
             {
@@ -2289,15 +2620,24 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 23,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "INK_SACK-3",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_COCOA",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
           "speed": 21,
           "recipe": [
             {
-              "item": "INK_SACK:3",
+              "item": "INK_SACK-3",
               "amount": 1072
             },
             {
@@ -2310,15 +2650,24 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 21,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "INK_SACK-3",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_COCOA",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
           "speed": 18,
           "recipe": [
             {
-              "item": "INK_SACK:3",
+              "item": "INK_SACK-3",
               "amount": 1072
             },
             {
@@ -2331,15 +2680,24 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 18,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "INK_SACK-3",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_COCOA",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
           "speed": 15,
           "recipe": [
             {
-              "item": "INK_SACK:3",
+              "item": "INK_SACK-3",
               "amount": 1072
             },
             {
@@ -2356,21 +2714,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 12,
-          "recipe": [
-            {
-              "item": "INK_SACK:3",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_COCOA",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_COOKIE",
-              "amount": 24
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -2478,8 +2823,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_BEEF",
+              "amount": 192
+            }
+          ],
+          "exactRecipe": true,
           "storage": 256
         },
         "3": {
@@ -2495,8 +2845,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_BEEF",
+              "amount": 960
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -2516,8 +2871,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_BEEF",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_RAW_BEEF",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -2537,8 +2901,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_BEEF",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_RAW_BEEF",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -2558,8 +2931,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 17,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_BEEF",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_RAW_BEEF",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -2575,7 +2957,7 @@ export const MINION_DATA = {
             },
             {
               "item": "ENCHANTED_LEATHER",
-              "amount": 256
+              "amount": 512
             }
           ],
           "exactRecipe": true,
@@ -2583,21 +2965,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 10,
-          "recipe": [
-            {
-              "item": "RAW_BEEF",
-              "amount": 960
-            },
-            {
-              "item": "ENCHANTED_RAW_BEEF",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_LEATHER",
-              "amount": 768
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -2714,8 +3083,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 27,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SULPHUR",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -2731,8 +3105,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 25,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SULPHUR",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -2752,8 +3131,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 23,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SULPHUR",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_GUNPOWDER",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -2773,8 +3161,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 21,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SULPHUR",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_GUNPOWDER",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -2794,8 +3191,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 18,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SULPHUR",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_GUNPOWDER",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -2913,7 +3319,7 @@ export const MINION_DATA = {
           "speed": 48,
           "recipe": [
             {
-              "item": "LOG_2:1",
+              "item": "LOG_2-1",
               "amount": 80
             }
           ],
@@ -2922,15 +3328,20 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 48,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG_2-1",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
           "speed": 45,
           "recipe": [
             {
-              "item": "LOG_2:1",
+              "item": "LOG_2-1",
               "amount": 560
             }
           ],
@@ -2939,15 +3350,20 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 45,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG_2-1",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
           "speed": 42,
           "recipe": [
             {
-              "item": "LOG_2:1",
+              "item": "LOG_2-1",
               "amount": 1072
             },
             {
@@ -2960,15 +3376,24 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 42,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG_2-1",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_DARK_OAK_LOG",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
           "speed": 38,
           "recipe": [
             {
-              "item": "LOG_2:1",
+              "item": "LOG_2-1",
               "amount": 1072
             },
             {
@@ -2981,15 +3406,24 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 38,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG_2-1",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_DARK_OAK_LOG",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
           "speed": 33,
           "recipe": [
             {
-              "item": "LOG_2:1",
+              "item": "LOG_2-1",
               "amount": 1072
             },
             {
@@ -3002,15 +3436,24 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 33,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG_2-1",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_DARK_OAK_LOG",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
           "speed": 27,
           "recipe": [
             {
-              "item": "LOG_2:1",
+              "item": "LOG_2-1",
               "amount": 1072
             },
             {
@@ -3126,8 +3569,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 29,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "DIAMOND",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -3143,8 +3591,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 27,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "DIAMOND",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -3164,8 +3617,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 25,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "DIAMOND",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_DIAMOND",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -3185,8 +3647,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "DIAMOND",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_DIAMOND",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -3206,8 +3677,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 19,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "DIAMOND",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_DIAMOND",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -3231,25 +3711,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 12,
-          "recipe": [
-            {
-              "item": "DIAMOND",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_DIAMOND",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_DIAMOND_BLOCK",
-              "amount": 24
-            },
-            {
-              "item": "Coins",
-              "amount": 2000000
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -3357,8 +3820,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 28,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "EMERALD",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -3374,8 +3842,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "EMERALD",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -3395,8 +3868,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "EMERALD",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_EMERALD",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -3416,8 +3898,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 21,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "EMERALD",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_EMERALD",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -3437,8 +3928,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 18,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "EMERALD",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_EMERALD",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -3462,25 +3962,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 12,
-          "recipe": [
-            {
-              "item": "EMERALD",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_EMERALD",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_EMERALD_BLOCK",
-              "amount": 24
-            },
-            {
-              "item": "Coins",
-              "amount": 2000000
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -3588,8 +4071,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ENDER_STONE",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -3605,8 +4093,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ENDER_STONE",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -3626,8 +4119,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ENDER_STONE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_ENDSTONE",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -3647,8 +4149,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 19,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ENDER_STONE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_ENDSTONE",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -3668,8 +4179,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 16,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ENDER_STONE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_ENDSTONE",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -3792,8 +4312,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 32,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ENDER_PEARL",
+              "amount": 192
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -3813,8 +4338,17 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 30,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ENDER_PEARL",
+              "amount": 192
+            },
+            {
+              "item": "ENCHANTED_ENDER_PEARL",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -3834,8 +4368,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 28,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ENDER_PEARL",
+              "amount": 192
+            },
+            {
+              "item": "ENCHANTED_ENDER_PEARL",
+              "amount": 176
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -3859,8 +4402,21 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 25,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ENDER_PEARL",
+              "amount": 192
+            },
+            {
+              "item": "ENCHANTED_ENDER_PEARL",
+              "amount": 176
+            },
+            {
+              "item": "ENCHANTED_EYE_OF_ENDER",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -3884,8 +4440,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ENDER_PEARL",
+              "amount": 192
+            },
+            {
+              "item": "ENCHANTED_ENDER_PEARL",
+              "amount": 176
+            },
+            {
+              "item": "ENCHANTED_EYE_OF_ENDER",
+              "amount": 176
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -4005,6 +4574,10 @@ export const MINION_DATA = {
             {
               "item": "RAW_FISH",
               "amount": 64
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -4012,8 +4585,17 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 75,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_FISH",
+              "amount": 192
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 640
         },
         "3": {
@@ -4022,6 +4604,10 @@ export const MINION_DATA = {
             {
               "item": "RAW_FISH",
               "amount": 448
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -4029,8 +4615,17 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 67,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_FISH",
+              "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 704
         },
         "5": {
@@ -4039,6 +4634,10 @@ export const MINION_DATA = {
             {
               "item": "RAW_FISH",
               "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             },
             {
               "item": "ENCHANTED_RAW_FISH",
@@ -4050,8 +4649,21 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 59,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_FISH",
+              "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
+            },
+            {
+              "item": "ENCHANTED_RAW_FISH",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "7": {
@@ -4060,6 +4672,10 @@ export const MINION_DATA = {
             {
               "item": "RAW_FISH",
               "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             },
             {
               "item": "ENCHANTED_RAW_FISH",
@@ -4071,8 +4687,21 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 51,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_FISH",
+              "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
+            },
+            {
+              "item": "ENCHANTED_RAW_FISH",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 832
         },
         "9": {
@@ -4081,6 +4710,10 @@ export const MINION_DATA = {
             {
               "item": "RAW_FISH",
               "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             },
             {
               "item": "ENCHANTED_RAW_FISH",
@@ -4092,8 +4725,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 53,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RAW_FISH",
+              "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
+            },
+            {
+              "item": "ENCHANTED_RAW_FISH",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 896
         },
         "11": {
@@ -4102,6 +4748,10 @@ export const MINION_DATA = {
             {
               "item": "RAW_FISH",
               "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             },
             {
               "item": "ENCHANTED_RAW_FISH",
@@ -4121,6 +4771,10 @@ export const MINION_DATA = {
             {
               "item": "RAW_FISH",
               "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             },
             {
               "item": "ENCHANTED_RAW_FISH",
@@ -4542,8 +5196,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 50,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GHAST_TEAR",
+              "amount": 192
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -4559,8 +5218,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 47,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GHAST_TEAR",
+              "amount": 960
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -4580,8 +5244,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 44,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GHAST_TEAR",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_GHAST_TEAR",
+              "amount": 768
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -4593,7 +5266,11 @@ export const MINION_DATA = {
             },
             {
               "item": "ENCHANTED_GHAST_TEAR",
-              "amount": 928
+              "amount": 768
+            },
+            {
+              "item": "SILVER_FANG",
+              "amount": 32
             }
           ],
           "exactRecipe": true,
@@ -4601,8 +5278,21 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 41,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GHAST_TEAR",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_GHAST_TEAR",
+              "amount": 768
+            },
+            {
+              "item": "SILVER_FANG",
+              "amount": 96
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -4614,7 +5304,11 @@ export const MINION_DATA = {
             },
             {
               "item": "ENCHANTED_GHAST_TEAR",
-              "amount": 1888
+              "amount": 768
+            },
+            {
+              "item": "SILVER_FANG",
+              "amount": 224
             }
           ],
           "exactRecipe": true,
@@ -4622,8 +5316,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 38,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GHAST_TEAR",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_GHAST_TEAR",
+              "amount": 768
+            },
+            {
+              "item": "SILVER_FANG",
+              "amount": 480
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -4635,7 +5342,11 @@ export const MINION_DATA = {
             },
             {
               "item": "ENCHANTED_GHAST_TEAR",
-              "amount": 5728
+              "amount": 768
+            },
+            {
+              "item": "SILVER_FANG",
+              "amount": 992
             }
           ],
           "exactRecipe": true,
@@ -4650,7 +5361,15 @@ export const MINION_DATA = {
             },
             {
               "item": "ENCHANTED_GHAST_TEAR",
-              "amount": 10848
+              "amount": 768
+            },
+            {
+              "item": "SILVER_FANG",
+              "amount": 2016
+            },
+            {
+              "item": "COINS",
+              "amount": 2000000
             }
           ],
           "exactRecipe": true,
@@ -4692,8 +5411,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 25,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GLOWSTONE_DUST",
+              "amount": 384
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -4709,8 +5433,17 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 23,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GLOWSTONE_DUST",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_GLOWSTONE_DUST",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -4730,8 +5463,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 21,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GLOWSTONE_DUST",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_GLOWSTONE_DUST",
+              "amount": 96
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -4751,8 +5493,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 19,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GLOWSTONE_DUST",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_GLOWSTONE_DUST",
+              "amount": 480
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -4772,8 +5523,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 16,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GLOWSTONE_DUST",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_GLOWSTONE_DUST",
+              "amount": 992
+            },
+            {
+              "item": "ENCHANTED_GLOWSTONE",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -4811,7 +5575,7 @@ export const MINION_DATA = {
               "amount": 56
             },
             {
-              "item": "Coins",
+              "item": "COINS",
               "amount": 2000000
             }
           ],
@@ -4933,8 +5697,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GOLD_INGOT",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -4950,8 +5719,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GOLD_INGOT",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -4971,8 +5745,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 18,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GOLD_INGOT",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_GOLD",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -4992,8 +5775,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 16,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GOLD_INGOT",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_GOLD",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -5013,8 +5805,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 14,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GOLD_INGOT",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_GOLD",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -5038,25 +5839,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 9,
-          "recipe": [
-            {
-              "item": "GOLD_INGOT",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_GOLD",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_GOLD_BLOCK",
-              "amount": 24
-            },
-            {
-              "item": "Coins",
-              "amount": 2000000
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -5164,8 +5948,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GRAVEL",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 256
         },
         "3": {
@@ -5181,8 +5970,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GRAVEL",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -5202,8 +5996,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GRAVEL",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_FLINT",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -5223,8 +6026,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 19,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GRAVEL",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_FLINT",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -5244,8 +6056,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 16,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "GRAVEL",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_FLINT",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -5365,8 +6186,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 14,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "HARD_STONE",
+              "amount": 768
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -5386,8 +6212,17 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 12,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "HARD_STONE",
+              "amount": 768
+            },
+            {
+              "item": "ENCHANTED_HARD_STONE",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -5407,8 +6242,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 10,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "HARD_STONE",
+              "amount": 768
+            },
+            {
+              "item": "ENCHANTED_HARD_STONE",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -5428,8 +6272,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 9,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "HARD_STONE",
+              "amount": 768
+            },
+            {
+              "item": "ENCHANTED_HARD_STONE",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -5449,8 +6302,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 8,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "HARD_STONE",
+              "amount": 768
+            },
+            {
+              "item": "ENCHANTED_HARD_STONE",
+              "amount": 1016
+            },
+            {
+              "item": "CONCENTRATED_STONE",
+              "amount": 4
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -5474,25 +6340,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 6,
-          "recipe": [
-            {
-              "item": "HARD_STONE",
-              "amount": 768
-            },
-            {
-              "item": "ENCHANTED_HARD_STONE",
-              "amount": 1016
-            },
-            {
-              "item": "CONCENTRATED_STONE",
-              "amount": 28
-            },
-            {
-              "item": "Coins",
-              "amount": 2000000
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -5600,8 +6449,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 14,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ICE",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -5617,8 +6471,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 12,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ICE",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -5638,8 +6497,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 10,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ICE",
+              "amount": 1072
+            },
+            {
+              "item": "PACKED_ICE",
+              "amount": 384
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -5659,8 +6527,21 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 9,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ICE",
+              "amount": 1072
+            },
+            {
+              "item": "PACKED_ICE",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_ICE",
+              "amount": 64
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -5684,8 +6565,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 8,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ICE",
+              "amount": 1072
+            },
+            {
+              "item": "PACKED_ICE",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_ICE",
+              "amount": 448
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -5709,25 +6603,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 6,
-          "recipe": [
-            {
-              "item": "ICE",
-              "amount": 1072
-            },
-            {
-              "item": "PACKED_ICE",
-              "amount": 896
-            },
-            {
-              "item": "ENCHANTED_ICE",
-              "amount": 1984
-            },
-            {
-              "item": "Coins",
-              "amount": 1000000
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -5835,8 +6712,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 17,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "IRON_INGOT",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -5852,8 +6734,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 15,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "IRON_INGOT",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -5873,8 +6760,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 14,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "IRON_INGOT",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_IRON",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -5894,8 +6790,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 12,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "IRON_INGOT",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_IRON",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -5915,8 +6820,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 10,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "IRON_INGOT",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_IRON",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -5940,25 +6854,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 7,
-          "recipe": [
-            {
-              "item": "IRON_INGOT",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_IRON",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_IRON_BLOCK",
-              "amount": 24
-            },
-            {
-              "item": "Coins",
-              "amount": 2000000
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -6057,7 +6954,7 @@ export const MINION_DATA = {
           "speed": 48,
           "recipe": [
             {
-              "item": "LOG:3",
+              "item": "LOG-3",
               "amount": 80
             }
           ],
@@ -6066,15 +6963,20 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 48,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-3",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
           "speed": 45,
           "recipe": [
             {
-              "item": "LOG:3",
+              "item": "LOG-3",
               "amount": 560
             }
           ],
@@ -6083,15 +6985,20 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 45,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-3",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
           "speed": 42,
           "recipe": [
             {
-              "item": "LOG:3",
+              "item": "LOG-3",
               "amount": 1072
             },
             {
@@ -6104,15 +7011,24 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 42,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-3",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_JUNGLE_LOG",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
           "speed": 38,
           "recipe": [
             {
-              "item": "LOG:3",
+              "item": "LOG-3",
               "amount": 1072
             },
             {
@@ -6125,15 +7041,24 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 38,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-3",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_JUNGLE_LOG",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
           "speed": 33,
           "recipe": [
             {
-              "item": "LOG:3",
+              "item": "LOG-3",
               "amount": 1072
             },
             {
@@ -6146,15 +7071,24 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 33,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-3",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_JUNGLE_LOG",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
           "speed": 27,
           "recipe": [
             {
-              "item": "LOG:3",
+              "item": "LOG-3",
               "amount": 1072
             },
             {
@@ -6261,7 +7195,7 @@ export const MINION_DATA = {
           "speed": 29,
           "recipe": [
             {
-              "item": "INK_SACK:4",
+              "item": "INK_SACK-4",
               "amount": 256
             }
           ],
@@ -6270,15 +7204,20 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 29,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "INK_SACK-4",
+              "amount": 768
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
           "speed": 27,
           "recipe": [
             {
-              "item": "INK_SACK:4",
+              "item": "INK_SACK-4",
               "amount": 768
             },
             {
@@ -6291,15 +7230,24 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 27,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "INK_SACK-4",
+              "amount": 768
+            },
+            {
+              "item": "ENCHANTED_LAPIS_LAZULI",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
           "speed": 25,
           "recipe": [
             {
-              "item": "INK_SACK:4",
+              "item": "INK_SACK-4",
               "amount": 768
             },
             {
@@ -6312,15 +7260,24 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 25,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "INK_SACK-4",
+              "amount": 768
+            },
+            {
+              "item": "ENCHANTED_LAPIS_LAZULI",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
           "speed": 23,
           "recipe": [
             {
-              "item": "INK_SACK:4",
+              "item": "INK_SACK-4",
               "amount": 768
             },
             {
@@ -6333,15 +7290,24 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 23,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "INK_SACK-4",
+              "amount": 768
+            },
+            {
+              "item": "ENCHANTED_LAPIS_LAZULI",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
           "speed": 21,
           "recipe": [
             {
-              "item": "INK_SACK:4",
+              "item": "INK_SACK-4",
               "amount": 768
             },
             {
@@ -6358,15 +7324,28 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 21,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "INK_SACK-4",
+              "amount": 768
+            },
+            {
+              "item": "ENCHANTED_LAPIS_LAZULI",
+              "amount": 992
+            },
+            {
+              "item": "ENCHANTED_LAPIS_LAZULI_BLOCK",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
           "speed": 18,
           "recipe": [
             {
-              "item": "INK_SACK:4",
+              "item": "INK_SACK-4",
               "amount": 768
             },
             {
@@ -6383,25 +7362,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 16,
-          "recipe": [
-            {
-              "item": "INK_SACK:4",
-              "amount": 768
-            },
-            {
-              "item": "ENCHANTED_LAPIS_LAZULI",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_LAPIS_LAZULI_BLOCK",
-              "amount": 120
-            },
-            {
-              "item": "Coins",
-              "amount": 2000000
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -6509,8 +7471,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 32,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MAGMA_CREAM",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -6526,8 +7493,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 30,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MAGMA_CREAM",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -6547,8 +7519,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 28,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MAGMA_CREAM",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_MAGMA_CREAM",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -6568,8 +7549,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 25,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MAGMA_CREAM",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_MAGMA_CREAM",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -6589,8 +7579,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MAGMA_CREAM",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_MAGMA_CREAM",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -6618,6 +7617,10 @@ export const MINION_DATA = {
             {
               "item": "ENCHANTED_MAGMA_CREAM",
               "amount": 2040
+            },
+            {
+              "item": "COINS",
+              "amount": 2000000
             }
           ],
           "exactRecipe": true,
@@ -6738,8 +7741,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MELON",
+              "amount": 768
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -6759,8 +7767,17 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 22.5,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MELON",
+              "amount": 768
+            },
+            {
+              "item": "MELON_BLOCK",
+              "amount": 384
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -6780,8 +7797,21 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 21,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MELON",
+              "amount": 768
+            },
+            {
+              "item": "MELON_BLOCK",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_MELON",
+              "amount": 64
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -6805,8 +7835,21 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 18.5,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MELON",
+              "amount": 768
+            },
+            {
+              "item": "MELON_BLOCK",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_MELON",
+              "amount": 448
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -6830,8 +7873,25 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 16,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MELON",
+              "amount": 768
+            },
+            {
+              "item": "MELON_BLOCK",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_MELON",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_MELON_BLOCK",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -6859,25 +7919,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 10,
-          "recipe": [
-            {
-              "item": "MELON",
-              "amount": 768
-            },
-            {
-              "item": "MELON_BLOCK",
-              "amount": 896
-            },
-            {
-              "item": "ENCHANTED_MELON",
-              "amount": 960
-            },
-            {
-              "item": "ENCHANTED_MELON_BLOCK",
-              "amount": 56
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -6985,8 +8028,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 80,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MITHRIL_ORE",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -7002,8 +8050,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 75,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MITHRIL_ORE",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -7023,8 +8076,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 70,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MITHRIL_ORE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_MITHRIL",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -7044,8 +8106,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 65,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MITHRIL_ORE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_MITHRIL",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -7065,8 +8136,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 60,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MITHRIL_ORE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_MITHRIL",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -7090,25 +8170,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 50,
-          "recipe": [
-            {
-              "item": "MITHRIL_ORE",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_MITHRIL",
-              "amount": 992
-            },
-            {
-              "item": "REFINED_MITHRIL",
-              "amount": 24
-            },
-            {
-              "item": "Coins",
-              "amount": 2000000
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -7216,8 +8279,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 30,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RED_MUSHROOM",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 256
         },
         "3": {
@@ -7233,8 +8301,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 28,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RED_MUSHROOM",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -7254,8 +8327,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RED_MUSHROOM",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_RED_MUSHROOM",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -7275,8 +8357,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 23,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RED_MUSHROOM",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_RED_MUSHROOM",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -7296,8 +8387,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RED_MUSHROOM",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_RED_MUSHROOM",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -7317,21 +8417,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 12,
-          "recipe": [
-            {
-              "item": "RED_MUSHROOM",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_RED_MUSHROOM",
-              "amount": 1528
-            },
-            {
-              "item": "ENCHANTED_BROWN_MUSHROOM",
-              "amount": 512
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -7448,8 +8535,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MYCEL",
+              "amount": 336
+            }
+          ],
+          "exactRecipe": true,
           "storage": 128
         },
         "3": {
@@ -7465,8 +8557,17 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MYCEL",
+              "amount": 848
+            },
+            {
+              "item": "ENCHANTED_MYCELIUM",
+              "amount": 16
+            }
+          ],
+          "exactRecipe": true,
           "storage": 320
         },
         "5": {
@@ -7486,8 +8587,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MYCEL",
+              "amount": 848
+            },
+            {
+              "item": "ENCHANTED_MYCELIUM",
+              "amount": 112
+            }
+          ],
+          "exactRecipe": true,
           "storage": 512
         },
         "7": {
@@ -7507,8 +8617,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MYCEL",
+              "amount": 848
+            },
+            {
+              "item": "ENCHANTED_MYCELIUM",
+              "amount": 496
+            }
+          ],
+          "exactRecipe": true,
           "storage": 704
         },
         "9": {
@@ -7528,8 +8647,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 18,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MYCEL",
+              "amount": 848
+            },
+            {
+              "item": "ENCHANTED_MYCELIUM",
+              "amount": 1008
+            },
+            {
+              "item": "ENCHANTED_MYCELIUM_CUBE",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 896
         },
         "11": {
@@ -7565,6 +8697,10 @@ export const MINION_DATA = {
             {
               "item": "ENCHANTED_MYCELIUM_CUBE",
               "amount": 56
+            },
+            {
+              "item": "COINS",
+              "amount": 2000000
             }
           ],
           "exactRecipe": true,
@@ -7685,8 +8821,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 50,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "NETHER_STALK",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -7702,8 +8843,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 47,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "NETHER_STALK",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -7723,8 +8869,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 44,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "NETHER_STALK",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_NETHER_STALK",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -7744,8 +8899,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 41,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "NETHER_STALK",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_NETHER_STALK",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -7765,8 +8929,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 38,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "NETHER_STALK",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_NETHER_STALK",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -7786,17 +8959,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 27,
-          "recipe": [
-            {
-              "item": "NETHER_STALK",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_NETHER_STALK",
-              "amount": 2040
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -7904,8 +9068,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 48,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -7921,8 +9090,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 45,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -7942,8 +9116,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 42,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_OAK_LOG",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -7963,8 +9146,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 38,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_OAK_LOG",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -7984,8 +9176,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 33,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_OAK_LOG",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -8108,8 +9309,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 45,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "OBSIDIAN",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -8125,8 +9331,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 42,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "OBSIDIAN",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -8146,8 +9357,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 39,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "OBSIDIAN",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_OBSIDIAN",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -8167,8 +9387,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 35,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "OBSIDIAN",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_OBSIDIAN",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -8188,8 +9417,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 30,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "OBSIDIAN",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_OBSIDIAN",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -8209,21 +9447,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 21,
-          "recipe": [
-            {
-              "item": "OBSIDIAN",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_OBSIDIAN",
-              "amount": 2040
-            },
-            {
-              "item": "Coins",
-              "amount": 2000000
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -8331,8 +9556,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "PORK",
+              "amount": 192
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -8348,8 +9578,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "PORK",
+              "amount": 960
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -8369,8 +9604,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "PORK",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_PORK",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -8390,8 +9634,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "PORK",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_PORK",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -8411,8 +9664,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 17,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "PORK",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_PORK",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -8436,21 +9698,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 10,
-          "recipe": [
-            {
-              "item": "PORK",
-              "amount": 960
-            },
-            {
-              "item": "ENCHANTED_PORK",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_GRILLED_PORK",
-              "amount": 24
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -8558,8 +9807,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "POTATO_ITEM",
+              "amount": 384
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -8575,8 +9829,17 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 18,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "POTATO_ITEM",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_POTATO",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -8596,8 +9859,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 16,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "POTATO_ITEM",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_POTATO",
+              "amount": 96
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -8617,8 +9889,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 14,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "POTATO_ITEM",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_POTATO",
+              "amount": 480
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -8638,8 +9919,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 12,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "POTATO_ITEM",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_POTATO",
+              "amount": 992
+            },
+            {
+              "item": "ENCHANTED_BAKED_POTATO",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -8663,21 +9957,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 8,
-          "recipe": [
-            {
-              "item": "POTATO_ITEM",
-              "amount": 896
-            },
-            {
-              "item": "ENCHANTED_POTATO",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_BAKED_POTATO",
-              "amount": 56
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -8785,8 +10066,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 32,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "PUMPKIN",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -8802,8 +10088,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 30,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "PUMPKIN",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -8823,8 +10114,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 27,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "PUMPKIN",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_PUMPKIN",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -8844,8 +10144,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "PUMPKIN",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_PUMPKIN",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -8865,8 +10174,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "PUMPKIN",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_PUMPKIN",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -8886,17 +10204,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 12,
-          "recipe": [
-            {
-              "item": "PUMPKIN",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_PUMPKIN",
-              "amount": 2040
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -9004,8 +10313,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 22.5,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "QUARTZ",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -9021,8 +10335,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 21,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "QUARTZ",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -9042,8 +10361,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 19,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "QUARTZ",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_QUARTZ",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -9063,8 +10391,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 17,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "QUARTZ",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_QUARTZ",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -9084,8 +10421,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 14.5,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "QUARTZ",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_QUARTZ",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -9123,7 +10469,7 @@ export const MINION_DATA = {
               "amount": 24
             },
             {
-              "item": "Coins",
+              "item": "COINS",
               "amount": 2000000
             }
           ],
@@ -9245,8 +10591,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RABBIT",
+              "amount": 192
+            }
+          ],
+          "exactRecipe": true,
           "storage": 320
         },
         "3": {
@@ -9262,11 +10613,31 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "RABBIT",
+              "amount": 960
+            }
+          ],
+          "exactRecipe": true,
           "storage": 448
         },
         "5": {
+          "speed": 22,
+          "recipe": [
+            {
+              "item": "RABBIT",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_RABBIT",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
+          "storage": 448
+        },
+        "6": {
           "speed": 22,
           "recipe": [
             {
@@ -9279,15 +10650,24 @@ export const MINION_DATA = {
             }
           ],
           "exactRecipe": true,
-          "storage": 448
-        },
-        "6": {
-          "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
           "storage": 576
         },
         "7": {
+          "speed": 20,
+          "recipe": [
+            {
+              "item": "RABBIT",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_RABBIT",
+              "amount": 96
+            }
+          ],
+          "exactRecipe": true,
+          "storage": 576
+        },
+        "8": {
           "speed": 20,
           "recipe": [
             {
@@ -9300,15 +10680,24 @@ export const MINION_DATA = {
             }
           ],
           "exactRecipe": true,
-          "storage": 576
-        },
-        "8": {
-          "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
           "storage": 768
         },
         "9": {
+          "speed": 17,
+          "recipe": [
+            {
+              "item": "RABBIT",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_RABBIT",
+              "amount": 480
+            }
+          ],
+          "exactRecipe": true,
+          "storage": 768
+        },
+        "10": {
           "speed": 17,
           "recipe": [
             {
@@ -9321,12 +10710,6 @@ export const MINION_DATA = {
             }
           ],
           "exactRecipe": true,
-          "storage": 768
-        },
-        "10": {
-          "speed": 17,
-          "recipe": null,
-          "exactRecipe": false,
           "storage": 960
         },
         "11": {
@@ -9350,21 +10733,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 10,
-          "recipe": [
-            {
-              "item": "RABBIT",
-              "amount": 960
-            },
-            {
-              "item": "ENCHANTED_RABBIT",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_COOKED_RABBIT",
-              "amount": 24
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -9481,7 +10851,7 @@ export const MINION_DATA = {
           "speed": 26,
           "recipe": [
             {
-              "item": "SAND:1",
+              "item": "SAND-1",
               "amount": 80
             }
           ],
@@ -9490,15 +10860,20 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SAND-1",
+              "amount": 336
+            }
+          ],
+          "exactRecipe": true,
           "storage": 128
         },
         "3": {
           "speed": 24,
           "recipe": [
             {
-              "item": "SAND:1",
+              "item": "SAND-1",
               "amount": 848
             }
           ],
@@ -9507,15 +10882,24 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SAND-1",
+              "amount": 848
+            },
+            {
+              "item": "ENCHANTED_RED_SAND",
+              "amount": 16
+            }
+          ],
+          "exactRecipe": true,
           "storage": 320
         },
         "5": {
           "speed": 22,
           "recipe": [
             {
-              "item": "SAND:1",
+              "item": "SAND-1",
               "amount": 848
             },
             {
@@ -9528,15 +10912,24 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SAND-1",
+              "amount": 848
+            },
+            {
+              "item": "ENCHANTED_RED_SAND",
+              "amount": 112
+            }
+          ],
+          "exactRecipe": true,
           "storage": 512
         },
         "7": {
           "speed": 20,
           "recipe": [
             {
-              "item": "SAND:1",
+              "item": "SAND-1",
               "amount": 848
             },
             {
@@ -9549,15 +10942,24 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SAND-1",
+              "amount": 848
+            },
+            {
+              "item": "ENCHANTED_RED_SAND",
+              "amount": 496
+            }
+          ],
+          "exactRecipe": true,
           "storage": 704
         },
         "9": {
           "speed": 18,
           "recipe": [
             {
-              "item": "SAND:1",
+              "item": "SAND-1",
               "amount": 848
             },
             {
@@ -9570,15 +10972,28 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 18,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SAND-1",
+              "amount": 848
+            },
+            {
+              "item": "ENCHANTED_RED_SAND",
+              "amount": 1008
+            },
+            {
+              "item": "ENCHANTED_RED_SAND_CUBE",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 896
         },
         "11": {
           "speed": 13,
           "recipe": [
             {
-              "item": "SAND:1",
+              "item": "SAND-1",
               "amount": 848
             },
             {
@@ -9595,21 +11010,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 11,
-          "recipe": [
-            {
-              "item": "SAND:1",
-              "amount": 848
-            },
-            {
-              "item": "ENCHANTED_RED_SAND",
-              "amount": 1008
-            },
-            {
-              "item": "ENCHANTED_RED_SAND_CUBE",
-              "amount": 56
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -9717,8 +11119,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 29,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "REDSTONE",
+              "amount": 384
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -9734,8 +11141,17 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 27,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "REDSTONE",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_REDSTONE",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -9755,8 +11171,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 25,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "REDSTONE",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_REDSTONE",
+              "amount": 96
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -9776,8 +11201,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 23,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "REDSTONE",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_REDSTONE",
+              "amount": 480
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -9797,8 +11231,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 21,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "REDSTONE",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_REDSTONE",
+              "amount": 992
+            },
+            {
+              "item": "ENCHANTED_REDSTONE_BLOCK",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -9822,25 +11269,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 16,
-          "recipe": [
-            {
-              "item": "REDSTONE",
-              "amount": 896
-            },
-            {
-              "item": "ENCHANTED_REDSTONE",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_REDSTONE_BLOCK",
-              "amount": 56
-            },
-            {
-              "item": "Coins",
-              "amount": 2000000
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -9939,16 +11369,12 @@ export const MINION_DATA = {
           "speed": 29,
           "recipe": [
             {
-              "item": "ENCHANTED_ROTTEN_FLESH",
-              "amount": 256
-            },
-            {
-              "item": "ENCHANTED_DIAMOND",
-              "amount": 256
-            },
-            {
               "item": "REVENANT_FLESH",
               "amount": 80
+            },
+            {
+              "item": "CRYSTALLIZED_HEART",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -9956,28 +11382,41 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 29,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "REVENANT_FLESH",
+              "amount": 220
+            },
+            {
+              "item": "CRYSTALLIZED_HEART",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_1",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
           "speed": 26,
           "recipe": [
             {
-              "item": "ENCHANTED_ROTTEN_FLESH",
-              "amount": 256
-            },
-            {
-              "item": "ENCHANTED_DIAMOND",
-              "amount": 256
-            },
-            {
               "item": "REVENANT_FLESH",
               "amount": 500
             },
             {
-              "item": "ROTTEN_FLESH",
-              "amount": 320
+              "item": "CRYSTALLIZED_HEART",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_2",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -9985,32 +11424,61 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "REVENANT_FLESH",
+              "amount": 948
+            },
+            {
+              "item": "CRYSTALLIZED_HEART",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_3",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
           "speed": 23,
           "recipe": [
             {
-              "item": "ENCHANTED_ROTTEN_FLESH",
-              "amount": 256
-            },
-            {
-              "item": "ENCHANTED_DIAMOND",
-              "amount": 256
-            },
-            {
               "item": "REVENANT_FLESH",
               "amount": 948
             },
             {
-              "item": "ROTTEN_FLESH",
-              "amount": 1952
+              "item": "CRYSTALLIZED_HEART",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_3",
+              "amount": 1
             },
             {
               "item": "REVENANT_VISCERA",
               "amount": 7
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_4",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -10018,32 +11486,81 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 23,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "REVENANT_FLESH",
+              "amount": 948
+            },
+            {
+              "item": "CRYSTALLIZED_HEART",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_3",
+              "amount": 1
+            },
+            {
+              "item": "REVENANT_VISCERA",
+              "amount": 21
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_5",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
           "speed": 19,
           "recipe": [
             {
-              "item": "ENCHANTED_ROTTEN_FLESH",
-              "amount": 280
-            },
-            {
-              "item": "ENCHANTED_DIAMOND",
-              "amount": 256
-            },
-            {
               "item": "REVENANT_FLESH",
               "amount": 948
             },
             {
-              "item": "ROTTEN_FLESH",
-              "amount": 4096
+              "item": "CRYSTALLIZED_HEART",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_3",
+              "amount": 1
             },
             {
               "item": "REVENANT_VISCERA",
               "amount": 49
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_6",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -10051,32 +11568,97 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 19,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "REVENANT_FLESH",
+              "amount": 948
+            },
+            {
+              "item": "CRYSTALLIZED_HEART",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_3",
+              "amount": 1
+            },
+            {
+              "item": "REVENANT_VISCERA",
+              "amount": 105
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_7",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
           "speed": 14.5,
           "recipe": [
             {
-              "item": "ENCHANTED_ROTTEN_FLESH",
-              "amount": 464
-            },
-            {
-              "item": "ENCHANTED_DIAMOND",
-              "amount": 256
-            },
-            {
               "item": "REVENANT_FLESH",
               "amount": 948
             },
             {
-              "item": "ROTTEN_FLESH",
-              "amount": 6240
+              "item": "CRYSTALLIZED_HEART",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_3",
+              "amount": 1
             },
             {
               "item": "REVENANT_VISCERA",
               "amount": 217
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_7",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_8",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -10084,32 +11666,113 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 14.5,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "REVENANT_FLESH",
+              "amount": 948
+            },
+            {
+              "item": "CRYSTALLIZED_HEART",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_3",
+              "amount": 1
+            },
+            {
+              "item": "REVENANT_VISCERA",
+              "amount": 441
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_7",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_8",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_9",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
           "speed": 10,
           "recipe": [
             {
-              "item": "ENCHANTED_ROTTEN_FLESH",
-              "amount": 1216
-            },
-            {
-              "item": "ENCHANTED_DIAMOND",
-              "amount": 256
-            },
-            {
               "item": "REVENANT_FLESH",
               "amount": 948
             },
             {
-              "item": "ROTTEN_FLESH",
-              "amount": 8384
+              "item": "CRYSTALLIZED_HEART",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_3",
+              "amount": 1
             },
             {
               "item": "REVENANT_VISCERA",
               "amount": 889
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_7",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_8",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_9",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_10",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -10119,28 +11782,60 @@ export const MINION_DATA = {
           "speed": 8,
           "recipe": [
             {
-              "item": "ENCHANTED_ROTTEN_FLESH",
-              "amount": 1216
-            },
-            {
-              "item": "ENCHANTED_DIAMOND",
-              "amount": 256
-            },
-            {
               "item": "REVENANT_FLESH",
               "amount": 948
             },
             {
-              "item": "ROTTEN_FLESH",
-              "amount": 8384
+              "item": "CRYSTALLIZED_HEART",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_3",
+              "amount": 1
             },
             {
               "item": "REVENANT_VISCERA",
-              "amount": 953
+              "amount": 889
             },
             {
-              "item": "Coins",
-              "amount": 2000000
+              "item": "ZOMBIE_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_7",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_8",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_9",
+              "amount": 1
+            },
+            {
+              "item": "ZOMBIE_GENERATOR_10",
+              "amount": 1
+            },
+            {
+              "item": "GENERATOR_UPGRADE_STONE_REVENANT_12",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -10307,8 +12002,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SAND",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -10324,8 +12024,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SAND",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -10345,8 +12050,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SAND",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_SAND",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -10366,8 +12080,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 19,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SAND",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_SAND",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -10387,8 +12110,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 16,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SAND",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_SAND",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -10511,8 +12243,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MUTTON",
+              "amount": 192
+            }
+          ],
+          "exactRecipe": true,
           "storage": 256
         },
         "3": {
@@ -10528,8 +12265,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MUTTON",
+              "amount": 960
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -10549,8 +12291,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MUTTON",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_MUTTON",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -10570,8 +12321,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 18,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MUTTON",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_MUTTON",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -10591,8 +12351,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 16,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "MUTTON",
+              "amount": 960
+            },
+            {
+              "item": "ENCHANTED_MUTTON",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -10616,21 +12385,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 9,
-          "recipe": [
-            {
-              "item": "MUTTON",
-              "amount": 960
-            },
-            {
-              "item": "ENCHANTED_MUTTON",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_COOKED_MUTTON",
-              "amount": 24
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -10747,8 +12503,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "BONE",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -10764,8 +12525,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "BONE",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -10785,8 +12551,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "BONE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_BONE",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -10806,8 +12581,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "BONE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_BONE",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -10827,8 +12611,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 17,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "BONE",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_BONE",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -10951,8 +12744,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SLIME_BALL",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -10968,8 +12766,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SLIME_BALL",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -10989,8 +12792,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SLIME_BALL",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_SLIME_BALL",
+              "amount": 32
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -11010,8 +12822,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 19,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SLIME_BALL",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_SLIME_BALL",
+              "amount": 224
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -11031,8 +12852,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 16,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SLIME_BALL",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_SLIME_BALL",
+              "amount": 992
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -11301,8 +13131,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "STRING",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 256
         },
         "3": {
@@ -11318,8 +13153,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "STRING",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -11339,8 +13179,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "STRING",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_STRING",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -11360,8 +13209,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "STRING",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_STRING",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -11381,8 +13239,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 17,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "STRING",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_STRING",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -11505,7 +13372,7 @@ export const MINION_DATA = {
           "speed": 48,
           "recipe": [
             {
-              "item": "LOG:1",
+              "item": "LOG-1",
               "amount": 80
             }
           ],
@@ -11514,15 +13381,20 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 48,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-1",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
           "speed": 45,
           "recipe": [
             {
-              "item": "LOG:1",
+              "item": "LOG-1",
               "amount": 560
             }
           ],
@@ -11531,15 +13403,20 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 45,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-1",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
           "speed": 42,
           "recipe": [
             {
-              "item": "LOG:1",
+              "item": "LOG-1",
               "amount": 1072
             },
             {
@@ -11552,15 +13429,24 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 42,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-1",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_SPRUCE_LOG",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
           "speed": 38,
           "recipe": [
             {
-              "item": "LOG:1",
+              "item": "LOG-1",
               "amount": 1072
             },
             {
@@ -11573,15 +13459,24 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 38,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-1",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_SPRUCE_LOG",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
           "speed": 33,
           "recipe": [
             {
-              "item": "LOG:1",
+              "item": "LOG-1",
               "amount": 1072
             },
             {
@@ -11594,15 +13489,24 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 33,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "LOG-1",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_SPRUCE_LOG",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
           "speed": 27,
           "recipe": [
             {
-              "item": "LOG:1",
+              "item": "LOG-1",
               "amount": 1072
             },
             {
@@ -11718,8 +13622,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SUGAR_CANE",
+              "amount": 384
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -11735,8 +13644,17 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SUGAR_CANE",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_SUGAR",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -11756,8 +13674,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 18,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SUGAR_CANE",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_SUGAR",
+              "amount": 96
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -11777,8 +13704,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 16,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SUGAR_CANE",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_SUGAR",
+              "amount": 480
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -11798,8 +13734,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 14.5,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "SUGAR_CANE",
+              "amount": 896
+            },
+            {
+              "item": "ENCHANTED_SUGAR",
+              "amount": 992
+            },
+            {
+              "item": "ENCHANTED_SUGAR_CANE",
+              "amount": 8
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -11823,21 +13772,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 9,
-          "recipe": [
-            {
-              "item": "SUGAR_CANE",
-              "amount": 896
-            },
-            {
-              "item": "ENCHANTED_SUGAR",
-              "amount": 992
-            },
-            {
-              "item": "ENCHANTED_SUGAR_CANE",
-              "amount": 56
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -11936,12 +13872,12 @@ export const MINION_DATA = {
           "speed": 29,
           "recipe": [
             {
-              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
-              "amount": 1
-            },
-            {
               "item": "TARANTULA_WEB",
               "amount": 80
+            },
+            {
+              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -11949,24 +13885,41 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 29,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "TARANTULA_WEB",
+              "amount": 220
+            },
+            {
+              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_1",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
           "speed": 26,
           "recipe": [
             {
-              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
-              "amount": 1
-            },
-            {
               "item": "TARANTULA_WEB",
               "amount": 500
             },
             {
-              "item": "STRING",
-              "amount": 320
+              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_2",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -11974,28 +13927,61 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "TARANTULA_WEB",
+              "amount": 948
+            },
+            {
+              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_3",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
           "speed": 23,
           "recipe": [
             {
-              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
-              "amount": 1
-            },
-            {
               "item": "TARANTULA_WEB",
               "amount": 948
             },
             {
-              "item": "STRING",
-              "amount": 1952
+              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_3",
+              "amount": 1
             },
             {
               "item": "TARANTULA_SILK",
               "amount": 7
+            },
+            {
+              "item": "SPIDER_GENERATOR_4",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -12003,32 +13989,81 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 23,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "TARANTULA_WEB",
+              "amount": 948
+            },
+            {
+              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_3",
+              "amount": 1
+            },
+            {
+              "item": "TARANTULA_SILK",
+              "amount": 21
+            },
+            {
+              "item": "SPIDER_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_5",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
           "speed": 19,
           "recipe": [
             {
-              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
-              "amount": 1
-            },
-            {
               "item": "TARANTULA_WEB",
               "amount": 948
             },
             {
-              "item": "STRING",
-              "amount": 4096
+              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_3",
+              "amount": 1
             },
             {
               "item": "TARANTULA_SILK",
               "amount": 49
             },
             {
-              "item": "ENCHANTED_STRING",
-              "amount": 24
+              "item": "SPIDER_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_6",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -12036,32 +14071,97 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 19,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "TARANTULA_WEB",
+              "amount": 948
+            },
+            {
+              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_3",
+              "amount": 1
+            },
+            {
+              "item": "TARANTULA_SILK",
+              "amount": 105
+            },
+            {
+              "item": "SPIDER_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_7",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
           "speed": 14.5,
           "recipe": [
             {
-              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
-              "amount": 1
-            },
-            {
               "item": "TARANTULA_WEB",
               "amount": 948
             },
             {
-              "item": "STRING",
-              "amount": 6240
+              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_3",
+              "amount": 1
             },
             {
               "item": "TARANTULA_SILK",
               "amount": 217
             },
             {
-              "item": "ENCHANTED_STRING",
-              "amount": 208
+              "item": "SPIDER_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_7",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_8",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -12069,32 +14169,113 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 14.5,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "TARANTULA_WEB",
+              "amount": 948
+            },
+            {
+              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_3",
+              "amount": 1
+            },
+            {
+              "item": "TARANTULA_SILK",
+              "amount": 441
+            },
+            {
+              "item": "SPIDER_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_7",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_8",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_9",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
           "speed": 10,
           "recipe": [
             {
-              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
-              "amount": 1
-            },
-            {
               "item": "TARANTULA_WEB",
               "amount": 948
             },
             {
-              "item": "STRING",
-              "amount": 8384
+              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_3",
+              "amount": 1
             },
             {
               "item": "TARANTULA_SILK",
               "amount": 889
             },
             {
-              "item": "ENCHANTED_STRING",
-              "amount": 960
+              "item": "SPIDER_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_7",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_8",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_9",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_10",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -12104,24 +14285,56 @@ export const MINION_DATA = {
           "speed": 8,
           "recipe": [
             {
-              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
-              "amount": 1
-            },
-            {
               "item": "TARANTULA_WEB",
               "amount": 948
             },
             {
-              "item": "STRING",
-              "amount": 8384
+              "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_3",
+              "amount": 1
             },
             {
               "item": "TARANTULA_SILK",
               "amount": 889
             },
             {
-              "item": "ENCHANTED_STRING",
-              "amount": 960
+              "item": "SPIDER_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_7",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_8",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_9",
+              "amount": 1
+            },
+            {
+              "item": "SPIDER_GENERATOR_10",
+              "amount": 1
             },
             {
               "item": "GENERATOR_UPGRADE_STONE_TARANTULA_12",
@@ -12294,6 +14507,10 @@ export const MINION_DATA = {
             {
               "item": "HEMOVIBE",
               "amount": 80
+            },
+            {
+              "item": "BAT_PERSON_HELMET",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -12301,8 +14518,17 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 190,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "HEMOVIBE",
+              "amount": 240
+            },
+            {
+              "item": "BAT_PERSON_HELMET",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -12311,6 +14537,10 @@ export const MINION_DATA = {
             {
               "item": "HEMOVIBE",
               "amount": 560
+            },
+            {
+              "item": "BAT_PERSON_HELMET",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -12318,8 +14548,17 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 175,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "HEMOVIBE",
+              "amount": 1072
+            },
+            {
+              "item": "BAT_PERSON_HELMET",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -12328,6 +14567,10 @@ export const MINION_DATA = {
             {
               "item": "HEMOVIBE",
               "amount": 1072
+            },
+            {
+              "item": "BAT_PERSON_HELMET",
+              "amount": 1
             },
             {
               "item": "HEMOGLASS",
@@ -12339,8 +14582,21 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 160,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "HEMOVIBE",
+              "amount": 1072
+            },
+            {
+              "item": "BAT_PERSON_HELMET",
+              "amount": 1
+            },
+            {
+              "item": "HEMOGLASS",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -12349,6 +14605,10 @@ export const MINION_DATA = {
             {
               "item": "HEMOVIBE",
               "amount": 1072
+            },
+            {
+              "item": "BAT_PERSON_HELMET",
+              "amount": 1
             },
             {
               "item": "HEMOGLASS",
@@ -12360,8 +14620,21 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 140,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "HEMOVIBE",
+              "amount": 1072
+            },
+            {
+              "item": "BAT_PERSON_HELMET",
+              "amount": 1
+            },
+            {
+              "item": "HEMOGLASS",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -12370,6 +14643,10 @@ export const MINION_DATA = {
             {
               "item": "HEMOVIBE",
               "amount": 1072
+            },
+            {
+              "item": "BAT_PERSON_HELMET",
+              "amount": 1
             },
             {
               "item": "HEMOGLASS",
@@ -12381,8 +14658,21 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 117,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "HEMOVIBE",
+              "amount": 1072
+            },
+            {
+              "item": "BAT_PERSON_HELMET",
+              "amount": 1
+            },
+            {
+              "item": "HEMOGLASS",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -12391,6 +14681,10 @@ export const MINION_DATA = {
             {
               "item": "HEMOVIBE",
               "amount": 1072
+            },
+            {
+              "item": "BAT_PERSON_HELMET",
+              "amount": 1
             },
             {
               "item": "HEMOGLASS",
@@ -12497,12 +14791,12 @@ export const MINION_DATA = {
           "speed": 45,
           "recipe": [
             {
-              "item": "ENDER_PEARL",
-              "amount": 64
-            },
-            {
               "item": "NULL_SPHERE",
               "amount": 80
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_1",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -12510,24 +14804,41 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 45,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "NULL_SPHERE",
+              "amount": 220
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_1",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
           "speed": 42,
           "recipe": [
             {
-              "item": "ENDER_PEARL",
-              "amount": 192
-            },
-            {
               "item": "NULL_SPHERE",
               "amount": 500
             },
             {
-              "item": "OBSIDIAN",
-              "amount": 80
+              "item": "ENDERMAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_2",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -12535,32 +14846,61 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 42,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "NULL_SPHERE",
+              "amount": 948
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_3",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
           "speed": 39,
           "recipe": [
             {
-              "item": "ENDER_PEARL",
-              "amount": 384
-            },
-            {
-              "item": "ENCHANTED_ENDER_PEARL",
-              "amount": 32
-            },
-            {
-              "item": "OBSIDIAN",
-              "amount": 640
-            },
-            {
               "item": "NULL_SPHERE",
               "amount": 948
             },
             {
+              "item": "ENDERMAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_3",
+              "amount": 1
+            },
+            {
               "item": "NULL_OVOID",
               "amount": 7
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_4",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -12568,36 +14908,81 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 39,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "NULL_SPHERE",
+              "amount": 948
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_3",
+              "amount": 1
+            },
+            {
+              "item": "NULL_OVOID",
+              "amount": 21
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_5",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
           "speed": 35,
           "recipe": [
             {
-              "item": "ENDER_PEARL",
-              "amount": 576
-            },
-            {
-              "item": "ENCHANTED_ENDER_PEARL",
-              "amount": 208
-            },
-            {
-              "item": "OBSIDIAN",
-              "amount": 1712
-            },
-            {
-              "item": "ENCHANTED_OBSIDIAN",
-              "amount": 8
-            },
-            {
               "item": "NULL_SPHERE",
               "amount": 948
             },
             {
+              "item": "ENDERMAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_3",
+              "amount": 1
+            },
+            {
               "item": "NULL_OVOID",
               "amount": 49
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_6",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -12605,40 +14990,97 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 35,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "NULL_SPHERE",
+              "amount": 948
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_3",
+              "amount": 1
+            },
+            {
+              "item": "NULL_OVOID",
+              "amount": 105
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_7",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
           "speed": 30,
           "recipe": [
             {
-              "item": "ENDER_PEARL",
-              "amount": 768
-            },
-            {
-              "item": "ENCHANTED_ENDER_PEARL",
-              "amount": 416
-            },
-            {
-              "item": "ENCHANTED_EYE_OF_ENDER",
-              "amount": 32
-            },
-            {
-              "item": "OBSIDIAN",
-              "amount": 2784
-            },
-            {
-              "item": "ENCHANTED_OBSIDIAN",
-              "amount": 64
-            },
-            {
               "item": "NULL_SPHERE",
               "amount": 948
             },
             {
+              "item": "ENDERMAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_3",
+              "amount": 1
+            },
+            {
               "item": "NULL_OVOID",
               "amount": 217
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_7",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_8",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -12646,40 +15088,113 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 30,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "NULL_SPHERE",
+              "amount": 948
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_3",
+              "amount": 1
+            },
+            {
+              "item": "NULL_OVOID",
+              "amount": 441
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_7",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_8",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_9",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
           "speed": 24,
           "recipe": [
             {
-              "item": "ENDER_PEARL",
-              "amount": 960
-            },
-            {
-              "item": "ENCHANTED_ENDER_PEARL",
-              "amount": 624
-            },
-            {
-              "item": "ENCHANTED_EYE_OF_ENDER",
-              "amount": 208
-            },
-            {
-              "item": "OBSIDIAN",
-              "amount": 3856
-            },
-            {
-              "item": "ENCHANTED_OBSIDIAN",
-              "amount": 312
-            },
-            {
               "item": "NULL_SPHERE",
               "amount": 948
             },
             {
+              "item": "ENDERMAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_1",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_2",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_3",
+              "amount": 1
+            },
+            {
               "item": "NULL_OVOID",
               "amount": 889
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_4",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_5",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_6",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_7",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_8",
+              "amount": 1
+            },
+            {
+              "item": "OBSIDIAN_GENERATOR_9",
+              "amount": 1
+            },
+            {
+              "item": "ENDERMAN_GENERATOR_10",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -12849,8 +15364,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 15,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "WHEAT",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 256
         },
         "3": {
@@ -12866,8 +15386,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 13,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "WHEAT",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -12887,8 +15412,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 11,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "WHEAT",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_WHEAT",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -12908,8 +15442,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 10,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "WHEAT",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_WHEAT",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -12929,8 +15472,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 9,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "WHEAT",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_WHEAT",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -12950,17 +15502,8 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 7,
-          "recipe": [
-            {
-              "item": "WHEAT",
-              "amount": 1072
-            },
-            {
-              "item": "ENCHANTED_WHEAT",
-              "amount": 2040
-            }
-          ],
-          "exactRecipe": true,
+          "recipe": null,
+          "exactRecipe": false,
           "storage": 960
         }
       },
@@ -13077,8 +15620,13 @@ export const MINION_DATA = {
         },
         "2": {
           "speed": 26,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ROTTEN_FLESH",
+              "amount": 240
+            }
+          ],
+          "exactRecipe": true,
           "storage": 192
         },
         "3": {
@@ -13094,8 +15642,13 @@ export const MINION_DATA = {
         },
         "4": {
           "speed": 24,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ROTTEN_FLESH",
+              "amount": 1072
+            }
+          ],
+          "exactRecipe": true,
           "storage": 384
         },
         "5": {
@@ -13115,8 +15668,17 @@ export const MINION_DATA = {
         },
         "6": {
           "speed": 22,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ROTTEN_FLESH",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_ROTTEN_FLESH",
+              "amount": 24
+            }
+          ],
+          "exactRecipe": true,
           "storage": 576
         },
         "7": {
@@ -13136,8 +15698,17 @@ export const MINION_DATA = {
         },
         "8": {
           "speed": 20,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ROTTEN_FLESH",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_ROTTEN_FLESH",
+              "amount": 120
+            }
+          ],
+          "exactRecipe": true,
           "storage": 768
         },
         "9": {
@@ -13157,8 +15728,17 @@ export const MINION_DATA = {
         },
         "10": {
           "speed": 17,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "ROTTEN_FLESH",
+              "amount": 1072
+            },
+            {
+              "item": "ENCHANTED_ROTTEN_FLESH",
+              "amount": 504
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         },
         "11": {
@@ -13311,7 +15891,7 @@ export const MINION_DATA = {
           "recipe": [
             {
               "item": "DOUBLE_PLANT",
-              "amount": 384
+              "amount": 288
             }
           ],
           "exactRecipe": true,
@@ -13322,7 +15902,7 @@ export const MINION_DATA = {
           "recipe": [
             {
               "item": "DOUBLE_PLANT",
-              "amount": 896
+              "amount": 608
             }
           ],
           "exactRecipe": true,
@@ -13333,11 +15913,7 @@ export const MINION_DATA = {
           "recipe": [
             {
               "item": "DOUBLE_PLANT",
-              "amount": 896
-            },
-            {
-              "item": "ENCHANTED_SUNFLOWER",
-              "amount": 8
+              "amount": 1120
             }
           ],
           "exactRecipe": true,
@@ -13348,11 +15924,11 @@ export const MINION_DATA = {
           "recipe": [
             {
               "item": "DOUBLE_PLANT",
-              "amount": 896
+              "amount": 1120
             },
             {
               "item": "ENCHANTED_SUNFLOWER",
-              "amount": 32
+              "amount": 8
             }
           ],
           "exactRecipe": true,
@@ -13363,11 +15939,11 @@ export const MINION_DATA = {
           "recipe": [
             {
               "item": "DOUBLE_PLANT",
-              "amount": 896
+              "amount": 1120
             },
             {
               "item": "ENCHANTED_SUNFLOWER",
-              "amount": 96
+              "amount": 32
             }
           ],
           "exactRecipe": true,
@@ -13378,11 +15954,11 @@ export const MINION_DATA = {
           "recipe": [
             {
               "item": "DOUBLE_PLANT",
-              "amount": 896
+              "amount": 1120
             },
             {
               "item": "ENCHANTED_SUNFLOWER",
-              "amount": 224
+              "amount": 96
             }
           ],
           "exactRecipe": true,
@@ -13393,11 +15969,11 @@ export const MINION_DATA = {
           "recipe": [
             {
               "item": "DOUBLE_PLANT",
-              "amount": 896
+              "amount": 1120
             },
             {
               "item": "ENCHANTED_SUNFLOWER",
-              "amount": 480
+              "amount": 224
             }
           ],
           "exactRecipe": true,
@@ -13408,11 +15984,11 @@ export const MINION_DATA = {
           "recipe": [
             {
               "item": "DOUBLE_PLANT",
-              "amount": 896
+              "amount": 1120
             },
             {
               "item": "ENCHANTED_SUNFLOWER",
-              "amount": 992
+              "amount": 736
             }
           ],
           "exactRecipe": true,
@@ -13423,11 +15999,11 @@ export const MINION_DATA = {
           "recipe": [
             {
               "item": "DOUBLE_PLANT",
-              "amount": 896
+              "amount": 1120
             },
             {
               "item": "ENCHANTED_SUNFLOWER",
-              "amount": 992
+              "amount": 736
             },
             {
               "item": "COMPACTED_SUNFLOWER",
@@ -13442,11 +16018,11 @@ export const MINION_DATA = {
           "recipe": [
             {
               "item": "DOUBLE_PLANT",
-              "amount": 896
+              "amount": 1120
             },
             {
               "item": "ENCHANTED_SUNFLOWER",
-              "amount": 992
+              "amount": 736
             },
             {
               "item": "COMPACTED_SUNFLOWER",
@@ -13570,6 +16146,10 @@ export const MINION_DATA = {
             {
               "item": "WATER_LILY",
               "amount": 64
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -13581,6 +16161,10 @@ export const MINION_DATA = {
             {
               "item": "WATER_LILY",
               "amount": 192
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -13592,6 +16176,10 @@ export const MINION_DATA = {
             {
               "item": "WATER_LILY",
               "amount": 448
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -13603,6 +16191,10 @@ export const MINION_DATA = {
             {
               "item": "WATER_LILY",
               "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             }
           ],
           "exactRecipe": true,
@@ -13614,6 +16206,10 @@ export const MINION_DATA = {
             {
               "item": "WATER_LILY",
               "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             },
             {
               "item": "ENCHANTED_WATER_LILY",
@@ -13631,6 +16227,10 @@ export const MINION_DATA = {
               "amount": 960
             },
             {
+              "item": "FISHING_ROD",
+              "amount": 1
+            },
+            {
               "item": "ENCHANTED_WATER_LILY",
               "amount": 40
             }
@@ -13644,6 +16244,10 @@ export const MINION_DATA = {
             {
               "item": "WATER_LILY",
               "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             },
             {
               "item": "ENCHANTED_WATER_LILY",
@@ -13661,6 +16265,10 @@ export const MINION_DATA = {
               "amount": 960
             },
             {
+              "item": "FISHING_ROD",
+              "amount": 1
+            },
+            {
               "item": "ENCHANTED_WATER_LILY",
               "amount": 232
             }
@@ -13674,6 +16282,10 @@ export const MINION_DATA = {
             {
               "item": "WATER_LILY",
               "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
             },
             {
               "item": "ENCHANTED_WATER_LILY",
@@ -13691,6 +16303,10 @@ export const MINION_DATA = {
               "amount": 960
             },
             {
+              "item": "FISHING_ROD",
+              "amount": 1
+            },
+            {
               "item": "ENCHANTED_WATER_LILY",
               "amount": 1000
             }
@@ -13706,6 +16322,10 @@ export const MINION_DATA = {
               "amount": 960
             },
             {
+              "item": "FISHING_ROD",
+              "amount": 1
+            },
+            {
               "item": "ENCHANTED_WATER_LILY",
               "amount": 1000
             },
@@ -13719,8 +16339,29 @@ export const MINION_DATA = {
         },
         "12": {
           "speed": 15,
-          "recipe": null,
-          "exactRecipe": false,
+          "recipe": [
+            {
+              "item": "WATER_LILY",
+              "amount": 960
+            },
+            {
+              "item": "FISHING_ROD",
+              "amount": 1
+            },
+            {
+              "item": "ENCHANTED_WATER_LILY",
+              "amount": 1000
+            },
+            {
+              "item": "CONDENSED_WATER_LILY",
+              "amount": 8
+            },
+            {
+              "item": "GENERATOR_UPGRADE_STONE_LILY_PAD_12",
+              "amount": 1
+            }
+          ],
+          "exactRecipe": true,
           "storage": 960
         }
       },
@@ -14298,6 +16939,7 @@ export const MINION_DATA = {
     "missing": 38,
     "errors": 0,
     "withVerifiedStorage": 702,
-    "unverifiedMinions": 2
+    "unverifiedMinions": 2,
+    "cumulativeDerivedFromExactSteps": true
   }
 };
