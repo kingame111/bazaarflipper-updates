@@ -489,7 +489,7 @@ export function calculateMinion(minion, options, context) {
     if(totalUnits*normalInterval>storageCapacity){
       warnings.push('Output may fill storage before the selected collection interval; net/day and payback may be overstated.');
     }
-  } else if (!useCompactor && collectionIntervalDays>1 && !options.hasHopper) {
+  } else if (!useCompactor && collectionIntervalDays>=0.25 && !options.hasHopper) {
     warnings.push('Storage capacity is unverified. Long collection intervals can overstate production without a Hopper or Compactor.');
   }
 
