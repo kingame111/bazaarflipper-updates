@@ -1,0 +1,62 @@
+name: Build BazaarFlipper 0.6.10 candidate
+on:
+  push:
+    branches: [release-v0.6.10-candidate]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Build and syntax-check all files
+        run: node scripts/build-0.6.10.mjs
+      - name: Verify release integrity and regression invariants
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { gunzipSync } from 'node:zlib';
+          import { createHash } from 'node:crypto';
+          import vm from 'node:vm';
+          const m=JSON.parse(fs.readFileSync('manifest.json','utf8'));
+          const raw=Buffer.from(m.bundle.parts.map(p=>fs.readFileSync(p,'utf8').trim()).join(''),'base64');
+          const hash=x=>createHash('sha256').update(x).digest('hex');
+          assert.equal(hash(raw),m.bundle.sha256);
+          const files=JSON.parse(gunzipSync(raw).toString('utf8')).files;
+          assert.equal(Object.keys(files).length,13);
+          for(const f of m.files)assert.equal(hash(Buffer.from(files[f.path],'base64')),f.sha256,f.path);
+          assert.equal(JSON.parse(Buffer.from(files['package.json'],'base64')).version,'0.6.10');
+          const server=Buffer.from(files['server.mjs'],'base64').toString('utf8');
+          assert.ok(server.includes('Math.floor(reliableDepthMs/86400000)'));
+          assert.ok(server.includes('scheduleHistoryImportRefresh();'));
+          assert.ok(!server.includes("refreshHistoryStatsAsync('sync-import',true)"));
+          assert.ok(server.includes("/api/diagnostics/history"));
+          const start=server.indexOf('function historyReliabilitySummary()');
+          const end=server.indexOf('\nfunction statusPayload()',start);
+          const code=server.slice(start,end);
+          assert.ok(start>=0&&end>start);
+          const timestamps=Array.from({length:918},(_,i)=>i*300000).filter((_,i)=>i<100||i>=117);
+          assert.equal(timestamps.length,901);
+          const last=timestamps.at(-1);
+          const db={prepare(sql){return sql.includes('MAX(bucket_ts)')?{get:()=>({newest:last})}:{all:()=>timestamps.map(ts=>({ts}))}}};
+          const fn=vm.runInNewContext(code+'\nhistoryReliabilitySummary',{db,config:{historyIntervalSeconds:300},historyStats:new Map([['GHAST_TEAR',{samples3d:850,coverage3d:0.95,samples4d:901,coverage4d:0.78}]])});
+          const out=fn();assert.equal(out.selectedCoverageWindowDays,3);assert.equal(out.reliableProducts,1);
+          const html=Buffer.from(files['public/index.html'],'base64').toString('utf8');
+          assert.ok(html.includes('reliable products'));
+          assert.ok(!html.includes('Reliable history: building'));
+          console.log('PASS full release checks; covered window',out.selectedCoverageWindowDays);
+          NODE
+      - name: Commit validated release to candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add manifest.json releases/0.6.10
+          git diff --cached --quiet || (git commit -m "Build and verify BazaarFlipper v0.6.10" && git push)

@@ -1,22 +1,21 @@
 {
-  "version": "0.6.9",
-  "publishedAt": "2026-09-23T06:17:11+03:00",
+  "version": "0.6.10",
+  "publishedAt": "2026-10-10T09:50:00+03:00",
   "notes": [
-    "Adds a multi-select Exclude upgrades control to Minion Setup, so one or more upgrades such as Flycatcher can be removed from optimizer consideration.",
-    "Persists excluded upgrades locally and includes them in saved table views.",
-    "Improves one-time setup pricing: use a direct Bazaar acquisition price when available, otherwise price verified crafting recipes recursively from their ingredients.",
-    "Adds verified recipes for the Minion upgrades currently modeled, including Flycatcher, Corrupt Soil, Soulflow engines, Berberis Fuel Injector, Super Compactor 3000, Diamond Spreading, Minion Expander and Enchanted Egg.",
-    "Shows a setup-cost breakdown in the Minion detail dialog with the price source for every component (Bazaar, Craft or Coins).",
-    "Keeps N/A only when a required setup component genuinely still cannot be priced from available market/recipe data."
+    "Reliable history depth and state corrected, avoiding false building status.",
+    "Expensive history refreshes are combined during snapshot imports.",
+    "Automatic laptop sync backs off on failure without deleting unacknowledged data.",
+    "Read-only history diagnostics and clear progress state.",
+    "Full 13-file release, with Minion calculations unchanged."
   ],
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "66f74a4768e85560c172374b3cfcf14a0a04506f6c0360ded457d43d97092dad"
+      "sha256": "4d2922ec11a3950e69ca21b45e3a36ef51181b98fbab01e5b88295eee3b9f74b"
     },
     {
       "path": "package.json",
-      "sha256": "ac1f35197f1ce7194faaf3ac6da3eb4c41554818b1831caf22e36f9bc16ce35d"
+      "sha256": "8924e6cef6356bc69a5ccea420e3122cd0a52f2bed8abf10c9dbdebd05e05d04"
     },
     {
       "path": "config.example.json",
@@ -44,7 +43,7 @@
     },
     {
       "path": "public/index.html",
-      "sha256": "8602995f50cb9025460ea4ee84ac181d6babef6dcebcd4c03b9fd674cc3c1080"
+      "sha256": "2ed60729a9b84c2a3c6e22649c823f475d78fcb4b08636f9d58488b11b2ef815"
     },
     {
       "path": "public/minions.html",
@@ -65,24 +64,16 @@
   ],
   "bundle": {
     "parts": [
-      "./releases/0.6.9/part-001.txt",
-      "./releases/0.6.9/part-002.txt",
-      "./releases/0.6.9/part-003.txt",
-      "./releases/0.6.9/part-004.txt",
-      "./releases/0.6.9/part-005.txt",
-      "./releases/0.6.9/part-006.txt",
-      "./releases/0.6.9/part-007.txt",
-      "./releases/0.6.9/part-008.txt",
-      "./releases/0.6.9/part-009.txt",
-      "./releases/0.6.9/part-010.txt",
-      "./releases/0.6.9/part-011.txt",
-      "./releases/0.6.9/part-012.txt",
-      "./releases/0.6.9/part-013.txt",
-      "./releases/0.6.9/part-014.txt",
-      "./releases/0.6.9/part-015.txt",
-      "./releases/0.6.9/part-016.txt"
+      "./releases/0.6.10/part-001.txt",
+      "./releases/0.6.10/part-002.txt",
+      "./releases/0.6.10/part-003.txt",
+      "./releases/0.6.10/part-004.txt",
+      "./releases/0.6.10/part-005.txt",
+      "./releases/0.6.10/part-006.txt",
+      "./releases/0.6.10/part-007.txt",
+      "./releases/0.6.10/part-008.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "5e35acf9b1db4331db51bfe044b4dfc102adf2d8eeec7818e98b907a2bc4a127"
+    "sha256": "29e7538d5ad3eacecfcdb26c1624ebdae288a7c59582d44d976ea8f1bb531100"
   }
 }
