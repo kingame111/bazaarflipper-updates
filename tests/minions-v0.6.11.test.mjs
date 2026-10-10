@@ -22,7 +22,7 @@ assert.equal(resolveCumulativeTierRecipe(ghast,11).complete,true);
 assert.equal(resolveCumulativeTierRecipe(ghast,11).recipe.find(x=>x.item==='SILVER_FANG').amount,992);
 const r11=calculateMinion(ghast,base,ctx);
 assert.equal(r11.setupCost,exp);
-assert.equal(r11.recipeSource,'EXPLICIT_STEPS');
+assert.ok(r11.recipeSource.startsWith('https://'),'Must show verifiable recipe provenance');
 assert.equal(r11.setupComplete,true);
 assert.equal(r11.setupBreakdown.filter(x=>x.item==='SILVER_FANG').length,5);
 assert.equal(r11.setupBreakdown.find(x=>x.tier===11).amount,512);
