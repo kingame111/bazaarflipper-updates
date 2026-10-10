@@ -1,7 +1,7 @@
 const $=(id)=>document.getElementById(id);
-const fmtCoins=(n)=>Number.isFinite(Number(n))?new Intl.NumberFormat('en-US',{maximumFractionDigits:Math.abs(n)<100?2:0}).format(Number(n)):'—';
+const fmtCoins=(n)=>n!=null&&Number.isFinite(Number(n))?new Intl.NumberFormat('en-US',{maximumFractionDigits:Math.abs(n)<100?2:0}).format(Number(n)):'—';
 const fmtPct=(n)=>Number.isFinite(Number(n))?`${Number(n).toFixed(1)}%`:'—';
-const fmtDays=(n)=>Number.isFinite(Number(n))?`${Number(n)<1?(Number(n)*24).toFixed(1)+'h':Number(n).toFixed(1)+'d'}`:'—';
+const fmtDays=(n)=>n!=null&&Number.isFinite(Number(n))?`${Number(n)<1?(Number(n)*24).toFixed(1)+'h':Number(n).toFixed(1)+'d'}`:'—';
 const fmtSpan=(ms)=>{const x=Math.max(0,Number(ms)||0),h=x/3600000;return h<1?`${Math.round(x/60000)}m`:h<48?`${h.toFixed(h<10?1:0)}h`:`${(h/24).toFixed(1)}d`;};
 const fmtAgo=(ts)=>{const age=Math.max(0,Date.now()-Number(ts||0));return !ts?'—':age<60000?`${Math.max(1,Math.round(age/1000))}s ago`:age<3600000?`${Math.round(age/60000)}m ago`:`${(age/3600000).toFixed(1)}h ago`;};
 const upgradeNames=(r)=>{const names=(r.upgrades||[]).map(x=>x.name);while(names.length<2)names.push('Empty');return names.slice(0,2);};
