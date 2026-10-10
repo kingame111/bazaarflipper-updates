@@ -1,6 +1,6 @@
 {
   "version": "0.6.11",
-  "publishedAt": "2026-10-10T08:37:05.340Z",
+  "publishedAt": "2026-10-10T08:40:47.625Z",
   "notes": [
     "Initial minion overhaul: independently Bazaar-price each verified Ghast tier ingredient including Silver Fang; add the tier XII NPC fee.",
     "Introduce an extensible per-tier recipe resolver and fail closed for incomplete or unverified recipes.",
@@ -12,7 +12,7 @@
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "28a465cc71b9e6db214a4541c50450319abc7af0162eecd0fecdab0a9bde58f2"
+      "sha256": "44608d66921c5b70d5d38dbf681b7b161559c706a36da180cada5bafd6be74cc"
     },
     {
       "path": "package.json",
@@ -36,11 +36,11 @@
     },
     {
       "path": "src/minions.mjs",
-      "sha256": "a1275ba81042d78e5c272f200b7fcde32eee3f5dd1c3fd0b5f164ab507083422"
+      "sha256": "dda8ae64eea9179a11c88f2b7d46a2e795bc2e3468b23ef8a0fa33a22cf4bd27"
     },
     {
       "path": "src/minion-data.mjs",
-      "sha256": "5c6f33792b2a370b3d5e53e124f117e072b2a008a44afb03a61e1e71a23fb953"
+      "sha256": "bccf06519c9be3f20f6f087a9e509caeeb9b44531397fce887c354e812f8604f"
     },
     {
       "path": "public/index.html",
@@ -48,11 +48,11 @@
     },
     {
       "path": "public/minions.html",
-      "sha256": "df917742fbb1b6a9df776e67f399852647d8cb3896b7cbdee93b8f277e484ee7"
+      "sha256": "ae3ee59a714605f4e95f3b4b7dded85a823a9a0719b4e951e52869a14b1ac3f8"
     },
     {
       "path": "public/minions.js",
-      "sha256": "9197009df3846d3208cac9c7f324b06fe27e6ab2d4800cb746b9584d6726f6f9"
+      "sha256": "b4a01563c4488c307a3e2e668a5b1106163fceb8ad3c84f145ad5517275b9e42"
     },
     {
       "path": "public/minions.css",
@@ -77,9 +77,10 @@
       "./releases/0.6.11/part-006.txt",
       "./releases/0.6.11/part-007.txt",
       "./releases/0.6.11/part-008.txt",
-      "./releases/0.6.11/part-009.txt"
+      "./releases/0.6.11/part-009.txt",
+      "./releases/0.6.11/part-010.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "6ba515c670cdda946c27d2737fe3c568eb715614206d40c658e207f1e929f9a7"
+    "sha256": "ec2eb2abaa07e30ffbe5cb4af4b612eec293f832929e062efbb95f7bf5ae9dca"
   }
 }
