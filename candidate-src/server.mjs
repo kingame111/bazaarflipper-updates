@@ -878,6 +878,7 @@ async function handleMainRequest(req, res) {
       tier: numberParam('tier', 11),
       count: numberParam('count', 1),
       fuel: url.searchParams.get('fuel') || 'ENCHANTED_LAVA_BUCKET',
+      shipping: url.searchParams.get('shipping') || 'NONE',
       beaconPercent: numberParam('beacon', 0),
       crystalPercent: numberParam('crystal', 0),
       otherSpeedPercent: numberParam('otherSpeed', 0),
