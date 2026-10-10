@@ -135,7 +135,11 @@ for(const change of [
 }
 const g=data.definitions['Ghast Minion'];
 if(g){for(const [n,v] of Object.entries(g.tiers||{}))ghastDetails[n]={speed:v.speed,recipe:v.recipe,exactRecipe:v.exactRecipe};}
-if(g?.tiers?.['11']?.recipe?.some(e=>e.item==='ENCHANTED_GHAST_TEAR'))issue('CRITICAL','GHAST_T11_RECIPE_CONVERTED','Cumulative recipe uses Enchanted Ghast Tears instead of Silver Fang despite different market price.');
+if(g?.tiers?.['11']?.recipe?.some(e=>e.item==='ENCHANTED_GHAST_TEAR') &&
+  !g.tiers['11'].recipe.some(e=>e.item==='SILVER_FANG'))
+  issue('CRITICAL','GHAST_T11_RECIPE_CONVERTED','Cumulative recipe omits Silver Fang and substitutes Enchanted Ghast Tears.');
+if(g?.tiers?.['11']?.recipe?.find(e=>e.item==='SILVER_FANG')?.amount!==992)
+  issue('CRITICAL','GHAST_T11_SILVER_FANG_COUNT','Expected 992 actual Silver Fangs across upgrades I-XI.');
 if(missingRecipes.length)issue('HIGH','INCOMPLETE_RECIPES',{count:missingRecipes.length,samples:missingRecipes.slice(0,20)});
 if(missingSetup.length)issue('HIGH','UNPRICED_TIER_SETUP',{count:missingSetup.length,samples:missingSetup.slice(0,15)});
 if(missingSpeeds.length)issue('CRITICAL','MISSING_SPEED',missingSpeeds.slice(0,15));
