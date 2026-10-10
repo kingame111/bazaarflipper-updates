@@ -1,4 +1,5 @@
 import { MINION_DATA } from './minion-data.mjs';
+import { resolveCumulativeTierRecipe } from './minion-recipes.mjs';
 
 const DAY_SECONDS = 86400;
 const safe = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
@@ -267,37 +268,35 @@ function upgradeCombinations(minion, excluded=new Set()) {
   return combinations;
 }
 
-function recipeCost(tierInfo, context) {
-  if (!tierInfo?.exactRecipe || !Array.isArray(tierInfo.recipe)) {
-    return { cost: null, complete: false, missing: ['Exact tier recipe unavailable'], details:[] };
-  }
-  if (!tierInfo.recipe.length) {
-    return { cost: null, complete: false, missing: ['Base minion acquisition cost unavailable'], details:[] };
-  }
-  let cost = 0;
-  const missing = [];
-  const details=[];
-  for (const entry of tierInfo.recipe) {
-    const amount = Math.max(0, safe(entry.amount));
-    if (!amount) continue;
-    if (upper(entry.item) === 'COINS') {
-      cost += amount;
-      details.push({kind:'MINION',item:'COINS',amount,unitPrice:1,total:amount,source:'COINS'});
+function recipeCost(minion, tier, context) {
+  const resolved=resolveCumulativeTierRecipe(minion,tier);
+  if (!resolved.complete) return {cost:null,complete:false,missing:resolved.missing||['Unverified tier recipe'],details:[],source:resolved.source};
+  let cost=0;
+  const missing=[],details=[];
+  // Explicit steps preserve each ingredient's independent market price, including
+  // Silver Fang even though it can be crafted from Enchanted Ghast Tears.
+  const inputs=resolved.byTier?.length ? resolved.byTier : resolved.recipe;
+  for (const entry of inputs) {
+    const amount=Math.max(0,safe(entry.amount));
+    if(!amount)continue;
+    const item=upper(entry.item), level=entry.tier||null;
+    if(item==='COINS'){
+      cost+=amount;
+      details.push({kind:'MINION',tier:level,item,amount,unitPrice:1,total:amount,source:'COINS'});
       continue;
     }
-    const q = setupAcquisitionQuote(entry.item, context);
-    if (!q.available) {
-      missing.push(...(q.missing?.length?q.missing:[entry.item]));
-      details.push({kind:'MINION',item:entry.item,amount,unitPrice:null,total:null,source:q.source||'UNPRICED'});
+    const q=setupAcquisitionQuote(item,context);
+    if(!q.available){
+      missing.push(...(q.missing?.length?q.missing:[item]));
+      details.push({kind:'MINION',tier:level,item,amount,unitPrice:null,total:null,source:q.source||'UNPRICED'});
       continue;
     }
     const total=q.price*amount;
-    cost += total;
-    details.push({kind:'MINION',item:entry.item,amount,unitPrice:q.price,total,source:q.source});
+    cost+=total;
+    details.push({kind:'MINION',tier:level,item,amount,unitPrice:q.price,total,source:q.source});
   }
-  return { cost, complete: missing.length === 0, missing:[...new Set(missing)], details };
+  return {cost,complete:missing.length===0,missing:[...new Set(missing)],details,source:resolved.source};
 }
-
 function setupExtraCost(fuel, upgrades, context) {
   let cost = 0;
   const missing = [];
@@ -372,7 +371,7 @@ export function calculateMinion(minion, options, context) {
     };
   }
 
-  const tier = Math.max(1, Math.min(12, Math.floor(safe(options.tier, 11))));
+  const tier = Math.max(1, Math.floor(safe(options.tier, 11)));
   const count = Math.max(1, Math.min(100, Math.floor(safe(options.count, 1))));
   const collectionIntervalDays = Math.max(1/24, Math.min(30, safe(options.collectionIntervalDays, 1)));
   const tierInfo = minion.tiers?.[tier];
@@ -411,10 +410,12 @@ export function calculateMinion(minion, options, context) {
   const useCompactor = upgrades.some((u)=>u.compactor);
 
   const generated = [];
+  let eligibleResourceItemsPerDay=0;
   const addDrop = (drop, cycles, source, outputMultiplier = 1) => {
     if (!drop || !(safe(drop.amount) > 0) || !(safe(drop.chance,1) > 0) || !(cycles > 0)) return;
     const effectiveDrop = applyUpgradeDropTransforms(drop, upgrades);
     const baseUnits = cycles * safe(effectiveDrop.amount) * safe(effectiveDrop.chance,1) * outputMultiplier;
+    if (source !== 'DIAMOND_SPREADING') eligibleResourceItemsPerDay+=baseUnits;
     const stream=compactDropStream(effectiveDrop,baseUnits,useCompactor,collectionIntervalDays);
     for(const part of stream) generated.push({
       source,
@@ -430,8 +431,17 @@ export function calculateMinion(minion, options, context) {
   };
 
   for (const drop of minion.drops || []) addDrop(drop,cyclesPerDay,'MINION',fuelDropMultiplier*normalOutputMultiplier);
+  // First process all other drops. Diamond Spreading rolls per resource unit,
+  // including additional resource drops, not once per minion collection cycle.
   for (const up of upgrades) {
+    if (up.id==='DIAMOND_SPREADING') continue;
     for (const drop of up.extraDrops || []) addDrop(drop,cyclesPerDay,up.id,fuelDropMultiplier);
+  }
+  for (const up of upgrades) {
+    if (up.id==='DIAMOND_SPREADING') {
+      for(const drop of up.extraDrops || []) addDrop(drop,eligibleResourceItemsPerDay,up.id,1);
+      continue;
+    }
     if (up.cooldownDrop?.item && safe(up.cooldownDrop.seconds)>0) {
       let amountMultiplier = 1;
       if (minion.id === 'VOIDLING_GENERATOR' && up.id === 'SOULFLOW_ENGINE') amountMultiplier = 1 + 0.03*tier;
@@ -472,7 +482,18 @@ export function calculateMinion(minion, options, context) {
   const expensesDay = fuelExpensePerMinionDay * count;
   const netDay = netPerMinionDay * count;
 
-  const recipe = recipeCost(tierInfo,context);
+  const normalInterval=collectionIntervalDays;
+  const storageCapacity=safe(tierInfo.storage,0);
+  if(!useCompactor && storageCapacity>0 && !options.hasHopper){
+    const totalUnits=generated.reduce((sum,g)=>sum+g.unitsPerDay,0);
+    if(totalUnits*normalInterval>storageCapacity){
+      warnings.push('Output may fill storage before the selected collection interval; net/day and payback may be overstated.');
+    }
+  } else if (!useCompactor && collectionIntervalDays>1 && !options.hasHopper) {
+    warnings.push('Storage capacity is unverified. Long collection intervals can overstate production without a Hopper or Compactor.');
+  }
+
+  const recipe = recipeCost(minion,tier,context);
   const extras = setupExtraCost(fuel,upgrades,context);
   const setupComplete = recipe.complete && extras.complete;
   const setupPerMinion = recipe.cost == null ? null : recipe.cost + extras.cost;
@@ -518,6 +539,7 @@ export function calculateMinion(minion, options, context) {
     setupPerMinion,
     setupCost,
     setupComplete,
+    recipeSource:recipe.source,
     setupMissing:[...new Set([...(recipe.missing||[]),...(extras.missing||[])])],
     setupBreakdown:[...(recipe.details||[]),...(extras.details||[])],
     paybackDays,
@@ -596,7 +618,7 @@ export function calculateMinionRankings(options = {}, context = {}) {
   const sort = upper(options.sort || 'NET');
   const metric = (row) => {
     if (!row.supported) return -Infinity;
-    if (sort === 'PAYBACK') return row.paybackDays == null ? Infinity : -row.paybackDays;
+    if (sort === 'PAYBACK') return Number.isFinite(row.paybackDays) ? -row.paybackDays : -Infinity;
     if (sort === 'ROI') return safe(row.roi30dPercent,-Infinity);
     if (sort === 'GROSS') return safe(row.grossDay,-Infinity);
     if (sort === 'STABILITY') return -safe(row.stabilityCv,Infinity);
