@@ -1,21 +1,22 @@
 {
-  "version": "0.6.10",
-  "publishedAt": "2026-10-10T09:50:00+03:00",
+  "version": "0.6.11",
+  "publishedAt": "2026-10-10T08:33:04.123Z",
   "notes": [
-    "Reliable history depth and state corrected, avoiding false building status.",
-    "Expensive history refreshes are combined during snapshot imports.",
-    "Automatic laptop sync backs off on failure without deleting unacknowledged data.",
-    "Read-only history diagnostics and clear progress state.",
-    "Full 13-file release, with Minion calculations unchanged."
+    "Initial minion overhaul: independently Bazaar-price each verified Ghast tier ingredient including Silver Fang; add the tier XII NPC fee.",
+    "Introduce an extensible per-tier recipe resolver and fail closed for incomplete or unverified recipes.",
+    "Fix Diamond Spreading roll counts per resource item instead of per collection cycle.",
+    "Fix PAYBACK ranking that could prefer N/A over valid setup investment.",
+    "Support dynamic tier counts, NET/PAYBACK/HORIZON optimization and separate incremental upgrade payback.",
+    "Improve storage uncertainty warnings and missing-value rendering. Minion algorithm remains under extended audit."
   ],
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "4d2922ec11a3950e69ca21b45e3a36ef51181b98fbab01e5b88295eee3b9f74b"
+      "sha256": "28a465cc71b9e6db214a4541c50450319abc7af0162eecd0fecdab0a9bde58f2"
     },
     {
       "path": "package.json",
-      "sha256": "8924e6cef6356bc69a5ccea420e3122cd0a52f2bed8abf10c9dbdebd05e05d04"
+      "sha256": "22b8988db4019b5bfbdd97c78a47e2e0725547bf33f4e04f4d78af8a46cb10f0"
     },
     {
       "path": "config.example.json",
@@ -35,23 +36,23 @@
     },
     {
       "path": "src/minions.mjs",
-      "sha256": "371200ef9e8e4c541759e90ae291c3655e347fab8d97a83808904c65b500c8ad"
+      "sha256": "a1275ba81042d78e5c272f200b7fcde32eee3f5dd1c3fd0b5f164ab507083422"
     },
     {
       "path": "src/minion-data.mjs",
-      "sha256": "b29f8944859e76d6d6f0d24dcb5e2efa6c5445e4dbcc038a4a949272fee30853"
+      "sha256": "5c6f33792b2a370b3d5e53e124f117e072b2a008a44afb03a61e1e71a23fb953"
     },
     {
       "path": "public/index.html",
-      "sha256": "2ed60729a9b84c2a3c6e22649c823f475d78fcb4b08636f9d58488b11b2ef815"
+      "sha256": "5be001ff78f7f37ea8e5accf296192462cc078bfd0503c1be22a936ea5f75883"
     },
     {
       "path": "public/minions.html",
-      "sha256": "7725b94569162f5a44a824b69095b6684e2af70f7f41b7f5300096543a1063b2"
+      "sha256": "df917742fbb1b6a9df776e67f399852647d8cb3896b7cbdee93b8f277e484ee7"
     },
     {
       "path": "public/minions.js",
-      "sha256": "d52bfbe3a0fd33caad907d4406b82b4a082e087aeaa215a424c4f34c0bc9ac35"
+      "sha256": "9197009df3846d3208cac9c7f324b06fe27e6ab2d4800cb746b9584d6726f6f9"
     },
     {
       "path": "public/minions.css",
@@ -60,20 +61,25 @@
     {
       "path": "start-bazaarflip.bat",
       "sha256": "8ea99b849d16f73121d4ac6b60b2b9c8359a4e64fc9cbb2f39b3037d38888bc0"
+    },
+    {
+      "path": "src/minion-recipes.mjs",
+      "sha256": "4a8561baccfff3ca4b1b788f975ee3f1b7222d6d894948396cc36225a17b58d2"
     }
   ],
   "bundle": {
     "parts": [
-      "./releases/0.6.10/part-001.txt",
-      "./releases/0.6.10/part-002.txt",
-      "./releases/0.6.10/part-003.txt",
-      "./releases/0.6.10/part-004.txt",
-      "./releases/0.6.10/part-005.txt",
-      "./releases/0.6.10/part-006.txt",
-      "./releases/0.6.10/part-007.txt",
-      "./releases/0.6.10/part-008.txt"
+      "./releases/0.6.11/part-001.txt",
+      "./releases/0.6.11/part-002.txt",
+      "./releases/0.6.11/part-003.txt",
+      "./releases/0.6.11/part-004.txt",
+      "./releases/0.6.11/part-005.txt",
+      "./releases/0.6.11/part-006.txt",
+      "./releases/0.6.11/part-007.txt",
+      "./releases/0.6.11/part-008.txt",
+      "./releases/0.6.11/part-009.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "29e7538d5ad3eacecfcdb26c1624ebdae288a7c59582d44d976ea8f1bb531100"
+    "sha256": "6ba515c670cdda946c27d2737fe3c568eb715614206d40c658e207f1e929f9a7"
   }
 }
