@@ -1,6 +1,6 @@
 {
   "version": "0.6.11",
-  "publishedAt": "2026-10-10T08:44:27.982Z",
+  "publishedAt": "2026-10-10T08:45:30.496Z",
   "notes": [
     "Initial minion overhaul: independently Bazaar-price each verified Ghast tier ingredient including Silver Fang; add the tier XII NPC fee.",
     "Import snapshot-pinned NotEnoughUpdates exact upgrade recipes for 58 fully craftable minions through XI; flag non-craftable Tier I and unavailable NPC trades.",
