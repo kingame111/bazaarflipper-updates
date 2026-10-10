@@ -46,7 +46,13 @@ const diamond=spread.outputDetails.find(x=>x.item==='DIAMOND'&&x.source==='DIAMO
 assert.ok(diamond);
 assert.ok(Math.abs(diamond.rawUnitsPerDay-expectedDiamonds)<1e-6,'Diamond Spreading per item');
 
-const sorted=calculateMinionRankings({...base,tier:11,sort:'PAYBACK'}, {...ctx,market:missingMarket});
+const rankedMarket={...missingMarket};
+for(const m of Object.values(MINION_DATA.definitions)){
+  for(const t of Object.values(m.tiers||{}))for(const x of t.recipe||[])if(x.item!=='COINS'&&!rankedMarket[x.item]&&x.item!=='SILVER_FANG')rankedMarket[x.item]=q(100);
+}
+for(const id of Object.keys(MINION_DATA.upgrades))if(id!=='NONE'&&!rankedMarket[id])rankedMarket[id]=q(100);
+for(const f of Object.values(MINION_DATA.fuels))if(f.itemId&&!rankedMarket[f.itemId])rankedMarket[f.itemId]=q(100);
+const sorted=calculateMinionRankings({...base,tier:11,sort:'PAYBACK'}, {...ctx,market:rankedMarket});
 const validIndex=sorted.rows.findIndex(x=>x.supported&&Number.isFinite(x.paybackDays));
 const missingIndex=sorted.rows.findIndex(x=>x.supported&&x.paybackDays==null);
 assert.ok(validIndex>=0&&missingIndex>validIndex,'N/A sorts after priced rows');
