@@ -91,6 +91,24 @@ for(const m of definitions){
     if(r.supported){supported++;if(!r.setupComplete)missingSetup.push(m.name+' T11 setup '+r.setupMissing.join(','))}
   }catch(e){exceptions.push(m.name+' summary '+e.stack)}
 }
+// Full compatible/unsupported two-slot permutations across all fuels and modeled families.
+const pairErrors=[];
+let pairFuelCases=0;
+for(const m of definitions.filter(m=>!m.special)){
+  for(const fuel of fuels){
+    for(let i=0;i<upgrades.length;i++){
+      for(let j=i;j<upgrades.length;j++){
+        pairFuelCases++;
+        try{
+          const r=calculateMinion(m,{...opts,fuel,upgrade1:upgrades[i],upgrade2:upgrades[j]},ctx);
+          if(!r.supported)pairErrors.push(m.name+' '+fuel+' '+upgrades[i]+' '+upgrades[j]+': unsupported');
+          else if(['grossDay','netDay','bazaarTaxDay','expensesDay','cyclesPerDay'].some(k=>!Number.isFinite(r[k])))pairErrors.push(m.name+' '+fuel+' '+upgrades[i]+' '+upgrades[j]+': nonfinite result');
+        }catch(e){pairErrors.push(m.name+' '+fuel+' '+upgrades[i]+' '+upgrades[j]+': '+e.message)}
+      }
+    }
+  }
+}
+if(pairErrors.length)issue('CRITICAL','TWO_SLOT_FUEL_COMBINATIONS',{count:pairErrors.length,samples:pairErrors.slice(0,20)});
 const histStats=new Map();
 for(const id of ids){const x={};for(let d=1;d<=7;d++){x['avgBuy'+d+'d']=100;x['avgSell'+d+'d']=150;x['coverage'+d+'d']=0.85;x['cvMid'+d+'d']=0.10;x['samples'+d+'d']=250;}histStats.set(id,x);}
 const histCtx={...ctx,historyStats:histStats,priceMode:'7D'};
@@ -132,7 +150,7 @@ if(source.includes('Math.min(12, Math.floor(safe(options.tier') || source.includ
 if(source.includes('const cyclesPerDay = DAY_SECONDS / (secondsPerAction * 2);'))issue('MEDIUM','ALL_MINIONS_TWO_ACTIONS','Two actions per cycle for every minion; verify category-specific mechanics.');
 if(source.includes('const first = Object.entries(drop.enchanted).find('))issue('MEDIUM','SINGLE_COMPACTION_CHAIN','Compaction chooses first enchanted branch; mixed recipes and item transformations need validation.');
 if(source.includes('if (requested === \'BEST\')')&&source.includes('Object.entries(methods).sort'))issue('MEDIUM','BEST_IGNORES_LIQUIDITY','BEST mode picks theoretical highest price without checking fill/liquidity.');
-const report={version:manifest.version,sourceFamilyCount:definitions.length,modeled,supported,tierCounts:tiers,upgrades:upgrades.length,fuels:fuels.length,syntheticMarketIds:ids.size,scenariosExecuted:total+scaleCases+historyCases+rankingScenarios.length,tierCases,fuelCases,upgradeCases,scaleCases,historyCases,exactRecipeMissing:missingRecipes.length,setupMissing:missingSetup.length,materialTransitions:transitions.length,materialTransitionExamples:transitions.slice(0,35),rankingScenarios,ghastDetails,issues};
+const report={version:manifest.version,sourceFamilyCount:definitions.length,modeled,supported,tierCounts:tiers,upgrades:upgrades.length,fuels:fuels.length,syntheticMarketIds:ids.size,scenariosExecuted:total+pairFuelCases+scaleCases+historyCases+rankingScenarios.length,tierCases,fuelCases,upgradeCases,pairFuelCases,scaleCases,historyCases,exactRecipeMissing:missingRecipes.length,setupMissing:missingSetup.length,materialTransitions:transitions.length,materialTransitionExamples:transitions.slice(0,35),rankingScenarios,ghastDetails,issues};
 fs.writeFileSync('minion-audit-results.json',JSON.stringify(report,null,2));
 console.log('MINION_AUDIT_REPORT_BEGIN');
 console.log(JSON.stringify(report));
