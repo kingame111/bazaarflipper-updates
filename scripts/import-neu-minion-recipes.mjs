@@ -104,7 +104,20 @@ for(const minion of Object.values(D.definitions)){
 }
 if(conflicts.length)throw Error('Ghast recipes conflict with preverified steps: '+JSON.stringify(conflicts));
 if(errors.length>7)throw Error('Too many source errors: '+JSON.stringify(errors.slice(0,8)));
-D.recipeDataVersion={source,commit:sha,importedAt:new Date().toISOString(),
+// Keep backward-compatible cumulative tier recipes in exact agreement with the
+// authoritative per-tier recipes; clear unknown NPC transitions rather than pricing guesses.
+for(const m of Object.values(D.definitions)){
+ if(!m.upgradeRecipes)continue;
+ const sum=new Map();
+ for(const tier of Object.keys(m.tiers||{}).map(Number).sort((a,b)=>a-b)){
+  const step=m.upgradeRecipes[tier],info=m.tiers[tier];
+  if(!Array.isArray(step)||!step.length){info.recipe=null;info.exactRecipe=false;continue;}
+  for(const part of step)sum.set(part.item,(sum.get(part.item)||0)+part.amount);
+  info.recipe=[...sum].map(([item,amount])=>({item,amount}));
+  info.exactRecipe=true;
+ }
+}
+D.recipeDataVersion={cumulativeDerivedFromExactSteps:true,source,commit:sha,importedAt:new Date().toISOString(),
  completeThrough11:complete11,completeThrough12:complete12,
  totalTierFiles:jobs.length,exactRecipes:success,missing:missing.length,errors:errors.length,
  withVerifiedStorage:storage,unverifiedMinions:partial};
