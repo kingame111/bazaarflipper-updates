@@ -1,0 +1,34 @@
+name: Import verified NEU minion recipes
+on:
+  push:
+    branches: [feature/minions-v0.6.11]
+    paths:
+      - scripts/import-neu-minion-recipes.mjs
+      - .github/workflows/import-neu-v0.6.11.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Import pinned source recipes and storage
+        run: node scripts/import-neu-minion-recipes.mjs
+      - name: Save source audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: neu-import-report
+          path: neu-import-report.json
+      - name: Commit audited recipes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add candidate-src/src/minion-data.mjs neu-import-report.json
+          git diff --cached --quiet || (git commit -m "Import pinned NEU tier recipes and verified storage metadata" && git push)
