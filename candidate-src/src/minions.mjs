@@ -2,6 +2,12 @@ import { MINION_DATA } from './minion-data.mjs';
 import { resolveCumulativeTierRecipe } from './minion-recipes.mjs';
 
 const DAY_SECONDS = 86400;
+// Shipping occupies its own minion slot, not one of the two standard upgrade slots.
+const SHIPPING = {
+  NONE:{id:'NONE',name:'No hopper',npcFactor:0},
+  BUDGET_HOPPER:{id:'BUDGET_HOPPER',name:'Budget Hopper',npcFactor:0.5},
+  ENCHANTED_HOPPER:{id:'ENCHANTED_HOPPER',name:'Enchanted Hopper',npcFactor:0.9}
+};
 const safe = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 const clamp = (value, min, max) => Math.max(min, Math.min(max, safe(value)));
 const upper = (value) => String(value || '').trim().toUpperCase();
@@ -297,7 +303,7 @@ function recipeCost(minion, tier, context) {
   }
   return {cost,complete:missing.length===0,missing:[...new Set(missing)],details,source:resolved.source};
 }
-function setupExtraCost(fuel, upgrades, context) {
+function setupExtraCost(fuel, upgrades, context, shipping) {
   let cost = 0;
   const missing = [];
   const details=[];
@@ -319,6 +325,16 @@ function setupExtraCost(fuel, upgrades, context) {
     } else {
       missing.push(...(q.missing?.length?q.missing:[up.id]));
       details.push({kind:'UPGRADE',item:up.id,name:up.name,amount:1,unitPrice:null,total:null,source:q.source||'UNPRICED'});
+    }
+  }
+  if(shipping?.id&&shipping.id!=='NONE'){
+    const q=setupAcquisitionQuote(shipping.id,context);
+    if(q.available){
+      cost+=q.price;
+      details.push({kind:'SHIPPING',item:shipping.id,name:shipping.name,amount:1,unitPrice:q.price,total:q.price,source:q.source});
+    }else{
+      missing.push(...(q.missing?.length?q.missing:[shipping.id]));
+      details.push({kind:'SHIPPING',item:shipping.id,name:shipping.name,amount:1,unitPrice:null,total:null,source:q.source||'UNPRICED'});
     }
   }
   return { cost, complete: missing.length === 0, missing:[...new Set(missing)], details };
@@ -348,11 +364,13 @@ export function minionCatalog() {
       confidence: m.confidence || 'HIGH'
     })).sort((a,b)=>a.name.localeCompare(b.name)),
     fuels: Object.entries(MINION_DATA.fuels).map(([id,f]) => ({ id, ...f })),
+    shipping: Object.values(SHIPPING),
     upgrades: Object.entries(MINION_DATA.upgrades).map(([id,u]) => ({ id, name:u.name, condition:u.condition || null, allowDuplicate:Boolean(u.allowDuplicate) })),
     defaults: {
       tier: 11,
       count: 1,
       fuel: 'ENCHANTED_LAVA_BUCKET',
+      shipping: 'NONE',
       sellMethod: 'BEST',
       priceMode: 'LIVE',
       horizonDays: 1,
@@ -379,6 +397,7 @@ export function calculateMinion(minion, options, context) {
     return { id:minion.id, name:minion.name, family:minion.family, tier, supported:false, reason:`Tier ${tier} is not available for this minion.` };
   }
 
+  const shipping = SHIPPING[upper(options.shipping||'NONE')] || SHIPPING.NONE;
   const fuelId = upper(options.fuel || 'NONE');
   let fuel = MINION_DATA.fuels[fuelId] || MINION_DATA.fuels.NONE;
   const warnings = Array.isArray(minion.warnings) ? [...minion.warnings] : [];
@@ -450,6 +469,30 @@ export function calculateMinion(minion, options, context) {
     }
   }
 
+  // Model the capacity of the minion's own storage over the collection interval.
+  // The NEU item lore supplies item-count capacity for each tier. This linear model
+  // approximates multi-item slot packing and may differ slightly from the game.
+  const storageCapacity = Math.max(0,safe(tierInfo.storage,0));
+  const totalUnitsPerDay=generated.reduce((sum,g)=>sum+g.unitsPerDay,0);
+  const theoreticalUnits=totalUnitsPerDay*collectionIntervalDays;
+  const overflowShare=storageCapacity>0 && theoreticalUnits>storageCapacity?
+    Math.max(0,1-storageCapacity/theoreticalUnits):0;
+  const storageDaysToFull=totalUnitsPerDay>0 && storageCapacity>0?
+    storageCapacity/totalUnitsPerDay:null;
+  if(storageCapacity>0&&overflowShare>0){
+    for(const output of generated){
+      output.overflowUnitsPerDay=output.unitsPerDay*overflowShare;
+      output.unitsPerDay*=1-overflowShare;
+    }
+    warnings.push(shipping.npcFactor>0?
+      'Storage overflow is modeled as hopper sales at a fraction of NPC value, not Bazaar sales.':
+      'Storage fills before collection. Estimated production is capped at minion capacity.');
+    if(generated.length>1)warnings.push('Multi-item storage uses an item-count approximation; real slot packing may shorten the time to full.');
+    if(useCompactor)warnings.push('Compactor and Hopper fill order is simplified; compare long-period simulations against in-game results.');
+  }
+  if(!storageCapacity && collectionIntervalDays>=0.25)
+    warnings.push('No verified storage capacity available for this tier; collection-interval revenue may be overstated.');
+
   let grossPerMinionDay = 0;
   let bazaarTaxPerMinionDay = 0;
   let weightedCoverage = 0;
@@ -474,6 +517,23 @@ export function calculateMinion(minion, options, context) {
     return { ...g, quote, grossRevenuePerDay:grossRevenue, bazaarTaxPerDay:bazaarTax, revenuePerDay:revenue };
   });
 
+  // Items shipped after storage fills are sold to the NPC at the Hopper rate.
+  // They do not incur Bazaar selling tax.
+  if(shipping.npcFactor>0){
+    for(const g of generated){
+      if(!(g.overflowUnitsPerDay>0))continue;
+      const npc=getNpcPrice(g.item,g.npc,context.itemMeta);
+      if(npc<=0)warnings.push('NPC selling value is unavailable for '+g.item+' hopper output; modeled as zero coins.');
+      const price=npc*shipping.npcFactor, revenue=g.overflowUnitsPerDay*price;
+      grossPerMinionDay+=revenue;
+      outputDetails.push({
+        ...g,source:'HOPPER',unitsPerDay:g.overflowUnitsPerDay,
+        quote:{method:'HOPPER',raw:price,price,taxApplied:false,npc},
+        grossRevenuePerDay:revenue,bazaarTaxPerDay:0,revenuePerDay:revenue
+      });
+    }
+  }
+
   const fuelExpense = finiteFuelExpensePerDay(fuel,context.market);
   const fuelExpensePerMinionDay = fuelExpense.cost;
   const netPerMinionDay = grossPerMinionDay - bazaarTaxPerMinionDay - fuelExpensePerMinionDay;
@@ -482,19 +542,9 @@ export function calculateMinion(minion, options, context) {
   const expensesDay = fuelExpensePerMinionDay * count;
   const netDay = netPerMinionDay * count;
 
-  const normalInterval=collectionIntervalDays;
-  const storageCapacity=safe(tierInfo.storage,0);
-  if(!useCompactor && storageCapacity>0 && !options.hasHopper){
-    const totalUnits=generated.reduce((sum,g)=>sum+g.unitsPerDay,0);
-    if(totalUnits*normalInterval>storageCapacity){
-      warnings.push('Output may fill storage before the selected collection interval; net/day and payback may be overstated.');
-    }
-  } else if (!useCompactor && collectionIntervalDays>=0.25 && !options.hasHopper) {
-    warnings.push('Storage capacity is unverified. Long collection intervals can overstate production without a Hopper or Compactor.');
-  }
 
   const recipe = recipeCost(minion,tier,context);
-  const extras = setupExtraCost(fuel,upgrades,context);
+  const extras = setupExtraCost(fuel,upgrades,context,shipping);
   const setupComplete = recipe.complete && extras.complete;
   const setupPerMinion = recipe.cost == null ? null : recipe.cost + extras.cost;
   const setupCost = setupPerMinion == null ? null : setupPerMinion * count;
@@ -527,6 +577,8 @@ export function calculateMinion(minion, options, context) {
     speedBonusPercent:speedBonus*100,
     cyclesPerDay,
     fuel:{id:fuelId,name:fuel.name,dropMultiplier:fuelDropMultiplier,duration:fuel.duration},
+    shipping:{id:shipping.id,name:shipping.name,npcFactor:shipping.npcFactor},
+    storage:{capacity:storageCapacity,daysToFull:storageDaysToFull,overflowShare,estimated:generated.length>1},
     upgrades:upgrades.map(u=>({id:u.id,name:u.name})),
     grossPerMinionDay,
     bazaarTaxPerMinionDay,
