@@ -18,6 +18,8 @@ jobs:
         run: node --check tests/minion-audit-20261010.mjs
       - name: Run synthetic audit across minion families, all tiers, all fuel and upgrades
         run: node tests/minion-audit-20261010.mjs
+      - name: Run targeted economic regression scenarios
+        run: node tests/minion-audit-deep-20261010.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
