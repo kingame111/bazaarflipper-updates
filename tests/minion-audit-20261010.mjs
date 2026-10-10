@@ -128,7 +128,7 @@ if(source.includes("row.paybackDays == null ? Infinity : -row.paybackDays"))issu
 if(!/storage|hopper/i.test(source))issue('HIGH','NO_STORAGE_OR_HOPPER_MODEL','Production and long collection periods ignore storage/hopper behavior.');
 if(source.includes('for (const drop of up.extraDrops || []) addDrop(drop,cyclesPerDay,up.id,fuelDropMultiplier)'))issue('HIGH','UPGRADE_DROPS_PER_CYCLE','All extra drops applied once per collection cycle rather than per generated item; check Diamond Spreading.');
 if(source.includes('let order = live.sellOrder;')&&!source.includes('order = hist.sellOrder'))issue('HIGH','HISTORICAL_SELL_ORDER_LIVE','History mode keeps live sell-order price.');
-if(source.includes('Math.min(12, Math.floor(safe(options.tier'))||source.includes('Math.min(12,'))issue('HIGH','MAX_TIER_HARDCODED','Tier selection hardcodes maximum 12; future tiers will not work.');
+if(source.includes('Math.min(12, Math.floor(safe(options.tier') || source.includes('Math.min(12,'))issue('HIGH','MAX_TIER_HARDCODED','Tier selection hardcodes maximum 12; future tiers will not work.');
 if(source.includes('const cyclesPerDay = DAY_SECONDS / (secondsPerAction * 2);'))issue('MEDIUM','ALL_MINIONS_TWO_ACTIONS','Two actions per cycle for every minion; verify category-specific mechanics.');
 if(source.includes('const first = Object.entries(drop.enchanted).find('))issue('MEDIUM','SINGLE_COMPACTION_CHAIN','Compaction chooses first enchanted branch; mixed recipes and item transformations need validation.');
 if(source.includes('if (requested === \'BEST\')')&&source.includes('Object.entries(methods).sort'))issue('MEDIUM','BEST_IGNORES_LIQUIDITY','BEST mode picks theoretical highest price without checking fill/liquidity.');
