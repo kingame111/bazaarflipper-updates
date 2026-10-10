@@ -48,6 +48,10 @@ assert.equal(missing.paybackDays,null);
 assert.equal(missing.setupMissing.includes('SILVER_FANG'),true);
 
 const snow=MINION_DATA.definitions['Snow Minion'];
+const flower=MINION_DATA.definitions['Flower Minion'];
+assert.equal(calculateMinion(snow,base,ctx).setupComplete,false,'Snow Tier I auction/gift acquisition cost must not be guessed');
+assert.equal(calculateMinion(flower,base,ctx).paybackDays,null,'Flower Tier I auction acquisition cost must not yield a false payback');
+
 assert.ok(snow);
 const baseSnow=calculateMinion(snow,base,ctx);
 const spread=calculateMinion(snow,{...base,upgrade1:'DIAMOND_SPREADING'},ctx);
@@ -90,6 +94,7 @@ if(MINION_DATA.definitions['Acacia Minion'].upgradeRecipes){
 const cat=minionCatalog();
 assert.ok(cat.minions.length>=61);
 const srv=fs.readFileSync('candidate-src/server.mjs','utf8');
+assert.ok(srv.includes('Math.max(30_000, config.requestTimeoutSeconds * 1000)'), 'Updater needs at least 30 seconds after previous aborted fetch');
 const html=fs.readFileSync('candidate-src/public/minions.html','utf8');
 const js=fs.readFileSync('candidate-src/public/minions.js','utf8');
 for(const x of ['optimizeFor','horizonDays','shipping']) {
