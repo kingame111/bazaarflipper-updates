@@ -336,7 +336,7 @@ async function refreshMayorTaxContext() {
 }
 
 async function refreshUpdateStatus() {
-  state.update = await checkForUpdate(UPDATE_MANIFEST_URL, APP_VERSION, Math.min(5_000, config.requestTimeoutSeconds * 1000));
+  state.update = await checkForUpdate(UPDATE_MANIFEST_URL, APP_VERSION, Math.max(30_000, config.requestTimeoutSeconds * 1000));
   return state.update;
 }
 
