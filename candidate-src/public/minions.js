@@ -5,7 +5,7 @@ const fmtDays=(n)=>Number.isFinite(Number(n))?`${Number(n)<1?(Number(n)*24).toFi
 const fmtSpan=(ms)=>{const x=Math.max(0,Number(ms)||0),h=x/3600000;return h<1?`${Math.round(x/60000)}m`:h<48?`${h.toFixed(h<10?1:0)}h`:`${(h/24).toFixed(1)}d`;};
 const fmtAgo=(ts)=>{const age=Math.max(0,Date.now()-Number(ts||0));return !ts?'—':age<60000?`${Math.max(1,Math.round(age/1000))}s ago`:age<3600000?`${Math.round(age/60000)}m ago`:`${(age/3600000).toFixed(1)}h ago`;};
 const upgradeNames=(r)=>{const names=(r.upgrades||[]).map(x=>x.name);while(names.length<2)names.push('Empty');return names.slice(0,2);};
-const controls=['tier','count','fuel','sellMethod','priceMode','compareDays','collectionIntervalDays','family','search','sort','tax','beacon','crystal','otherSpeed'];
+const controls=['tier','count','fuel','sellMethod','priceMode','compareDays','collectionIntervalDays','optimizeFor','horizonDays','family','search','sort','tax','beacon','crystal','otherSpeed'];
 let catalog=null,lastData=null,timer=null,requestSeq=0,lastHistoryLoadedAt=null,statusTimer=null;
 const COLUMN_KEY='bazaarflipper.minions.columns.v2',OLD_COLUMN_KEY='bazaarflipper.minions.columns.v1',VIEW_KEY='bazaarflipper.minions.views.v2',COMPARE_KEY='bazaarflipper.minions.compareDays.v1',EXCLUDED_KEY='bazaarflipper.minions.excludedUpgrades.v1';
 const columnNames=['#','Minion','Best upgrades','Tier','Net / day','LIVE comparison','Data coverage','Gross / day','Bazaar tax / day','Recurring / day','Setup (one-time)','Payback','30d ROI','Speed'];
@@ -43,7 +43,10 @@ try{excludedUpgrades=new Set(JSON.parse(localStorage.getItem(EXCLUDED_KEY)||'[]'
 function option(select,value,label){const o=document.createElement('option');o.value=value;o.textContent=label;select.appendChild(o)}
 function populateCatalog(c){
   catalog=c;
-  if(!$('tier').options.length) for(let i=1;i<=12;i++) option($('tier'),i,`Tier ${i}`);
+  if(!$('tier').options.length){
+    const tiers=[...new Set((c.minions||[]).flatMap(m=>m.tiers||[]))].filter(Number.isInteger).sort((a,b)=>a-b);
+    for(const t of tiers) option($('tier'),t,`Tier ${t}`);
+  }
   $('tier').value=String(c.defaults?.tier||11);
   if(!$('fuel').options.length){for(const f of c.fuels||[]) option($('fuel'),f.id,f.name);}
   $('fuel').value=c.defaults?.fuel||'ENCHANTED_LAVA_BUCKET';
@@ -139,7 +142,7 @@ function render(data){
   $('compareHeader').textContent=`LIVE vs ${compareDays}d`;
   $('coverageHeader').textContent=`${compareDays}d coverage`;
   const histOpt=[...$('priceMode').options].find(o=>o.value==='7D');if(histOpt)histOpt.textContent=`Historical expected — ${compareDays}d`;
-  $('modeMeta').textContent=`${data.priceMode} · effective tax ${Number(data.effectiveTaxPercent||0).toFixed(3)}%`;
+  $('modeMeta').textContent=`${data.priceMode} · optimize ${$('optimizeFor').value} · effective tax ${Number(data.effectiveTaxPercent||0).toFixed(3)}%`;
   renderHistoryDetail(data.status);
   renderDataDetail(data.status,data.dataMode);
 
@@ -192,7 +195,7 @@ function render(data){
 function showDetail(r){
   const alternatives=(r.upgradeAlternatives||[]).map((a,i)=>`<tr><td>${i===0?'Best':a.rank}</td><td>${(a.upgrades||[]).map(x=>x.name).join(' + ')||'No upgrades'}</td><td class="${a.netPerMinionDay>=0?'profit':'loss'}">${fmtCoins(a.netPerMinionDay)}</td><td>${fmtCoins(a.grossPerMinionDay)}</td><td>${fmtCoins(a.bazaarTaxPerMinionDay)}</td><td>${fmtCoins(a.expensesPerMinionDay)}</td><td>${a.deltaFromBestPerMinionDay===0?'—':fmtCoins(a.deltaFromBestPerMinionDay)}</td></tr>`).join('');
   const outputs=(r.outputDetails||[]).map(o=>`<tr><td>${o.item}<span class="family">${o.source}${o.compacted?' · compacted':''}</span></td><td>${fmtCoins(o.unitsPerDay)}</td><td>${o.quote.method}</td><td>${fmtCoins(o.quote.raw)}</td><td>${fmtCoins(o.grossRevenuePerDay)}</td><td>${fmtCoins(o.bazaarTaxPerDay)}</td><td>${fmtCoins(o.revenuePerDay)}</td></tr>`).join('');
-  const setupRows=(r.setupBreakdown||[]).map(x=>`<tr><td>${x.name||x.item}</td><td>${x.kind||'ITEM'}</td><td>${fmtCoins(x.amount)}</td><td>${x.source||'—'}</td><td>${x.unitPrice==null?'N/A':fmtCoins(x.unitPrice)}</td><td>${x.total==null?'N/A':fmtCoins(x.total)}</td></tr>`).join('');
+  const setupRows=(r.setupBreakdown||[]).map(x=>`<tr><td>${x.tier?'T'+x.tier+' · ':''}${x.name||x.item}</td><td>${x.kind||'ITEM'}</td><td>${fmtCoins(x.amount)}</td><td>${x.source||'—'}</td><td>${x.unitPrice==null?'N/A':fmtCoins(x.unitPrice)}</td><td>${x.total==null?'N/A':fmtCoins(x.total)}</td></tr>`).join('');
   const warnings=[...(r.warnings||[]),...(r.setupComplete?[]:[`Setup/ROI incomplete: ${(r.setupMissing||[]).join(', ')||'exact recipe unavailable'}`])];
   if(Number(r.historicalCoverage||0)<0.8)warnings.push(`Historical price coverage is only ${(Number(r.historicalCoverage||0)*100).toFixed(0)}% for the selected ${r.compareDays||7}-day window.`);
   $('detail').innerHTML=`<div class="detailTitle"><h2>${r.name} T${r.tier}</h2><p>${r.count} minion(s) · ${r.fuel.name} · ${r.upgrades.map(x=>x.name).join(' + ')||'no upgrades'}</p></div>
@@ -206,7 +209,11 @@ function showDetail(r){
       <div><span>Recurring expenses / day</span><strong>${fmtCoins(r.expensesDay)}</strong></div>
       <div><span>Net / day</span><strong class="${r.netDay>=0?'profit':'loss'}">${fmtCoins(r.netDay)}</strong></div>
       <div><span>Setup total · one-time</span><strong>${r.setupComplete?fmtCoins(r.setupCost):'N/A'}</strong></div>
-      <div><span>Payback</span><strong>${fmtDays(r.paybackDays)}</strong></div>
+      <div><span>Full setup payback</span><strong>${fmtDays(r.paybackDays)}</strong></div>
+      <div><span>Extra upgrade investment</span><strong>${fmtCoins(r.incrementalUpgradeCost)}</strong></div>
+      <div><span>Extra upgrade return / day</span><strong>${fmtCoins(r.incrementalNetPerDay)}</strong></div>
+      <div><span>Upgrade-only payback</span><strong>${fmtDays(r.upgradePaybackDays)}</strong></div>
+      <div><span>Horizon profit (${r.horizonDays||30}d)</span><strong>${fmtCoins(r.horizonProfit)}</strong></div>
       <div><span>LIVE net / day</span><strong>${fmtCoins(r.liveNetDay)}</strong></div>
       <div><span>${r.compareDays||7}d expected net / day</span><strong>${fmtCoins(r.expectedHistoryNetDay)}</strong></div>
       <div><span>LIVE vs ${r.compareDays||7}d</span><strong>${Number.isFinite(r.currentVsHistoryPercent)?fmtPct(r.currentVsHistoryPercent):'—'}</strong></div>
@@ -214,6 +221,7 @@ function showDetail(r){
       <div><span>Price CV</span><strong>${fmtPct((r.stabilityCv||0)*100)}</strong></div>
     </div>
     <h3>Setup cost breakdown · per minion</h3>
+    <p class="family">Recipe source: ${r.recipeSource||'unknown'}. Unverified tier material prices show as N/A rather than an invented cost.</p>
     <p class="family">Pricing uses a direct Bazaar purchase when available; otherwise a verified crafting recipe is priced recursively from its ingredients.</p>
     <table class="detailOutputs"><thead><tr><th>Component</th><th>Type</th><th>Qty</th><th>Price source</th><th>Unit cost</th><th>Total</th></tr></thead><tbody>${setupRows||'<tr><td colspan="6">No setup-cost components</td></tr>'}</tbody></table>
     <h3>Upgrade comparison</h3>
