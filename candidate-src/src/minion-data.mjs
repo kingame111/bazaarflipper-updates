@@ -2821,6 +2821,85 @@ export const MINION_DATA = {
       "confidence": "MEDIUM"
     },
     "Ghast Minion": {
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "GHAST_TEAR",
+            "amount": 64
+          }
+        ],
+        "2": [
+          {
+            "item": "GHAST_TEAR",
+            "amount": 128
+          }
+        ],
+        "3": [
+          {
+            "item": "GHAST_TEAR",
+            "amount": 256
+          }
+        ],
+        "4": [
+          {
+            "item": "GHAST_TEAR",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_GHAST_TEAR",
+            "amount": 256
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_GHAST_TEAR",
+            "amount": 512
+          }
+        ],
+        "7": [
+          {
+            "item": "SILVER_FANG",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "SILVER_FANG",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "SILVER_FANG",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "SILVER_FANG",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "SILVER_FANG",
+            "amount": 512
+          }
+        ],
+        "12": [
+          {
+            "item": "SILVER_FANG",
+            "amount": 1024
+          },
+          {
+            "item": "COINS",
+            "amount": 2000000
+          }
+        ]
+      },
+      "recipeSource": "https://wiki.hypixel.net/Ghast_Minion",
       "id": "GHAST_GENERATOR",
       "name": "Ghast Minion",
       "family": "Combat",
