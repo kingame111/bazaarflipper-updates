@@ -7,6 +7,13 @@ export function resolveCumulativeTierRecipe(minion, tier) {
   const selected = Number(tier);
   if (!Number.isInteger(selected) || selected < 1 || !minion?.tiers?.[selected])
     return {complete:false, source:'INVALID_TIER', recipe:[],missing:['Tier unavailable']};
+  // Some Tier I minions (Snow/Flower) are acquired from gifts or auctions
+  // rather than the Bazaar. Their legacy cumulative upgrade recipes exclude
+  // the starting minion's acquisition cost and must not yield a fake payback.
+  if(minion.starterAcquisition==='EXTERNAL_UNPRICED')return {
+    complete:false,source:'EXTERNAL_STARTER_COST_UNKNOWN',recipe:[],byTier:[],
+    missing:[minion.starterPriceWarning||'Tier I acquisition cost is unverified']
+  };
   const steps = minion.upgradeRecipes;
   if (steps && typeof steps === 'object') {
     const details=[], merged=new Map(), missing=[];
