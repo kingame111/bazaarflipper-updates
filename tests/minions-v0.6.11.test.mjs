@@ -69,8 +69,12 @@ assert.equal(future.supported,true);
 assert.equal(future.tier,13);
 assert.equal(future.paybackDays,null,'unverified future tier fails closed');
 const missingLegacy=calculateMinion(MINION_DATA.definitions['Acacia Minion'],{...base,tier:2},ctx);
-assert.equal(missingLegacy.setupComplete,false);
-assert.equal(missingLegacy.paybackDays,null);
+if(MINION_DATA.definitions['Acacia Minion'].upgradeRecipes){
+  assert.equal(missingLegacy.setupComplete,true,'NEU verified tier II should be priced');
+}else{
+  assert.equal(missingLegacy.setupComplete,false);
+  assert.equal(missingLegacy.paybackDays,null);
+}
 
 const cat=minionCatalog();
 assert.ok(cat.minions.length>=61);
