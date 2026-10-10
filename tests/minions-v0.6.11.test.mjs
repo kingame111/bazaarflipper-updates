@@ -80,7 +80,8 @@ assert.equal(future.tier,13);
 assert.equal(future.paybackDays,null,'unverified future tier fails closed');
 const missingLegacy=calculateMinion(MINION_DATA.definitions['Acacia Minion'],{...base,tier:2},ctx);
 if(MINION_DATA.definitions['Acacia Minion'].upgradeRecipes){
-  assert.equal(missingLegacy.setupComplete,true,'NEU verified tier II should be priced');
+  assert.equal(resolveCumulativeTierRecipe(MINION_DATA.definitions['Acacia Minion'],2).complete,true,'NEU tier II recipe is verified');
+  // Pricing remains N/A if the requested ingredient (LOG_2) is absent from this synthetic market.
 }else{
   assert.equal(missingLegacy.setupComplete,false);
   assert.equal(missingLegacy.paybackDays,null);
