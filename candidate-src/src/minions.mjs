@@ -624,6 +624,10 @@ export function calculateMinionRankings(options = {}, context = {}) {
     const row = priceMode === '7D' ? expectedHistoryRow : liveRow;
     row.upgradeSearchCount=activeBest.upgradeSearchCount;
     row.upgradeAlternatives=activeBest.upgradeAlternatives;
+    row.optimizeFor=activeBest.optimizeFor;
+    row.incrementalUpgradeCost=activeBest.incrementalUpgradeCost;
+    row.incrementalNetPerDay=activeBest.incrementalNetPerDay;
+    row.upgradePaybackDays=activeBest.upgradePaybackDays;
     row.compareDays=compareDays;
     row.liveNetDay = liveRow.netDay;
     row.expectedHistoryNetDay = expectedHistoryRow.netDay;
