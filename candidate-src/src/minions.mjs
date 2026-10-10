@@ -538,6 +538,8 @@ export function calculateMinion(minion, options, context) {
     netDay,
     setupPerMinion,
     setupCost,
+    horizonDays:Math.max(1,Math.min(365,Math.floor(safe(options.horizonDays,30)))),
+    horizonProfit:setupComplete&&setupCost!=null ? netDay*Math.max(1,Math.min(365,Math.floor(safe(options.horizonDays,30))))-setupCost : null,
     setupComplete,
     recipeSource:recipe.source,
     setupMissing:[...new Set([...(recipe.missing||[]),...(extras.missing||[])])],
@@ -555,19 +557,44 @@ export function calculateMinion(minion, options, context) {
 }
 
 function calculateBestUpgradeSetup(minion, options, context) {
-  if (!minion || minion.special) return calculateMinion(minion, options, context);
+  if (!minion || minion.special) return calculateMinion(minion,options,context);
   const excluded=normalizedExcludedUpgrades(options.excludedUpgrades);
-  const candidates = upgradeCombinations(minion,excluded)
-    .map(ids => calculateMinion(minion,{...options,upgrade1:ids[0]||'NONE',upgrade2:ids[1]||'NONE'},context))
-    .filter(row => row.supported)
-    .sort((a,b) => safe(b.netPerMinionDay,-Infinity)-safe(a.netPerMinionDay,-Infinity) || Number(Boolean(b.setupComplete))-Number(Boolean(a.setupComplete)) || safe(a.setupPerMinion,Infinity)-safe(b.setupPerMinion,Infinity) || a.upgrades.length-b.upgrades.length);
+  const mode=upper(options.optimizeFor||'NET');
+  const days=Math.max(1,Math.min(365,Math.floor(safe(options.horizonDays,30))));
+  const candidates=upgradeCombinations(minion,excluded)
+    .map(ids=>calculateMinion(minion,{...options,upgrade1:ids[0]||'NONE',upgrade2:ids[1]||'NONE'},context))
+    .filter(row=>row.supported);
+  const score=(row)=>{
+    if(mode==='PAYBACK')return Number.isFinite(row.paybackDays)?-row.paybackDays:-Infinity;
+    if(mode==='HORIZON')return row.setupComplete&&Number.isFinite(row.setupPerMinion)?
+      row.netPerMinionDay*days-row.setupPerMinion:-Infinity;
+    return safe(row.netPerMinionDay,-Infinity);
+  };
+  candidates.sort((a,b)=>score(b)-score(a) ||
+    Number(Boolean(b.setupComplete))-Number(Boolean(a.setupComplete)) ||
+    safe(a.setupPerMinion,Infinity)-safe(b.setupPerMinion,Infinity) ||
+    a.upgrades.length-b.upgrades.length);
   const best=candidates[0] || calculateMinion(minion,{...options,upgrade1:'NONE',upgrade2:'NONE'},context);
-  const bestNet=safe(best.netPerMinionDay);
+  const baseline=candidates.find(c=>c.upgrades.length===0);
+  best.optimizeFor=mode;
   best.upgradeSearchCount=candidates.length;
-  best.upgradeAlternatives=candidates.map((row,index)=>({rank:index+1,upgrades:row.upgrades,grossPerMinionDay:row.grossPerMinionDay,bazaarTaxPerMinionDay:row.bazaarTaxPerMinionDay,expensesPerMinionDay:row.fuelExpensePerMinionDay,netPerMinionDay:row.netPerMinionDay,totalNetDay:row.netDay,setupPerMinion:row.setupPerMinion,setupComplete:row.setupComplete,speedBonusPercent:row.speedBonusPercent,deltaFromBestPerMinionDay:row.netPerMinionDay-bestNet}));
+  best.incrementalUpgradeCost=baseline?.setupComplete&&best.setupComplete?
+    Math.max(0,best.setupPerMinion-baseline.setupPerMinion):null;
+  best.incrementalNetPerDay=baseline?best.netPerMinionDay-baseline.netPerMinionDay:null;
+  best.upgradePaybackDays=best.incrementalUpgradeCost!=null &&
+    best.incrementalUpgradeCost>0 && best.incrementalNetPerDay>0 ?
+    best.incrementalUpgradeCost/best.incrementalNetPerDay : null;
+  best.upgradeAlternatives=candidates.map((row,index)=>({
+    rank:index+1,upgrades:row.upgrades,grossPerMinionDay:row.grossPerMinionDay,
+    bazaarTaxPerMinionDay:row.bazaarTaxPerMinionDay,
+    expensesPerMinionDay:row.fuelExpensePerMinionDay,netPerMinionDay:row.netPerMinionDay,
+    totalNetDay:row.netDay,setupPerMinion:row.setupPerMinion,
+    setupComplete:row.setupComplete,speedBonusPercent:row.speedBonusPercent,
+    paybackDays:row.paybackDays,horizonProfit:row.horizonProfit,
+    deltaFromBestPerMinionDay:row.netPerMinionDay-best.netPerMinionDay
+  }));
   return best;
 }
-
 export function calculateMinionRankings(options = {}, context = {}) {
   const priceMode = upper(options.priceMode || 'LIVE') === '7D' ? '7D' : 'LIVE';
   const sellMethod = ['BEST','ORDER','INSTANT','NPC'].includes(upper(options.sellMethod)) ? upper(options.sellMethod) : 'BEST';
@@ -620,6 +647,7 @@ export function calculateMinionRankings(options = {}, context = {}) {
     if (!row.supported) return -Infinity;
     if (sort === 'PAYBACK') return Number.isFinite(row.paybackDays) ? -row.paybackDays : -Infinity;
     if (sort === 'ROI') return safe(row.roi30dPercent,-Infinity);
+    if (sort === 'HORIZON') return Number.isFinite(row.horizonProfit)?row.horizonProfit:-Infinity;
     if (sort === 'GROSS') return safe(row.grossDay,-Infinity);
     if (sort === 'STABILITY') return -safe(row.stabilityCv,Infinity);
     if (sort === 'VS7D') return safe(row.currentVsHistoryPercent,-Infinity);
@@ -634,7 +662,7 @@ export function calculateMinionRankings(options = {}, context = {}) {
   const visibleRows = search
     ? rows.filter((row)=>String(row.name||'').toLowerCase().includes(search))
     : rows;
-  const horizonDays = 1;
+  const horizonDays = Math.max(1,Math.min(365,Math.floor(safe(options.horizonDays,30))));
 
   return {
     generatedAt:Date.now(),
