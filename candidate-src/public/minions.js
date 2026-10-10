@@ -5,7 +5,7 @@ const fmtDays=(n)=>n!=null&&Number.isFinite(Number(n))?`${Number(n)<1?(Number(n)
 const fmtSpan=(ms)=>{const x=Math.max(0,Number(ms)||0),h=x/3600000;return h<1?`${Math.round(x/60000)}m`:h<48?`${h.toFixed(h<10?1:0)}h`:`${(h/24).toFixed(1)}d`;};
 const fmtAgo=(ts)=>{const age=Math.max(0,Date.now()-Number(ts||0));return !ts?'—':age<60000?`${Math.max(1,Math.round(age/1000))}s ago`:age<3600000?`${Math.round(age/60000)}m ago`:`${(age/3600000).toFixed(1)}h ago`;};
 const upgradeNames=(r)=>{const names=(r.upgrades||[]).map(x=>x.name);while(names.length<2)names.push('Empty');return names.slice(0,2);};
-const controls=['tier','count','fuel','sellMethod','priceMode','compareDays','collectionIntervalDays','optimizeFor','horizonDays','family','search','sort','tax','beacon','crystal','otherSpeed'];
+const controls=['tier','count','fuel','shipping','sellMethod','priceMode','compareDays','collectionIntervalDays','optimizeFor','horizonDays','family','search','sort','tax','beacon','crystal','otherSpeed'];
 let catalog=null,lastData=null,timer=null,requestSeq=0,lastHistoryLoadedAt=null,statusTimer=null;
 const COLUMN_KEY='bazaarflipper.minions.columns.v2',OLD_COLUMN_KEY='bazaarflipper.minions.columns.v1',VIEW_KEY='bazaarflipper.minions.views.v2',COMPARE_KEY='bazaarflipper.minions.compareDays.v1',EXCLUDED_KEY='bazaarflipper.minions.excludedUpgrades.v1';
 const columnNames=['#','Minion','Best upgrades','Tier','Net / day','LIVE comparison','Data coverage','Gross / day','Bazaar tax / day','Recurring / day','Setup (one-time)','Payback','30d ROI','Speed'];
@@ -50,6 +50,7 @@ function populateCatalog(c){
   $('tier').value=String(c.defaults?.tier||11);
   if(!$('fuel').options.length){for(const f of c.fuels||[]) option($('fuel'),f.id,f.name);}
   $('fuel').value=c.defaults?.fuel||'ENCHANTED_LAVA_BUCKET';
+  $('shipping').value=c.defaults?.shipping||'NONE';
   if($('family').options.length===1){
     const families=[...new Set((c.minions||[]).map(x=>x.family).filter(Boolean))].sort();
     for(const f of families) option($('family'),f,f);
@@ -203,6 +204,10 @@ function showDetail(r){
       <div><span>Base action</span><strong>${r.baseSecondsPerAction.toFixed(2)}s</strong></div>
       <div><span>Effective action</span><strong>${r.effectiveSecondsPerAction.toFixed(2)}s</strong></div>
       <div><span>Cycles / day / minion</span><strong>${fmtCoins(r.cyclesPerDay)}</strong></div>
+      <div><span>Shipping</span><strong>${r.shipping?.name||'None'}</strong></div>
+      <div><span>Storage capacity</span><strong>${r.storage?.capacity?fmtCoins(r.storage.capacity):'N/A'}</strong></div>
+      <div><span>Storage fills in</span><strong>${fmtDays(r.storage?.daysToFull)}</strong></div>
+      <div><span>Overflow share</span><strong>${fmtPct((r.storage?.overflowShare||0)*100)}</strong></div>
       <div><span>Collection interval</span><strong>${Number(r.collectionIntervalDays||1)<1?(Number(r.collectionIntervalDays||1)*24).toFixed(1)+'h':Number(r.collectionIntervalDays||1).toFixed(1)+'d'}</strong></div>
       <div><span>Gross / day</span><strong>${fmtCoins(r.grossDay)}</strong></div>
       <div><span>Bazaar tax / day</span><strong>${fmtCoins(r.bazaarTaxDay)}</strong></div>
