@@ -1,13 +1,15 @@
 {
   "version": "0.6.11",
-  "publishedAt": "2026-10-10T08:40:47.625Z",
+  "publishedAt": "2026-10-10T08:41:59.390Z",
   "notes": [
     "Initial minion overhaul: independently Bazaar-price each verified Ghast tier ingredient including Silver Fang; add the tier XII NPC fee.",
+    "Import snapshot-pinned NotEnoughUpdates exact upgrade recipes for 58 fully craftable minions through XI; flag non-craftable Tier I and unavailable NPC trades.",
     "Introduce an extensible per-tier recipe resolver and fail closed for incomplete or unverified recipes.",
     "Fix Diamond Spreading roll counts per resource item instead of per collection cycle.",
     "Fix PAYBACK ranking that could prefer N/A over valid setup investment.",
     "Support dynamic tier counts, NET/PAYBACK/HORIZON optimization and separate incremental upgrade payback.",
-    "Improve storage uncertainty warnings and missing-value rendering. Minion algorithm remains under extended audit."
+    "Use verified tier storage sizes to cap collection-period production and price Budget/Enchanted Hopper overflows at 50%/90% NPC rates.",
+    "Fix missing-value rendering, label estimated multi-item capacity, and provide upgrade payback breakdown."
   ],
   "files": [
     {
