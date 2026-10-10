@@ -15,12 +15,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 48,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 45,
@@ -30,12 +32,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 45,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 42,
@@ -49,12 +53,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 42,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 38,
@@ -68,12 +74,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 38,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 33,
@@ -87,12 +95,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 33,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 27,
@@ -106,7 +116,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -120,7 +131,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "LOG_2",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "LOG_2",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "LOG_2",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "LOG_2",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_ACACIA_LOG",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_ACACIA_LOG",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_ACACIA_LOG",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_ACACIA_LOG",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_ACACIA_LOG",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_ACACIA_LOG",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_ACACIA_LOG",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Birch Minion": {
       "id": "BIRCH_GENERATOR",
@@ -136,12 +219,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 48,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 45,
@@ -151,12 +236,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 45,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 42,
@@ -170,12 +257,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 42,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 38,
@@ -189,12 +278,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 38,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 33,
@@ -208,12 +299,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 33,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 27,
@@ -227,7 +320,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -241,7 +335,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "LOG-2",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "LOG-2",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "LOG-2",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "LOG-2",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_BIRCH_LOG",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_BIRCH_LOG",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_BIRCH_LOG",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_BIRCH_LOG",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_BIRCH_LOG",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_BIRCH_LOG",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_BIRCH_LOG",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Blaze Minion": {
       "id": "BLAZE_GENERATOR",
@@ -257,12 +423,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 33,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 31,
@@ -272,12 +440,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 31,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 28.5,
@@ -291,12 +461,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 28.5,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 25,
@@ -310,12 +482,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 25,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 21,
@@ -329,12 +503,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 21,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 16.5,
@@ -352,7 +528,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 15,
@@ -374,7 +551,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -388,7 +566,89 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "BLAZE_ROD",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "BLAZE_ROD",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "BLAZE_ROD",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "BLAZE_ROD",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_BLAZE_POWDER",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_BLAZE_POWDER",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_BLAZE_POWDER",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_BLAZE_POWDER",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_BLAZE_POWDER",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_BLAZE_POWDER",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_BLAZE_ROD",
+            "amount": 8
+          }
+        ],
+        "12": [
+          {
+            "item": "ENCHANTED_BLAZE_ROD",
+            "amount": 16
+          },
+          {
+            "item": "COINS",
+            "amount": 2000000
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Cactus Minion": {
       "id": "CACTUS_GENERATOR",
@@ -404,12 +664,14 @@ export const MINION_DATA = {
               "amount": 128
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 27,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 25,
@@ -419,12 +681,14 @@ export const MINION_DATA = {
               "amount": 896
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 25,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 23,
@@ -438,12 +702,14 @@ export const MINION_DATA = {
               "amount": 32
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 23,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 21,
@@ -457,12 +723,14 @@ export const MINION_DATA = {
               "amount": 224
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 21,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 18,
@@ -476,12 +744,14 @@ export const MINION_DATA = {
               "amount": 992
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 18,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 15,
@@ -499,7 +769,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 12,
@@ -517,7 +788,8 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -531,7 +803,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "CACTUS",
+            "amount": 128
+          }
+        ],
+        "2": [
+          {
+            "item": "CACTUS",
+            "amount": 256
+          }
+        ],
+        "3": [
+          {
+            "item": "CACTUS",
+            "amount": 512
+          }
+        ],
+        "4": [
+          {
+            "item": "ENCHANTED_CACTUS_GREEN",
+            "amount": 8
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_CACTUS_GREEN",
+            "amount": 24
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_CACTUS_GREEN",
+            "amount": 64
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_CACTUS_GREEN",
+            "amount": 128
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_CACTUS_GREEN",
+            "amount": 256
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_CACTUS_GREEN",
+            "amount": 512
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_CACTUS",
+            "amount": 8
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_CACTUS",
+            "amount": 16
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Carrot Minion": {
       "id": "CARROT_GENERATOR",
@@ -547,12 +891,14 @@ export const MINION_DATA = {
               "amount": 128
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 18,
@@ -562,12 +908,14 @@ export const MINION_DATA = {
               "amount": 896
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 18,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 16,
@@ -581,12 +929,14 @@ export const MINION_DATA = {
               "amount": 32
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 16,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 14,
@@ -600,12 +950,14 @@ export const MINION_DATA = {
               "amount": 224
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 14,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 12,
@@ -619,12 +971,14 @@ export const MINION_DATA = {
               "amount": 992
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 12,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 10,
@@ -642,7 +996,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 8,
@@ -660,7 +1015,8 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -674,7 +1030,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "CARROT_ITEM",
+            "amount": 128
+          }
+        ],
+        "2": [
+          {
+            "item": "CARROT_ITEM",
+            "amount": 256
+          }
+        ],
+        "3": [
+          {
+            "item": "CARROT_ITEM",
+            "amount": 512
+          }
+        ],
+        "4": [
+          {
+            "item": "ENCHANTED_CARROT",
+            "amount": 8
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_CARROT",
+            "amount": 24
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_CARROT",
+            "amount": 64
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_CARROT",
+            "amount": 128
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_CARROT",
+            "amount": 256
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_CARROT",
+            "amount": 512
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_GOLDEN_CARROT",
+            "amount": 8
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_GOLDEN_CARROT",
+            "amount": 16
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Cave Spider Minion": {
       "id": "CAVESPIDER_GENERATOR",
@@ -690,12 +1118,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 128
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 256
         },
         "3": {
           "speed": 24,
@@ -705,12 +1135,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 256
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 22,
@@ -724,12 +1156,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 20,
@@ -743,12 +1177,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 17,
@@ -762,12 +1198,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 17,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 13,
@@ -785,7 +1223,8 @@ export const MINION_DATA = {
               "amount": 16
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -808,7 +1247,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "SPIDER_EYE",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "SPIDER_EYE",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "SPIDER_EYE",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "SPIDER_EYE",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_SPIDER_EYE",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_SPIDER_EYE",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_SPIDER_EYE",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_SPIDER_EYE",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_SPIDER_EYE",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_SPIDER_EYE",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+            "amount": 16
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Chicken Minion": {
       "id": "CHICKEN_GENERATOR",
@@ -824,12 +1335,14 @@ export const MINION_DATA = {
               "amount": 64
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 320
         },
         "3": {
           "speed": 24,
@@ -839,12 +1352,14 @@ export const MINION_DATA = {
               "amount": 448
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 320
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 448
         },
         "5": {
           "speed": 22,
@@ -858,12 +1373,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 448
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 20,
@@ -877,12 +1394,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 18,
@@ -896,12 +1415,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 18,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 15,
@@ -915,7 +1436,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 12,
@@ -929,7 +1451,8 @@ export const MINION_DATA = {
               "amount": 2040
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -952,7 +1475,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "RAW_CHICKEN",
+            "amount": 64
+          }
+        ],
+        "2": [
+          {
+            "item": "RAW_CHICKEN",
+            "amount": 128
+          }
+        ],
+        "3": [
+          {
+            "item": "RAW_CHICKEN",
+            "amount": 256
+          }
+        ],
+        "4": [
+          {
+            "item": "RAW_CHICKEN",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_RAW_CHICKEN",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_RAW_CHICKEN",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_RAW_CHICKEN",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_RAW_CHICKEN",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_RAW_CHICKEN",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_RAW_CHICKEN",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_RAW_CHICKEN",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Clay Minion": {
       "id": "CLAY_GENERATOR",
@@ -968,12 +1563,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 32,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 30,
@@ -983,12 +1580,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 30,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 27.5,
@@ -1002,12 +1601,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 27.5,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 24,
@@ -1021,12 +1622,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 20,
@@ -1040,12 +1643,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 16,
@@ -1059,7 +1664,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 14,
@@ -1077,7 +1683,8 @@ export const MINION_DATA = {
               "amount": 1
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -1091,7 +1698,85 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "CLAY_BALL",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "CLAY_BALL",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "CLAY_BALL",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "CLAY_BALL",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_CLAY_BALL",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_CLAY_BALL",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_CLAY_BALL",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_CLAY_BALL",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_CLAY_BALL",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_CLAY_BALL",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_CLAY_BALL",
+            "amount": 512
+          }
+        ],
+        "12": [
+          {
+            "item": "GENERATOR_UPGRADE_STONE_CLAY_12",
+            "amount": 1
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Coal Minion": {
       "id": "COAL_GENERATOR",
@@ -1107,12 +1792,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 15,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 13,
@@ -1122,12 +1809,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 13,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 12,
@@ -1141,12 +1830,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 12,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 10,
@@ -1160,12 +1851,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 10,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 9,
@@ -1179,12 +1872,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 9,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 7,
@@ -1202,7 +1897,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 6,
@@ -1224,7 +1920,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -1238,7 +1935,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "COAL",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "COAL",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "COAL",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "COAL",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_COAL",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_COAL",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_COAL",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_COAL",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_COAL",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_COAL",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_COAL_BLOCK",
+            "amount": 8
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Cobblestone Minion": {
       "id": "COBBLESTONE_GENERATOR",
@@ -1254,12 +2023,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 14,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 12,
@@ -1269,12 +2040,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 12,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 10,
@@ -1288,12 +2061,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 10,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 9,
@@ -1307,12 +2082,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 9,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 8,
@@ -1326,12 +2103,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 8,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 7,
@@ -1345,7 +2124,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 6,
@@ -1363,7 +2143,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -1377,7 +2158,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "COBBLESTONE",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "COBBLESTONE",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "COBBLESTONE",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "COBBLESTONE",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_COBBLESTONE",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_COBBLESTONE",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_COBBLESTONE",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_COBBLESTONE",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_COBBLESTONE",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_COBBLESTONE",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_COBBLESTONE",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Cocoa Beans Minion": {
       "id": "COCOA_GENERATOR",
@@ -1393,12 +2246,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 27,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 25,
@@ -1408,12 +2263,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 25,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 23,
@@ -1427,12 +2284,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 23,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 21,
@@ -1446,12 +2305,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 21,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 18,
@@ -1465,12 +2326,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 18,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 15,
@@ -1488,7 +2351,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 12,
@@ -1506,7 +2370,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -1520,7 +2385,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "INK_SACK-3",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "INK_SACK-3",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "INK_SACK-3",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "INK_SACK-3",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_COCOA",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_COCOA",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_COCOA",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_COCOA",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_COCOA",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_COCOA",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_COOKIE",
+            "amount": 8
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Cow Minion": {
       "id": "COW_GENERATOR",
@@ -1536,12 +2473,14 @@ export const MINION_DATA = {
               "amount": 64
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 128
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 256
         },
         "3": {
           "speed": 24,
@@ -1551,12 +2490,14 @@ export const MINION_DATA = {
               "amount": 448
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 256
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 22,
@@ -1570,12 +2511,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 20,
@@ -1589,12 +2532,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 17,
@@ -1608,12 +2553,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 17,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 13,
@@ -1631,7 +2578,8 @@ export const MINION_DATA = {
               "amount": 256
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 10,
@@ -1649,7 +2597,8 @@ export const MINION_DATA = {
               "amount": 768
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -1672,7 +2621,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "RAW_BEEF",
+            "amount": 64
+          }
+        ],
+        "2": [
+          {
+            "item": "RAW_BEEF",
+            "amount": 128
+          }
+        ],
+        "3": [
+          {
+            "item": "RAW_BEEF",
+            "amount": 256
+          }
+        ],
+        "4": [
+          {
+            "item": "RAW_BEEF",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_RAW_BEEF",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_RAW_BEEF",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_RAW_BEEF",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_RAW_BEEF",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_RAW_BEEF",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_RAW_BEEF",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_LEATHER",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Creeper Minion": {
       "id": "CREEPER_GENERATOR",
@@ -1688,12 +2709,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 27,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 25,
@@ -1703,12 +2726,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 25,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 23,
@@ -1722,12 +2747,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 23,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 21,
@@ -1741,12 +2768,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 21,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 18,
@@ -1760,12 +2789,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 18,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 14,
@@ -1783,7 +2814,8 @@ export const MINION_DATA = {
               "amount": 16
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -1797,7 +2829,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "SULPHUR",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "SULPHUR",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "SULPHUR",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "SULPHUR",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_GUNPOWDER",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_GUNPOWDER",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_GUNPOWDER",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_GUNPOWDER",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_GUNPOWDER",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_GUNPOWDER",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_FIREWORK_ROCKET",
+            "amount": 16
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Dark Oak Minion": {
       "id": "DARK_OAK_GENERATOR",
@@ -1813,12 +2917,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 48,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 45,
@@ -1828,12 +2934,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 45,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 42,
@@ -1847,12 +2955,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 42,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 38,
@@ -1866,12 +2976,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 38,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 33,
@@ -1885,12 +2997,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 33,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 27,
@@ -1904,7 +3018,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -1918,7 +3033,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "LOG_2-1",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "LOG_2-1",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "LOG_2-1",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "LOG_2-1",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_DARK_OAK_LOG",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_DARK_OAK_LOG",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_DARK_OAK_LOG",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_DARK_OAK_LOG",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_DARK_OAK_LOG",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_DARK_OAK_LOG",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_DARK_OAK_LOG",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Diamond Minion": {
       "id": "DIAMOND_GENERATOR",
@@ -1934,12 +3121,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 29,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 27,
@@ -1949,12 +3138,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 27,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 25,
@@ -1968,12 +3159,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 25,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 22,
@@ -1987,12 +3180,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 19,
@@ -2006,12 +3201,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 19,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 15,
@@ -2029,7 +3226,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 12,
@@ -2051,7 +3249,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -2065,7 +3264,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "DIAMOND",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "DIAMOND",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "DIAMOND",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "DIAMOND",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_DIAMOND",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_DIAMOND",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_DIAMOND",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_DIAMOND",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_DIAMOND",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_DIAMOND",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_DIAMOND_BLOCK",
+            "amount": 8
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Emerald Minion": {
       "id": "EMERALD_GENERATOR",
@@ -2081,12 +3352,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 28,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 26,
@@ -2096,12 +3369,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 24,
@@ -2115,12 +3390,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 21,
@@ -2134,12 +3411,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 21,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 18,
@@ -2153,12 +3432,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 18,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 14,
@@ -2176,7 +3457,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 12,
@@ -2198,7 +3480,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -2212,7 +3495,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "EMERALD",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "EMERALD",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "EMERALD",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "EMERALD",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_EMERALD",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_EMERALD",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_EMERALD",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_EMERALD",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_EMERALD",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_EMERALD",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_EMERALD_BLOCK",
+            "amount": 8
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "End Stone Minion": {
       "id": "ENDER_STONE_GENERATOR",
@@ -2228,12 +3583,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 24,
@@ -2243,12 +3600,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 22,
@@ -2262,12 +3621,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 19,
@@ -2281,12 +3642,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 19,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 16,
@@ -2300,12 +3663,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 16,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 13,
@@ -2319,7 +3684,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -2333,7 +3699,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "ENDER_STONE",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "ENDER_STONE",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "ENDER_STONE",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "ENDER_STONE",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_ENDSTONE",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_ENDSTONE",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_ENDSTONE",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_ENDSTONE",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_ENDSTONE",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_ENDSTONE",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_ENDSTONE",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Enderman Minion": {
       "id": "ENDERMAN_GENERATOR",
@@ -2349,12 +3787,14 @@ export const MINION_DATA = {
               "amount": 64
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 32,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 30,
@@ -2368,12 +3808,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 30,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 28,
@@ -2387,12 +3829,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 28,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 25,
@@ -2410,12 +3854,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 25,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 22,
@@ -2433,12 +3879,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 18,
@@ -2456,7 +3904,8 @@ export const MINION_DATA = {
               "amount": 368
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -2470,7 +3919,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "ENDER_PEARL",
+            "amount": 64
+          }
+        ],
+        "2": [
+          {
+            "item": "ENDER_PEARL",
+            "amount": 128
+          }
+        ],
+        "3": [
+          {
+            "item": "ENCHANTED_ENDER_PEARL",
+            "amount": 8
+          }
+        ],
+        "4": [
+          {
+            "item": "ENCHANTED_ENDER_PEARL",
+            "amount": 24
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_ENDER_PEARL",
+            "amount": 48
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_ENDER_PEARL",
+            "amount": 96
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_EYE_OF_ENDER",
+            "amount": 8
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_EYE_OF_ENDER",
+            "amount": 24
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_EYE_OF_ENDER",
+            "amount": 48
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_EYE_OF_ENDER",
+            "amount": 96
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_EYE_OF_ENDER",
+            "amount": 192
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Fishing Minion": {
       "id": "FISHING_GENERATOR",
@@ -2486,12 +4007,14 @@ export const MINION_DATA = {
               "amount": 64
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 640
         },
         "2": {
           "speed": 75,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 640
         },
         "3": {
           "speed": 67,
@@ -2501,12 +4024,14 @@ export const MINION_DATA = {
               "amount": 448
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 640
         },
         "4": {
           "speed": 67,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 704
         },
         "5": {
           "speed": 59,
@@ -2520,12 +4045,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 704
         },
         "6": {
           "speed": 59,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "7": {
           "speed": 51,
@@ -2539,12 +4066,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "8": {
           "speed": 51,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 832
         },
         "9": {
           "speed": 43,
@@ -2558,12 +4087,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 832
         },
         "10": {
           "speed": 53,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 896
         },
         "11": {
           "speed": 35,
@@ -2581,7 +4112,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 30,
@@ -2603,7 +4135,8 @@ export const MINION_DATA = {
               "amount": 1
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -2671,7 +4204,86 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "RAW_FISH",
+            "amount": 64
+          },
+          {
+            "item": "FISHING_ROD",
+            "amount": 1
+          }
+        ],
+        "2": [
+          {
+            "item": "RAW_FISH",
+            "amount": 128
+          }
+        ],
+        "3": [
+          {
+            "item": "RAW_FISH",
+            "amount": 256
+          }
+        ],
+        "4": [
+          {
+            "item": "RAW_FISH",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_RAW_FISH",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_RAW_FISH",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_RAW_FISH",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_RAW_FISH",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_RAW_FISH",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_RAW_FISH",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_COOKED_FISH",
+            "amount": 8
+          }
+        ],
+        "12": [
+          {
+            "item": "GENERATOR_UPGRADE_STONE_FISHING_12",
+            "amount": 1
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items"
     },
     "Flower Minion": {
       "id": "FLOWER_GENERATOR",
@@ -2682,12 +4294,14 @@ export const MINION_DATA = {
         "1": {
           "speed": 30,
           "recipe": [],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "2": {
           "speed": 30,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "3": {
           "speed": 28,
@@ -2697,12 +4311,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "4": {
           "speed": 28,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "5": {
           "speed": 26,
@@ -2716,12 +4332,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "6": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "7": {
           "speed": 24,
@@ -2735,12 +4353,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "8": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "9": {
           "speed": 22,
@@ -2754,12 +4374,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "10": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 18,
@@ -2777,7 +4399,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 15,
@@ -2795,7 +4418,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -2899,7 +4523,7 @@ export const MINION_DATA = {
           }
         ]
       },
-      "recipeSource": "https://wiki.hypixel.net/Ghast_Minion",
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
       "id": "GHAST_GENERATOR",
       "name": "Ghast Minion",
       "family": "Combat",
@@ -2913,12 +4537,14 @@ export const MINION_DATA = {
               "amount": 64
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 50,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 47,
@@ -2928,12 +4554,14 @@ export const MINION_DATA = {
               "amount": 448
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 47,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 44,
@@ -2947,12 +4575,14 @@ export const MINION_DATA = {
               "amount": 256
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 44,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 41,
@@ -2966,12 +4596,14 @@ export const MINION_DATA = {
               "amount": 928
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 41,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 38,
@@ -2985,12 +4617,14 @@ export const MINION_DATA = {
               "amount": 1888
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 38,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 32,
@@ -3004,7 +4638,8 @@ export const MINION_DATA = {
               "amount": 5728
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 30,
@@ -3018,7 +4653,8 @@ export const MINION_DATA = {
               "amount": 10848
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -3032,7 +4668,10 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Glowstone Minion": {
       "id": "GLOWSTONE_GENERATOR",
@@ -3048,12 +4687,14 @@ export const MINION_DATA = {
               "amount": 128
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 25,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 23,
@@ -3063,12 +4704,14 @@ export const MINION_DATA = {
               "amount": 896
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 23,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 21,
@@ -3082,12 +4725,14 @@ export const MINION_DATA = {
               "amount": 32
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 21,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 19,
@@ -3101,12 +4746,14 @@ export const MINION_DATA = {
               "amount": 224
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 19,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 16,
@@ -3120,12 +4767,14 @@ export const MINION_DATA = {
               "amount": 992
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 16,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 13,
@@ -3143,7 +4792,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 11,
@@ -3165,7 +4815,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -3179,7 +4830,89 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "GLOWSTONE_DUST",
+            "amount": 128
+          }
+        ],
+        "2": [
+          {
+            "item": "GLOWSTONE_DUST",
+            "amount": 256
+          }
+        ],
+        "3": [
+          {
+            "item": "GLOWSTONE_DUST",
+            "amount": 512
+          }
+        ],
+        "4": [
+          {
+            "item": "ENCHANTED_GLOWSTONE_DUST",
+            "amount": 8
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_GLOWSTONE_DUST",
+            "amount": 24
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_GLOWSTONE_DUST",
+            "amount": 64
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_GLOWSTONE_DUST",
+            "amount": 128
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_GLOWSTONE_DUST",
+            "amount": 256
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_GLOWSTONE_DUST",
+            "amount": 512
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_GLOWSTONE",
+            "amount": 8
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_GLOWSTONE",
+            "amount": 16
+          }
+        ],
+        "12": [
+          {
+            "item": "ENCHANTED_GLOWSTONE",
+            "amount": 32
+          },
+          {
+            "item": "COINS",
+            "amount": 2000000
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Gold Minion": {
       "id": "GOLD_GENERATOR",
@@ -3195,12 +4928,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 20,
@@ -3210,12 +4945,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 18,
@@ -3229,12 +4966,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 18,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 16,
@@ -3248,12 +4987,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 16,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 14,
@@ -3267,12 +5008,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 14,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 11,
@@ -3290,7 +5033,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 9,
@@ -3312,7 +5056,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -3326,7 +5071,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "GOLD_INGOT",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "GOLD_INGOT",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "GOLD_INGOT",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "GOLD_INGOT",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_GOLD",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_GOLD",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_GOLD",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_GOLD",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_GOLD",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_GOLD",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_GOLD_BLOCK",
+            "amount": 8
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Gravel Minion": {
       "id": "GRAVEL_GENERATOR",
@@ -3342,12 +5159,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 128
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 256
         },
         "3": {
           "speed": 24,
@@ -3357,12 +5176,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 256
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 22,
@@ -3376,12 +5197,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 19,
@@ -3395,12 +5218,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 19,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 16,
@@ -3414,12 +5239,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 16,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 13,
@@ -3433,7 +5260,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -3444,7 +5272,79 @@ export const MINION_DATA = {
           "npc": 3
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "GRAVEL",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "GRAVEL",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "GRAVEL",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "GRAVEL",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_FLINT",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_FLINT",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_FLINT",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_FLINT",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_FLINT",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_FLINT",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_FLINT",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Hard Stone Minion": {
       "id": "HARD_STONE_GENERATOR",
@@ -3460,12 +5360,14 @@ export const MINION_DATA = {
               "amount": 256
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 14,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 12,
@@ -3479,12 +5381,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 12,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 10,
@@ -3498,12 +5402,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 10,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 9,
@@ -3517,12 +5423,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 9,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 8,
@@ -3536,12 +5444,14 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 8,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 7,
@@ -3559,7 +5469,8 @@ export const MINION_DATA = {
               "amount": 12
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 6,
@@ -3581,7 +5492,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -3595,7 +5507,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "HARD_STONE",
+            "amount": 256
+          }
+        ],
+        "2": [
+          {
+            "item": "HARD_STONE",
+            "amount": 512
+          }
+        ],
+        "3": [
+          {
+            "item": "ENCHANTED_HARD_STONE",
+            "amount": 8
+          }
+        ],
+        "4": [
+          {
+            "item": "ENCHANTED_HARD_STONE",
+            "amount": 16
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_HARD_STONE",
+            "amount": 32
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_HARD_STONE",
+            "amount": 64
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_HARD_STONE",
+            "amount": 128
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_HARD_STONE",
+            "amount": 256
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_HARD_STONE",
+            "amount": 512
+          }
+        ],
+        "10": [
+          {
+            "item": "CONCENTRATED_STONE",
+            "amount": 4
+          }
+        ],
+        "11": [
+          {
+            "item": "CONCENTRATED_STONE",
+            "amount": 8
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Ice Minion": {
       "id": "ICE_GENERATOR",
@@ -3611,12 +5595,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 14,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 12,
@@ -3626,12 +5612,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 12,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 10,
@@ -3645,12 +5633,14 @@ export const MINION_DATA = {
               "amount": 128
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 10,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 9,
@@ -3664,12 +5654,14 @@ export const MINION_DATA = {
               "amount": 896
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 9,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 8,
@@ -3687,12 +5679,14 @@ export const MINION_DATA = {
               "amount": 192
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 8,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 7,
@@ -3710,7 +5704,8 @@ export const MINION_DATA = {
               "amount": 960
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 6,
@@ -3732,7 +5727,8 @@ export const MINION_DATA = {
               "amount": 1000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -3746,7 +5742,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "ICE",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "ICE",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "ICE",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "ICE",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "PACKED_ICE",
+            "amount": 128
+          }
+        ],
+        "6": [
+          {
+            "item": "PACKED_ICE",
+            "amount": 256
+          }
+        ],
+        "7": [
+          {
+            "item": "PACKED_ICE",
+            "amount": 512
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_ICE",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_ICE",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_ICE",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_ICE",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Iron Minion": {
       "id": "IRON_GENERATOR",
@@ -3762,12 +5830,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 17,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 15,
@@ -3777,12 +5847,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 15,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 14,
@@ -3796,12 +5868,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 14,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 12,
@@ -3815,12 +5889,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 12,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 10,
@@ -3834,12 +5910,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 10,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 8,
@@ -3857,7 +5935,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 7,
@@ -3879,7 +5958,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -3893,7 +5973,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "IRON_INGOT",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "IRON_INGOT",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "IRON_INGOT",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "IRON_INGOT",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_IRON",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_IRON",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_IRON",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_IRON",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_IRON",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_IRON",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_IRON_BLOCK",
+            "amount": 8
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Jungle Minion": {
       "id": "JUNGLE_GENERATOR",
@@ -3909,12 +6061,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 48,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 45,
@@ -3924,12 +6078,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 45,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 42,
@@ -3943,12 +6099,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 42,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 38,
@@ -3962,12 +6120,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 38,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 33,
@@ -3981,12 +6141,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 33,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 27,
@@ -4000,7 +6162,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -4014,7 +6177,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "LOG-3",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "LOG-3",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "LOG-3",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "LOG-3",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_JUNGLE_LOG",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_JUNGLE_LOG",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_JUNGLE_LOG",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_JUNGLE_LOG",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_JUNGLE_LOG",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_JUNGLE_LOG",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_JUNGLE_LOG",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Lapis Minion": {
       "id": "LAPIS_GENERATOR",
@@ -4030,12 +6265,14 @@ export const MINION_DATA = {
               "amount": 256
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 29,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 27,
@@ -4049,12 +6286,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 27,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 25,
@@ -4068,12 +6307,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 25,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 23,
@@ -4087,12 +6328,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 23,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 21,
@@ -4110,12 +6353,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 21,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 18,
@@ -4133,7 +6378,8 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 16,
@@ -4155,7 +6401,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -4169,7 +6416,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "INK_SACK-4",
+            "amount": 256
+          }
+        ],
+        "2": [
+          {
+            "item": "INK_SACK-4",
+            "amount": 512
+          }
+        ],
+        "3": [
+          {
+            "item": "ENCHANTED_LAPIS_LAZULI",
+            "amount": 8
+          }
+        ],
+        "4": [
+          {
+            "item": "ENCHANTED_LAPIS_LAZULI",
+            "amount": 24
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_LAPIS_LAZULI",
+            "amount": 64
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_LAPIS_LAZULI",
+            "amount": 128
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_LAPIS_LAZULI",
+            "amount": 256
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_LAPIS_LAZULI",
+            "amount": 512
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_LAPIS_LAZULI_BLOCK",
+            "amount": 8
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_LAPIS_LAZULI_BLOCK",
+            "amount": 16
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_LAPIS_LAZULI_BLOCK",
+            "amount": 32
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Magma Cube Minion": {
       "id": "MAGMA_CUBE_GENERATOR",
@@ -4185,12 +6504,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 32,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 30,
@@ -4200,12 +6521,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 30,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 28,
@@ -4219,12 +6542,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 28,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 25,
@@ -4238,12 +6563,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 25,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 22,
@@ -4257,12 +6584,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 18,
@@ -4276,7 +6605,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 16,
@@ -4290,7 +6620,8 @@ export const MINION_DATA = {
               "amount": 2040
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -4304,7 +6635,89 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "MAGMA_CREAM",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "MAGMA_CREAM",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "MAGMA_CREAM",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "MAGMA_CREAM",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_MAGMA_CREAM",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_MAGMA_CREAM",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_MAGMA_CREAM",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_MAGMA_CREAM",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_MAGMA_CREAM",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_MAGMA_CREAM",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_MAGMA_CREAM",
+            "amount": 512
+          }
+        ],
+        "12": [
+          {
+            "item": "ENCHANTED_MAGMA_CREAM",
+            "amount": 1024
+          },
+          {
+            "item": "COINS",
+            "amount": 2000000
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Melon Minion": {
       "id": "MELON_GENERATOR",
@@ -4320,12 +6733,14 @@ export const MINION_DATA = {
               "amount": 256
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 22.5,
@@ -4339,12 +6754,14 @@ export const MINION_DATA = {
               "amount": 128
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 22.5,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 21,
@@ -4358,12 +6775,14 @@ export const MINION_DATA = {
               "amount": 896
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 21,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 18.5,
@@ -4381,12 +6800,14 @@ export const MINION_DATA = {
               "amount": 192
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 18.5,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 16,
@@ -4404,12 +6825,14 @@ export const MINION_DATA = {
               "amount": 960
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 16,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 13,
@@ -4431,7 +6854,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 10,
@@ -4453,7 +6877,8 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -4467,7 +6892,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "MELON",
+            "amount": 256
+          }
+        ],
+        "2": [
+          {
+            "item": "MELON",
+            "amount": 512
+          }
+        ],
+        "3": [
+          {
+            "item": "MELON_BLOCK",
+            "amount": 128
+          }
+        ],
+        "4": [
+          {
+            "item": "MELON_BLOCK",
+            "amount": 256
+          }
+        ],
+        "5": [
+          {
+            "item": "MELON_BLOCK",
+            "amount": 512
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_MELON",
+            "amount": 64
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_MELON",
+            "amount": 128
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_MELON",
+            "amount": 256
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_MELON",
+            "amount": 512
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_MELON_BLOCK",
+            "amount": 8
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_MELON_BLOCK",
+            "amount": 16
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Mithril Minion": {
       "id": "MITHRIL_GENERATOR",
@@ -4483,12 +6980,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 80,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 75,
@@ -4498,12 +6997,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 75,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 70,
@@ -4517,12 +7018,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 70,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 65,
@@ -4536,12 +7039,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 65,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 60,
@@ -4555,12 +7060,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 60,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 55,
@@ -4578,7 +7085,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 50,
@@ -4600,7 +7108,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -4614,7 +7123,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "MITHRIL_ORE",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "MITHRIL_ORE",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "MITHRIL_ORE",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "MITHRIL_ORE",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_MITHRIL",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_MITHRIL",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_MITHRIL",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_MITHRIL",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_MITHRIL",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_MITHRIL",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "REFINED_MITHRIL",
+            "amount": 8
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Mushroom Minion": {
       "id": "MUSHROOM_GENERATOR",
@@ -4630,12 +7211,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 128
         },
         "2": {
           "speed": 30,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 256
         },
         "3": {
           "speed": 28,
@@ -4645,12 +7228,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 256
         },
         "4": {
           "speed": 28,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 26,
@@ -4664,12 +7249,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 23,
@@ -4683,12 +7270,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 23,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 20,
@@ -4702,12 +7291,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 16,
@@ -4721,7 +7312,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 12,
@@ -4739,7 +7331,8 @@ export const MINION_DATA = {
               "amount": 512
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -4762,7 +7355,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "RED_MUSHROOM",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "RED_MUSHROOM",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "RED_MUSHROOM",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "RED_MUSHROOM",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_RED_MUSHROOM",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_RED_MUSHROOM",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_RED_MUSHROOM",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_RED_MUSHROOM",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_RED_MUSHROOM",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_RED_MUSHROOM",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_RED_MUSHROOM",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Mycelium Minion": {
       "id": "MYCELIUM_GENERATOR",
@@ -4778,12 +7443,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 128
         },
         "3": {
           "speed": 24,
@@ -4793,12 +7460,14 @@ export const MINION_DATA = {
               "amount": 848
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 320
         },
         "5": {
           "speed": 22,
@@ -4812,12 +7481,14 @@ export const MINION_DATA = {
               "amount": 48
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 512
         },
         "7": {
           "speed": 20,
@@ -4831,12 +7502,14 @@ export const MINION_DATA = {
               "amount": 240
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 704
         },
         "9": {
           "speed": 18,
@@ -4850,12 +7523,14 @@ export const MINION_DATA = {
               "amount": 1008
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 18,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 896
         },
         "11": {
           "speed": 13,
@@ -4873,7 +7548,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 11,
@@ -4891,7 +7567,8 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -4905,7 +7582,89 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "MYCEL",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "MYCEL",
+            "amount": 256
+          }
+        ],
+        "3": [
+          {
+            "item": "MYCEL",
+            "amount": 512
+          }
+        ],
+        "4": [
+          {
+            "item": "ENCHANTED_MYCELIUM",
+            "amount": 16
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_MYCELIUM",
+            "amount": 32
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_MYCELIUM",
+            "amount": 64
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_MYCELIUM",
+            "amount": 128
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_MYCELIUM",
+            "amount": 256
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_MYCELIUM",
+            "amount": 512
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_MYCELIUM_CUBE",
+            "amount": 8
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_MYCELIUM_CUBE",
+            "amount": 16
+          }
+        ],
+        "12": [
+          {
+            "item": "ENCHANTED_MYCELIUM_CUBE",
+            "amount": 32
+          },
+          {
+            "item": "COINS",
+            "amount": 2000000
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Nether Wart Minion": {
       "id": "NETHER_WARTS_GENERATOR",
@@ -4921,12 +7680,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 50,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 47,
@@ -4936,12 +7697,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 47,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 44,
@@ -4955,12 +7718,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 44,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 41,
@@ -4974,12 +7739,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 41,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 38,
@@ -4993,12 +7760,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 38,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 32,
@@ -5012,7 +7781,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 27,
@@ -5026,7 +7796,8 @@ export const MINION_DATA = {
               "amount": 2040
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -5040,7 +7811,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "NETHER_STALK",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "NETHER_STALK",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "NETHER_STALK",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "NETHER_STALK",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_NETHER_STALK",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_NETHER_STALK",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_NETHER_STALK",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_NETHER_STALK",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_NETHER_STALK",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_NETHER_STALK",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_NETHER_STALK",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Oak Minion": {
       "id": "OAK_GENERATOR",
@@ -5056,12 +7899,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 48,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 45,
@@ -5071,12 +7916,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 45,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 42,
@@ -5090,12 +7937,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 42,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 38,
@@ -5109,12 +7958,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 38,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 33,
@@ -5128,12 +7979,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 33,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 27,
@@ -5147,7 +8000,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -5161,7 +8015,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "LOG",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "LOG",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "LOG",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "LOG",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_OAK_LOG",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_OAK_LOG",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_OAK_LOG",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_OAK_LOG",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_OAK_LOG",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_OAK_LOG",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_OAK_LOG",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Obsidian Minion": {
       "id": "OBSIDIAN_GENERATOR",
@@ -5177,12 +8103,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 45,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 42,
@@ -5192,12 +8120,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 42,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 39,
@@ -5211,12 +8141,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 39,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 35,
@@ -5230,12 +8162,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 35,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 30,
@@ -5249,12 +8183,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 30,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 24,
@@ -5268,7 +8204,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 21,
@@ -5286,7 +8223,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -5300,7 +8238,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "OBSIDIAN",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "OBSIDIAN",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "OBSIDIAN",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "OBSIDIAN",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_OBSIDIAN",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_OBSIDIAN",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_OBSIDIAN",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_OBSIDIAN",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_OBSIDIAN",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_OBSIDIAN",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_OBSIDIAN",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Pig Minion": {
       "id": "PIG_GENERATOR",
@@ -5316,12 +8326,14 @@ export const MINION_DATA = {
               "amount": 64
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 24,
@@ -5331,12 +8343,14 @@ export const MINION_DATA = {
               "amount": 448
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 22,
@@ -5350,12 +8364,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 20,
@@ -5369,12 +8385,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 17,
@@ -5388,12 +8406,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 17,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 13,
@@ -5411,7 +8431,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 10,
@@ -5429,7 +8450,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -5443,7 +8465,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "PORK",
+            "amount": 64
+          }
+        ],
+        "2": [
+          {
+            "item": "PORK",
+            "amount": 128
+          }
+        ],
+        "3": [
+          {
+            "item": "PORK",
+            "amount": 256
+          }
+        ],
+        "4": [
+          {
+            "item": "PORK",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_PORK",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_PORK",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_PORK",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_PORK",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_PORK",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_PORK",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_GRILLED_PORK",
+            "amount": 8
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Potato Minion": {
       "id": "POTATO_GENERATOR",
@@ -5459,12 +8553,14 @@ export const MINION_DATA = {
               "amount": 128
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 18,
@@ -5474,12 +8570,14 @@ export const MINION_DATA = {
               "amount": 896
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 18,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 16,
@@ -5493,12 +8591,14 @@ export const MINION_DATA = {
               "amount": 32
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 16,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 14,
@@ -5512,12 +8612,14 @@ export const MINION_DATA = {
               "amount": 224
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 14,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 12,
@@ -5531,12 +8633,14 @@ export const MINION_DATA = {
               "amount": 992
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 12,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 10,
@@ -5554,7 +8658,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 8,
@@ -5572,7 +8677,8 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -5586,7 +8692,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "POTATO_ITEM",
+            "amount": 128
+          }
+        ],
+        "2": [
+          {
+            "item": "POTATO_ITEM",
+            "amount": 256
+          }
+        ],
+        "3": [
+          {
+            "item": "POTATO_ITEM",
+            "amount": 512
+          }
+        ],
+        "4": [
+          {
+            "item": "ENCHANTED_POTATO",
+            "amount": 8
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_POTATO",
+            "amount": 24
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_POTATO",
+            "amount": 64
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_POTATO",
+            "amount": 128
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_POTATO",
+            "amount": 256
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_POTATO",
+            "amount": 512
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_BAKED_POTATO",
+            "amount": 8
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_BAKED_POTATO",
+            "amount": 16
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Pumpkin Minion": {
       "id": "PUMPKIN_GENERATOR",
@@ -5602,12 +8780,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 32,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 30,
@@ -5617,12 +8797,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 30,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 27,
@@ -5636,12 +8818,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 27,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 24,
@@ -5655,12 +8839,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 20,
@@ -5674,12 +8860,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 16,
@@ -5693,7 +8881,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 12,
@@ -5707,7 +8896,8 @@ export const MINION_DATA = {
               "amount": 2040
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -5721,7 +8911,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "PUMPKIN",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "PUMPKIN",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "PUMPKIN",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "PUMPKIN",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_PUMPKIN",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_PUMPKIN",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_PUMPKIN",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_PUMPKIN",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_PUMPKIN",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_PUMPKIN",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_PUMPKIN",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Quartz Minion": {
       "id": "QUARTZ_GENERATOR",
@@ -5737,12 +8999,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 22.5,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 21,
@@ -5752,12 +9016,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 21,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 19,
@@ -5771,12 +9037,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 19,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 17,
@@ -5790,12 +9058,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 17,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 14.5,
@@ -5809,12 +9079,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 14.5,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 11.5,
@@ -5832,7 +9104,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 10,
@@ -5854,7 +9127,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -5868,7 +9142,89 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "QUARTZ",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "QUARTZ",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "QUARTZ",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "QUARTZ",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_QUARTZ",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_QUARTZ",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_QUARTZ",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_QUARTZ",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_QUARTZ",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_QUARTZ",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_QUARTZ_BLOCK",
+            "amount": 8
+          }
+        ],
+        "12": [
+          {
+            "item": "ENCHANTED_QUARTZ_BLOCK",
+            "amount": 16
+          },
+          {
+            "item": "COINS",
+            "amount": 2000000
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Rabbit Minion": {
       "id": "RABBIT_GENERATOR",
@@ -5884,12 +9240,14 @@ export const MINION_DATA = {
               "amount": 64
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 320
         },
         "3": {
           "speed": 24,
@@ -5899,12 +9257,14 @@ export const MINION_DATA = {
               "amount": 448
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 320
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 448
         },
         "5": {
           "speed": 22,
@@ -5918,12 +9278,14 @@ export const MINION_DATA = {
               "amount": 32
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 448
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 20,
@@ -5937,12 +9299,14 @@ export const MINION_DATA = {
               "amount": 224
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 17,
@@ -5956,12 +9320,14 @@ export const MINION_DATA = {
               "amount": 992
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 17,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 13,
@@ -5979,7 +9345,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 10,
@@ -5997,7 +9364,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -6029,7 +9397,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "RABBIT",
+            "amount": 64
+          }
+        ],
+        "2": [
+          {
+            "item": "RABBIT",
+            "amount": 128
+          }
+        ],
+        "3": [
+          {
+            "item": "RABBIT",
+            "amount": 256
+          }
+        ],
+        "4": [
+          {
+            "item": "RABBIT",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_RABBIT",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_RABBIT",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_RABBIT",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_RABBIT",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_RABBIT",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_RABBIT",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_COOKED_RABBIT",
+            "amount": 8
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Red Sand Minion": {
       "id": "RED_SAND_GENERATOR",
@@ -6045,12 +9485,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 128
         },
         "3": {
           "speed": 24,
@@ -6060,12 +9502,14 @@ export const MINION_DATA = {
               "amount": 848
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 320
         },
         "5": {
           "speed": 22,
@@ -6079,12 +9523,14 @@ export const MINION_DATA = {
               "amount": 48
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 512
         },
         "7": {
           "speed": 20,
@@ -6098,12 +9544,14 @@ export const MINION_DATA = {
               "amount": 240
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 704
         },
         "9": {
           "speed": 18,
@@ -6117,12 +9565,14 @@ export const MINION_DATA = {
               "amount": 1008
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 18,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 896
         },
         "11": {
           "speed": 13,
@@ -6140,7 +9590,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 11,
@@ -6158,7 +9609,8 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -6172,7 +9624,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "SAND-1",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "SAND-1",
+            "amount": 256
+          }
+        ],
+        "3": [
+          {
+            "item": "SAND-1",
+            "amount": 512
+          }
+        ],
+        "4": [
+          {
+            "item": "ENCHANTED_RED_SAND",
+            "amount": 16
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_RED_SAND",
+            "amount": 32
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_RED_SAND",
+            "amount": 64
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_RED_SAND",
+            "amount": 128
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_RED_SAND",
+            "amount": 256
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_RED_SAND",
+            "amount": 512
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_RED_SAND_CUBE",
+            "amount": 8
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_RED_SAND_CUBE",
+            "amount": 16
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Redstone Minion": {
       "id": "REDSTONE_GENERATOR",
@@ -6188,12 +9712,14 @@ export const MINION_DATA = {
               "amount": 128
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 29,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 27,
@@ -6203,12 +9729,14 @@ export const MINION_DATA = {
               "amount": 896
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 27,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 25,
@@ -6222,12 +9750,14 @@ export const MINION_DATA = {
               "amount": 32
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 25,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 23,
@@ -6241,12 +9771,14 @@ export const MINION_DATA = {
               "amount": 224
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 23,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 21,
@@ -6260,12 +9792,14 @@ export const MINION_DATA = {
               "amount": 992
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 21,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 18,
@@ -6283,7 +9817,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 16,
@@ -6305,7 +9840,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -6319,7 +9855,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "REDSTONE",
+            "amount": 128
+          }
+        ],
+        "2": [
+          {
+            "item": "REDSTONE",
+            "amount": 256
+          }
+        ],
+        "3": [
+          {
+            "item": "REDSTONE",
+            "amount": 512
+          }
+        ],
+        "4": [
+          {
+            "item": "ENCHANTED_REDSTONE",
+            "amount": 8
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_REDSTONE",
+            "amount": 24
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_REDSTONE",
+            "amount": 64
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_REDSTONE",
+            "amount": 128
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_REDSTONE",
+            "amount": 256
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_REDSTONE",
+            "amount": 512
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_REDSTONE_BLOCK",
+            "amount": 8
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_REDSTONE_BLOCK",
+            "amount": 16
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Revenant Minion": {
       "id": "REVENANT_GENERATOR",
@@ -6343,12 +9951,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 29,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 26,
@@ -6370,12 +9980,14 @@ export const MINION_DATA = {
               "amount": 320
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 23,
@@ -6401,12 +10013,14 @@ export const MINION_DATA = {
               "amount": 7
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 23,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 19,
@@ -6432,12 +10046,14 @@ export const MINION_DATA = {
               "amount": 49
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 19,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 14.5,
@@ -6463,12 +10079,14 @@ export const MINION_DATA = {
               "amount": 217
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 14.5,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 10,
@@ -6494,7 +10112,8 @@ export const MINION_DATA = {
               "amount": 889
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 8,
@@ -6524,7 +10143,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -6547,7 +10167,126 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "REVENANT_FLESH",
+            "amount": 80
+          },
+          {
+            "item": "CRYSTALLIZED_HEART",
+            "amount": 1
+          }
+        ],
+        "2": [
+          {
+            "item": "REVENANT_FLESH",
+            "amount": 140
+          },
+          {
+            "item": "ZOMBIE_GENERATOR_1",
+            "amount": 1
+          }
+        ],
+        "3": [
+          {
+            "item": "REVENANT_FLESH",
+            "amount": 280
+          },
+          {
+            "item": "ZOMBIE_GENERATOR_2",
+            "amount": 1
+          }
+        ],
+        "4": [
+          {
+            "item": "REVENANT_FLESH",
+            "amount": 448
+          },
+          {
+            "item": "ZOMBIE_GENERATOR_3",
+            "amount": 1
+          }
+        ],
+        "5": [
+          {
+            "item": "REVENANT_VISCERA",
+            "amount": 7
+          },
+          {
+            "item": "ZOMBIE_GENERATOR_4",
+            "amount": 1
+          }
+        ],
+        "6": [
+          {
+            "item": "REVENANT_VISCERA",
+            "amount": 14
+          },
+          {
+            "item": "ZOMBIE_GENERATOR_5",
+            "amount": 1
+          }
+        ],
+        "7": [
+          {
+            "item": "REVENANT_VISCERA",
+            "amount": 28
+          },
+          {
+            "item": "ZOMBIE_GENERATOR_6",
+            "amount": 1
+          }
+        ],
+        "8": [
+          {
+            "item": "REVENANT_VISCERA",
+            "amount": 56
+          },
+          {
+            "item": "ZOMBIE_GENERATOR_7",
+            "amount": 1
+          }
+        ],
+        "9": [
+          {
+            "item": "REVENANT_VISCERA",
+            "amount": 112
+          },
+          {
+            "item": "ZOMBIE_GENERATOR_8",
+            "amount": 1
+          }
+        ],
+        "10": [
+          {
+            "item": "REVENANT_VISCERA",
+            "amount": 224
+          },
+          {
+            "item": "ZOMBIE_GENERATOR_9",
+            "amount": 1
+          }
+        ],
+        "11": [
+          {
+            "item": "REVENANT_VISCERA",
+            "amount": 448
+          },
+          {
+            "item": "ZOMBIE_GENERATOR_10",
+            "amount": 1
+          }
+        ],
+        "12": [
+          {
+            "item": "GENERATOR_UPGRADE_STONE_REVENANT_12",
+            "amount": 1
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items"
     },
     "Sand Minion": {
       "id": "SAND_GENERATOR",
@@ -6563,12 +10302,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 24,
@@ -6578,12 +10319,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 22,
@@ -6597,12 +10340,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 19,
@@ -6616,12 +10361,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 19,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 16,
@@ -6635,12 +10382,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 16,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 13,
@@ -6654,7 +10403,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -6668,7 +10418,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "SAND",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "SAND",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "SAND",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "SAND",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_SAND",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_SAND",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_SAND",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_SAND",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_SAND",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_SAND",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_SAND",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Sheep Minion": {
       "id": "SHEEP_GENERATOR",
@@ -6684,12 +10506,14 @@ export const MINION_DATA = {
               "amount": 64
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 128
         },
         "2": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 256
         },
         "3": {
           "speed": 22,
@@ -6699,12 +10523,14 @@ export const MINION_DATA = {
               "amount": 448
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 256
         },
         "4": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 20,
@@ -6718,12 +10544,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 18,
@@ -6737,12 +10565,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 18,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 16,
@@ -6756,12 +10586,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 16,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 12,
@@ -6779,7 +10611,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 9,
@@ -6797,7 +10630,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -6820,7 +10654,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "MUTTON",
+            "amount": 64
+          }
+        ],
+        "2": [
+          {
+            "item": "MUTTON",
+            "amount": 128
+          }
+        ],
+        "3": [
+          {
+            "item": "MUTTON",
+            "amount": 256
+          }
+        ],
+        "4": [
+          {
+            "item": "MUTTON",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_MUTTON",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_MUTTON",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_MUTTON",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_MUTTON",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_MUTTON",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_MUTTON",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_COOKED_MUTTON",
+            "amount": 8
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Skeleton Minion": {
       "id": "SKELETON_GENERATOR",
@@ -6836,12 +10742,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 24,
@@ -6851,12 +10759,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 22,
@@ -6870,12 +10780,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 20,
@@ -6889,12 +10801,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 17,
@@ -6908,12 +10822,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 17,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 13,
@@ -6927,7 +10843,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -6941,7 +10858,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "BONE",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "BONE",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "BONE",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "BONE",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_BONE",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_BONE",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_BONE",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_BONE",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_BONE",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_BONE",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_BONE",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Slime Minion": {
       "id": "SLIME_GENERATOR",
@@ -6957,12 +10946,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 24,
@@ -6972,12 +10963,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 22,
@@ -6991,12 +10984,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 19,
@@ -7010,12 +11005,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 19,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 16,
@@ -7029,12 +11026,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 16,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 12,
@@ -7052,7 +11051,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -7066,7 +11066,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "SLIME_BALL",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "SLIME_BALL",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "SLIME_BALL",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "SLIME_BALL",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_SLIME_BALL",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_SLIME_BALL",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_SLIME_BALL",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_SLIME_BALL",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_SLIME_BALL",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_SLIME_BALL",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_SLIME_BLOCK",
+            "amount": 8
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Snow Minion": {
       "id": "SNOW_GENERATOR",
@@ -7077,12 +11149,14 @@ export const MINION_DATA = {
         "1": {
           "speed": 13,
           "recipe": [],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 13,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 12,
@@ -7092,12 +11166,14 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 12,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 11,
@@ -7107,12 +11183,14 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 11,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 9.5,
@@ -7126,12 +11204,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 9.5,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 8,
@@ -7145,12 +11225,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 8,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 6.5,
@@ -7164,7 +11246,8 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 5.8,
@@ -7182,7 +11265,8 @@ export const MINION_DATA = {
               "amount": 2000000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -7212,12 +11296,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 128
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 256
         },
         "3": {
           "speed": 24,
@@ -7227,12 +11313,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 256
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 22,
@@ -7246,12 +11334,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 20,
@@ -7265,12 +11355,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 17,
@@ -7284,12 +11376,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 17,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 13,
@@ -7303,7 +11397,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -7326,7 +11421,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "STRING",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "STRING",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "STRING",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "STRING",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_STRING",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_STRING",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_STRING",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_STRING",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_STRING",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_STRING",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_STRING",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Spruce Minion": {
       "id": "SPRUCE_GENERATOR",
@@ -7342,12 +11509,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 48,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 45,
@@ -7357,12 +11526,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 45,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 42,
@@ -7376,12 +11547,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 42,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 38,
@@ -7395,12 +11568,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 38,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 33,
@@ -7414,12 +11589,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 33,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 27,
@@ -7433,7 +11610,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -7447,7 +11625,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "LOG-1",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "LOG-1",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "LOG-1",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "LOG-1",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_SPRUCE_LOG",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_SPRUCE_LOG",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_SPRUCE_LOG",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_SPRUCE_LOG",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_SPRUCE_LOG",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_SPRUCE_LOG",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_SPRUCE_LOG",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Sugar Cane Minion": {
       "id": "SUGAR_CANE_GENERATOR",
@@ -7463,12 +11713,14 @@ export const MINION_DATA = {
               "amount": 128
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 20,
@@ -7478,12 +11730,14 @@ export const MINION_DATA = {
               "amount": 896
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 18,
@@ -7497,12 +11751,14 @@ export const MINION_DATA = {
               "amount": 32
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 18,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 16,
@@ -7516,12 +11772,14 @@ export const MINION_DATA = {
               "amount": 224
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 16,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 14.5,
@@ -7535,12 +11793,14 @@ export const MINION_DATA = {
               "amount": 992
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 14.5,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 12,
@@ -7558,7 +11818,8 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 9,
@@ -7576,7 +11837,8 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -7590,7 +11852,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "SUGAR_CANE",
+            "amount": 128
+          }
+        ],
+        "2": [
+          {
+            "item": "SUGAR_CANE",
+            "amount": 256
+          }
+        ],
+        "3": [
+          {
+            "item": "SUGAR_CANE",
+            "amount": 512
+          }
+        ],
+        "4": [
+          {
+            "item": "ENCHANTED_SUGAR",
+            "amount": 8
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_SUGAR",
+            "amount": 24
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_SUGAR",
+            "amount": 64
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_SUGAR",
+            "amount": 128
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_SUGAR",
+            "amount": 256
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_SUGAR",
+            "amount": 512
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_SUGAR_CANE",
+            "amount": 8
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_SUGAR_CANE",
+            "amount": 16
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Tarantula Minion": {
       "id": "TARANTULA_GENERATOR",
@@ -7610,12 +11944,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 29,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 26,
@@ -7633,12 +11969,14 @@ export const MINION_DATA = {
               "amount": 320
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 23,
@@ -7660,12 +11998,14 @@ export const MINION_DATA = {
               "amount": 7
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 23,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 19,
@@ -7691,12 +12031,14 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 19,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 14.5,
@@ -7722,12 +12064,14 @@ export const MINION_DATA = {
               "amount": 208
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 14.5,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 10,
@@ -7753,7 +12097,8 @@ export const MINION_DATA = {
               "amount": 960
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 8,
@@ -7783,7 +12128,8 @@ export const MINION_DATA = {
               "amount": 1
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -7815,7 +12161,126 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "TARANTULA_WEB",
+            "amount": 80
+          },
+          {
+            "item": "ENCHANTED_FERMENTED_SPIDER_EYE",
+            "amount": 1
+          }
+        ],
+        "2": [
+          {
+            "item": "TARANTULA_WEB",
+            "amount": 140
+          },
+          {
+            "item": "SPIDER_GENERATOR_1",
+            "amount": 1
+          }
+        ],
+        "3": [
+          {
+            "item": "TARANTULA_WEB",
+            "amount": 280
+          },
+          {
+            "item": "SPIDER_GENERATOR_2",
+            "amount": 1
+          }
+        ],
+        "4": [
+          {
+            "item": "TARANTULA_WEB",
+            "amount": 448
+          },
+          {
+            "item": "SPIDER_GENERATOR_3",
+            "amount": 1
+          }
+        ],
+        "5": [
+          {
+            "item": "TARANTULA_SILK",
+            "amount": 7
+          },
+          {
+            "item": "SPIDER_GENERATOR_4",
+            "amount": 1
+          }
+        ],
+        "6": [
+          {
+            "item": "TARANTULA_SILK",
+            "amount": 14
+          },
+          {
+            "item": "SPIDER_GENERATOR_5",
+            "amount": 1
+          }
+        ],
+        "7": [
+          {
+            "item": "TARANTULA_SILK",
+            "amount": 28
+          },
+          {
+            "item": "SPIDER_GENERATOR_6",
+            "amount": 1
+          }
+        ],
+        "8": [
+          {
+            "item": "TARANTULA_SILK",
+            "amount": 56
+          },
+          {
+            "item": "SPIDER_GENERATOR_7",
+            "amount": 1
+          }
+        ],
+        "9": [
+          {
+            "item": "TARANTULA_SILK",
+            "amount": 112
+          },
+          {
+            "item": "SPIDER_GENERATOR_8",
+            "amount": 1
+          }
+        ],
+        "10": [
+          {
+            "item": "TARANTULA_SILK",
+            "amount": 224
+          },
+          {
+            "item": "SPIDER_GENERATOR_9",
+            "amount": 1
+          }
+        ],
+        "11": [
+          {
+            "item": "TARANTULA_SILK",
+            "amount": 448
+          },
+          {
+            "item": "SPIDER_GENERATOR_10",
+            "amount": 1
+          }
+        ],
+        "12": [
+          {
+            "item": "GENERATOR_UPGRADE_STONE_TARANTULA_12",
+            "amount": 1
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items"
     },
     "Vampire Minion": {
       "id": "VAMPIRE_GENERATOR",
@@ -7831,12 +12296,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 190,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 175,
@@ -7846,12 +12313,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 175,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 160,
@@ -7865,12 +12334,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 160,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 140,
@@ -7884,12 +12355,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 140,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 117,
@@ -7903,12 +12376,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 117,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 95,
@@ -7922,7 +12397,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -7936,7 +12412,80 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "HEMOVIBE",
+            "amount": 80
+          },
+          {
+            "item": "BAT_PERSON_HELMET",
+            "amount": 1
+          }
+        ],
+        "2": [
+          {
+            "item": "HEMOVIBE",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "HEMOVIBE",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "HEMOVIBE",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "HEMOGLASS",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "HEMOGLASS",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "HEMOGLASS",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "HEMOGLASS",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "HEMOGLASS",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "HEMOGLASS",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "HEMOGLASS",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items"
     },
     "Voidling Minion": {
       "id": "VOIDLING_GENERATOR",
@@ -7956,12 +12505,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 45,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 42,
@@ -7979,12 +12530,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 42,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 39,
@@ -8010,12 +12563,14 @@ export const MINION_DATA = {
               "amount": 7
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 39,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 35,
@@ -8045,12 +12600,14 @@ export const MINION_DATA = {
               "amount": 49
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 35,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 30,
@@ -8084,12 +12641,14 @@ export const MINION_DATA = {
               "amount": 217
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 30,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 24,
@@ -8123,7 +12682,8 @@ export const MINION_DATA = {
               "amount": 889
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -8155,7 +12715,120 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "NULL_SPHERE",
+            "amount": 80
+          },
+          {
+            "item": "ENDERMAN_GENERATOR_1",
+            "amount": 1
+          }
+        ],
+        "2": [
+          {
+            "item": "NULL_SPHERE",
+            "amount": 140
+          },
+          {
+            "item": "OBSIDIAN_GENERATOR_1",
+            "amount": 1
+          }
+        ],
+        "3": [
+          {
+            "item": "NULL_SPHERE",
+            "amount": 280
+          },
+          {
+            "item": "ENDERMAN_GENERATOR_2",
+            "amount": 1
+          }
+        ],
+        "4": [
+          {
+            "item": "NULL_SPHERE",
+            "amount": 448
+          },
+          {
+            "item": "OBSIDIAN_GENERATOR_3",
+            "amount": 1
+          }
+        ],
+        "5": [
+          {
+            "item": "NULL_OVOID",
+            "amount": 7
+          },
+          {
+            "item": "ENDERMAN_GENERATOR_4",
+            "amount": 1
+          }
+        ],
+        "6": [
+          {
+            "item": "NULL_OVOID",
+            "amount": 14
+          },
+          {
+            "item": "OBSIDIAN_GENERATOR_5",
+            "amount": 1
+          }
+        ],
+        "7": [
+          {
+            "item": "NULL_OVOID",
+            "amount": 28
+          },
+          {
+            "item": "ENDERMAN_GENERATOR_6",
+            "amount": 1
+          }
+        ],
+        "8": [
+          {
+            "item": "NULL_OVOID",
+            "amount": 56
+          },
+          {
+            "item": "OBSIDIAN_GENERATOR_7",
+            "amount": 1
+          }
+        ],
+        "9": [
+          {
+            "item": "NULL_OVOID",
+            "amount": 112
+          },
+          {
+            "item": "ENDERMAN_GENERATOR_8",
+            "amount": 1
+          }
+        ],
+        "10": [
+          {
+            "item": "NULL_OVOID",
+            "amount": 224
+          },
+          {
+            "item": "OBSIDIAN_GENERATOR_9",
+            "amount": 1
+          }
+        ],
+        "11": [
+          {
+            "item": "NULL_OVOID",
+            "amount": 448
+          },
+          {
+            "item": "ENDERMAN_GENERATOR_10",
+            "amount": 1
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items"
     },
     "Wheat Minion": {
       "id": "WHEAT_GENERATOR",
@@ -8171,12 +12844,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 128
         },
         "2": {
           "speed": 15,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 256
         },
         "3": {
           "speed": 13,
@@ -8186,12 +12861,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 256
         },
         "4": {
           "speed": 13,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 11,
@@ -8205,12 +12882,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 11,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 10,
@@ -8224,12 +12903,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 10,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 9,
@@ -8243,12 +12924,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 9,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 8,
@@ -8262,7 +12945,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 7,
@@ -8276,7 +12960,8 @@ export const MINION_DATA = {
               "amount": 2040
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -8299,7 +12984,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "WHEAT",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "WHEAT",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "WHEAT",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "WHEAT",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_WHEAT",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_WHEAT",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_WHEAT",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_WHEAT",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_WHEAT",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_WHEAT",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_WHEAT",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Zombie Minion": {
       "id": "ZOMBIE_GENERATOR",
@@ -8315,12 +13072,14 @@ export const MINION_DATA = {
               "amount": 80
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 26,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 192
         },
         "3": {
           "speed": 24,
@@ -8330,12 +13089,14 @@ export const MINION_DATA = {
               "amount": 560
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 24,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 384
         },
         "5": {
           "speed": 22,
@@ -8349,12 +13110,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 22,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 576
         },
         "7": {
           "speed": 20,
@@ -8368,12 +13131,14 @@ export const MINION_DATA = {
               "amount": 56
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 20,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 768
         },
         "9": {
           "speed": 17,
@@ -8387,12 +13152,14 @@ export const MINION_DATA = {
               "amount": 248
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 17,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         },
         "11": {
           "speed": 13,
@@ -8406,7 +13173,8 @@ export const MINION_DATA = {
               "amount": 1016
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         }
       },
       "drops": [
@@ -8447,7 +13215,79 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "ROTTEN_FLESH",
+            "amount": 80
+          }
+        ],
+        "2": [
+          {
+            "item": "ROTTEN_FLESH",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "ROTTEN_FLESH",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "ROTTEN_FLESH",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_ROTTEN_FLESH",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_ROTTEN_FLESH",
+            "amount": 16
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_ROTTEN_FLESH",
+            "amount": 32
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_ROTTEN_FLESH",
+            "amount": 64
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_ROTTEN_FLESH",
+            "amount": 128
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_ROTTEN_FLESH",
+            "amount": 256
+          }
+        ],
+        "11": [
+          {
+            "item": "ENCHANTED_ROTTEN_FLESH",
+            "amount": 512
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "warnings": [
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ]
     },
     "Sunflower Minion": {
       "id": "SUNFLOWER_GENERATOR",
@@ -8463,7 +13303,8 @@ export const MINION_DATA = {
               "amount": 128
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 128
         },
         "2": {
           "speed": 23,
@@ -8473,7 +13314,8 @@ export const MINION_DATA = {
               "amount": 384
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "3": {
           "speed": 22,
@@ -8483,7 +13325,8 @@ export const MINION_DATA = {
               "amount": 896
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 320
         },
         "4": {
           "speed": 21,
@@ -8497,7 +13340,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "5": {
           "speed": 20,
@@ -8511,7 +13355,8 @@ export const MINION_DATA = {
               "amount": 32
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 448
         },
         "6": {
           "speed": 19,
@@ -8525,7 +13370,8 @@ export const MINION_DATA = {
               "amount": 96
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 512
         },
         "7": {
           "speed": 18,
@@ -8539,7 +13385,8 @@ export const MINION_DATA = {
               "amount": 224
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 17,
@@ -8553,7 +13400,8 @@ export const MINION_DATA = {
               "amount": 480
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 704
         },
         "9": {
           "speed": 16,
@@ -8567,7 +13415,8 @@ export const MINION_DATA = {
               "amount": 992
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 15,
@@ -8585,7 +13434,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 896
         },
         "11": {
           "speed": 14,
@@ -8603,12 +13453,14 @@ export const MINION_DATA = {
               "amount": 24
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 13,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         }
       },
       "drops": [
@@ -8633,8 +13485,78 @@ export const MINION_DATA = {
       ],
       "confidence": "HIGH",
       "warnings": [
-        "Normal operation is modeled as a 50/50 long-run day/night split: Sunflowers by day and Moonflowers by night. Dayswitch and Nightswitch are not yet modeled."
-      ]
+        "Normal operation is modeled as a 50/50 long-run day/night split: Sunflowers by day and Moonflowers by night. Dayswitch and Nightswitch are not yet modeled.",
+        "The Tier I vanilla tool cost is excluded; Bazaar ingredient costs use exact NEU recipes."
+      ],
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "DOUBLE_PLANT",
+            "amount": 128
+          }
+        ],
+        "2": [
+          {
+            "item": "DOUBLE_PLANT",
+            "amount": 160
+          }
+        ],
+        "3": [
+          {
+            "item": "DOUBLE_PLANT",
+            "amount": 320
+          }
+        ],
+        "4": [
+          {
+            "item": "DOUBLE_PLANT",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_SUNFLOWER",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_SUNFLOWER",
+            "amount": 24
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_SUNFLOWER",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_SUNFLOWER",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_SUNFLOWER",
+            "amount": 512
+          }
+        ],
+        "10": [
+          {
+            "item": "COMPACTED_SUNFLOWER",
+            "amount": 8
+          }
+        ],
+        "11": [
+          {
+            "item": "COMPACTED_SUNFLOWER",
+            "amount": 16
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items"
     },
     "Lily Pad Minion": {
       "id": "LILY_PAD_GENERATOR",
@@ -8650,7 +13572,8 @@ export const MINION_DATA = {
               "amount": 64
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 64
         },
         "2": {
           "speed": 37.5,
@@ -8660,7 +13583,8 @@ export const MINION_DATA = {
               "amount": 192
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "3": {
           "speed": 33.5,
@@ -8670,7 +13594,8 @@ export const MINION_DATA = {
               "amount": 448
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 192
         },
         "4": {
           "speed": 33.5,
@@ -8680,7 +13605,8 @@ export const MINION_DATA = {
               "amount": 960
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "5": {
           "speed": 29.5,
@@ -8694,7 +13620,8 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 384
         },
         "6": {
           "speed": 29.5,
@@ -8708,7 +13635,8 @@ export const MINION_DATA = {
               "amount": 40
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "7": {
           "speed": 25.5,
@@ -8722,7 +13650,8 @@ export const MINION_DATA = {
               "amount": 104
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 576
         },
         "8": {
           "speed": 25.5,
@@ -8736,7 +13665,8 @@ export const MINION_DATA = {
               "amount": 232
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "9": {
           "speed": 21.5,
@@ -8750,7 +13680,8 @@ export const MINION_DATA = {
               "amount": 488
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 768
         },
         "10": {
           "speed": 21.5,
@@ -8764,7 +13695,8 @@ export const MINION_DATA = {
               "amount": 1000
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "11": {
           "speed": 17.5,
@@ -8782,12 +13714,14 @@ export const MINION_DATA = {
               "amount": 8
             }
           ],
-          "exactRecipe": true
+          "exactRecipe": true,
+          "storage": 960
         },
         "12": {
           "speed": 15,
           "recipe": null,
-          "exactRecipe": false
+          "exactRecipe": false,
+          "storage": 960
         }
       },
       "drops": [
@@ -8801,7 +13735,86 @@ export const MINION_DATA = {
           }
         }
       ],
-      "confidence": "HIGH"
+      "confidence": "HIGH",
+      "upgradeRecipes": {
+        "1": [
+          {
+            "item": "WATER_LILY",
+            "amount": 64
+          },
+          {
+            "item": "FISHING_ROD",
+            "amount": 1
+          }
+        ],
+        "2": [
+          {
+            "item": "WATER_LILY",
+            "amount": 128
+          }
+        ],
+        "3": [
+          {
+            "item": "WATER_LILY",
+            "amount": 256
+          }
+        ],
+        "4": [
+          {
+            "item": "WATER_LILY",
+            "amount": 512
+          }
+        ],
+        "5": [
+          {
+            "item": "ENCHANTED_WATER_LILY",
+            "amount": 8
+          }
+        ],
+        "6": [
+          {
+            "item": "ENCHANTED_WATER_LILY",
+            "amount": 32
+          }
+        ],
+        "7": [
+          {
+            "item": "ENCHANTED_WATER_LILY",
+            "amount": 64
+          }
+        ],
+        "8": [
+          {
+            "item": "ENCHANTED_WATER_LILY",
+            "amount": 128
+          }
+        ],
+        "9": [
+          {
+            "item": "ENCHANTED_WATER_LILY",
+            "amount": 256
+          }
+        ],
+        "10": [
+          {
+            "item": "ENCHANTED_WATER_LILY",
+            "amount": 512
+          }
+        ],
+        "11": [
+          {
+            "item": "CONDENSED_WATER_LILY",
+            "amount": 8
+          }
+        ],
+        "12": [
+          {
+            "item": "GENERATOR_UPGRADE_STONE_LILY_PAD_12",
+            "amount": 1
+          }
+        ]
+      },
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items"
     },
     "Inferno Minion": {
       "id": "INFERNO_GENERATOR",
@@ -8912,16 +13925,31 @@ export const MINION_DATA = {
       "name": "Super Compactor 3000",
       "compactor": true,
       "recipe": [
-        {"item":"ENCHANTED_COBBLESTONE","amount":224},
-        {"item":"ENCHANTED_REDSTONE","amount":32},
-        {"item":"COMPACTOR","amount":1}
+        {
+          "item": "ENCHANTED_COBBLESTONE",
+          "amount": 224
+        },
+        {
+          "item": "ENCHANTED_REDSTONE",
+          "amount": 32
+        },
+        {
+          "item": "COMPACTOR",
+          "amount": 1
+        }
       ]
     },
     "DIAMOND_SPREADING": {
       "name": "Diamond Spreading",
       "recipe": [
-        {"item":"VINE","amount":8},
-        {"item":"ENCHANTED_DIAMOND","amount":1}
+        {
+          "item": "VINE",
+          "amount": 8
+        },
+        {
+          "item": "ENCHANTED_DIAMOND",
+          "amount": 1
+        }
       ],
       "extraDrops": [
         {
@@ -8939,8 +13967,14 @@ export const MINION_DATA = {
       "name": "Minion Expander",
       "speed": 0.05,
       "recipe": [
-        {"item":"ENCHANTED_QUARTZ","amount":16},
-        {"item":"ENCHANTED_REDSTONE","amount":2}
+        {
+          "item": "ENCHANTED_QUARTZ",
+          "amount": 16
+        },
+        {
+          "item": "ENCHANTED_REDSTONE",
+          "amount": 2
+        }
       ],
       "allowDuplicate": true,
       "specialStack": "MULTIPLICATIVE_SAME_ID"
@@ -8950,15 +13984,27 @@ export const MINION_DATA = {
       "speed": 0.2,
       "allowDuplicate": true,
       "recipe": [
-        {"item":"TARANTULA_SILK","amount":102},
-        {"item":"FLY_SWATTER","amount":1}
+        {
+          "item": "TARANTULA_SILK",
+          "amount": 102
+        },
+        {
+          "item": "FLY_SWATTER",
+          "amount": 1
+        }
       ]
     },
     "CORRUPT_SOIL": {
       "name": "Corrupt Soil",
       "recipe": [
-        {"item":"ENCHANTED_MYCELIUM","amount":160},
-        {"item":"CORRUPTED_FRAGMENT","amount":20}
+        {
+          "item": "ENCHANTED_MYCELIUM",
+          "amount": 160
+        },
+        {
+          "item": "CORRUPTED_FRAGMENT",
+          "amount": 20
+        }
       ],
       "condition": {
         "mobSpawning": true
@@ -8988,10 +14034,22 @@ export const MINION_DATA = {
       "name": "Soulflow Engine",
       "exclusiveGroup": "SOULFLOW_ENGINE_LINE",
       "recipe": [
-        {"item":"NULL_ATOM","amount":2},
-        {"item":"LESSER_SOULFLOW_ENGINE","amount":4},
-        {"item":"NULL_OVOID","amount":64},
-        {"item":"REFINED_TITANIUM","amount":12}
+        {
+          "item": "NULL_ATOM",
+          "amount": 2
+        },
+        {
+          "item": "LESSER_SOULFLOW_ENGINE",
+          "amount": 4
+        },
+        {
+          "item": "NULL_OVOID",
+          "amount": 64
+        },
+        {
+          "item": "REFINED_TITANIUM",
+          "amount": 12
+        }
       ],
       "outputMultiplier": 0.5,
       "cooldownDrop": {
@@ -9007,9 +14065,18 @@ export const MINION_DATA = {
       "name": "Lesser Soulflow Engine",
       "exclusiveGroup": "SOULFLOW_ENGINE_LINE",
       "recipe": [
-        {"item":"NULL_OVOID","amount":6},
-        {"item":"ENCHANTED_EYE_OF_ENDER","amount":48},
-        {"item":"ENCHANTED_IRON_BLOCK","amount":8}
+        {
+          "item": "NULL_OVOID",
+          "amount": 6
+        },
+        {
+          "item": "ENCHANTED_EYE_OF_ENDER",
+          "amount": 48
+        },
+        {
+          "item": "ENCHANTED_IRON_BLOCK",
+          "amount": 8
+        }
       ],
       "outputMultiplier": 0.5,
       "cooldownDrop": {
@@ -9025,7 +14092,10 @@ export const MINION_DATA = {
       "name": "Berberis Fuel Injector",
       "speed": 0.15,
       "recipe": [
-        {"item":"WILTED_BERBERIS","amount":336}
+        {
+          "item": "WILTED_BERBERIS",
+          "amount": 336
+        }
       ],
       "condition": {
         "family": "Farming"
@@ -9042,7 +14112,10 @@ export const MINION_DATA = {
     "ENCHANTED_EGG": {
       "name": "Enchanted Egg",
       "recipe": [
-        {"item":"EGG","amount":144}
+        {
+          "item": "EGG",
+          "amount": 144
+        }
       ],
       "condition": {
         "name": "Chicken Minion"
@@ -9062,8 +14135,14 @@ export const MINION_DATA = {
     "FLINT_SHOVEL": {
       "name": "Flint Shovel",
       "recipe": [
-        {"item":"FLINT","amount":10},
-        {"item":"STICK","amount":2}
+        {
+          "item": "FLINT",
+          "amount": 10
+        },
+        {
+          "item": "STICK",
+          "amount": 2
+        }
       ],
       "condition": {
         "name": "Gravel Minion"
@@ -9082,8 +14161,14 @@ export const MINION_DATA = {
   },
   "setupRecipes": {
     "COMPACTOR": [
-      {"item":"ENCHANTED_COBBLESTONE","amount":7},
-      {"item":"ENCHANTED_REDSTONE","amount":1}
+      {
+        "item": "ENCHANTED_COBBLESTONE",
+        "amount": 7
+      },
+      {
+        "item": "ENCHANTED_REDSTONE",
+        "amount": 1
+      }
     ]
   },
   "notes": [
@@ -9201,5 +14286,18 @@ export const MINION_DATA = {
       "item": "ENCHANTED_SUGAR_CANE",
       "ratio": 160
     }
+  },
+  "recipeDataVersion": {
+    "source": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+    "commit": "c4f7d4757641f3a11c74d3d77cec76c100abaf98",
+    "importedAt": "2026-10-10T08:37:35.145Z",
+    "completeThrough11": 58,
+    "completeThrough12": 11,
+    "totalTierFiles": 702,
+    "exactRecipes": 664,
+    "missing": 38,
+    "errors": 0,
+    "withVerifiedStorage": 702,
+    "unverifiedMinions": 2
   }
 };
