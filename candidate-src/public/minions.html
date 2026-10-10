@@ -80,6 +80,16 @@
             <option value="14">14 days</option>
           </select>
         </label>
+        <label>Optimize upgrades for
+          <select id="optimizeFor">
+            <option value="NET">Maximum net profit per day</option>
+            <option value="PAYBACK">Fastest full setup payback</option>
+            <option value="HORIZON">Highest profit after investment</option>
+          </select>
+        </label>
+        <label>Investment horizon (days)
+          <input id="horizonDays" type="number" min="1" max="365" step="1" value="30" />
+        </label>
         <label>Family
           <select id="family">
             <option value="ALL">All families</option>
@@ -93,6 +103,7 @@
             <option value="NET">Net profit</option>
             <option value="GROSS">Gross revenue</option>
             <option value="PAYBACK">Fastest payback</option>
+            <option value="HORIZON">Profit after investment horizon</option>
             <option value="ROI">30-day ROI</option>
                         <option value="STABILITY">Most stable price</option>
             <option value="VS7D">Highest LIVE vs selected history</option>
