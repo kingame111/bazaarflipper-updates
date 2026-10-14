@@ -1,0 +1,49 @@
+name: Verify BazaarFlipper startup and sync v0.6.12
+on:
+  push:
+    branches: [feature/startup-sync-v0.6.12]
+    paths:
+      - candidate-src/**
+      - tests/startup-sync-v0.6.12.test.mjs
+      - tests/minions-v0.6.11.test.mjs
+      - tests/minion-audit-v0.6.11.mjs
+      - scripts/package-v0.6.12.mjs
+      - .github/workflows/startup-sync-v0.6.12.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify startup and 700-snapshot backlog behavior
+        run: node tests/startup-sync-v0.6.12.test.mjs
+      - name: Re-run minion economics regressions
+        run: node tests/minions-v0.6.11.test.mjs
+      - name: Re-run complete synthetic minion matrix
+        run: |
+          node tests/minion-audit-v0.6.11.mjs
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const r=JSON.parse(fs.readFileSync('minion-audit-results.json','utf8'));
+          if(r.sourceFamilyCount!==61) throw Error('Unexpected minion family count');
+          if(r.scenariosExecuted<49000) throw Error('Too few regression cases');
+          const critical=(r.issues||[]).filter(i=>['EXECUTION_FAIL','INVARIANT_FAIL','TWO_SLOT_FUEL_COMBINATIONS'].includes(i.id));
+          if(critical.length) throw Error('Minion regressions: '+JSON.stringify(critical));
+          console.log('FULL MATRIX PASS',r.scenariosExecuted,'scenarios');
+          NODE
+      - name: Build verified v0.6.12 update bundle
+        run: node scripts/package-v0.6.12.mjs
+      - name: Commit verified candidate package
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add releases/0.6.12/ manifest.json
+          git diff --cached --quiet || (git commit -m "Package verified BazaarFlipper v0.6.12 candidate" && git push)
