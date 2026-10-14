@@ -86,6 +86,7 @@ if (dualCollectorEnabled && !collectorState.active) saveCollectorState(collector
 const localOriginId = handoff.role === 'LAPTOP' ? 'LAPTOP' : 'DESKTOP';
 
 const dbPath = path.join(dataDir, 'bazaar.sqlite');
+const marketCachePath = path.join(dataDir, 'last-good-market.json');
 bootLog('[boot] opening/migrating SQLite database');
 const dbOpenStarted=Date.now();
 const db = openDatabase(dbPath,{deferExtendedHistory:true});
@@ -135,6 +136,8 @@ let runningPoll = false;
 let lastHistoryWrite = 0;
 let lastCleanup = 0;
 let previousSnapshotTs = null;
+let lastMarketCacheWrite=0;
+let marketCacheWriteRunning=false;
 let switching = false;
 let updateApplying = false;
 let syncRunning = false;
@@ -257,9 +260,64 @@ function enforceLaptopStoragePolicy(){
   if(dropped){ invalidatePendingSyncCache(); const total=Number(getMeta(db,'laptop_dropped_before_sync')||0)+dropped; setMeta(db,'laptop_dropped_before_sync',total); state.dualSync.droppedBeforeSync=total; console.warn(`[storage] low disk: dropped ${dropped} oldest unsynced laptop snapshots to preserve newer data`); }
 }
 
+loadLastGoodMarketCache();
+
 try {
   if (process.platform === 'win32') os.setPriority(process.pid, os.constants.priority.PRIORITY_BELOW_NORMAL);
 } catch {}
+
+function loadLastGoodMarketCache(){
+  try{
+    if(!fs.existsSync(marketCachePath)) return false;
+    const cached=JSON.parse(fs.readFileSync(marketCachePath,'utf8'));
+    if(!cached || !cached.lastHypixelUpdate || !cached.products || typeof cached.products!=='object') return false;
+    latestBazaarProducts=cached.products;
+    state.flips=Array.isArray(cached.flips)?cached.flips:[];
+    state.reverseNpcFlips=Array.isArray(cached.reverseNpcFlips)?cached.reverseNpcFlips:[];
+    state.lastHypixelUpdate=Number(cached.lastHypixelUpdate)||null;
+    state.lastSuccessfulFetchAt=Number(cached.savedAt)||Number(cached.lastHypixelUpdate)||null;
+    state.lastFetchAt=state.lastSuccessfulFetchAt;
+    state.lastFetchDurationMs=null;
+    state.lastError=null;
+    console.log(`[cache] loaded last good market snapshot; products=${Object.keys(latestBazaarProducts).length}; age=${formatAge(Date.now()-state.lastSuccessfulFetchAt)}`);
+    return true;
+  }catch(error){
+    console.warn('[cache] failed to load last good market snapshot:',error instanceof Error?error.message:String(error));
+    return false;
+  }
+}
+
+function saveLastGoodMarketCache(force=false){
+  const now=Date.now();
+  if(marketCacheWriteRunning || (!force && now-lastMarketCacheWrite<5*60*1000) || !state.lastHypixelUpdate || !Object.keys(latestBazaarProducts).length) return;
+  marketCacheWriteRunning=true;
+  lastMarketCacheWrite=now;
+  const tmp=marketCachePath+'.tmp';
+  let body;
+  try{
+    body=JSON.stringify({
+      version:1,
+      savedAt:state.lastSuccessfulFetchAt||now,
+      lastHypixelUpdate:state.lastHypixelUpdate,
+      products:latestBazaarProducts,
+      flips:state.flips,
+      reverseNpcFlips:state.reverseNpcFlips
+    });
+  }catch(error){
+    marketCacheWriteRunning=false;
+    console.warn('[cache] failed to serialize last good market snapshot:',error instanceof Error?error.message:String(error));
+    return;
+  }
+  fs.writeFile(tmp,body,'utf8',(error)=>{
+    try{
+      if(error) throw error;
+      fs.renameSync(tmp,marketCachePath);
+    }catch(err){
+      console.warn('[cache] failed to persist last good market snapshot:',err instanceof Error?err.message:String(err));
+      try{fs.rmSync(tmp,{force:true});}catch{}
+    }finally{marketCacheWriteRunning=false;}
+  });
+}
 
 function resetRuntimeMarketState() {
   latestBazaarProducts = {};
@@ -443,6 +501,7 @@ async function pollBazaar() {
     state.reverseNpcFlips = reverseNpcFlips;
     state.lastHypixelUpdate = data.lastUpdated;
     state.newSnapshots += 1;
+    saveLastGoodMarketCache(false);
 
     const now = Date.now();
     const freeRamMB = os.freemem() / 1024 / 1024;
@@ -1148,5 +1207,5 @@ handoffServer.listen(handoffPort, '0.0.0.0', () => {
   console.log(`Handoff listener: port ${handoffPort} (${handoff.token ? 'token protected' : 'NOT CONFIGURED'})`);
 });
 
-async function gracefulShutdown(signal='shutdown'){if(shuttingDown)return;shuttingDown=true;collectorActive=false;console.log(`[shutdown] requested by ${signal}; stopping collector, sync and servers`);for(const timer of runtimeTimers){try{clearTimeout(timer);clearInterval(timer);}catch{}}const deadline=Date.now()+5000;while((runningPoll||syncRunning)&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));await Promise.allSettled([new Promise(r=>{try{server.close(()=>r());server.closeAllConnections?.();}catch{r();}}),new Promise(r=>{try{handoffServer.close(()=>r());handoffServer.closeAllConnections?.();}catch{r();}})]);try{checkpointDatabase(db);console.log('[shutdown] database checkpoint complete');}catch{}try{db.close();console.log('[shutdown] database closed');}catch{}releaseInstanceLock();try{console.log('[shutdown] servers stopped; BazaarFlipper stopped safely');}catch{}try{logStream.end();}catch{}process.exit(0);}
+async function gracefulShutdown(signal='shutdown'){if(shuttingDown)return;saveLastGoodMarketCache(true);shuttingDown=true;collectorActive=false;console.log(`[shutdown] requested by ${signal}; stopping collector, sync and servers`);for(const timer of runtimeTimers){try{clearTimeout(timer);clearInterval(timer);}catch{}}const deadline=Date.now()+5000;while((runningPoll||syncRunning)&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));await Promise.allSettled([new Promise(r=>{try{server.close(()=>r());server.closeAllConnections?.();}catch{r();}}),new Promise(r=>{try{handoffServer.close(()=>r());handoffServer.closeAllConnections?.();}catch{r();}})]);try{checkpointDatabase(db);console.log('[shutdown] database checkpoint complete');}catch{}try{db.close();console.log('[shutdown] database closed');}catch{}releaseInstanceLock();try{console.log('[shutdown] servers stopped; BazaarFlipper stopped safely');}catch{}try{logStream.end();}catch{}process.exit(0);}
 for(const signal of ['SIGINT','SIGTERM','SIGBREAK','SIGHUP'])process.on(signal,()=>{void gracefulShutdown(signal);});
