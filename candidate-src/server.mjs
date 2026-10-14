@@ -28,6 +28,7 @@ import {
   pendingHistoryStats,
   dropOldestPendingSnapshots,
   compactDatabase,
+  historyRowEstimate,
   getMeta,
   setMeta
 } from './src/db.mjs';
@@ -108,6 +109,8 @@ let historyImportQueuedBatches=0;
 let syncRetryAfter=0;
 let syncConsecutiveFailures=0;
 let lastSyncBusyLogAt=0;
+let lastPendingSyncCache={at:0,value:null};
+let lastHistoryReliabilityCache={at:0,value:null};
 const previousMarket = new Map();
 
 const logPath = path.join(logsDir, 'server.log');
@@ -236,14 +239,22 @@ function currentBazaarHealth(now=Date.now()) {
 }
 
 function diskStats(){ try{ const st=fs.statfsSync(projectRoot); const block=Number(st.bsize||st.frsize||4096); return {freeBytes:Number(st.bavail)*block,totalBytes:Number(st.blocks)*block}; }catch{return {freeBytes:null,totalBytes:null};} }
-function pendingSync(){ return handoff.role==='LAPTOP' ? pendingHistoryStats(db, localOriginId) : {snapshots:0,rows:0,oldestTs:null,newestTs:null}; }
+function pendingSync(force=false){
+  if(handoff.role!=='LAPTOP') return {snapshots:0,rows:0,oldestTs:null,newestTs:null};
+  const now=Date.now();
+  if(!force && lastPendingSyncCache.value && now-lastPendingSyncCache.at<5000) return lastPendingSyncCache.value;
+  const value=pendingHistoryStats(db,localOriginId);
+  lastPendingSyncCache={at:now,value};
+  return value;
+}
+function invalidatePendingSyncCache(){ lastPendingSyncCache={at:0,value:null}; }
 function enforceLaptopStoragePolicy(){
   if (!(dualCollectorEnabled && handoff.role==='LAPTOP')) return;
   const minFreeGB=Math.max(1,Number(config.laptopMinimumFreeDiskGB)||10);
   let d=diskStats(); if(d.freeBytes==null || d.freeBytes>=minFreeGB*1024**3) return;
   let dropped=0;
-  for(let i=0;i<100 && d.freeBytes<minFreeGB*1024**3;i++){ const x=dropOldestPendingSnapshots(db,localOriginId,10); if(!x.snapshotsDeleted) break; dropped += x.snapshotsDeleted; if(i%5===4){compactDatabase(db); d=diskStats();} }
-  if(dropped){ compactDatabase(db); const total=Number(getMeta(db,'laptop_dropped_before_sync')||0)+dropped; setMeta(db,'laptop_dropped_before_sync',total); state.dualSync.droppedBeforeSync=total; console.warn(`[storage] low disk: dropped ${dropped} oldest unsynced laptop snapshots to preserve newer data`); }
+  for(let i=0;i<100 && d.freeBytes<minFreeGB*1024**3;i++){ const x=dropOldestPendingSnapshots(db,localOriginId,10); if(!x.snapshotsDeleted) break; dropped += x.snapshotsDeleted; if(i%5===4){checkpointDatabase(db); d=diskStats();} }
+  if(dropped){ invalidatePendingSyncCache(); const total=Number(getMeta(db,'laptop_dropped_before_sync')||0)+dropped; setMeta(db,'laptop_dropped_before_sync',total); state.dualSync.droppedBeforeSync=total; console.warn(`[storage] low disk: dropped ${dropped} oldest unsynced laptop snapshots to preserve newer data`); }
 }
 
 try {
@@ -519,7 +530,7 @@ function handoffStatus() {
     handoffPort: handoff.handoffPort,
     collectorActive,
     switching,
-    localHistoryRows: historyCount(db),
+    localHistoryRows: handoff.role==='LAPTOP' ? pendingSync().rows : historyRowEstimate(db),
     projectRoot,
     databasePath: dbPath,
     dualCollectorEnabled,
@@ -536,7 +547,9 @@ function median(values) {
   return list.length%2?list[mid]:(list[mid-1]+list[mid])/2;
 }
 
-function historyReliabilitySummary() {
+function historyReliabilitySummary(force=false) {
+  const cacheNow=Date.now();
+  if(!force && lastHistoryReliabilityCache.value && cacheNow-lastHistoryReliabilityCache.at<15000) return lastHistoryReliabilityCache.value;
   const threshold=0.80, intervalMs=Math.max(30,Number(config.historyIntervalSeconds)||300)*1000;
   const newest=Number(db.prepare('SELECT MAX(bucket_ts) newest FROM history_snapshot_meta').get()?.newest)||0;
   const cutoff=Math.max(0,newest-7*86400000);
@@ -552,7 +565,9 @@ function historyReliabilitySummary() {
   const d=Math.max(1,Math.min(7,Math.floor(reliableDepthMs/86400000)||1));
   const stats=[...historyStats.values()].filter(x=>Number(x?.[`samples${d}d`])>0);
   const reliable=stats.filter(x=>Number(x?.[`coverage${d}d`])>=threshold);
-  return {threshold,windowDays:7,selectedCoverageWindowDays:d,products:stats.length,reliableProducts:reliable.length,reliableShare:stats.length?reliable.length/stats.length:0,reliableDepthMs,coverage,reliableSince,newestSnapshotTs:newest||null,snapshotCount:stamps.length};
+  const value={threshold,windowDays:7,selectedCoverageWindowDays:d,products:stats.length,reliableProducts:reliable.length,reliableShare:stats.length?reliable.length/stats.length:0,reliableDepthMs,coverage,reliableSince,newestSnapshotTs:newest||null,snapshotCount:stamps.length};
+  lastHistoryReliabilityCache={at:cacheNow,value};
+  return value;
 }
 
 function statusPayload() {
@@ -716,12 +731,12 @@ async function syncLaptopToDesktop(manual=false){
   if(!manual&&Date.now()<syncRetryAfter)return {ok:false,backoff:true,nextRetryAt:syncRetryAfter,pendingSync:pendingSync()};
   syncRunning=true;
   state.dualSync.lastSyncAt=Date.now();
-  const before=pendingSync();
+  const before=pendingSync(true);
   try{
     let sentSnapshots=0,sentRows=0,acknowledgedSnapshots=0,deletedRows=0;
-    const maxBatches=manual?500:8;
+    const maxBatches=manual?500:2;
     for(let i=0;i<maxBatches;i++){
-      const snaps=exportPendingHistorySnapshots(db,localOriginId,Number(config.syncBatchSnapshots)||12);
+      const snaps=exportPendingHistorySnapshots(db,localOriginId,Math.max(1,Math.min(4,Number(config.syncBatchSnapshots)||4)));
       if(!snaps.length) break;
       const result=await fetchPeerJson('/handoff/sync/import',{method:'POST',body:JSON.stringify({sourceRole:'LAPTOP',snapshots:snaps})},90000);
       if(!result?.ok) throw new Error('Desktop did not confirm history import.');
@@ -730,9 +745,11 @@ async function syncLaptopToDesktop(manual=false){
       sentRows+=snaps.reduce((a,x)=>a+x.rows.length,0);
       acknowledgedSnapshots+=ack.snapshotsDeleted;
       deletedRows+=ack.rowsDeleted;
+      invalidatePendingSyncCache();
+      if(i<maxBatches-1) await new Promise(resolve=>setImmediate(resolve));
     }
-    if(acknowledgedSnapshots) compactDatabase(db);
-    const after=pendingSync();
+    if(acknowledgedSnapshots) invalidatePendingSyncCache();
+    const after=pendingSync(true);
     const now=Date.now();
     syncConsecutiveFailures=0;syncRetryAfter=0;
     Object.assign(state.dualSync,{lastSuccessAt:now,lastTransferAt:now,lastError:null,lastErrorType:null,peerReachable:true});
@@ -751,7 +768,7 @@ async function syncLaptopToDesktop(manual=false){
     state.dualSync.peerReachable=false;
     syncConsecutiveFailures=Math.min(5,syncConsecutiveFailures+1);
     syncRetryAfter=Date.now()+Math.min(120000,30000*(2**(syncConsecutiveFailures-1)));
-    const pending=pendingSync();
+    const pending=pendingSync(true);
     console.warn(`[sync] LAPTOP->DESKTOP failed [${type}]; pendingSnapshots=${pending.snapshots} pendingRows=${pending.rows}; data kept locally; error=${message}`);
     if(manual) throw error;
     return {ok:false,error:message,errorType:type,pendingSync:pending};
@@ -1085,31 +1102,37 @@ server.listen(port, host, () => {
 
       if(handoff.role!=='LAPTOP') void refreshHistoryStatsAsync('startup',true);
 
-      await refreshMayorTaxContext();
-      void refreshUpdateStatus();
-      if (collectorActive) {
-        await refreshItems();
-        await pollBazaar();
-      }
+      const runAutoSync = () => {
+        if(!dualCollectorEnabled || shuttingDown) return;
+        void syncHistoryWithPeer(false).catch((error) => {
+          const message = error instanceof Error ? error.message : String(error);
+          const type = classifyRuntimeError(error);
+          state.dualSync.lastError = message;
+          state.dualSync.lastErrorType = type;
+          state.dualSync.peerReachable = false;
+          console.warn(`[sync] automatic sync wrapper failed [${type}]; server continues; error=${message}`);
+        });
+      };
+
       keepTimer(setInterval(pollBazaar, config.pollIntervalSeconds * 1000));
       keepTimer(setInterval(refreshItems, 6 * 60 * 60 * 1000));
       keepTimer(setInterval(refreshMayorTaxContext, 15 * 60 * 1000));
       keepTimer(setInterval(refreshUpdateStatus, Math.max(5, Number(config.updateCheckMinutes) || 30) * 60 * 1000));
       if(handoff.role!=='LAPTOP') keepTimer(setInterval(()=>{void refreshHistoryStatsAsync('periodic',false);},historyStatsRefreshIntervalMs));
-      if (dualCollectorEnabled) {
-        const runAutoSync = () => {
-          void syncHistoryWithPeer(false).catch((error) => {
-            const message = error instanceof Error ? error.message : String(error);
-            const type = classifyRuntimeError(error);
-            state.dualSync.lastError = message;
-            state.dualSync.lastErrorType = type;
-            state.dualSync.peerReachable = false;
-            console.warn(`[sync] automatic sync wrapper failed [${type}]; server continues; error=${message}`);
-          });
-        };
-        keepTimer(setTimeout(runAutoSync,5000));
+      if(dualCollectorEnabled){
+        keepTimer(setTimeout(runAutoSync,250));
         keepTimer(setInterval(runAutoSync,Math.max(30,Number(config.syncIntervalSeconds)||60)*1000));
       }
+
+      bootLog('[boot] runtime schedulers armed; external startup work is background-only');
+      console.log('[startup] runtime ready; Hypixel and sync continue independently in background');
+
+      void refreshMayorTaxContext();
+      void refreshUpdateStatus();
+      if(collectorActive){
+        void refreshItems().finally(()=>{void pollBazaar();});
+      }
+
       bootLog('[boot] full startup complete');
       console.log('[startup] full initialization complete');
     } catch(error) {
