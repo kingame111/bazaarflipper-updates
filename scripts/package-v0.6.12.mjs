@@ -7,7 +7,7 @@ import {spawnSync} from 'node:child_process';
 
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const baseline=JSON.parse(fs.readFileSync('manifest.json','utf8'));
-if(baseline.version!=='0.6.11') throw Error('Wrong base version: '+baseline.version);
+if(!['0.6.11','0.6.12'].includes(baseline.version)) throw Error('Wrong base version: '+baseline.version);
 
 const raw=Buffer.from(baseline.bundle.parts.map(p=>fs.readFileSync(p,'utf8').trim()).join(''),'base64');
 const baseFiles=JSON.parse(gunzipSync(raw).toString('utf8')).files;
@@ -28,6 +28,7 @@ for(const p of paths){
 const pkg=JSON.parse(Buffer.from(data['package.json'],'base64').toString('utf8'));
 if(pkg.version!=='0.6.12') throw Error('Version mismatch');
 
+fs.rmSync('releases/0.6.12',{recursive:true,force:true});
 const archive=gzipSync(Buffer.from(JSON.stringify({files:data}),'utf8'),{level:9});
 const encoded=archive.toString('base64'),parts=[];
 for(let i=0;i<encoded.length;i+=16000){
