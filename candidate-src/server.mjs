@@ -27,7 +27,6 @@ import {
   acknowledgeHistorySnapshots,
   pendingHistoryStats,
   dropOldestPendingSnapshots,
-  compactDatabase,
   historyRowEstimate,
   getMeta,
   setMeta
@@ -299,7 +298,12 @@ function saveLastGoodMarketCache(force=false){
       version:1,
       savedAt:state.lastSuccessfulFetchAt||now,
       lastHypixelUpdate:state.lastHypixelUpdate,
-      products:latestBazaarProducts,
+      products:Object.fromEntries(Object.entries(latestBazaarProducts).map(([id,p])=>[id,{
+        product_id:p?.product_id??id,
+        quick_status:p?.quick_status||{},
+        buy_summary:Array.isArray(p?.buy_summary)?p.buy_summary.slice(0,1):[],
+        sell_summary:Array.isArray(p?.sell_summary)?p.sell_summary.slice(0,1):[]
+      }])),
       flips:state.flips,
       reverseNpcFlips:state.reverseNpcFlips
     });
@@ -686,7 +690,7 @@ function statusPayload() {
       updateCheckMinutes: Number(config.updateCheckMinutes) || 30,
       autoApplyUpdates: Boolean(config.autoApplyUpdates),
       syncIntervalSeconds: Number(config.syncIntervalSeconds)||60,
-      syncBatchSnapshots: Number(config.syncBatchSnapshots)||12,
+      syncBatchSnapshots: Number(config.syncBatchSnapshots)||4,
       laptopMinimumFreeDiskGB: Number(config.laptopMinimumFreeDiskGB)||10
     }
   };
