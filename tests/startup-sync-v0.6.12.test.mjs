@@ -4,6 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {openDatabase,ensureExtendedHistorySchema,insertHistorySnapshot,pendingHistoryStats,historyRowEstimate} from '../candidate-src/src/db.mjs';
 
+// Regression target: keep local HTTP responsive while hundreds of snapshots drain in background.
 const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'bazaar-sync-test-'));
 const dbPath=path.join(tmp,'test.sqlite');
 const db=openDatabase(dbPath,{deferExtendedHistory:true});
