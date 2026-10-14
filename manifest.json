@@ -1,6 +1,6 @@
 {
   "version": "0.6.12",
-  "publishedAt": "2026-10-14T23:53:04.065Z",
+  "publishedAt": "2026-10-14T23:55:03.707Z",
   "notes": [
     "Decouple startup from Hypixel requests so the UI and dual-sync scheduler become available immediately after local database initialization.",
     "Start dual synchronization independently in the background instead of waiting for Bazaar, item metadata or mayor-tax requests.",
@@ -12,7 +12,7 @@
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "34caa86163c6dd9f3ad22e11fe446bd98fc4ed60ab6c26668f0fc03d48af87dd"
+      "sha256": "ea735cd5565191cc9e3385fe0862e1fb854f691043a27c7a2553dbe3aa7c847e"
     },
     {
       "path": "package.json",
@@ -81,6 +81,6 @@
       "./releases/0.6.12/part-010.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "c4dff509da316e5653cb7a02bd65811a6141bf8cbca65720cade893299b01134"
+    "sha256": "a1b62860f2ea8dca2c6a5af9f142edd15bd496913827cd1f820be0b781518806"
   }
 }
