@@ -194,9 +194,28 @@ export function acknowledgeHistorySnapshots(db, snapshots = [], originId = 'LAPT
 }
 
 export function pendingHistoryStats(db, originId='LAPTOP') {
-  const s=db.prepare('SELECT COUNT(*) n, MIN(ts) oldestTs, MAX(ts) newestTs FROM history_snapshots WHERE origin_id=?').get(originId);
-  const r=db.prepare('SELECT COUNT(*) n FROM history WHERE ts IN (SELECT ts FROM history_snapshots WHERE origin_id=?)').get(originId);
-  return {snapshots:Number(s?.n)||0, rows:Number(r?.n)||0, oldestTs:s?.oldestTs?Number(s.oldestTs):null, newestTs:s?.newestTs?Number(s.newestTs):null};
+  const s=db.prepare(`
+    SELECT COUNT(*) n, MIN(hs.ts) oldestTs, MAX(hs.ts) newestTs,
+           COALESCE(SUM(COALESCE(m.product_count,0)),0) rows,
+           SUM(CASE WHEN m.bucket_ts IS NULL THEN 1 ELSE 0 END) missingMeta
+    FROM history_snapshots hs
+    LEFT JOIN history_snapshot_meta m
+      ON m.bucket_ts=hs.ts AND m.origin_id=hs.origin_id
+    WHERE hs.origin_id=?
+  `).get(originId);
+  let rows=Number(s?.rows)||0;
+  if(Number(s?.missingMeta)>0){
+    rows=Number(db.prepare('SELECT COUNT(*) n FROM history WHERE ts IN (SELECT ts FROM history_snapshots WHERE origin_id=?)').get(originId)?.n)||rows;
+  }
+  return {snapshots:Number(s?.n)||0, rows, oldestTs:s?.oldestTs?Number(s.oldestTs):null, newestTs:s?.newestTs?Number(s.newestTs):null};
+}
+
+export function historyRowEstimate(db) {
+  try {
+    return Number(db.prepare('SELECT COALESCE(SUM(product_count),0) n FROM history_snapshot_meta').get()?.n)||0;
+  } catch {
+    return 0;
+  }
 }
 
 export function dropOldestPendingSnapshots(db, originId='LAPTOP', count=1) {

@@ -27,7 +27,7 @@ import {
   acknowledgeHistorySnapshots,
   pendingHistoryStats,
   dropOldestPendingSnapshots,
-  compactDatabase,
+  historyRowEstimate,
   getMeta,
   setMeta
 } from './src/db.mjs';
@@ -85,6 +85,7 @@ if (dualCollectorEnabled && !collectorState.active) saveCollectorState(collector
 const localOriginId = handoff.role === 'LAPTOP' ? 'LAPTOP' : 'DESKTOP';
 
 const dbPath = path.join(dataDir, 'bazaar.sqlite');
+const marketCachePath = path.join(dataDir, 'last-good-market.json');
 bootLog('[boot] opening/migrating SQLite database');
 const dbOpenStarted=Date.now();
 const db = openDatabase(dbPath,{deferExtendedHistory:true});
@@ -108,6 +109,8 @@ let historyImportQueuedBatches=0;
 let syncRetryAfter=0;
 let syncConsecutiveFailures=0;
 let lastSyncBusyLogAt=0;
+let lastPendingSyncCache={at:0,value:null};
+let lastHistoryReliabilityCache={at:0,value:null};
 const previousMarket = new Map();
 
 const logPath = path.join(logsDir, 'server.log');
@@ -132,6 +135,8 @@ let runningPoll = false;
 let lastHistoryWrite = 0;
 let lastCleanup = 0;
 let previousSnapshotTs = null;
+let lastMarketCacheWrite=0;
+let marketCacheWriteRunning=false;
 let switching = false;
 let updateApplying = false;
 let syncRunning = false;
@@ -236,19 +241,87 @@ function currentBazaarHealth(now=Date.now()) {
 }
 
 function diskStats(){ try{ const st=fs.statfsSync(projectRoot); const block=Number(st.bsize||st.frsize||4096); return {freeBytes:Number(st.bavail)*block,totalBytes:Number(st.blocks)*block}; }catch{return {freeBytes:null,totalBytes:null};} }
-function pendingSync(){ return handoff.role==='LAPTOP' ? pendingHistoryStats(db, localOriginId) : {snapshots:0,rows:0,oldestTs:null,newestTs:null}; }
+function pendingSync(force=false){
+  if(handoff.role!=='LAPTOP') return {snapshots:0,rows:0,oldestTs:null,newestTs:null};
+  const now=Date.now();
+  if(!force && lastPendingSyncCache.value && now-lastPendingSyncCache.at<5000) return lastPendingSyncCache.value;
+  const value=pendingHistoryStats(db,localOriginId);
+  lastPendingSyncCache={at:now,value};
+  return value;
+}
+function invalidatePendingSyncCache(){ lastPendingSyncCache={at:0,value:null}; }
 function enforceLaptopStoragePolicy(){
   if (!(dualCollectorEnabled && handoff.role==='LAPTOP')) return;
   const minFreeGB=Math.max(1,Number(config.laptopMinimumFreeDiskGB)||10);
   let d=diskStats(); if(d.freeBytes==null || d.freeBytes>=minFreeGB*1024**3) return;
   let dropped=0;
-  for(let i=0;i<100 && d.freeBytes<minFreeGB*1024**3;i++){ const x=dropOldestPendingSnapshots(db,localOriginId,10); if(!x.snapshotsDeleted) break; dropped += x.snapshotsDeleted; if(i%5===4){compactDatabase(db); d=diskStats();} }
-  if(dropped){ compactDatabase(db); const total=Number(getMeta(db,'laptop_dropped_before_sync')||0)+dropped; setMeta(db,'laptop_dropped_before_sync',total); state.dualSync.droppedBeforeSync=total; console.warn(`[storage] low disk: dropped ${dropped} oldest unsynced laptop snapshots to preserve newer data`); }
+  for(let i=0;i<100 && d.freeBytes<minFreeGB*1024**3;i++){ const x=dropOldestPendingSnapshots(db,localOriginId,10); if(!x.snapshotsDeleted) break; dropped += x.snapshotsDeleted; if(i%5===4){checkpointDatabase(db); d=diskStats();} }
+  if(dropped){ invalidatePendingSyncCache(); const total=Number(getMeta(db,'laptop_dropped_before_sync')||0)+dropped; setMeta(db,'laptop_dropped_before_sync',total); state.dualSync.droppedBeforeSync=total; console.warn(`[storage] low disk: dropped ${dropped} oldest unsynced laptop snapshots to preserve newer data`); }
 }
+
+loadLastGoodMarketCache();
 
 try {
   if (process.platform === 'win32') os.setPriority(process.pid, os.constants.priority.PRIORITY_BELOW_NORMAL);
 } catch {}
+
+function loadLastGoodMarketCache(){
+  try{
+    if(!fs.existsSync(marketCachePath)) return false;
+    const cached=JSON.parse(fs.readFileSync(marketCachePath,'utf8'));
+    if(!cached || !cached.lastHypixelUpdate || !cached.products || typeof cached.products!=='object') return false;
+    latestBazaarProducts=cached.products;
+    state.flips=Array.isArray(cached.flips)?cached.flips:[];
+    state.reverseNpcFlips=Array.isArray(cached.reverseNpcFlips)?cached.reverseNpcFlips:[];
+    state.lastHypixelUpdate=Number(cached.lastHypixelUpdate)||null;
+    state.lastSuccessfulFetchAt=Number(cached.savedAt)||Number(cached.lastHypixelUpdate)||null;
+    state.lastFetchAt=state.lastSuccessfulFetchAt;
+    state.lastFetchDurationMs=null;
+    state.lastError=null;
+    console.log(`[cache] loaded last good market snapshot; products=${Object.keys(latestBazaarProducts).length}; age=${formatAge(Date.now()-state.lastSuccessfulFetchAt)}`);
+    return true;
+  }catch(error){
+    console.warn('[cache] failed to load last good market snapshot:',error instanceof Error?error.message:String(error));
+    return false;
+  }
+}
+
+function saveLastGoodMarketCache(force=false){
+  const now=Date.now();
+  if(marketCacheWriteRunning || (!force && now-lastMarketCacheWrite<5*60*1000) || !state.lastHypixelUpdate || !Object.keys(latestBazaarProducts).length) return;
+  marketCacheWriteRunning=true;
+  lastMarketCacheWrite=now;
+  const tmp=marketCachePath+'.tmp';
+  let body;
+  try{
+    body=JSON.stringify({
+      version:1,
+      savedAt:state.lastSuccessfulFetchAt||now,
+      lastHypixelUpdate:state.lastHypixelUpdate,
+      products:Object.fromEntries(Object.entries(latestBazaarProducts).map(([id,p])=>[id,{
+        product_id:p?.product_id??id,
+        quick_status:p?.quick_status||{},
+        buy_summary:Array.isArray(p?.buy_summary)?p.buy_summary.slice(0,1):[],
+        sell_summary:Array.isArray(p?.sell_summary)?p.sell_summary.slice(0,1):[]
+      }])),
+      flips:state.flips,
+      reverseNpcFlips:state.reverseNpcFlips
+    });
+  }catch(error){
+    marketCacheWriteRunning=false;
+    console.warn('[cache] failed to serialize last good market snapshot:',error instanceof Error?error.message:String(error));
+    return;
+  }
+  fs.writeFile(tmp,body,'utf8',(error)=>{
+    try{
+      if(error) throw error;
+      fs.renameSync(tmp,marketCachePath);
+    }catch(err){
+      console.warn('[cache] failed to persist last good market snapshot:',err instanceof Error?err.message:String(err));
+      try{fs.rmSync(tmp,{force:true});}catch{}
+    }finally{marketCacheWriteRunning=false;}
+  });
+}
 
 function resetRuntimeMarketState() {
   latestBazaarProducts = {};
@@ -432,6 +505,7 @@ async function pollBazaar() {
     state.reverseNpcFlips = reverseNpcFlips;
     state.lastHypixelUpdate = data.lastUpdated;
     state.newSnapshots += 1;
+    saveLastGoodMarketCache(false);
 
     const now = Date.now();
     const freeRamMB = os.freemem() / 1024 / 1024;
@@ -519,7 +593,7 @@ function handoffStatus() {
     handoffPort: handoff.handoffPort,
     collectorActive,
     switching,
-    localHistoryRows: historyCount(db),
+    localHistoryRows: handoff.role==='LAPTOP' ? pendingSync().rows : historyRowEstimate(db),
     projectRoot,
     databasePath: dbPath,
     dualCollectorEnabled,
@@ -536,7 +610,9 @@ function median(values) {
   return list.length%2?list[mid]:(list[mid-1]+list[mid])/2;
 }
 
-function historyReliabilitySummary() {
+function historyReliabilitySummary(force=false) {
+  const cacheNow=Date.now();
+  if(!force && lastHistoryReliabilityCache.value && cacheNow-lastHistoryReliabilityCache.at<15000) return lastHistoryReliabilityCache.value;
   const threshold=0.80, intervalMs=Math.max(30,Number(config.historyIntervalSeconds)||300)*1000;
   const newest=Number(db.prepare('SELECT MAX(bucket_ts) newest FROM history_snapshot_meta').get()?.newest)||0;
   const cutoff=Math.max(0,newest-7*86400000);
@@ -552,7 +628,9 @@ function historyReliabilitySummary() {
   const d=Math.max(1,Math.min(7,Math.floor(reliableDepthMs/86400000)||1));
   const stats=[...historyStats.values()].filter(x=>Number(x?.[`samples${d}d`])>0);
   const reliable=stats.filter(x=>Number(x?.[`coverage${d}d`])>=threshold);
-  return {threshold,windowDays:7,selectedCoverageWindowDays:d,products:stats.length,reliableProducts:reliable.length,reliableShare:stats.length?reliable.length/stats.length:0,reliableDepthMs,coverage,reliableSince,newestSnapshotTs:newest||null,snapshotCount:stamps.length};
+  const value={threshold,windowDays:7,selectedCoverageWindowDays:d,products:stats.length,reliableProducts:reliable.length,reliableShare:stats.length?reliable.length/stats.length:0,reliableDepthMs,coverage,reliableSince,newestSnapshotTs:newest||null,snapshotCount:stamps.length};
+  lastHistoryReliabilityCache={at:cacheNow,value};
+  return value;
 }
 
 function statusPayload() {
@@ -612,7 +690,7 @@ function statusPayload() {
       updateCheckMinutes: Number(config.updateCheckMinutes) || 30,
       autoApplyUpdates: Boolean(config.autoApplyUpdates),
       syncIntervalSeconds: Number(config.syncIntervalSeconds)||60,
-      syncBatchSnapshots: Number(config.syncBatchSnapshots)||12,
+      syncBatchSnapshots: Number(config.syncBatchSnapshots)||4,
       laptopMinimumFreeDiskGB: Number(config.laptopMinimumFreeDiskGB)||10
     }
   };
@@ -716,12 +794,12 @@ async function syncLaptopToDesktop(manual=false){
   if(!manual&&Date.now()<syncRetryAfter)return {ok:false,backoff:true,nextRetryAt:syncRetryAfter,pendingSync:pendingSync()};
   syncRunning=true;
   state.dualSync.lastSyncAt=Date.now();
-  const before=pendingSync();
+  const before=pendingSync(true);
   try{
     let sentSnapshots=0,sentRows=0,acknowledgedSnapshots=0,deletedRows=0;
-    const maxBatches=manual?500:8;
+    const maxBatches=manual?500:2;
     for(let i=0;i<maxBatches;i++){
-      const snaps=exportPendingHistorySnapshots(db,localOriginId,Number(config.syncBatchSnapshots)||12);
+      const snaps=exportPendingHistorySnapshots(db,localOriginId,Math.max(1,Math.min(4,Number(config.syncBatchSnapshots)||4)));
       if(!snaps.length) break;
       const result=await fetchPeerJson('/handoff/sync/import',{method:'POST',body:JSON.stringify({sourceRole:'LAPTOP',snapshots:snaps})},90000);
       if(!result?.ok) throw new Error('Desktop did not confirm history import.');
@@ -730,9 +808,11 @@ async function syncLaptopToDesktop(manual=false){
       sentRows+=snaps.reduce((a,x)=>a+x.rows.length,0);
       acknowledgedSnapshots+=ack.snapshotsDeleted;
       deletedRows+=ack.rowsDeleted;
+      invalidatePendingSyncCache();
+      if(i<maxBatches-1) await new Promise(resolve=>setImmediate(resolve));
     }
-    if(acknowledgedSnapshots) compactDatabase(db);
-    const after=pendingSync();
+    if(acknowledgedSnapshots) invalidatePendingSyncCache();
+    const after=pendingSync(true);
     const now=Date.now();
     syncConsecutiveFailures=0;syncRetryAfter=0;
     Object.assign(state.dualSync,{lastSuccessAt:now,lastTransferAt:now,lastError:null,lastErrorType:null,peerReachable:true});
@@ -751,7 +831,7 @@ async function syncLaptopToDesktop(manual=false){
     state.dualSync.peerReachable=false;
     syncConsecutiveFailures=Math.min(5,syncConsecutiveFailures+1);
     syncRetryAfter=Date.now()+Math.min(120000,30000*(2**(syncConsecutiveFailures-1)));
-    const pending=pendingSync();
+    const pending=pendingSync(true);
     console.warn(`[sync] LAPTOP->DESKTOP failed [${type}]; pendingSnapshots=${pending.snapshots} pendingRows=${pending.rows}; data kept locally; error=${message}`);
     if(manual) throw error;
     return {ok:false,error:message,errorType:type,pendingSync:pending};
@@ -1085,31 +1165,37 @@ server.listen(port, host, () => {
 
       if(handoff.role!=='LAPTOP') void refreshHistoryStatsAsync('startup',true);
 
-      await refreshMayorTaxContext();
-      void refreshUpdateStatus();
-      if (collectorActive) {
-        await refreshItems();
-        await pollBazaar();
-      }
+      const runAutoSync = () => {
+        if(!dualCollectorEnabled || shuttingDown) return;
+        void syncHistoryWithPeer(false).catch((error) => {
+          const message = error instanceof Error ? error.message : String(error);
+          const type = classifyRuntimeError(error);
+          state.dualSync.lastError = message;
+          state.dualSync.lastErrorType = type;
+          state.dualSync.peerReachable = false;
+          console.warn(`[sync] automatic sync wrapper failed [${type}]; server continues; error=${message}`);
+        });
+      };
+
       keepTimer(setInterval(pollBazaar, config.pollIntervalSeconds * 1000));
       keepTimer(setInterval(refreshItems, 6 * 60 * 60 * 1000));
       keepTimer(setInterval(refreshMayorTaxContext, 15 * 60 * 1000));
       keepTimer(setInterval(refreshUpdateStatus, Math.max(5, Number(config.updateCheckMinutes) || 30) * 60 * 1000));
       if(handoff.role!=='LAPTOP') keepTimer(setInterval(()=>{void refreshHistoryStatsAsync('periodic',false);},historyStatsRefreshIntervalMs));
-      if (dualCollectorEnabled) {
-        const runAutoSync = () => {
-          void syncHistoryWithPeer(false).catch((error) => {
-            const message = error instanceof Error ? error.message : String(error);
-            const type = classifyRuntimeError(error);
-            state.dualSync.lastError = message;
-            state.dualSync.lastErrorType = type;
-            state.dualSync.peerReachable = false;
-            console.warn(`[sync] automatic sync wrapper failed [${type}]; server continues; error=${message}`);
-          });
-        };
-        keepTimer(setTimeout(runAutoSync,5000));
+      if(dualCollectorEnabled){
+        keepTimer(setTimeout(runAutoSync,250));
         keepTimer(setInterval(runAutoSync,Math.max(30,Number(config.syncIntervalSeconds)||60)*1000));
       }
+
+      bootLog('[boot] runtime schedulers armed; external startup work is background-only');
+      console.log('[startup] runtime ready; Hypixel and sync continue independently in background');
+
+      void refreshMayorTaxContext();
+      void refreshUpdateStatus();
+      if(collectorActive){
+        void refreshItems().finally(()=>{void pollBazaar();});
+      }
+
       bootLog('[boot] full startup complete');
       console.log('[startup] full initialization complete');
     } catch(error) {
@@ -1125,5 +1211,5 @@ handoffServer.listen(handoffPort, '0.0.0.0', () => {
   console.log(`Handoff listener: port ${handoffPort} (${handoff.token ? 'token protected' : 'NOT CONFIGURED'})`);
 });
 
-async function gracefulShutdown(signal='shutdown'){if(shuttingDown)return;shuttingDown=true;collectorActive=false;console.log(`[shutdown] requested by ${signal}; stopping collector, sync and servers`);for(const timer of runtimeTimers){try{clearTimeout(timer);clearInterval(timer);}catch{}}const deadline=Date.now()+5000;while((runningPoll||syncRunning)&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));await Promise.allSettled([new Promise(r=>{try{server.close(()=>r());server.closeAllConnections?.();}catch{r();}}),new Promise(r=>{try{handoffServer.close(()=>r());handoffServer.closeAllConnections?.();}catch{r();}})]);try{checkpointDatabase(db);console.log('[shutdown] database checkpoint complete');}catch{}try{db.close();console.log('[shutdown] database closed');}catch{}releaseInstanceLock();try{console.log('[shutdown] servers stopped; BazaarFlipper stopped safely');}catch{}try{logStream.end();}catch{}process.exit(0);}
+async function gracefulShutdown(signal='shutdown'){if(shuttingDown)return;saveLastGoodMarketCache(true);shuttingDown=true;collectorActive=false;console.log(`[shutdown] requested by ${signal}; stopping collector, sync and servers`);for(const timer of runtimeTimers){try{clearTimeout(timer);clearInterval(timer);}catch{}}const deadline=Date.now()+5000;while((runningPoll||syncRunning)&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));await Promise.allSettled([new Promise(r=>{try{server.close(()=>r());server.closeAllConnections?.();}catch{r();}}),new Promise(r=>{try{handoffServer.close(()=>r());handoffServer.closeAllConnections?.();}catch{r();}})]);try{checkpointDatabase(db);console.log('[shutdown] database checkpoint complete');}catch{}try{db.close();console.log('[shutdown] database closed');}catch{}releaseInstanceLock();try{console.log('[shutdown] servers stopped; BazaarFlipper stopped safely');}catch{}try{logStream.end();}catch{}process.exit(0);}
 for(const signal of ['SIGINT','SIGTERM','SIGBREAK','SIGHUP'])process.on(signal,()=>{void gracefulShutdown(signal);});

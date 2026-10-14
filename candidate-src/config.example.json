@@ -14,7 +14,7 @@
   "updateCheckMinutes": 30,
   "autoApplyUpdates": false,
   "syncIntervalSeconds": 30,
-  "syncBatchSnapshots": 12,
+  "syncBatchSnapshots": 4,
   "laptopMinimumFreeDiskGB": 10,
   "hourlyHistoryRetentionDays": 730
 }

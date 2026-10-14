@@ -1,32 +1,30 @@
 {
-  "version": "0.6.11",
-  "publishedAt": "2026-10-10T08:51:29.645Z",
+  "version": "0.6.12",
+  "publishedAt": "2026-10-14T23:55:03.707Z",
   "notes": [
-    "Initial minion overhaul: independently Bazaar-price each verified Ghast tier ingredient including Silver Fang; add the tier XII NPC fee.",
-    "Import snapshot-pinned NotEnoughUpdates exact upgrade recipes for 58 fully craftable minions through XI; flag non-craftable Tier I and unavailable NPC trades.",
-    "Introduce an extensible per-tier recipe resolver and fail closed for incomplete or unverified recipes.",
-    "Fix Diamond Spreading roll counts per resource item instead of per collection cycle.",
-    "Fix PAYBACK ranking that could prefer N/A over valid setup investment.",
-    "Support dynamic tier counts, NET/PAYBACK/HORIZON optimization and separate incremental upgrade payback.",
-    "Use verified tier storage sizes to cap collection-period production and price Budget/Enchanted Hopper overflows at 50%/90% NPC rates.",
-    "Fix missing-value rendering, label estimated multi-item capacity, and provide upgrade payback breakdown."
+    "Decouple startup from Hypixel requests so the UI and dual-sync scheduler become available immediately after local database initialization.",
+    "Start dual synchronization independently in the background instead of waiting for Bazaar, item metadata or mayor-tax requests.",
+    "Bound automatic backlog sync to small batches and yield between batches so hundreds of pending snapshots cannot freeze the local web server.",
+    "Remove routine VACUUM from successful sync acknowledgements; keep acknowledgement transactional without blocking the Node process for compaction.",
+    "Use metadata-backed pending row counts and short-lived status caches to keep /api/status fast on large databases.",
+    "Persist and restore the last known good Bazaar snapshot so restarts during a Hypixel outage open in LAST_GOOD_SNAPSHOT instead of an empty STARTING state."
   ],
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "cc0650ccca9e7b9d6aa658ce3e35e1eb95f1bd6abae67350681fa06eb8e73ec0"
+      "sha256": "ea735cd5565191cc9e3385fe0862e1fb854f691043a27c7a2553dbe3aa7c847e"
     },
     {
       "path": "package.json",
-      "sha256": "22b8988db4019b5bfbdd97c78a47e2e0725547bf33f4e04f4d78af8a46cb10f0"
+      "sha256": "b9c66346c5a117a353c666a59d35f2155c0d47d69b634b2bcbbadc0fcacc403c"
     },
     {
       "path": "config.example.json",
-      "sha256": "254a822ddb97bd9f9537c3be6da9075ead9db0d5dbe2253648b9c7c46eb77e98"
+      "sha256": "6685d15a96a4c68d9013fe4d63bce9b87d5ddbf2c0a6141fd7834d08930bbd4a"
     },
     {
       "path": "src/db.mjs",
-      "sha256": "2d19bb6937dad33d52d4f68429c8b949ef007a6c67b859aba6283b31bd63eca1"
+      "sha256": "a47eac20fa1f7068051b0502e0d3681f981de3d9c5ddb680bf5f4d334b291ca9"
     },
     {
       "path": "src/apply-update.mjs",
@@ -71,18 +69,18 @@
   ],
   "bundle": {
     "parts": [
-      "./releases/0.6.11/part-001.txt",
-      "./releases/0.6.11/part-002.txt",
-      "./releases/0.6.11/part-003.txt",
-      "./releases/0.6.11/part-004.txt",
-      "./releases/0.6.11/part-005.txt",
-      "./releases/0.6.11/part-006.txt",
-      "./releases/0.6.11/part-007.txt",
-      "./releases/0.6.11/part-008.txt",
-      "./releases/0.6.11/part-009.txt",
-      "./releases/0.6.11/part-010.txt"
+      "./releases/0.6.12/part-001.txt",
+      "./releases/0.6.12/part-002.txt",
+      "./releases/0.6.12/part-003.txt",
+      "./releases/0.6.12/part-004.txt",
+      "./releases/0.6.12/part-005.txt",
+      "./releases/0.6.12/part-006.txt",
+      "./releases/0.6.12/part-007.txt",
+      "./releases/0.6.12/part-008.txt",
+      "./releases/0.6.12/part-009.txt",
+      "./releases/0.6.12/part-010.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "1af0bb1a042ebaa946452a95eadcfeb0e6c8b06b38406b00937560137a9b8f90"
+    "sha256": "a1b62860f2ea8dca2c6a5af9f142edd15bd496913827cd1f820be0b781518806"
   }
 }
