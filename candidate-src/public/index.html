@@ -12,7 +12,7 @@
       <div class="heroCopy">
         <p class="eyebrow">HYPIXEL SKYBLOCK</p>
         <h1>BazaarFlipper <span>Local</span></h1>
-        <div class="versionLine">v0.6.9 · Bazaar scanner + Minion Calculator</div>
+        <div class="versionLine" id="appVersion">Bazaar scanner + Minion Calculator</div>
         <p class="sub">A lightweight Bazaar trading dashboard running on your own PC.</p>
       </div>
       <div class="statusCard">
@@ -173,9 +173,10 @@
   <script>
     (() => {
       const el=document.getElementById('dataDepthMeta');
+       const versionEl=document.getElementById('appVersion');
       const span=(ms)=>{const h=Math.max(0,Number(ms)||0)/3600000;return h<1?`${Math.round(h*60)}m`:h<48?`${h.toFixed(h<10?1:0)}h`:`${(h/24).toFixed(1)}d`;};
       const ago=(ts)=>{if(!ts)return '—';const ms=Math.max(0,Date.now()-Number(ts));return ms<60000?`${Math.max(1,Math.round(ms/1000))}s ago`:ms<3600000?`${Math.round(ms/60000)}m ago`:`${(ms/3600000).toFixed(1)}h ago`;};
-      async function refreshDataDepth(){try{const res=await fetch('/api/status',{cache:'no-store'});if(!res.ok)return;const s=await res.json(),h=s.historyReliability;const label='Freshness: '+ago(s.lastHypixelUpdate)+' · Reliable history: ';if(!s.historySchemaReady)el.textContent=label+'initializing…';else if(s.historyStatsLastError)el.textContent=label+'calculation error';else if(s.historyStatsLoading&&!s.historyStatsLastLoadedAt)el.textContent=label+'calculating…';else if(!h?.snapshotCount)el.textContent=label+'no snapshots yet';else el.textContent=label+span(h.reliableDepthMs)+' · '+Math.round(Number(h.coverage||0)*100)+'% coverage · '+(h.reliableProducts||0)+'/'+(h.products||0)+' reliable products'+(s.historyImportQueuedBatches?' · sync refresh queued':'')+(s.historyStatsLoading?' · updating…':'');}catch{}}
+      async function refreshDataDepth(){try{const res=await fetch('/api/status',{cache:'no-store'});if(!res.ok)return;const s=await res.json(),h=s.historyReliability;if(s.version&&versionEl)versionEl.textContent='v'+s.version+' · Bazaar scanner + Minion Calculator';const label='Freshness: '+ago(s.lastHypixelUpdate)+' · Reliable history: ';if(!s.historySchemaReady)el.textContent=label+'initializing…';else if(s.historyStatsLastError)el.textContent=label+'calculation error';else if(s.historyStatsLoading&&!s.historyStatsLastLoadedAt)el.textContent=label+'calculating…';else if(!h?.snapshotCount)el.textContent=label+'no snapshots yet';else el.textContent=label+span(h.reliableDepthMs)+' · '+Math.round(Number(h.coverage||0)*100)+'% coverage · '+(h.reliableProducts||0)+'/'+(h.products||0)+' reliable products'+(s.historyImportQueuedBatches?' · sync refresh queued':'')+(s.historyStatsLoading?' · updating…':'');}catch{}}
       refreshDataDepth();
       setInterval(refreshDataDepth,15000);
     })();
