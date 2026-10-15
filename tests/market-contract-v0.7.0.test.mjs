@@ -51,6 +51,22 @@ assert.equal(calculated.taxRate,0.0125,'withTax cannot mutate original result');
 const reverse=analyseReverseNpc(row,{npcSellPrice:150});
 assert.ok(reverse,'NPC reverse flip should be available if properly priced');
 
+const redSand=MINION_DATA.definitions['Red Sand Minion'];
+const legacyMarket={'SAND:1':{buy_summary:[{pricePerUnit:21,amount:1000}],
+    sell_summary:[{pricePerUnit:19,amount:1000}],quick_status:{buyPrice:21,sellPrice:19}}};
+const normalizedCost=calculateMinion(redSand,{...opts,tier:1},
+  {...ctx,market:legacyMarket,sellMethod:'NPC'});
+assert.equal(normalizedCost.setupComplete,true,
+  'Legacy NEU SAND-1 must use verified Hypixel Bazaar SAND:1 price');
+assert.equal(normalizedCost.setupCost,80*21);
+const birch=MINION_DATA.definitions['Birch Minion'];
+const historicalAlias=calculateMinion(birch,{...opts,tier:1},{
+  ...ctx,market:{},
+  historyStats:new Map([['LOG:2',{samples7d:500,avgBuy7d:6,avgSell7d:7,coverage7d:0.7}]]),
+  priceMode:'7D',sellMethod:'INSTANT'});
+assert.equal(historicalAlias.outputDetails[0].quote.raw,6,
+  'Legacy log ID must match normalized time-series data');
+
 const fetchSaved=globalThis.fetch;
 const seen=[];
 let status=200,payload=null;
