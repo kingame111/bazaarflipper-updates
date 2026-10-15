@@ -44,7 +44,7 @@ const candidateFiles=['runtime-manager.mjs'];
 for(const folder of ['src','public']){
   const dir=path.join('candidate-src',folder);
   for(const entry of fs.readdirSync(dir,{withFileTypes:true})){
-    if(entry.isFile() && /\\.(mjs|js|css|html|svg)$/.test(entry.name))candidateFiles.push(folder+'/'+entry.name);
+    if(entry.isFile() && /\.(mjs|js|css|html|svg)$/.test(entry.name))candidateFiles.push(folder+'/'+entry.name);
   }
 }
 const runtimeResource=p=>/^(src|public)\/.+\.(mjs|js|css|html|svg)$/.test(p);
