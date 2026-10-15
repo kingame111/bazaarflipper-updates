@@ -71,7 +71,7 @@ for(const p of paths){
     source=Buffer.from(old,'base64');
   }
   if(/\.(mjs|js)$/.test(p)){
-    const check=spawnSync(process.execPath,['--check','-'],{input:source,encoding:'utf8'});
+    const check=spawnSync(process.execPath,['--check','--input-type=module','-'],{input:source,encoding:'utf8'});
     if(check.status!==0)throw Error('Syntax error in '+p+': '+check.stderr);
   }
   data[p]=source.toString('base64');
