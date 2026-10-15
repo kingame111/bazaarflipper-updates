@@ -257,13 +257,20 @@ function pendingSync(force=false){
   return value;
 }
 function invalidatePendingSyncCache(){ lastPendingSyncCache={at:0,value:null}; }
+// The laptop history queue is DURABLE, even in low-disk conditions.
+// Never delete unsent snapshots to satisfy a free-space threshold.
 function enforceLaptopStoragePolicy(){
-  if (!(dualCollectorEnabled && handoff.role==='LAPTOP')) return;
+  if (!(dualCollectorEnabled && handoff.role==='LAPTOP')) return true;
   const minFreeGB=Math.max(1,Number(config.laptopMinimumFreeDiskGB)||10);
-  let d=diskStats(); if(d.freeBytes==null || d.freeBytes>=minFreeGB*1024**3) return;
-  let dropped=0;
-  for(let i=0;i<100 && d.freeBytes<minFreeGB*1024**3;i++){ const x=dropOldestPendingSnapshots(db,localOriginId,10); if(!x.snapshotsDeleted) break; dropped += x.snapshotsDeleted; if(i%5===4){checkpointDatabase(db); d=diskStats();} }
-  if(dropped){ invalidatePendingSyncCache(); const total=Number(getMeta(db,'laptop_dropped_before_sync')||0)+dropped; setMeta(db,'laptop_dropped_before_sync',total); state.dualSync.droppedBeforeSync=total; console.warn(`[storage] low disk: dropped ${dropped} oldest unsynced laptop snapshots to preserve newer data`); }
+  const d=diskStats();
+  const safe=d.freeBytes==null || d.freeBytes>=minFreeGB*1024**3;
+  state.dualSync.storageBackpressure=!safe;
+  state.dualSync.freeDiskBytes=d.freeBytes;
+  if(safe)return true;
+  if(!syncRunning && Date.now()>=syncRetryAfter)
+    setImmediate(()=>{void syncLaptopToDesktop(false).catch(e=>console.warn('[storage] urgent sync failed: '+e.message));});
+  console.warn('[storage] LOW_DISK: preserving ALL unacknowledged laptop snapshots; new history writes paused until enough disk space is available. freeBytes='+d.freeBytes);
+  return false;
 }
 
 loadLastGoodMarketCache();
@@ -521,7 +528,12 @@ async function pollBazaar() {
     const dueHistory = now - lastHistoryWrite >= config.historyIntervalSeconds * 1000;
 
     if (dueHistory && collectorActive) {
-      if (freeRamMB >= effectiveMinimumFreeRamMB) {
+      if (freeRamMB < effectiveMinimumFreeRamMB) {
+        state.skippedForLowMemory += 1;
+        console.warn('[memory] history write skipped; free RAM '+Math.round(freeRamMB)+' MB');
+      } else if (!enforceLaptopStoragePolicy()) {
+        state.skippedForLowDisk=(state.skippedForLowDisk||0)+1;
+      } else {
         const bucketMs = config.historyIntervalSeconds * 1000;
         const sourceTs = Number(data.lastUpdated) || now;
         const ts = Math.floor(sourceTs / bucketMs) * bucketMs;
@@ -533,10 +545,7 @@ async function pollBazaar() {
         state.dynamicsWrites += 1;
         console.log(`[bazaar] snapshot saved; mode=LIVE source=${new Date(sourceTs).toISOString()} sourceAge=${formatAge(Math.max(0, now-sourceTs))} products=${historyRows.length} fetch=${state.lastFetchDurationMs}ms origin=${localOriginId}`);
         if(handoff.role!=='LAPTOP') void refreshHistoryStatsAsync('snapshot',false);
-        enforceLaptopStoragePolicy();
-      } else {
-        state.skippedForLowMemory += 1;
-        console.warn(`[memory] persistence skipped; free RAM ${Math.round(freeRamMB)} MB`);
+
       }
     }
 
@@ -697,6 +706,7 @@ function statusPayload() {
     historyWrites: state.historyWrites,
     dynamicsWrites: state.dynamicsWrites,
     skippedForLowMemory: state.skippedForLowMemory,
+    skippedForLowDisk: state.skippedForLowDisk||0,
     processRamMB: Math.round(memory.rss / 1024 / 1024),
     systemFreeRamMB: Math.round(os.freemem() / 1024 / 1024),
     databaseSizeMB: Math.round((dbSize / 1024 / 1024) * 10) / 10,
