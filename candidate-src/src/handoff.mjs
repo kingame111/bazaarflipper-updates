@@ -46,6 +46,7 @@ export function loadHandoffConfig(projectRoot, baseDir, config) {
     peerHost: String(raw.peerHost || '').trim(),
     projectRoot,
     handoffPort: Number(raw.handoffPort || config.handoffPort || 3211),
+    peerPort: Number(raw.peerPort || raw.handoffPort || config.handoffPort || 3211),
     token
   };
 }
