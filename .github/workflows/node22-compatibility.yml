@@ -10,12 +10,16 @@ jobs:
   original-engine:
     runs-on: windows-latest
     timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ['22.13.0','22.15.0','22.21.1','24.0.0']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.5.1'
-      - name: Validate exact minimum Node version advertised in package.json
+          node-version: ${{ matrix.version }}
+      - name: Validate built-in SQLite and standalone runtime compatibility
         shell: pwsh
         run: |
           node --version
