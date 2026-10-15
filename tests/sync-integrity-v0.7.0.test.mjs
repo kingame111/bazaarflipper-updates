@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import {openDatabase,insertHistorySnapshot,importHistorySnapshots,
+import {openDatabase,insertHistorySnapshot,importHistorySnapshots,resetCollectedData,
   ensureExtendedHistorySchema,exportPendingHistorySnapshots,acknowledgeHistorySnapshots} from '../candidate-src/src/db.mjs';
 
 const dir=fs.mkdtempSync(path.join(os.tmpdir(),'bazaar-sync-integrity-'));
@@ -32,6 +32,12 @@ try{
  const changed=structuredClone(snaps);
  changed[0].rows[0].bestBuyOrder=999;
  assert.throws(()=>importHistorySnapshots(desktop,changed,'LAPTOP'),/Snapshot content conflict/);
+ const future=ts+600000;
+ assert.throws(()=>importHistorySnapshots(desktop,[{ts:future,originId:'LAPTOP',meta:{productCount:2200},rows:[]}],'LAPTOP'),/Empty snapshot/);
+ assert.throws(()=>importHistorySnapshots(desktop,[{ts:future,originId:'LAPTOP',meta:{productCount:1},rows:[{productId:null}]}],'LAPTOP'),/Invalid or repeated/);
+ assert.throws(()=>importHistorySnapshots(desktop,[{ts:future,originId:'LAPTOP',meta:{productCount:1},rows:[{productId:'IRON',bestBuyOrder:-5}]}],'LAPTOP'),/Invalid snapshot/);
+ assert.throws(()=>importHistorySnapshots(desktop,[{ts:future,originId:'LAPTOP',meta:{productCount:2},rows:[{productId:'IRON',bestBuyOrder:1}]}],'LAPTOP'),/count mismatch/);
+ assert.equal(desktop.prepare('SELECT COUNT(*) n FROM sync_imported_snapshots').get().n,1);
  const ack=acknowledgeHistorySnapshots(laptop,snaps,'LAPTOP');
  assert.equal(ack.snapshotsDeleted,1);
  assert.equal(exportPendingHistorySnapshots(laptop,'LAPTOP').length,0);
@@ -42,6 +48,8 @@ try{
  ensureExtendedHistorySchema(legacy);
  const after=legacy.prepare('PRAGMA table_info(sync_imported_snapshots)').all();
  assert.equal(after.some(x=>x.name==='content_hash'),true);
+ resetCollectedData(desktop);
+ assert.equal(desktop.prepare('SELECT COUNT(*) n FROM sync_imported_snapshots').get().n,0);
  legacy.close();desktop.close();laptop.close();
  console.log(JSON.stringify({pass:true,differentOriginPreserved:true,duplicateIdempotent:true,
    alteredReplayRejected:true,acknowledgementSafe:true,legacyMigrated:true}));
