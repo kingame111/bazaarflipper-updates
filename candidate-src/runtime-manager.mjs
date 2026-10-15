@@ -9,7 +9,8 @@ import http from 'node:http';
 import {spawn,spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
-import {DatabaseSync,backup} from 'node:sqlite';
+import * as sqlite from 'node:sqlite';
+const {DatabaseSync}=sqlite;
 import {checkForUpdate,stageUpdate} from './src/updater.mjs';
 
 const projectRoot=path.dirname(fileURLToPath(import.meta.url));
@@ -155,7 +156,8 @@ async function snapshotDatabase(project){
   let db;
   try{
     db=new DatabaseSync(databasePath,{readOnly:true});
-    await backup(db,target);
+    if(typeof sqlite.backup==='function')await sqlite.backup(db,target);
+    else db.exec("VACUUM INTO '"+target.replace(/'/g,"''")+"'");
     const check=new DatabaseSync(target,{readOnly:true});
     try{
       const result=check.prepare('PRAGMA quick_check').get();
