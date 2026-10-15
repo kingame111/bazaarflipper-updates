@@ -11,20 +11,66 @@ if(!['0.6.13','0.7.0'].includes(baseline.version)) throw Error('Wrong base versi
 
 const raw=Buffer.from(baseline.bundle.parts.map(p=>fs.readFileSync(p,'utf8').trim()).join(''),'base64');
 const baseFiles=JSON.parse(gunzipSync(raw).toString('utf8')).files;
-const paths=[...new Set([...Object.keys(baseFiles),'runtime-manager.mjs','public/update-client.js','src/minion-worker.mjs'])];
-if(!paths.includes('server.mjs')||!paths.includes('src/db.mjs')) throw Error('Required update files missing from base release');
+// A release must be INSTALLABLE FROM SCRATCH, not just a patch to a
+// preexisting Windows folder. Recover unchanged runtime dependencies from
+// the newest preceding release that contained each source file.
+const legacyFiles=new Map();
+const versions=fs.readdirSync('releases',{withFileTypes:true})
+  .filter(x=>x.isDirectory()&&/^\d+\.\d+\.\d+$/.test(x.name)&&x.name!=='0.7.0')
+  .map(x=>x.name)
+  .sort((a,b)=>{
+    const x=a.split('.').map(Number),y=b.split('.').map(Number);
+    for(let i=0;i<3;i++)if(x[i]!==y[i])return y[i]-x[i];
+    return 0;
+  });
+for(const v of versions){
+  const dir=path.join('releases',v);
+  const chunks=fs.readdirSync(dir)
+    .filter(x=>/^part-\d+\.txt$/.test(x))
+    .sort();
+  if(!chunks.length)continue;
+  try{
+    const packed=Buffer.from(chunks.map(x=>fs.readFileSync(path.join(dir,x),'utf8').trim()).join(''),'base64');
+    const decoded=JSON.parse(gunzipSync(packed).toString('utf8')).files;
+    for(const [p,encoded] of Object.entries(decoded||{})){
+      if(typeof encoded!=='string')continue;
+      if(!legacyFiles.has(p))legacyFiles.set(p,encoded);
+    }
+  }catch(error){
+    console.warn('Historical archive v'+v+' cannot be reused:',error.message);
+  }
+}
+const candidateFiles=['runtime-manager.mjs','public/update-client.js','src/minion-worker.mjs'];
+const runtimeResource=p=>/^(src|public)\/.+\.(mjs|js|css|html|svg)$/.test(p);
+const paths=[...new Set([
+  ...Object.keys(baseFiles),
+  ...[...legacyFiles.keys()].filter(runtimeResource),
+  ...candidateFiles
+])].sort();
+if(!paths.includes('server.mjs')||!paths.includes('src/db.mjs'))throw Error('Required update files missing from base release');
+for(const required of ['src/hypixel.mjs','src/scoring.mjs','src/handoff.mjs','src/state.mjs',
+  'public/app.js','public/pending-sync.js','public/styles.css']){
+  if(!paths.includes(required))throw Error('Missing vital standalone dependency: '+required);
+}
 
 const data={};
 for(const p of paths){
-  if(p.includes('..')||p.startsWith('/')) throw Error('Unsafe path '+p);
-  const file=path.join('candidate-src',p);
-  const content=fs.readFileSync(file);
-  if(/\.(mjs|js)$/.test(p)){
-    const check=spawnSync(process.execPath,['--check',file],{encoding:'utf8'});
-    if(check.status!==0) throw Error('Syntax '+p+': '+check.stderr);
+  if(p.includes('..')||p.startsWith('/'))throw Error('Unsafe file path '+p);
+  const local=path.join('candidate-src',p);
+  let source;
+  if(fs.existsSync(local))source=fs.readFileSync(local);
+  else{
+    const old=legacyFiles.get(p)??baseFiles[p];
+    if(typeof old!=='string')throw Error('No source available for '+p);
+    source=Buffer.from(old,'base64');
   }
-  data[p]=content.toString('base64');
+  if(/\.(mjs|js)$/.test(p)){
+    const check=spawnSync(process.execPath,['--check','-'],{input:source,encoding:'utf8'});
+    if(check.status!==0)throw Error('Syntax error in '+p+': '+check.stderr);
+  }
+  data[p]=source.toString('base64');
 }
+console.log('RELEASE SOURCE AUDIT: full standalone package; dependencies='+paths.length+'; archived fallback='+paths.filter(p=>!fs.existsSync(path.join('candidate-src',p))).length);
 const pkg=JSON.parse(Buffer.from(data['package.json'],'base64').toString('utf8'));
 if(pkg.version!=='0.7.0') throw Error('Version mismatch');
 
