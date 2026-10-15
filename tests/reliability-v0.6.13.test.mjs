@@ -39,7 +39,7 @@ try{
   assert.equal(stats.size,2200);
   const known=stats.get('PRODUCT_0000');
   assert.equal(known.samples7d,700);
-  assert.equal(known.samples1d,287); // 5-minute spacing, exclusive of the oldest 24h endpoint
+  assert.equal(known.samples1d,288); // 24 hours with a snapshot every 5 minutes
   assert.ok(Math.abs(known.avgBuy7d-100)<1e-6);
   assert.ok(Math.abs(known.avgSell7d-105)<1e-6);
   assert.ok(known.coverage7d>0 && known.coverage7d<0.4);
