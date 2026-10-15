@@ -1,0 +1,45 @@
+name: BazaarFlipper reliability v0.6.13
+on:
+  push:
+    branches: [fix/reliability-v0.6.13]
+    paths:
+      - candidate-src/**
+      - tests/reliability-v0.6.13.test.mjs
+      - tests/startup-sync-v0.6.12.test.mjs
+      - scripts/package-v0.6.13.mjs
+      - .github/workflows/reliability-v0.6.13.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: true}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - name: Syntax-check all changed modules
+        run: |
+          node --check candidate-src/server.mjs
+          node --check candidate-src/src/db.mjs
+          node --check candidate-src/src/updater.mjs
+          node --check candidate-src/src/maintenance-worker.mjs
+          node --check scripts/package-v0.6.13.mjs
+      - name: Real-scale 1.54m-row database regression and update retry/rollback staging
+        run: node tests/reliability-v0.6.13.test.mjs
+      - name: 700-snapshot backlog baseline
+        run: node tests/startup-sync-v0.6.12.test.mjs
+      - name: Minion regression suite
+        run: |
+          node tests/minions-v0.6.11.test.mjs
+          node tests/minion-audit-v0.6.11.mjs
+      - name: Package verified release
+        run: node scripts/package-v0.6.13.mjs
+      - name: Save release bundle to candidate branch only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add releases/0.6.13/ manifest.json
+          git diff --cached --quiet || (git commit -m "Package verified BazaarFlipper v0.6.13 candidate" && git push)
