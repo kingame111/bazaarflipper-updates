@@ -1,0 +1,58 @@
+name: Verify recovery installer on Windows PowerShell 5.1
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/recover-bazaarflipper-v0.6.13.ps1
+      - .github/workflows/recovery-powershell51.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows-powershell-51:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify ASCII-safe script and parse with built-in Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          if ($PSVersionTable.PSVersion.Major -ne 5) { throw 'Test must use Windows PowerShell 5.1' }
+          $script = (Resolve-Path 'scripts/recover-bazaarflipper-v0.6.13.ps1').Path
+          $bytes = [IO.File]::ReadAllBytes($script)
+          if (@($bytes | Where-Object { $_ -gt 127 }).Count -gt 0) { throw 'Non-ASCII character in Windows PowerShell 5.1 script' }
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile($script, [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors.Count -gt 0) { $errors | Format-List; throw 'Windows PowerShell 5.1 parse failure' }
+          Write-Host 'PowerShell 5.1 parsing PASS'
+      - name: Download the GitHub-hosted installer exactly as users do
+        shell: powershell
+        run: |
+          $url = 'https://raw.githubusercontent.com/kingame111/bazaarflipper-updates/main/scripts/recover-bazaarflipper-v0.6.13.ps1'
+          $download = Join-Path $env:RUNNER_TEMP 'recover-bazaarflipper-v0.6.13.ps1'
+          Invoke-WebRequest -Uri $url -OutFile $download -UseBasicParsing
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile($download, [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors.Count -gt 0) { $errors | Format-List; throw 'Downloaded PowerShell 5.1 script has syntax errors' }
+          $bytes = [IO.File]::ReadAllBytes($download)
+          if (@($bytes | Where-Object { $_ -gt 127 }).Count -gt 0) { throw 'Downloaded script is not ASCII safe' }
+      - name: Execute recovery on mock installation and preserve original files
+        shell: powershell
+        run: |
+          $root = Join-Path $env:RUNNER_TEMP 'legacy-bazaar'
+          New-Item -ItemType Directory -Path (Join-Path $root 'data'), (Join-Path $root 'logs') -Force | Out-Null
+          Set-Content -LiteralPath (Join-Path $root 'server.mjs') -Value '// old BazaarFlipper' -Encoding ASCII
+          Set-Content -LiteralPath (Join-Path $root 'config.json') -Value '{"keepMe":true}' -Encoding ASCII
+          Set-Content -LiteralPath (Join-Path $root 'data/bazaar.sqlite') -Value 'SAVED-HISTORY' -Encoding ASCII
+          & powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'scripts/recover-bazaarflipper-v0.6.13.ps1' -ProjectRoot $root
+          if ($LASTEXITCODE -ne 0) { throw 'Recovery executable failed on Windows PowerShell 5.1' }
+          $v = (Get-Content (Join-Path $root 'package.json') -Raw | ConvertFrom-Json).version
+          if ($v -ne '0.6.13') { throw "Recovery wrote wrong version: $v" }
+          if (-not ((Get-Content (Join-Path $root 'config.json') -Raw | ConvertFrom-Json).keepMe)) { throw 'Configuration was overwritten' }
+          if ((Get-Content (Join-Path $root 'data/bazaar.sqlite') -Raw).Trim() -ne 'SAVED-HISTORY') { throw 'History changed' }
+          Write-Host 'Windows PowerShell 5.1 recovery PASS; original config and data preserved'
