@@ -175,7 +175,7 @@ async function waitHealth(expected,readyPort,timeoutMs=60000){
 }
 
 export function createRuntimeManager({root=projectRoot,port=managerPort(),dataPort=serverPort(),
-    sourceManifestUrl=manifestUrl(),disableServer=false}={}){
+    sourceManifestUrl=manifestUrl(),disableServer=false,healthTimeoutMs=60000}={}){
   let child=null,stopping=false,updating=false,restartCount=0,restartTimer=null;
   let manifestCache=null,checkedAt=0,checkBusy=null;
   const state={phase:'idle',lastError:null,lastCompletedVersion:null,updateStartedAt:null,childPid:null};
@@ -229,7 +229,7 @@ export function createRuntimeManager({root=projectRoot,port=managerPort(),dataPo
       state.phase='swapping';tx=swapStagedFiles({project:root,stagingRoot:staged.stagingRoot,manifest:result.manifest});
       state.phase='verifying';
       updating=false;startServer();updating=true;
-      await waitHealth(String(result.manifest.version),dataPort,60000);
+      await waitHealth(String(result.manifest.version),dataPort,healthTimeoutMs);
       commitUpdate(root,tx);
       saveJson(path.join(root,'data','last-update.json'),{
         ok:true,version:result.manifest.version,at:Date.now(),backupRoot:tx.backupRoot
