@@ -546,13 +546,17 @@ export function calculateMinion(minion, options, context) {
   const recipe = recipeCost(minion,tier,context);
   const extras = setupExtraCost(fuel,upgrades,context,shipping);
   const setupComplete = recipe.complete && extras.complete;
-  const setupPerMinion = recipe.cost == null ? null : recipe.cost + extras.cost;
+  // A partial sum must never be displayed as a verified setup price.
+  const setupPerMinion = setupComplete ? recipe.cost + extras.cost : null;
   const setupCost = setupPerMinion == null ? null : setupPerMinion * count;
   const paybackDays = setupComplete && setupCost != null && netDay > 0 ? setupCost / netDay : null;
   const roi30dPercent = setupComplete && setupCost > 0 ? (netDay*30/setupCost)*100 : null;
 
   const histCoverage = historicalRevenue > 0 ? weightedCoverage / historicalRevenue : 0;
   const cv = historicalRevenue > 0 ? weightedCv / historicalRevenue : 0;
+  const economicsComplete = fuelExpense.available && unpricedOutputs===0;
+  if(!setupComplete)warnings.push('Minion setup cost is incomplete; payback and ROI are unavailable.');
+  if(!economicsComplete)warnings.push('One or more income or recurring expense prices are missing; net profit is an estimate.');
   let confidenceScore = 1;
   if (!setupComplete) confidenceScore -= 0.10;
   if (!fuelExpense.available) confidenceScore -= 0.10;
@@ -562,6 +566,8 @@ export function calculateMinion(minion, options, context) {
     if (fallbackRevenue > 0) confidenceScore -= Math.min(0.35,fallbackRevenue/Math.max(1,grossPerMinionDay)*0.35);
   }
   if (minion.confidence === 'MEDIUM') confidenceScore -= 0.15;
+  if(!setupComplete||!economicsComplete)confidenceScore=Math.min(confidenceScore,0.49);
+  if(minion.confidence==='MEDIUM')confidenceScore=Math.min(confidenceScore,0.74);
   confidenceScore = clamp(confidenceScore,0,1);
 
   return {
@@ -593,6 +599,7 @@ export function calculateMinion(minion, options, context) {
     horizonDays:Math.max(1,Math.min(365,Math.floor(safe(options.horizonDays,30)))),
     horizonProfit:setupComplete&&setupCost!=null ? netDay*Math.max(1,Math.min(365,Math.floor(safe(options.horizonDays,30))))-setupCost : null,
     setupComplete,
+    economicsComplete,
     recipeSource:recipe.source,
     setupMissing:[...new Set([...(recipe.missing||[]),...(extras.missing||[])])],
     setupBreakdown:[...(recipe.details||[]),...(extras.details||[])],
@@ -690,7 +697,7 @@ export function calculateMinionRankings(options = {}, context = {}) {
     row.currentVs7dPercent = row.currentVsHistoryPercent;
     rows.push(row);
   }
-  const netRanked=rows.filter(r=>r.supported).slice().sort((a,b)=>safe(b.netDay,-Infinity)-safe(a.netDay,-Infinity));
+  const netRanked=rows.filter(r=>r.supported&&r.economicsComplete).slice().sort((a,b)=>safe(b.netDay,-Infinity)-safe(a.netDay,-Infinity));
   for(let i=0;i<netRanked.length;i++){
     const row=netRanked[i],next=netRanked[i+1]||null;
     row.netRank=i+1;
@@ -700,7 +707,7 @@ export function calculateMinionRankings(options = {}, context = {}) {
 
   const sort = upper(options.sort || 'NET');
   const metric = (row) => {
-    if (!row.supported) return -Infinity;
+    if (!row.supported||!row.economicsComplete) return -Infinity;
     if (sort === 'PAYBACK') return Number.isFinite(row.paybackDays) ? -row.paybackDays : -Infinity;
     if (sort === 'ROI') return safe(row.roi30dPercent,-Infinity);
     if (sort === 'HORIZON') return Number.isFinite(row.horizonProfit)?row.horizonProfit:-Infinity;
