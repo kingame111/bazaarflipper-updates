@@ -812,6 +812,7 @@ function uploadDatabaseToPeer() {
 }
 
 async function syncLaptopToDesktop(manual=false){
+  if(shuttingDown)return {ok:false,shutdown:true};
   if(handoff.role!=='LAPTOP') throw new Error('Only the LAPTOP sends pending snapshots to the desktop.');
   if(syncRunning) {
     const pending=pendingSync();
@@ -1313,5 +1314,5 @@ handoffServer.listen(handoffPort, '0.0.0.0', () => {
   console.log(`Handoff listener: port ${handoffPort} (${handoff.token ? 'token protected' : 'NOT CONFIGURED'})`);
 });
 
-async function gracefulShutdown(signal='shutdown'){if(shuttingDown)return;saveLastGoodMarketCache(true);shuttingDown=true;collectorActive=false;console.log(`[shutdown] requested by ${signal}; stopping collector, sync and servers`);for(const timer of runtimeTimers){try{clearTimeout(timer);clearInterval(timer);}catch{}}const deadline=Date.now()+5000;while((runningPoll||syncRunning)&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));await Promise.allSettled([new Promise(r=>{try{server.close(()=>r());server.closeAllConnections?.();}catch{r();}}),new Promise(r=>{try{handoffServer.close(()=>r());handoffServer.closeAllConnections?.();}catch{r();}})]);try{if(signal!=='update')checkpointDatabase(db);console.log('[shutdown] database checkpoint '+(signal==='update'?'skipped safely for updater':'complete'));}catch{}try{db.close();console.log('[shutdown] database closed');}catch{}releaseInstanceLock();try{console.log('[shutdown] servers stopped; BazaarFlipper stopped safely');}catch{}try{logStream.end();}catch{}process.exit(0);}
+async function gracefulShutdown(signal='shutdown'){if(shuttingDown)return;saveLastGoodMarketCache(true);shuttingDown=true;collectorActive=false;console.log(`[shutdown] requested by ${signal}; stopping collector, sync and servers`);for(const timer of runtimeTimers){try{clearTimeout(timer);clearInterval(timer);}catch{}}if(syncDrainTimer)clearTimeout(syncDrainTimer);const deadline=Date.now()+5000;while((runningPoll||syncRunning)&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));await Promise.allSettled([new Promise(r=>{try{server.close(()=>r());server.closeAllConnections?.();}catch{r();}}),new Promise(r=>{try{handoffServer.close(()=>r());handoffServer.closeAllConnections?.();}catch{r();}})]);try{if(signal!=='update')checkpointDatabase(db);console.log('[shutdown] database checkpoint '+(signal==='update'?'skipped safely for updater':'complete'));}catch{}try{db.close();console.log('[shutdown] database closed');}catch{}releaseInstanceLock();try{console.log('[shutdown] servers stopped; BazaarFlipper stopped safely');}catch{}try{logStream.end();}catch{}process.exit(0);}
 for(const signal of ['SIGINT','SIGTERM','SIGBREAK','SIGHUP'])process.on(signal,()=>{void gracefulShutdown(signal);});
