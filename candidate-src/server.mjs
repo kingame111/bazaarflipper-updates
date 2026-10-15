@@ -948,6 +948,9 @@ async function switchCollectorToPeer() {
 async function handleMainRequest(req, res) {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
 
+  // Dedicated constant-time health endpoints: never scan SQLite or reach Hypixel.
+  if(url.pathname==='/health/live') return sendJson(res,{ok:true,version:APP_VERSION,pid:process.pid});
+  if(url.pathname==='/health/ready') return sendJson(res,{ok:true,ready:historySchemaReady,version:APP_VERSION,pid:process.pid},historySchemaReady?200:503);
   if (url.pathname === '/api/status') return sendJson(res, statusPayload());
   if (url.pathname === '/api/handoff/status') return sendJson(res, handoffStatus());
   if (url.pathname === '/api/handoff/sync' && req.method === 'POST') {
