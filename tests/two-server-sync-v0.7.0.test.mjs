@@ -99,7 +99,8 @@ try{
  assert.ok(sent.ok,JSON.stringify(sent).slice(0,300));
  db=openDatabase(path.join(desktop.root,'data','bazaar.sqlite'));
  const imported=db.prepare("SELECT COUNT(*) n FROM history WHERE product_id LIKE 'AUDIT_PRODUCT_%'").get().n;
- const conflicts=db.prepare("SELECT COUNT(*) n FROM history_observation_conflicts WHERE origin_id='LAPTOP'").get().n;
+ const conflicts=db.prepare("SELECT COUNT(*) n FROM history_observation_conflicts WHERE origin_id='LAPTOP' AND product_id LIKE 'AUDIT_PRODUCT_%'").get().n;
+ const allConflicts=db.prepare("SELECT COUNT(*) n FROM history_observation_conflicts WHERE origin_id='LAPTOP'").get().n;
  const preserved=db.prepare('SELECT best_buy_order p FROM history WHERE ts=? AND product_id=?')
    .get(stamps[0],DATA_ID+'00000').p;
  assert.equal(imported,snapshots*products,'All uploaded source observations must exist (except one shared canonical record)');
@@ -113,7 +114,7 @@ try{
  db.close();
  console.log(JSON.stringify({PASS:true,realHttpServers:2,offlineRetryTest:true,
    snapshotCount:snapshots,productsPerSnapshot:products,verifiedRows:imported,
-   conflictsRetained:conflicts,offlineDurationMs:Date.now()-downStart}));
+   conflictsRetained:conflicts,allSourceConflicts:allConflicts,offlineDurationMs:Date.now()-downStart}));
 }catch(error){
  console.error('LAST SERVER LOGS\n'+logLines.slice(-35).join('\n'));
  throw error;
