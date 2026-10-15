@@ -34,5 +34,18 @@ assert.equal(workerOutput.rows.length,direct.rows.length);
 const fields=x=>x.rows.map(r=>({name:r.name,setupComplete:r.setupComplete,economicsComplete:r.economicsComplete,
   setupPerMinion:r.setupPerMinion,netDay:r.netDay,sortRank:r.sortRank,confidence:r.confidence}));
 assert.deepEqual(fields(workerOutput),fields(direct));
+const exactMarket={
+  COBBLESTONE:{sell_summary:[{pricePerUnit:100,amount:1000}],
+    buy_summary:[{pricePerUnit:120,amount:1000}],
+    quick_status:{sellPrice:100,buyPrice:120}}
+};
+const stableContext={...context,market:exactMarket};
+const allRows=calculateMinionRankings({...options,search:''},stableContext);
+const filteredRows=calculateMinionRankings({...options,search:'Ghast'},stableContext);
+const expected=allRows.rows.filter(x=>x.name.toLowerCase().includes('ghast'));
+assert.ok(expected.length>=1,'Need a filtered Ghast minion case');
+assert.deepEqual(filteredRows.rows.map(x=>({name:x.name,rank:x.sortRank})),
+  expected.map(x=>({name:x.name,rank:x.sortRank})),
+  'Searching with unchanged prices must preserve the original global rank');
 console.log(JSON.stringify({pass:true,rows:direct.rows.length,workerMatchesDirect:true,
   incompleteSetupHandled:true,unpricedRanksWithheld:true}));
