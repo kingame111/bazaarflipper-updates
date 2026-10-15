@@ -142,6 +142,9 @@ let switching = false;
 let updateApplying = false;
 let updateLastCheckedAt = 0;
 let syncRunning = false;
+let minionWorkersActive=0;
+const minionResultCache=new Map();
+
 let syncDrainTimer=null;
 let shuttingDown=false;
 const runtimeTimers=[];
@@ -954,6 +957,43 @@ async function switchCollectorToPeer() {
   }
 }
 
+async function calculateMinionsOffThread(options, context){
+  const key=JSON.stringify([options,context.marketUpdatedAt,historyStatsLastLoadedAt,itemMeta.size]);
+  const cache=minionResultCache.get(key);
+  if(cache&&Date.now()-cache.at<20000)return cache.result;
+  if(minionWorkersActive>=2)throw Error('Minion calculations are busy, please retry shortly');
+  minionWorkersActive++;
+  try{
+    const result=await new Promise((resolve,reject)=>{
+      const worker=new Worker(new URL('./src/minion-worker.mjs',import.meta.url),{
+        workerData:{options,context:{
+          market:context.market,
+          historyStatsEntries:[...context.historyStats.entries()],
+          itemMetaEntries:[...context.itemMeta.entries()],
+          taxRate:context.taxRate,marketUpdatedAt:context.marketUpdatedAt
+        }}
+      });
+      let settled=false;
+      const settle=(error,value)=>{
+        if(settled)return;
+        settled=true;clearTimeout(timer);
+        if(error)reject(error);else resolve(value);
+      };
+      const timer=setTimeout(()=>{
+        void worker.terminate();
+        settle(Error('Minion worker exceeded 30 second limit'));
+      },30000);
+      worker.once('message',message=>message?.ok?
+        settle(null,message.result):settle(Error(message?.error||'Minion worker returned an invalid result')));
+      worker.once('error',settle);
+      worker.once('exit',code=>{if(!settled)settle(Error('Minion worker exited with code '+code));});
+    });
+    if(minionResultCache.size>16)minionResultCache.clear();
+    minionResultCache.set(key,{at:Date.now(),result});
+    return result;
+  }finally{minionWorkersActive--;}
+}
+
 async function handleMainRequest(req, res) {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
 
@@ -1012,13 +1052,15 @@ async function handleMainRequest(req, res) {
       sort: url.searchParams.get('sort') || 'NET',
       // Horizon is supplied by Setup above.
     };
-    const result = calculateMinionRankings(options, {
-      market: latestBazaarProducts,
-      historyStats,
-      itemMeta,
-      taxRate,
-      marketUpdatedAt: state.lastHypixelUpdate
-    });
+    let result;
+    try{
+      result=await calculateMinionsOffThread(options,{
+        market:latestBazaarProducts,historyStats,itemMeta,taxRate,
+        marketUpdatedAt:state.lastHypixelUpdate
+      });
+    }catch(error){
+      return sendJson(res,{error:error instanceof Error?error.message:String(error)},503);
+    }
     return sendJson(res, {
       ...result,
       personalTaxPercent: personalTaxRate * 100,
