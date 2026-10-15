@@ -5,6 +5,7 @@ on:
     paths:
       - candidate-src/**
       - tests/runtime-manager-v0.7.0.test.mjs
+      - tests/sync-integrity-v0.7.0.test.mjs
       - scripts/package-v0.7.0.mjs
       - .github/workflows/stabilization-v0.7.0.yml
   workflow_dispatch:
@@ -26,6 +27,12 @@ jobs:
           node --check candidate-src/server.mjs
       - name: Test independent update, interruption, and rollback
         run: node tests/runtime-manager-v0.7.0.test.mjs
+      - name: Test sync receipts, collisions and tampered replays
+        run: node tests/sync-integrity-v0.7.0.test.mjs
+      - name: Minion economics regressions
+        run: |
+          node tests/minions-v0.6.11.test.mjs
+          node tests/minion-audit-v0.6.11.mjs
   runtime-windows:
     runs-on: windows-latest
     timeout-minutes: 12
@@ -37,3 +44,6 @@ jobs:
       - name: Test independent update and rollback on Windows
         shell: pwsh
         run: node tests/runtime-manager-v0.7.0.test.mjs
+      - name: Test collision handling on Windows
+        shell: pwsh
+        run: node tests/sync-integrity-v0.7.0.test.mjs
