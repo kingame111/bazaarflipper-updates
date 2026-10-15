@@ -52,3 +52,20 @@ Do not merge or release until a fully packaged runtime boots on Windows and Linu
 - GitHub CI synthetic load cannot replicate the desktop's hardware, disk state or existing millions of records.
 - An emergency one-time installer may still be necessary to leave v0.6.10 because its old updater cannot install itself reliably.
 - The published v0.6.13 package is not proof of independent update architecture.
+
+## Independent uploaded-source audit (2026-10-15)
+The uploaded `src.zip` contains 12 `.mjs`, 3 `.js`, 2 HTML and 2 CSS files from desktop v0.6.13. Standalone Node 22 syntax tests passed on 15 JS/MJS files. This source archive was audited locally; the unmodified originals must still be copied into the release candidate before full clean-install tests.
+
+**Release blockers confirmed by standalone SQLite tests:**
+- v0.6.13 `history(ts, product_id)` collisions silently discarded a LAPTOP observation with a different price, after which the laptop acknowledgement deleted it; modified retransmits of the same `(origin_id, ts)` were accepted as duplicates.
+- `importHistorySnapshots` produced a receipt for `meta.productCount=2200, rows=[]` and for a row with `productId=null`, even though the latter stored zero products. Invalid negative prices were stored. Validate entire import before acknowledgement and test zero/invalid/mismatched products.
+- `resetCollectedData` emptied history but did not clear `sync_imported_snapshots`, leaving stale receipts.
+- A full database handoff can hit `receiveFile`'s 512 MiB size cap; no proof of consistent transfer with WAL was gathered.
+
+**Other demonstrated gaps:**
+- Hypixel mock tests rejected 429, 504, invalid JSON, `success=false` and timeouts, but accepted `success=true` with an empty products object or null product.
+- 30,000 randomized scoring fixtures passed one-unit net profit and recalculation-after-tax invariants; not a proof of economic accuracy against the live market.
+- Of 61 minion families, Inferno is explicitly unsupported. Tier recipe audit found 53 unverified tier combinations. Under empty market pricing, 58 of 60 supported families still reported a partial setup price, and 59 had `HIGH` confidence despite missing full setup costs in v0.6.13. Candidate branch guards need end-to-end retesting.
+- `public/app.js` loads every 15 seconds and on user input, but lacks request sequencing / cancellation; late responses can overwrite newer filters. `public/minions.js` already uses `requestSeq`.
+
+**Do not claim full reliability yet.** Direct Hypixel connectivity from the user's network, sustained real-database I/O, two-computer sync under faults, actual Windows migration, and browser E2E all remain unverified.
