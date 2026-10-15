@@ -719,7 +719,7 @@ export function calculateMinionRankings(options = {}, context = {}) {
   rows.sort((a,b)=>metric(b)-metric(a) || String(a.name).localeCompare(String(b.name)));
   let rankedPosition=0;
   for (const row of rows) {
-    if (!row.supported) continue;
+    if (!row.supported||!row.economicsComplete) continue;
     row.sortRank=++rankedPosition;
   }
   const visibleRows = search
