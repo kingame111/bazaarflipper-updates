@@ -11,7 +11,7 @@ const desktop={root:path.join(tmp,'desktop'),http:basePort,sync:basePort+2,peer:
 const laptop={root:path.join(tmp,'laptop'),http:basePort+1,sync:basePort+3,peer:basePort+2,role:'LAPTOP'};
 const children=new Map(),logLines=[];
 const T=Date.now();
-const snapshots=80,products=2200;
+const snapshots=Math.max(1,Number(process.env.BAZAAR_SYNC_SNAPSHOTS)||80),products=Math.max(1,Number(process.env.BAZAAR_SYNC_PRODUCTS)||2200);
 const stamps=Array.from({length:snapshots},(_,i)=>Math.floor((T-(snapshots-i+100)*300000)/300000)*300000);
 const DATA_ID='AUDIT_PRODUCT_';
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
@@ -95,7 +95,7 @@ try{
    'Offline desktop must not delete pending laptop data');
  db.close();
  start(desktop);await wait(desktop.http);
- const sent=await request(laptop.http,'/api/handoff/sync','POST',150000);
+ const sent=await request(laptop.http,'/api/handoff/sync','POST',Math.max(150000,snapshots*500));
  assert.ok(sent.ok,JSON.stringify(sent).slice(0,300));
  db=openDatabase(path.join(desktop.root,'data','bazaar.sqlite'));
  const imported=db.prepare("SELECT COUNT(*) n FROM history WHERE product_id LIKE 'AUDIT_PRODUCT_%'").get().n;
