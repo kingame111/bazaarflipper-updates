@@ -41,12 +41,13 @@ const manifest={
   version:'0.6.13',
   publishedAt:new Date().toISOString(),
   notes:[
-    'Decouple startup from Hypixel requests so the UI and dual-sync scheduler become available immediately after local database initialization.',
-    'Start dual synchronization independently in the background instead of waiting for Bazaar, item metadata or mayor-tax requests.',
-    'Bound automatic backlog sync to small batches and yield between batches so hundreds of pending snapshots cannot freeze the local web server.',
-    'Remove routine VACUUM from successful sync acknowledgements; keep acknowledgement transactional without blocking the Node process for compaction.',
-    'Use metadata-backed pending row counts and short-lived status caches to keep /api/status fast on large databases.',
-    'Persist and restore the last known good Bazaar snapshot so restarts during a Hypixel outage open in LAST_GOOD_SNAPSHOT instead of an empty STARTING state.'
+    'Replace seven expensive history aggregation passes with one indexed query; tested against 1.54 million SQLite history rows.',
+    'Run long-term history retention and roll-up in a background worker instead of blocking the local HTTP server.',
+    'Debounce history recalculation while large laptop-to-desktop backlogs import.',
+    'Make update downloads checksum-verified, retry transient network failures, and record download/staging diagnostics.',
+    'Avoid a redundant GitHub update check on every click and avoid blocking SQLite checkpoint during update shutdown.',
+    'Bound restarted-server health-check requests so failed restarts can roll back reliably.',
+    'Show the actual running version in the dashboard instead of the previously hardcoded banner.'
   ],
   files:paths.map(p=>({path:p,sha256:sha(Buffer.from(data[p],'base64'))})),
   bundle:{parts,encoding:'gzip-base64',sha256:sha(archive)}
