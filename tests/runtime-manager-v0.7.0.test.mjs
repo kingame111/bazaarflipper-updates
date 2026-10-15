@@ -5,6 +5,7 @@ import path from 'node:path';
 import http from 'node:http';
 import {createHash} from 'node:crypto';
 import {gzipSync} from 'node:zlib';
+import {DatabaseSync} from 'node:sqlite';
 import {createRuntimeManager,recoverInterruptedUpdate,swapStagedFiles} from '../candidate-src/runtime-manager.mjs';
 
 const sha=b=>createHash('sha256').update(b).digest('hex');
@@ -59,7 +60,15 @@ async function poll(predicate,maxMs=16000){
 try{
  write('package.json',pkg('0.6.13'));
  write('server.mjs',server());
- write('data/bazaar.sqlite','CRITICAL HISTORY');
+ fs.mkdirSync(p('data'),{recursive:true});
+ const proofDb=new DatabaseSync(p('data/bazaar.sqlite'));
+ proofDb.exec("CREATE TABLE user_history (value TEXT); INSERT INTO user_history VALUES ('CRITICAL HISTORY');");
+ proofDb.close();
+ const checkHistory=()=>{
+   const d=new DatabaseSync(p('data/bazaar.sqlite'),{readOnly:true});
+   try{return d.prepare('SELECT value FROM user_history').get()?.value;}
+   finally{d.close();}
+ };
  write('config.json','{"userConfig":true}');
  const freePort=http.createServer();
  await new Promise(resolve=>freePort.listen(0,'127.0.0.1',resolve));
@@ -93,7 +102,8 @@ try{
   return s.phase==='success'&&s;
  });
  assert.equal(JSON.parse(fs.readFileSync(p('package.json'),'utf8')).version,'0.7.0');
- assert.equal(fs.readFileSync(p('data/bazaar.sqlite'),'utf8'),'CRITICAL HISTORY');
+ assert.equal(checkHistory(),'CRITICAL HISTORY');
+ assert.ok((await realFetch(base+'/status').then(r=>r.json())).lastDatabaseBackup);
  assert.equal(JSON.parse(fs.readFileSync(p('config.json'),'utf8')).userConfig,true);
  // Unhealthy update must restore exact previous software, preserving user data.
  ({manifest:activeManifest,chunks:activeChunks}=build('0.7.1',{
@@ -107,7 +117,7 @@ try{
   return s.phase==='rolled-back'&&s;
  },14000);
  assert.equal(JSON.parse(fs.readFileSync(p('package.json'),'utf8')).version,'0.7.0');
- assert.equal(fs.readFileSync(p('data/bazaar.sqlite'),'utf8'),'CRITICAL HISTORY');
+ assert.equal(checkHistory(),'CRITICAL HISTORY');
  assert.equal((await realFetch(base+'/apply',{method:'POST',headers:{origin:'https://evil.example'}})).status,403);
  console.log(JSON.stringify({passed:true,successfulUpdate:true,automaticRollback:true,
    interruptedSwapRecovery:true,independentStatus:true,dataPreserved:true}));
