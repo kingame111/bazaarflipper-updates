@@ -27,8 +27,8 @@ fs.mkdirSync(logsDir,{recursive:true});
 const logPath=path.join(logsDir,'runtime-manager.log');
 const log=message=>{try{fs.appendFileSync(logPath,new Date().toISOString()+' '+message+'\n');}catch{};};
 const normalize=e=>e instanceof Error?(e.stack||e.message):String(e);
-const version=()=>{
-  try{return String(JSON.parse(fs.readFileSync(path.join(projectRoot,'package.json'),'utf8')).version);}
+const versionAt=(root=projectRoot)=>{
+  try{return String(JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8')).version);}
   catch{return 'unknown';}
 };
 const manifestUrl=()=>config().updateManifestUrl||
@@ -117,7 +117,7 @@ export function swapStagedFiles({project=projectRoot,stagingRoot,manifest}){
     }
     entries.push({path:rel,existed});
   }
-  const tx={phase:'backed-up',backupRoot,entries,fromVersion:version(),toVersion:String(manifest.version),at:Date.now()};
+  const tx={phase:'backed-up',backupRoot,entries,fromVersion:versionAt(project),toVersion:String(manifest.version),at:Date.now()};
   saveJson(journal,tx);
   saveJson(journal,{...tx,phase:'swapping'});
   // A crash after this point triggers an automatic rollback on next launch.
@@ -186,7 +186,7 @@ export function createRuntimeManager({root=projectRoot,port=managerPort(),dataPo
       cwd:root,stdio:['ignore','inherit','inherit'],windowsHide:true
     });
     state.childPid=child.pid||null;
-    logState('server start pid='+state.childPid+' version='+version());
+    logState('server start pid='+state.childPid+' version='+versionAt(root));
     child.once('exit',(code,signal)=>{
       if(state.childPid===child.pid)state.childPid=null;
       logState('server exited pid='+child.pid+' code='+code+' signal='+signal);
@@ -206,7 +206,7 @@ export function createRuntimeManager({root=projectRoot,port=managerPort(),dataPo
   }
   async function check(){
     if(checkBusy)return checkBusy;
-    checkBusy=checkForUpdate(sourceManifestUrl,version(),30000).then(result=>{
+    checkBusy=checkForUpdate(sourceManifestUrl,versionAt(root),30000).then(result=>{
       if(!result.error&&result.manifest){manifestCache=result;checkedAt=Date.now();}
       if(result.error)logState('check failed '+result.error);
       return result;
@@ -256,11 +256,11 @@ export function createRuntimeManager({root=projectRoot,port=managerPort(),dataPo
     }finally{updating=false;}
   }
   const statePayload=()=>({...state,managerReady:true,serverRunning:isAlive(child),
-    currentVersion:version(),updateAvailable:manifestCache?.updateAvailable??null,
+    currentVersion:versionAt(root),updateAvailable:manifestCache?.updateAvailable??null,
     latestVersion:manifestCache?.latestVersion??null});
   const api=http.createServer(async(req,res)=>{
     const origin=req.headers.origin;
-    if(origin&&!allowedOrigins().has(origin)){
+    if(origin&&![`http://127.0.0.1:${dataPort}`,`http://localhost:${dataPort}`].includes(origin)){
       res.writeHead(403);res.end('Disallowed origin');return;
     }
     const headers={'content-type':'application/json; charset=utf-8','cache-control':'no-store'};
