@@ -15,6 +15,17 @@ const upper = (value) => String(value || '').trim().toUpperCase();
 // Hypixel names summary sides from the instant transaction perspective:
 // sell_summary = current BUY orders (what an instant seller receives);
 // buy_summary = current SELL offers (what an instant buyer pays).
+// NEU crafting recipes use a legacy ID suffix such as LOG-2;
+// the public Hypixel Bazaar exposes the matching item as LOG:2.
+// Only map to a canonical id if that exact product really exists in the market.
+function canonicalProductId(itemId, mapping) {
+  const id=String(itemId||'').trim();
+  if(mapping?.has?.(id)||Object.hasOwn(mapping||{},id))return id;
+  const canonical=id.replace(/-(\d+)$/,':$1');
+  return canonical!==id && (mapping?.has?.(canonical)||Object.hasOwn(mapping||{},canonical))
+    ? canonical : id;
+}
+
 function firstBookPrice(product, action) {
   const instantBuy = action === 'INSTANT_BUY';
   const levels = instantBuy
@@ -27,7 +38,7 @@ function firstBookPrice(product, action) {
 }
 
 function currentPrice(productId, market) {
-  const product = market?.[productId];
+  const product = market?.[canonicalProductId(productId,market)];
   return {
     instantSell: firstBookPrice(product, 'INSTANT_SELL'),
     sellOrder: firstBookPrice(product, 'INSTANT_BUY'),
@@ -36,7 +47,7 @@ function currentPrice(productId, market) {
 }
 
 function historyPrice(productId, historyStats, days=7) {
-  const h = historyStats?.get?.(productId);
+  const h = historyStats?.get?.(canonicalProductId(productId,historyStats));
   const d=Math.max(1,Math.min(7,Math.round(safe(days,7))));
   return {
     instantSell: safe(h?.[`avgBuy${d}d`]),
@@ -48,7 +59,7 @@ function historyPrice(productId, historyStats, days=7) {
 }
 
 function getNpcPrice(itemId, fallbackNpc, itemMeta) {
-  const meta = itemMeta?.get?.(itemId);
+  const meta = itemMeta?.get?.(canonicalProductId(itemId,itemMeta));
   const candidates = [
     meta?.npcSellPrice, meta?.npc_sell_price, meta?.npcPrice, meta?.npc_price,
     meta?.sellPrice, meta?.sell_price, fallbackNpc
