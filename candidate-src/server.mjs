@@ -142,6 +142,7 @@ let switching = false;
 let updateApplying = false;
 let updateLastCheckedAt = 0;
 let syncRunning = false;
+let syncDrainTimer=null;
 let shuttingDown=false;
 const runtimeTimers=[];
 const keepTimer=(timer)=>{runtimeTimers.push(timer);timer.unref?.();return timer;};
@@ -823,12 +824,13 @@ async function syncLaptopToDesktop(manual=false){
   const before=pendingSync(true);
   try{
     let sentSnapshots=0,sentRows=0,acknowledgedSnapshots=0,deletedRows=0;
-    const maxBatches=manual?500:2;
+    const maxBatches=manual?500:Math.max(2,Math.min(8,Math.ceil(before.snapshots/100)));
     for(let i=0;i<maxBatches;i++){
       const snaps=exportPendingHistorySnapshots(db,localOriginId,Math.max(1,Math.min(4,Number(config.syncBatchSnapshots)||4)));
       if(!snaps.length) break;
       const result=await fetchPeerJson('/handoff/sync/import',{method:'POST',body:JSON.stringify({sourceRole:'LAPTOP',snapshots:snaps})},90000);
-      if(!result?.ok) throw new Error('Desktop did not confirm history import.');
+      if(!result?.ok || Number(result?.acceptedSnapshots)!==snaps.length)
+        throw new Error('Desktop did not confirm every imported snapshot; local data retained.');
       const ack=acknowledgeHistorySnapshots(db,snaps,localOriginId);
       sentSnapshots+=snaps.length;
       sentRows+=snaps.reduce((a,x)=>a+x.rows.length,0);
@@ -847,6 +849,11 @@ async function syncLaptopToDesktop(manual=false){
     state.dualSync.acknowledgedSnapshots+=acknowledgedSnapshots;
     state.dualSync.deletedRows+=deletedRows;
     historyStats=new Map();
+    if(after.snapshots>0&&acknowledgedSnapshots>0&&!manual){
+      if(syncDrainTimer)clearTimeout(syncDrainTimer);
+      syncDrainTimer=setTimeout(()=>{syncDrainTimer=null;void syncLaptopToDesktop(false);},2000);
+      syncDrainTimer.unref?.();
+    }
     if(sentSnapshots>0 || manual) console.log(`[sync] LAPTOP->DESKTOP success; snapshots=${sentSnapshots} rows=${sentRows} acknowledged=${acknowledgedSnapshots}; pending ${before.snapshots}->${after.snapshots} snapshots, ${before.rows}->${after.rows} rows`);
     return {ok:true,cumulative:{...state.dualSync},sentSnapshots,sentRows,acknowledgedSnapshots,deletedRows,pendingSync:after};
   }catch(error){
@@ -874,7 +881,9 @@ async function syncHistoryWithPeer(manual=false){
   const wasReachable=state.dualSync.peerReachable;
   try {
     const result=await fetchPeerJson(`/handoff/sync/push?wait=${manual?'1':'0'}`,{method:'POST'},manual?10*60*1000:20000);
-    Object.assign(state.dualSync,{lastSuccessAt:Date.now(),lastError:null,lastErrorType:null,peerReachable:true});
+    // A successful trigger is not evidence that the laptop transferred anything.
+    Object.assign(state.dualSync,{lastTriggerAcceptedAt:Date.now(),lastError:null,lastErrorType:null,peerReachable:true});
+    if(manual&&Number(result?.acknowledgedSnapshots)>0)state.dualSync.lastSuccessAt=Date.now();
     if(wasReachable===false) console.log('[sync] DESKTOP->LAPTOP trigger RECOVERED; peer reachable again');
     if(manual) console.log(`[sync] manual DESKTOP->LAPTOP trigger completed; started=${Boolean(result?.started)} busy=${Boolean(result?.busy)}`);
     return result;
@@ -1090,6 +1099,12 @@ async function handleMainRequest(req, res) {
     }
   }
 
+  if (url.pathname === '/api/diagnostics/conflicts' && req.method === 'GET') {
+    if(!historySchemaReady)return sendJson(res,{ready:false},503);
+    const total=db.prepare('SELECT COUNT(*) n FROM history_observation_conflicts').get();
+    const recent=db.prepare('SELECT ts,product_id productId,origin_id originId,observed_at observedAt FROM history_observation_conflicts ORDER BY ts DESC LIMIT 20').all();
+    return sendJson(res,{ok:true,conflicts:Number(total?.n)||0,recent});
+  }
   if (url.pathname === '/api/diagnostics/history' && req.method === 'GET') {
     if(!historySchemaReady)return sendJson(res,{ok:false,state:'INITIALIZING'},503);
     const counts=db.prepare('SELECT COUNT(*) AS metadataRows, COUNT(DISTINCT bucket_ts) AS distinctSnapshots, MIN(bucket_ts) AS oldest, MAX(bucket_ts) AS newest FROM history_snapshot_meta').get();
@@ -1124,7 +1139,15 @@ async function handleHandoffRequest(req, res) {
     const body=await readJsonBody(req,64*1024*1024);
     if(String(body?.sourceRole||'').toUpperCase()!=='LAPTOP') return sendJson(res,{error:'Desktop accepts synced history only from LAPTOP.'},409);
     const imported=importHistorySnapshots(db,body?.snapshots,'LAPTOP');
+    if(imported.acceptedSnapshots!==(Array.isArray(body?.snapshots)?body.snapshots.length:0))
+      throw Error('Incomplete snapshot confirmation');
     if(imported.snapshotsRecorded||imported.rowsInserted) scheduleHistoryImportRefresh();
+    if(imported.acceptedSnapshots){
+      state.dualSync.lastTransferAt=Date.now();
+      state.dualSync.lastSuccessAt=Date.now();
+    }
+    state.dualSync.conflictingObservations=(state.dualSync.conflictingObservations||0)+imported.conflictingObservations;
+    state.dualSync.legacyUnverified=(state.dualSync.legacyUnverified||0)+imported.legacyUnverified;
     state.dualSync.receivedSnapshots=(state.dualSync.receivedSnapshots||0)+imported.snapshotsRecorded;
     state.dualSync.receivedRows=(state.dualSync.receivedRows||0)+imported.rowsInserted;
     state.dualSync.duplicateSnapshotsIgnored=(state.dualSync.duplicateSnapshotsIgnored||0)+(imported.duplicateSnapshots||0);
