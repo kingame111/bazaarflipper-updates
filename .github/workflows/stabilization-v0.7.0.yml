@@ -8,6 +8,7 @@ on:
       - tests/sync-integrity-v0.7.0.test.mjs
       - tests/minion-quality-v0.7.0.test.mjs
       - tests/market-contract-v0.7.0.test.mjs
+      - tests/minion-recursive-v0.7.0.test.mjs
       - tests/no-data-loss-v0.7.0.test.mjs
       - tests/two-server-sync-v0.7.0.test.mjs
       - tests/browser-smoke-v0.7.0.test.mjs
@@ -39,6 +40,8 @@ jobs:
         run: node tests/no-data-loss-v0.7.0.test.mjs
       - name: Verify Hypixel contracts and Bazaar/minion price sides
         run: node tests/market-contract-v0.7.0.test.mjs
+      - name: Test nested Slayer minion ingredient recipes
+        run: node tests/minion-recursive-v0.7.0.test.mjs
       - name: Minion economics regressions
         run: |
           node tests/minions-v0.6.11.test.mjs
@@ -63,6 +66,9 @@ jobs:
       - name: Test Hypixel price-side and economic invariants on Windows
         shell: pwsh
         run: node tests/market-contract-v0.7.0.test.mjs
+      - name: Test recursive minion economics on Windows
+        shell: pwsh
+        run: node tests/minion-recursive-v0.7.0.test.mjs
 
   two-servers-linux:
     runs-on: ubuntu-latest
