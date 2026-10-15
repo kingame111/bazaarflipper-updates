@@ -63,8 +63,8 @@ if(marketPayload?.products&&itemMetadata){
       marketUpdatedAt:marketPayload.lastUpdated});
   const supported=ranking.rows.filter(x=>x.supported);
   const missingIds=new Set(supported.filter(x=>!x.setupComplete).flatMap(x=>x.setupMissing||[]));
-  results.neuIdProbe=[...missingIds].filter(x=>/-\\d+$/.test(x)).map(id=>{
-    const hyPixelId=id.replace(/-(\\d+)$/,':$1');
+  results.neuIdProbe=[...missingIds].filter(x=>/-\d+$/.test(x)).map(id=>{
+    const hyPixelId=id.replace(/-(\d+)$/,':$1');
     return {neuId:id,hypixelId:hyPixelId,available:!!market[hyPixelId]};
   });
   results.economicAudit={status:weird.length||ignored.scored<100?'FAIL':'PASS',
