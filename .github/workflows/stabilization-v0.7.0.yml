@@ -6,6 +6,8 @@ on:
       - candidate-src/**
       - tests/runtime-manager-v0.7.0.test.mjs
       - tests/sync-integrity-v0.7.0.test.mjs
+      - tests/minion-quality-v0.7.0.test.mjs
+      - tests/full-runtime-smoke-v0.7.0.mjs
       - scripts/package-v0.7.0.mjs
       - .github/workflows/stabilization-v0.7.0.yml
   workflow_dispatch:
@@ -47,3 +49,61 @@ jobs:
       - name: Test collision handling on Windows
         shell: pwsh
         run: node tests/sync-integrity-v0.7.0.test.mjs
+
+  package-candidate:
+    needs: [runtime-linux, runtime-windows]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check minion quality and calculation worker equivalence
+        run: node tests/minion-quality-v0.7.0.test.mjs
+      - name: Recheck 1.54-million-row historical calculation
+        run: node tests/reliability-v0.6.13.test.mjs
+      - name: Package the exact tested source tree
+        run: node scripts/package-v0.7.0.mjs
+      - name: Boot the complete packaged application on Linux
+        run: node tests/full-runtime-smoke-v0.7.0.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verified-v0-7-0
+          path: |
+            manifest.json
+            releases/0.7.0/*.txt
+          retention-days: 7
+  full-windows:
+    needs: package-candidate
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@v4
+        with:
+          name: verified-v0-7-0
+          path: .
+      - name: Boot the full release bundle on Windows
+        shell: pwsh
+        run: node tests/full-runtime-smoke-v0.7.0.mjs
+  publish-candidate:
+    needs: [package-candidate, full-windows]
+    runs-on: ubuntu-latest
+    permissions: {contents: write}
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: true}
+      - uses: actions/download-artifact@v4
+        with:
+          name: verified-v0-7-0
+          path: .
+      - name: Save bundle to candidate branch only — never main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add manifest.json releases/0.7.0/
+          git diff --cached --quiet || (git commit -m "Package verified BazaarFlipper v0.7.0 candidate" && git push)
