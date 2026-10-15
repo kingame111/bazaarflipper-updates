@@ -9,4 +9,4 @@ if errorlevel 1 (
   exit /b 1
 )
 echo Starting BazaarFlipper from %CD%...
-node "%~dp0server.mjs"
+node "%~dp0runtime-manager.mjs"
