@@ -1,5 +1,6 @@
 import {analyseProduct,analyseReverseNpc} from '../candidate-src/src/scoring.mjs';
-import {calculateMinionRankings} from '../candidate-src/src/minions.mjs';
+import {calculateMinionRankings,calculateMinion} from '../candidate-src/src/minions.mjs';
+import {MINION_DATA} from '../candidate-src/src/minion-data.mjs';
 import {fetchBazaar,fetchItemMetadata,fetchBazaarTaxContext} from '../candidate-src/src/hypixel.mjs';
 
 const results={},started=Date.now();
@@ -67,6 +68,27 @@ if(marketPayload?.products&&itemMetadata){
     const hyPixelId=id.replace(/-(\d+)$/,':$1');
     return {neuId:id,hypixelId:hyPixelId,available:!!market[hyPixelId]};
   });
+  const everyTier=[];
+  const fullContext={market,historyStats:new Map(),itemMeta:itemMetadata,taxRate:0.0125,
+    priceMode:'LIVE',sellMethod:'BEST',historyDays:7};
+  for(const minion of Object.values(MINION_DATA.definitions)){
+    if(minion.special)continue;
+    for(const tier of Object.keys(minion.tiers||{}).map(Number).filter(Number.isInteger)){
+      const x=calculateMinion(minion,{tier,count:1,fuel:'NONE',shipping:'NONE',
+        upgrade1:'NONE',upgrade2:'NONE',collectionIntervalDays:1},fullContext);
+      everyTier.push({minion:minion.name,tier,setupComplete:x.setupComplete,
+        economicsComplete:x.economicsComplete,missing:x.setupMissing});
+      if(!Number.isFinite(x.netDay)||!Number.isFinite(x.grossDay))
+        weird.push(minion.name+'/T'+tier+':non-finite-profit');
+    }
+  }
+  results.allMinionTiers={
+    reviewed:everyTier.length,
+    completeSetups:everyTier.filter(x=>x.setupComplete).length,
+    incompleteSetups:everyTier.filter(x=>!x.setupComplete).length,
+    incompleteOngoingProfit:everyTier.filter(x=>!x.economicsComplete).length,
+    incompleteExamples:everyTier.filter(x=>!x.setupComplete).slice(0,40)
+  };
   results.economicAudit={status:weird.length||ignored.scored<100?'FAIL':'PASS',
     ...ignored,nonFiniteOrInvalid:weird.slice(0,15),
     minionsTotal:ranking.rows.length,minionsSupported:supported.length,
