@@ -9,6 +9,7 @@ import http from 'node:http';
 import {spawn,spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
+import {DatabaseSync,backup} from 'node:sqlite';
 import {checkForUpdate,stageUpdate} from './src/updater.mjs';
 
 const projectRoot=path.dirname(fileURLToPath(import.meta.url));
@@ -134,6 +135,40 @@ export function commitUpdate(project=projectRoot,transaction){
   fs.rmSync(journal,{force:true});
 }
 
+async function snapshotDatabase(project){
+  const databasePath=path.join(project,'data','bazaar.sqlite');
+  if(!fs.existsSync(databasePath))return null;
+  const size=fs.statSync(databasePath).size;
+  try{
+    const available=fs.statfsSync(path.dirname(databasePath));
+    const free=Number(available.bavail)*Number(available.bsize);
+    if(free<Math.ceil(size*1.25)+64*1024*1024)
+      throw new Error('Insufficient free disk for a verified SQLite pre-update backup');
+  }catch(e){
+    if(/Insufficient/.test(e.message))throw e;
+    // statfs can be unavailable on older Windows Node versions.
+    log('disk availability could not be preflighted: '+e.message);
+  }
+  const backupDir=path.join(project,'data','updates','database-backups');
+  fs.mkdirSync(backupDir,{recursive:true});
+  const target=path.join(backupDir,'pre-update-'+Date.now()+'-'+process.pid+'.sqlite');
+  let db;
+  try{
+    db=new DatabaseSync(databasePath,{readOnly:true});
+    await backup(db,target);
+    const check=new DatabaseSync(target,{readOnly:true});
+    try{
+      const result=check.prepare('PRAGMA quick_check').get();
+      if(Object.values(result||{})[0]!=='ok')throw new Error('Backup failed SQLite quick_check');
+    }finally{check.close();}
+    log('verified pre-update database backup size='+fs.statSync(target).size+' path='+target);
+    return target;
+  }catch(error){
+    try{fs.rmSync(target,{force:true});}catch{}
+    throw new Error('Cannot safely update without a verified database backup: '+normalize(error));
+  }finally{try{db?.close();}catch{}}
+}
+
 function waitForExit(child,ms){
   if(!child||child.exitCode!==null||child.signalCode!==null)return Promise.resolve(true);
   return new Promise(resolve=>{
@@ -226,6 +261,7 @@ export function createRuntimeManager({root=projectRoot,port=managerPort(),dataPo
       const staged=await stageUpdate({manifest:result.manifest,manifestUrl:sourceManifestUrl,
         projectRoot:root,timeoutMs:30000});
       state.phase='stopping-server';await stopServer();
+      state.phase='backing-up-history';state.lastDatabaseBackup=await snapshotDatabase(root);
       state.phase='swapping';tx=swapStagedFiles({project:root,stagingRoot:staged.stagingRoot,manifest:result.manifest});
       state.phase='verifying';
       updating=false;startServer();updating=true;
