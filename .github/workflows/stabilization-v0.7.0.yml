@@ -61,12 +61,12 @@ jobs:
           node-version: '24'
       - name: Check minion quality and calculation worker equivalence
         run: node tests/minion-quality-v0.7.0.test.mjs
-      - name: Recheck 1.54-million-row historical calculation
-        run: node tests/reliability-v0.6.13.test.mjs
       - name: Package the exact tested source tree
         run: node scripts/package-v0.7.0.mjs
       - name: Boot the complete packaged application on Linux
         run: node tests/full-runtime-smoke-v0.7.0.mjs
+      - name: Recheck 1.54-million-row historical calculation
+        run: node tests/reliability-v0.6.13.test.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: verified-v0-7-0
