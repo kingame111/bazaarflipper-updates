@@ -110,7 +110,7 @@ try {
   Write-Host "Backup of prior code: $backup"
   Write-Host "Now launch start-bazaarflip.bat and confirm the displayed server version."
 }catch{
-  Log "FAILED: $($_.Exception.Message) — restoring prior code"
+  Log "FAILED: $($_.Exception.Message) - restoring prior code"
   for($j=$copied.Count-1;$j -ge 0;$j--){
     $relativeWin=$copied[$j]
     $target=Join-Path $ProjectRoot $relativeWin
