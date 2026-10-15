@@ -291,95 +291,111 @@ export function replaceCompetitionStats(db, map) {
 
 
 export function loadHistoryStats(db, nowTs = Date.now(), historyIntervalSeconds = 300) {
-  const dayMs = 24 * 60 * 60 * 1000;
+  const dayMs = 86400000;
   const sevenDaysMs = 7 * dayMs;
   const sinceTs = nowTs - sevenDaysMs;
-  const expectedSamples = Math.max(1, Math.round(sevenDaysMs / (Math.max(30, Number(historyIntervalSeconds) || 300) * 1000)));
+  const intervalMs = Math.max(30, Number(historyIntervalSeconds) || 300) * 1000;
+  const expectedSamples = Math.max(1, Math.round(sevenDaysMs / intervalMs));
+  const mid = '(best_buy_order + best_sell_offer) / 2.0';
 
-  const rows = db.prepare(`
+  // One indexed seven-day scan replaces seven independent full aggregations.
+  // Keeping all windows in the same query also gives a consistent SQLite read snapshot.
+  const windowSelect = [];
+  for (let days = 1; days <= 6; days++) {
+    const f = ' FILTER (WHERE ts >= ?)';
+    const suffix = days + 'd';
+    windowSelect.push(
+      'COUNT(*)' + f + ' AS "samples' + suffix + '"',
+      'MIN(ts)' + f + ' AS "firstTs' + suffix + '"',
+      'MAX(ts)' + f + ' AS "lastTs' + suffix + '"',
+      'AVG(best_buy_order)' + f + ' AS "avgBuy' + suffix + '"',
+      'AVG(best_sell_offer)' + f + ' AS "avgSell' + suffix + '"',
+      'AVG(' + mid + ')' + f + ' AS "avgMid' + suffix + '"',
+      'AVG((' + mid + ') * (' + mid + '))' + f + ' AS "avgMidSq' + suffix + '"'
+    );
+  }
+
+  // Every FILTER placeholder is bound separately in SELECT order.
+  const params=[];
+  for(let days=1;days<=6;days++) for(let i=0;i<7;i++) params.push(nowTs-days*dayMs);
+  const rows=db.prepare(`
     SELECT product_id AS productId,
-           COUNT(*) AS samples,
-           MIN(ts) AS firstTs,
-           MAX(ts) AS lastTs,
-           AVG(best_buy_order) AS avgBuy7d,
-           AVG(best_sell_offer) AS avgSell7d,
-           AVG((best_buy_order + best_sell_offer) / 2.0) AS avgMid7d,
-           AVG(((best_buy_order + best_sell_offer) / 2.0) * ((best_buy_order + best_sell_offer) / 2.0)) AS avgMidSq7d,
-           MIN((best_buy_order + best_sell_offer) / 2.0) AS minMid7d,
-           MAX((best_buy_order + best_sell_offer) / 2.0) AS maxMid7d
-    FROM history
+      COUNT(*) AS samples7d, MIN(ts) AS firstTs7d, MAX(ts) AS lastTs7d,
+      AVG(best_buy_order) AS avgBuy7d, AVG(best_sell_offer) AS avgSell7d,
+      AVG(${mid}) AS avgMid7d, AVG((${mid}) * (${mid})) AS avgMidSq7d,
+      MIN(${mid}) AS minMid7d, MAX(${mid}) AS maxMid7d,
+      ${windowSelect.join(',\n      ')}
+    FROM history INDEXED BY sqlite_autoindex_history_1
     WHERE ts >= ?
     GROUP BY product_id
-  `).all(sinceTs);
+  `).all(...params,sinceTs);
 
   const nearestBefore = (targetTs, searchWindowMs) => {
-    const minTs = targetTs - searchWindowMs;
-    const result = db.prepare(`
+    const minTs=targetTs-searchWindowMs;
+    const result=db.prepare(`
       SELECT h.product_id AS productId,
-             (h.best_buy_order + h.best_sell_offer) / 2.0 AS mid,
+             (h.best_buy_order + h.best_sell_offer)/2.0 AS mid,
              h.ts AS ts
       FROM history h
       JOIN (
-        SELECT product_id, MAX(ts) AS ts
+        SELECT product_id,MAX(ts) AS ts
         FROM history
-        WHERE ts <= ? AND ts >= ?
+        WHERE ts<=? AND ts>=?
         GROUP BY product_id
-      ) r ON r.product_id = h.product_id AND r.ts = h.ts
-    `).all(targetTs, minTs);
-    return new Map(result.map((row) => [row.productId, { mid: Number(row.mid) || 0, ts: Number(row.ts) || 0 }]));
+      ) r ON r.product_id=h.product_id AND r.ts=h.ts
+    `).all(targetTs,minTs);
+    return new Map(result.map(row=>[row.productId,{mid:Number(row.mid)||0,ts:Number(row.ts)||0}]));
   };
+  const oneHour=nearestBefore(nowTs-3600000,7200000);
+  const oneDay=nearestBefore(nowTs-dayMs,8*3600000);
 
-  const oneHour = nearestBefore(nowTs - 60 * 60 * 1000, 2 * 60 * 60 * 1000);
-  const oneDay = nearestBefore(nowTs - dayMs, 8 * 60 * 60 * 1000);
-
-  const map = new Map();
-  for (const row of rows) {
-    const samples = Number(row.samples) || 0;
-    const avgMid = Number(row.avgMid7d) || 0;
-    const avgSq = Number(row.avgMidSq7d) || 0;
-    const variance = Math.max(0, avgSq - avgMid * avgMid);
-    const std = Math.sqrt(variance);
-    const firstTs = Number(row.firstTs) || nowTs;
-    const lastTs = Number(row.lastTs) || firstTs;
-    const spanCoverage = Math.max(0, Math.min(1, (lastTs - firstTs + 1) / sevenDaysMs));
-    const sampleCoverage = Math.max(0, Math.min(1, samples / expectedSamples));
-    map.set(row.productId, {
-      samples7d: samples,
-      firstTs7d: firstTs,
-      lastTs7d: lastTs,
-      coverage7d: Math.min(spanCoverage, sampleCoverage),
-      avgBuy7d: Number(row.avgBuy7d) || 0,
-      avgSell7d: Number(row.avgSell7d) || 0,
-      avgMid7d: avgMid,
-      stdMid7d: std,
-      cvMid7d: avgMid > 0 ? std / avgMid : 0,
-      minMid7d: Number(row.minMid7d) || 0,
-      maxMid7d: Number(row.maxMid7d) || 0,
-      ref1hMid: oneHour.get(row.productId)?.mid || 0,
-      ref1hTs: oneHour.get(row.productId)?.ts || 0,
-      ref24hMid: oneDay.get(row.productId)?.mid || 0,
-      ref24hTs: oneDay.get(row.productId)?.ts || 0
-    });
+  function coverage(first,last,samples,spanMs,expected){
+    if(!samples)return 0;
+    const span=Math.max(0,Math.min(1,(last-first+1)/spanMs));
+    return Math.min(span,Math.max(0,Math.min(1,samples/expected)));
   }
-  for (let days=1; days<=6; days++) {
-    const windowMs=days*dayMs;
-    const expected=Math.max(1,Math.round(windowMs/(Math.max(30,Number(historyIntervalSeconds)||300)*1000)));
-    const agg=db.prepare(`SELECT product_id AS productId, COUNT(*) AS samples, MIN(ts) AS firstTs, MAX(ts) AS lastTs,
-      AVG(best_buy_order) AS avgBuy, AVG(best_sell_offer) AS avgSell,
-      AVG((best_buy_order+best_sell_offer)/2.0) AS avgMid,
-      AVG(((best_buy_order+best_sell_offer)/2.0)*((best_buy_order+best_sell_offer)/2.0)) AS avgMidSq
-      FROM history WHERE ts>=? GROUP BY product_id`).all(nowTs-windowMs);
-    for (const row of agg) {
-      const h=map.get(row.productId)||{};
-      const samples=Number(row.samples)||0, first=Number(row.firstTs)||nowTs, last=Number(row.lastTs)||first;
-      const avgMid=Number(row.avgMid)||0, avgSq=Number(row.avgMidSq)||0, std=Math.sqrt(Math.max(0,avgSq-avgMid*avgMid));
-      h[`samples${days}d`]=samples; h[`firstTs${days}d`]=first; h[`lastTs${days}d`]=last;
-      h[`coverage${days}d`]=Math.min(Math.max(0,Math.min(1,(last-first+1)/windowMs)),Math.max(0,Math.min(1,samples/expected)));
-      h[`avgBuy${days}d`]=Number(row.avgBuy)||0; h[`avgSell${days}d`]=Number(row.avgSell)||0;
-      h[`avgMid${days}d`]=avgMid; h[`cvMid${days}d`]=avgMid>0?std/avgMid:0; map.set(row.productId,h);
+  const stats=new Map();
+  for(const row of rows){
+    const samples=Number(row.samples7d)||0;
+    const first=Number(row.firstTs7d)||nowTs;
+    const last=Number(row.lastTs7d)||first;
+    const avgMid=Number(row.avgMid7d)||0;
+    const variance=Math.max(0,(Number(row.avgMidSq7d)||0)-avgMid*avgMid);
+    const std=Math.sqrt(variance);
+    const value={
+      samples7d:samples,firstTs7d:first,lastTs7d:last,
+      coverage7d:coverage(first,last,samples,sevenDaysMs,expectedSamples),
+      avgBuy7d:Number(row.avgBuy7d)||0,
+      avgSell7d:Number(row.avgSell7d)||0,
+      avgMid7d:avgMid,stdMid7d:std,
+      cvMid7d:avgMid>0?std/avgMid:0,
+      minMid7d:Number(row.minMid7d)||0,
+      maxMid7d:Number(row.maxMid7d)||0,
+      ref1hMid:oneHour.get(row.productId)?.mid||0,
+      ref1hTs:oneHour.get(row.productId)?.ts||0,
+      ref24hMid:oneDay.get(row.productId)?.mid||0,
+      ref24hTs:oneDay.get(row.productId)?.ts||0
+    };
+    for(let days=1;days<=6;days++){
+      const suffix=days+'d';
+      const n=Number(row['samples'+suffix])||0;
+      if(!n)continue;
+      const tFirst=Number(row['firstTs'+suffix])||nowTs;
+      const tLast=Number(row['lastTs'+suffix])||tFirst;
+      const m=Number(row['avgMid'+suffix])||0;
+      const square=Number(row['avgMidSq'+suffix])||0;
+      value['samples'+suffix]=n;
+      value['firstTs'+suffix]=tFirst;
+      value['lastTs'+suffix]=tLast;
+      value['coverage'+suffix]=coverage(tFirst,tLast,n,days*dayMs,Math.max(1,Math.round(days*dayMs/intervalMs)));
+      value['avgBuy'+suffix]=Number(row['avgBuy'+suffix])||0;
+      value['avgSell'+suffix]=Number(row['avgSell'+suffix])||0;
+      value['avgMid'+suffix]=m;
+      value['cvMid'+suffix]=m>0?Math.sqrt(Math.max(0,square-m*m))/m:0;
     }
+    stats.set(row.productId,value);
   }
-  return map;
+  return stats;
 }
 
 export function historyCount(db) {
