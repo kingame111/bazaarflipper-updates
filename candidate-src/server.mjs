@@ -134,11 +134,13 @@ let latestBazaarProducts = {};
 let runningPoll = false;
 let lastHistoryWrite = 0;
 let lastCleanup = 0;
+let retentionWorkerActive = false;
 let previousSnapshotTs = null;
 let lastMarketCacheWrite=0;
 let marketCacheWriteRunning=false;
 let switching = false;
 let updateApplying = false;
+let updateLastCheckedAt = 0;
 let syncRunning = false;
 let shuttingDown=false;
 const runtimeTimers=[];
@@ -199,7 +201,8 @@ function scheduleHistoryImportRefresh(){
     console.log('[history] coalesced '+n+' import batches');
     void refreshHistoryStatsAsync('sync-import-coalesced',true);
   };
-  historyImportRefreshTimer=setTimeout(flush,45000);
+  // Debounce large backlog imports: heavy stats must not compete with transfers.
+  historyImportRefreshTimer=setTimeout(flush,180000);
   historyImportRefreshTimer.unref?.();
 }
 
@@ -409,8 +412,10 @@ async function refreshMayorTaxContext() {
 }
 
 async function refreshUpdateStatus() {
-  state.update = await checkForUpdate(UPDATE_MANIFEST_URL, APP_VERSION, Math.max(30_000, config.requestTimeoutSeconds * 1000));
-  return state.update;
+  const result = await checkForUpdate(UPDATE_MANIFEST_URL, APP_VERSION, Math.max(30_000, config.requestTimeoutSeconds * 1000));
+  if(!result.error || !state.update?.manifest){state.update=result;updateLastCheckedAt=Date.now();}
+  else console.warn('[update] check failed; retained last valid manifest:', result.error);
+  return result.error ? {...(state.update||result),error:result.error} : result;
 }
 
 function isTransientBazaarFetchError(error) {
@@ -531,12 +536,33 @@ async function pollBazaar() {
       }
     }
 
-    if (handoff.role !== 'LAPTOP' && config.historyRetentionDays > 0 && now - lastCleanup > 6 * 60 * 60 * 1000) {
-      const cutoff = now - config.historyRetentionDays * 24 * 60 * 60 * 1000;
-      const hourlyDays = Math.max(Number(config.historyRetentionDays) || 30, Number(config.hourlyHistoryRetentionDays) || 730);
-      const rolled = cleanupHistory(db, cutoff, now - hourlyDays * 24 * 60 * 60 * 1000);
-      if (rolled.rawRowsDeleted || rolled.hourlyRowsDeleted) console.log(`[history] rolled up ${rolled.rawRowsDeleted} raw rows and ${rolled.hourlyRowsDeleted} hourly rows; daily archive retained`);
-      lastCleanup = now;
+    if (handoff.role !== 'LAPTOP' && config.historyRetentionDays > 0 &&
+      now - lastCleanup > 6 * 60 * 60 * 1000 && !retentionWorkerActive &&
+      !historyStatsLoading && !syncRunning) {
+      retentionWorkerActive=true;
+      lastCleanup=now;
+      const started=Date.now();
+      const cutoff=now-config.historyRetentionDays*86400000;
+      const hourlyDays=Math.max(Number(config.historyRetentionDays)||30,Number(config.hourlyHistoryRetentionDays)||730);
+      const worker=new Worker(new URL('./src/maintenance-worker.mjs',import.meta.url),{
+        workerData:{dbPath,rawCutoffTs:cutoff,hourlyCutoffTs:now-hourlyDays*86400000}
+      });
+      let settled=false;
+      const finish=(ok,msg)=>{
+        if(settled)return;
+        settled=true;
+        retentionWorkerActive=false;
+        if(!ok){
+          lastCleanup=Date.now()-5*3600000;
+          console.warn('[history] retention worker failed after '+(Date.now()-started)+'ms: '+msg);
+        }else{
+          const count=msg||{};
+          console.log('[history] retention worker completed in '+(Date.now()-started)+'ms; rolledRaw='+count.rawRowsDeleted+' rolledHourly='+count.hourlyRowsDeleted);
+        }
+      };
+      worker.once('message',m=>finish(m?.ok,m?.ok?m.result:m?.error));
+      worker.once('error',e=>finish(false,e?.stack||e?.message||String(e)));
+      worker.once('exit',code=>{if(!settled)finish(false,'exit code '+code);});
     }
   } catch (error) {
     state.lastFetchDurationMs = Math.round(performance.now() - started);
@@ -1024,9 +1050,14 @@ async function handleMainRequest(req, res) {
 
   if (url.pathname === '/api/update/apply' && req.method === 'POST') {
     if (updateApplying) return sendJson(res, { error: 'An update is already being applied.' }, 409);
-    const update = await refreshUpdateStatus();
+    // A previously checked manifest avoids a redundant, fallible network operation.
+    const update = state.update?.manifest && Date.now()-updateLastCheckedAt<2*3600000
+      ? state.update : await refreshUpdateStatus();
     if (!update.updateAvailable || !update.manifest) return sendJson(res, { error: 'No newer version is available.', update }, 409);
     updateApplying = true;
+    const updateLogFile=path.join(logsDir,'update-download.log');
+    const logUpdate=(s)=>{try{fs.appendFileSync(updateLogFile,new Date().toISOString()+' '+s+'\n');}catch{}};
+    logUpdate('POST /api/update/apply accepted; current='+APP_VERSION+' target='+update.manifest.version);
     try {
       const staged = await stageUpdate({
         manifest: update.manifest,
@@ -1034,7 +1065,8 @@ async function handleMainRequest(req, res) {
         projectRoot: __dirname,
         timeoutMs: Math.max(30_000, config.requestTimeoutSeconds * 2000)
       });
-      checkpointDatabase(db);
+      // A TRUNCATE checkpoint may wait on a long-lived history reader.
+      logUpdate('stage verified; launching external updater at '+staged.stagingRoot);
       const worker = spawn(process.execPath, [
         path.join(__dirname, 'src', 'apply-update.mjs'),
         '--project', __dirname,
@@ -1044,11 +1076,13 @@ async function handleMainRequest(req, res) {
         '--host', String(config.host || '127.0.0.1')
       ], { cwd: __dirname, detached: true, stdio: 'ignore', windowsHide: true });
       worker.unref();
+      logUpdate('external updater started pid='+worker.pid);
       sendJson(res, { ok: true, restarting: true, version: staged.version });
-      setTimeout(() => process.exit(0), 800).unref();
+      setTimeout(()=>{void gracefulShutdown('update');},250).unref();
       return;
     } catch (error) {
       updateApplying = false;
+      logUpdate('FAILED to stage update: '+(error instanceof Error?error.stack||error.message:String(error)));
       return sendJson(res, { error: error instanceof Error ? error.message : String(error) }, 500);
     }
   }
@@ -1211,5 +1245,5 @@ handoffServer.listen(handoffPort, '0.0.0.0', () => {
   console.log(`Handoff listener: port ${handoffPort} (${handoff.token ? 'token protected' : 'NOT CONFIGURED'})`);
 });
 
-async function gracefulShutdown(signal='shutdown'){if(shuttingDown)return;saveLastGoodMarketCache(true);shuttingDown=true;collectorActive=false;console.log(`[shutdown] requested by ${signal}; stopping collector, sync and servers`);for(const timer of runtimeTimers){try{clearTimeout(timer);clearInterval(timer);}catch{}}const deadline=Date.now()+5000;while((runningPoll||syncRunning)&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));await Promise.allSettled([new Promise(r=>{try{server.close(()=>r());server.closeAllConnections?.();}catch{r();}}),new Promise(r=>{try{handoffServer.close(()=>r());handoffServer.closeAllConnections?.();}catch{r();}})]);try{checkpointDatabase(db);console.log('[shutdown] database checkpoint complete');}catch{}try{db.close();console.log('[shutdown] database closed');}catch{}releaseInstanceLock();try{console.log('[shutdown] servers stopped; BazaarFlipper stopped safely');}catch{}try{logStream.end();}catch{}process.exit(0);}
+async function gracefulShutdown(signal='shutdown'){if(shuttingDown)return;saveLastGoodMarketCache(true);shuttingDown=true;collectorActive=false;console.log(`[shutdown] requested by ${signal}; stopping collector, sync and servers`);for(const timer of runtimeTimers){try{clearTimeout(timer);clearInterval(timer);}catch{}}const deadline=Date.now()+5000;while((runningPoll||syncRunning)&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));await Promise.allSettled([new Promise(r=>{try{server.close(()=>r());server.closeAllConnections?.();}catch{r();}}),new Promise(r=>{try{handoffServer.close(()=>r());handoffServer.closeAllConnections?.();}catch{r();}})]);try{if(signal!=='update')checkpointDatabase(db);console.log('[shutdown] database checkpoint '+(signal==='update'?'skipped safely for updater':'complete'));}catch{}try{db.close();console.log('[shutdown] database closed');}catch{}releaseInstanceLock();try{console.log('[shutdown] servers stopped; BazaarFlipper stopped safely');}catch{}try{logStream.end();}catch{}process.exit(0);}
 for(const signal of ['SIGINT','SIGTERM','SIGBREAK','SIGHUP'])process.on(signal,()=>{void gracefulShutdown(signal);});

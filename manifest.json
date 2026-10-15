@@ -1,22 +1,23 @@
 {
-  "version": "0.6.12",
-  "publishedAt": "2026-10-14T23:55:03.707Z",
+  "version": "0.6.13",
+  "publishedAt": "2026-10-15T01:36:46.503Z",
   "notes": [
-    "Decouple startup from Hypixel requests so the UI and dual-sync scheduler become available immediately after local database initialization.",
-    "Start dual synchronization independently in the background instead of waiting for Bazaar, item metadata or mayor-tax requests.",
-    "Bound automatic backlog sync to small batches and yield between batches so hundreds of pending snapshots cannot freeze the local web server.",
-    "Remove routine VACUUM from successful sync acknowledgements; keep acknowledgement transactional without blocking the Node process for compaction.",
-    "Use metadata-backed pending row counts and short-lived status caches to keep /api/status fast on large databases.",
-    "Persist and restore the last known good Bazaar snapshot so restarts during a Hypixel outage open in LAST_GOOD_SNAPSHOT instead of an empty STARTING state."
+    "Replace seven expensive history aggregation passes with one indexed query; tested against 1.54 million SQLite history rows.",
+    "Run long-term history retention and roll-up in a background worker instead of blocking the local HTTP server.",
+    "Debounce history recalculation while large laptop-to-desktop backlogs import.",
+    "Make update downloads checksum-verified, retry transient network failures, and record download/staging diagnostics.",
+    "Avoid a redundant GitHub update check on every click and avoid blocking SQLite checkpoint during update shutdown.",
+    "Bound restarted-server health-check requests so failed restarts can roll back reliably.",
+    "Show the actual running version in the dashboard instead of the previously hardcoded banner."
   ],
   "files": [
     {
       "path": "server.mjs",
-      "sha256": "ea735cd5565191cc9e3385fe0862e1fb854f691043a27c7a2553dbe3aa7c847e"
+      "sha256": "3249a07b8e5b2514859a1fb98d7b33837ac1510402cac84cf5388f5b35630105"
     },
     {
       "path": "package.json",
-      "sha256": "b9c66346c5a117a353c666a59d35f2155c0d47d69b634b2bcbbadc0fcacc403c"
+      "sha256": "3ef70c37e08f236bc4f9fac4fab91bdc17ea4d8c4319ea820e6607dd1eed8a58"
     },
     {
       "path": "config.example.json",
@@ -24,11 +25,11 @@
     },
     {
       "path": "src/db.mjs",
-      "sha256": "a47eac20fa1f7068051b0502e0d3681f981de3d9c5ddb680bf5f4d334b291ca9"
+      "sha256": "e1c4ac42c981e22d2c1bfd1091a47376b785334c82e84f2c9e8080925031d1ad"
     },
     {
       "path": "src/apply-update.mjs",
-      "sha256": "7bfc8bb13df755699ac38abeeecaa92597e0b7e3d1e9cb5514a81f82c5d62538"
+      "sha256": "acd966c6f1904bc561a3bbd2d6aed9b591663fc48289867c2957b3e1e5b9ec54"
     },
     {
       "path": "src/history-stats-worker.mjs",
@@ -44,7 +45,7 @@
     },
     {
       "path": "public/index.html",
-      "sha256": "5be001ff78f7f37ea8e5accf296192462cc078bfd0503c1be22a936ea5f75883"
+      "sha256": "5983cdfa703bf452f04472dde126aa071c33abb8a70b9cade19ec7f9cf08fd75"
     },
     {
       "path": "public/minions.html",
@@ -65,22 +66,31 @@
     {
       "path": "src/minion-recipes.mjs",
       "sha256": "5e561d5b6431c3353303a7492d5e35b559e96526ae0a266d1b45d32dcf5bb549"
+    },
+    {
+      "path": "src/updater.mjs",
+      "sha256": "2123d9ad4f0739ae996cb04674b8b54d1447469db12d3b71844336f050327c91"
+    },
+    {
+      "path": "src/maintenance-worker.mjs",
+      "sha256": "209c68d37b8d62bc46bee70a800c1bc200c9dff4992a9919c893ca694f2e3d01"
     }
   ],
   "bundle": {
     "parts": [
-      "./releases/0.6.12/part-001.txt",
-      "./releases/0.6.12/part-002.txt",
-      "./releases/0.6.12/part-003.txt",
-      "./releases/0.6.12/part-004.txt",
-      "./releases/0.6.12/part-005.txt",
-      "./releases/0.6.12/part-006.txt",
-      "./releases/0.6.12/part-007.txt",
-      "./releases/0.6.12/part-008.txt",
-      "./releases/0.6.12/part-009.txt",
-      "./releases/0.6.12/part-010.txt"
+      "./releases/0.6.13/part-001.txt",
+      "./releases/0.6.13/part-002.txt",
+      "./releases/0.6.13/part-003.txt",
+      "./releases/0.6.13/part-004.txt",
+      "./releases/0.6.13/part-005.txt",
+      "./releases/0.6.13/part-006.txt",
+      "./releases/0.6.13/part-007.txt",
+      "./releases/0.6.13/part-008.txt",
+      "./releases/0.6.13/part-009.txt",
+      "./releases/0.6.13/part-010.txt",
+      "./releases/0.6.13/part-011.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "a1b62860f2ea8dca2c6a5af9f142edd15bd496913827cd1f820be0b781518806"
+    "sha256": "894ae30c18ef85282e417dfbc2b2bc9826d04bba2cb66423beefbbf4022705cb"
   }
 }

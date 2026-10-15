@@ -1,0 +1,76 @@
+name: BazaarFlipper reliability v0.6.13
+on:
+  push:
+    branches: [fix/reliability-v0.6.13]
+    paths:
+      - candidate-src/**
+      - tests/reliability-v0.6.13.test.mjs
+      - tests/startup-sync-v0.6.12.test.mjs
+      - scripts/package-v0.6.13.mjs
+      - .github/workflows/reliability-v0.6.13.yml
+      - scripts/recover-bazaarflipper-v0.6.13.ps1
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: true}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - name: Syntax-check all changed modules
+        run: |
+          node --check candidate-src/server.mjs
+          node --check candidate-src/src/db.mjs
+          node --check candidate-src/src/updater.mjs
+          node --check candidate-src/src/maintenance-worker.mjs
+          node --check scripts/package-v0.6.13.mjs
+      - name: Real-scale 1.54m-row database regression and update retry/rollback staging
+        run: node tests/reliability-v0.6.13.test.mjs
+      - name: 700-snapshot backlog baseline
+        run: node tests/startup-sync-v0.6.12.test.mjs
+      - name: Minion regression suite
+        run: |
+          node tests/minions-v0.6.11.test.mjs
+          node tests/minion-audit-v0.6.11.mjs
+      - name: Package verified release
+        run: node scripts/package-v0.6.13.mjs
+      - name: Save release bundle to candidate branch only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add releases/0.6.13/ manifest.json
+          git diff --cached --quiet || (git commit -m "Package verified BazaarFlipper v0.6.13 candidate" && git push)
+
+  recovery-windows:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - name: Parse recovery PowerShell script
+        shell: pwsh
+        run: |
+          $tokens=$null
+          $parseErrors=$null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path scripts/recover-bazaarflipper-v0.6.13.ps1),[ref]$tokens,[ref]$parseErrors) | Out-Null
+          if($parseErrors.Count -gt 0){ $parseErrors | Format-List; throw 'PowerShell parse errors' }
+      - name: Exercise recovery on a legacy installation, preserving data
+        shell: pwsh
+        run: |
+          $root=Join-Path $env:RUNNER_TEMP 'bazaar-recovery-test'
+          New-Item -ItemType Directory -Path (Join-Path $root 'data'),(Join-Path $root 'logs') -Force | Out-Null
+          Set-Content -LiteralPath (Join-Path $root 'server.mjs') -Value '// old version'
+          Set-Content -LiteralPath (Join-Path $root 'config.json') -Value '{"preserve":true}'
+          Set-Content -LiteralPath (Join-Path $root 'data/bazaar.sqlite') -Value 'DATABASE-DO-NOT-TOUCH'
+          & ./scripts/recover-bazaarflipper-v0.6.13.ps1 -ProjectRoot $root
+          if($LASTEXITCODE -ne 0){throw 'Recovery script failed'}
+          $version=(Get-Content (Join-Path $root 'package.json') -Raw|ConvertFrom-Json).version
+          if($version -ne '0.6.12'){throw "Unexpected recovery version: $version"}
+          if((Get-Content (Join-Path $root 'data/bazaar.sqlite') -Raw).Trim() -ne 'DATABASE-DO-NOT-TOUCH'){throw 'Data changed'}
+          if((Get-Content (Join-Path $root 'config.json') -Raw|ConvertFrom-Json).preserve -ne $true){throw 'Config changed'}
+          Write-Host 'Windows recovery smoke PASS; original database and config unchanged'

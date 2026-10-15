@@ -71,7 +71,7 @@ async function healthCheck(expectedVersion, timeoutMs=180000) {
   let lastError='', firstResponseLogged=false;
   while (Date.now()-started < timeoutMs) {
     try {
-      const response = await fetch(`http://${host}:${port}/api/status`, { cache: 'no-store' });
+      const response = await fetch(`http://${host}:${port}/api/status`, { cache: 'no-store', signal: AbortSignal.timeout(5000) });
       if (!firstResponseLogged) {
         log(`first health response after ${Date.now()-started}ms: HTTP ${response.status}`);
         firstResponseLogged=true;
