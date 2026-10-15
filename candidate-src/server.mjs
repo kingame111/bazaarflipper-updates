@@ -630,6 +630,7 @@ function handoffStatus() {
     role: handoff.role,
     peerHost: handoff.peerHost,
     handoffPort: handoff.handoffPort,
+    peerPort: handoff.peerPort||handoff.handoffPort,
     collectorActive,
     switching,
     localHistoryRows: handoff.role==='LAPTOP' ? pendingSync().rows : historyRowEstimate(db),
@@ -762,7 +763,7 @@ function serveStatic(req, res) {
 function peerBaseUrl() {
   const host = String(handoff.peerHost || '').replace(/^https?:\/\//i, '').replace(/\/$/, '');
   if (!host) throw new Error('Peer computer is not configured. Run setup-handoff.bat first.');
-  return `http://${host}:${handoff.handoffPort}`;
+  return `http://${host}:${handoff.peerPort||handoff.handoffPort}`;
 }
 
 async function fetchPeerJson(endpoint, options = {}, timeoutMs = 20000) {
