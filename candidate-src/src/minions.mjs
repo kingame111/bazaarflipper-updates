@@ -12,22 +12,26 @@ const safe = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(va
 const clamp = (value, min, max) => Math.max(min, Math.min(max, safe(value)));
 const upper = (value) => String(value || '').trim().toUpperCase();
 
-function firstBookPrice(product, side) {
-  const levels = side === 'BUY'
+// Hypixel names summary sides from the instant transaction perspective:
+// sell_summary = current BUY orders (what an instant seller receives);
+// buy_summary = current SELL offers (what an instant buyer pays).
+function firstBookPrice(product, action) {
+  const instantBuy = action === 'INSTANT_BUY';
+  const levels = instantBuy
     ? (Array.isArray(product?.buy_summary) ? product.buy_summary : [])
     : (Array.isArray(product?.sell_summary) ? product.sell_summary : []);
   const price = safe(levels[0]?.pricePerUnit);
   if (price > 0) return price;
   const q = product?.quick_status || {};
-  return side === 'BUY' ? safe(q.buyPrice) : safe(q.sellPrice);
+  return instantBuy ? safe(q.buyPrice) : safe(q.sellPrice);
 }
 
 function currentPrice(productId, market) {
   const product = market?.[productId];
   return {
-    instantSell: firstBookPrice(product, 'BUY'),
-    sellOrder: firstBookPrice(product, 'SELL'),
-    acquisition: firstBookPrice(product, 'SELL')
+    instantSell: firstBookPrice(product, 'INSTANT_SELL'),
+    sellOrder: firstBookPrice(product, 'INSTANT_BUY'),
+    acquisition: firstBookPrice(product, 'INSTANT_BUY')
   };
 }
 
