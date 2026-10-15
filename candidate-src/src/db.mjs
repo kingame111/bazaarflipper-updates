@@ -182,6 +182,20 @@ export function importHistorySnapshots(db,snapshots=[],originId='LAPTOP'){
    const sourceOrigin=String(snap?.originId||originId||'LAPTOP');
    if(sourceOrigin!==String(originId))throw Error('Source origin mismatch: '+sourceOrigin);
    const list=Array.isArray(snap?.rows)?snap.rows:[];
+   if(!list.length)throw Error('Empty snapshot cannot be acknowledged: '+sourceOrigin+'/'+ts);
+   const expectedCount=Number(snap?.meta?.productCount);
+   if(snap?.meta?.productCount!=null && Number.isFinite(expectedCount) && expectedCount>0 && expectedCount!==list.length)
+     throw Error('Snapshot product count mismatch: '+sourceOrigin+'/'+ts);
+   const uniqueProducts=new Set();
+   for(const entry of list){
+     const id=Array.isArray(entry)?entry[0]:entry?.productId;
+     if(typeof id!=='string'||!id.trim()||uniqueProducts.has(id))
+       throw Error('Invalid or repeated snapshot product id: '+String(id));
+     uniqueProducts.add(id);
+     const values=Array.isArray(entry)?entry.slice(1):Object.entries(entry).filter(([k])=>k!=='productId').map(([,v])=>v);
+     for(const value of values)if(typeof value==='number'&&(!Number.isFinite(value)||value<0))
+       throw Error('Invalid snapshot product price, quantity, or volume: '+id);
+   }
    const digest=createHash('sha256').update(JSON.stringify({ts,originId:sourceOrigin,rows:list})).digest('hex');
    const prior=seen.get(sourceOrigin,ts);
    if(prior){
@@ -461,6 +475,8 @@ export function resetCollectedData(db) {
     db.exec('DELETE FROM history_daily;');
     db.exec('DELETE FROM competition_daily;');
     db.exec('DELETE FROM competition_stats;');
+    // Clear obsolete ACK receipts together with the history they refer to.
+    db.exec('DELETE FROM sync_imported_snapshots;');
     db.exec('DELETE FROM meta;');
     db.exec('COMMIT;');
   } catch (error) {
