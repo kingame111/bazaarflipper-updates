@@ -7,6 +7,7 @@ on:
       - tests/runtime-manager-v0.7.0.test.mjs
       - tests/sync-integrity-v0.7.0.test.mjs
       - tests/minion-quality-v0.7.0.test.mjs
+      - tests/market-contract-v0.7.0.test.mjs
       - tests/full-runtime-smoke-v0.7.0.mjs
       - scripts/package-v0.7.0.mjs
       - .github/workflows/stabilization-v0.7.0.yml
@@ -31,6 +32,8 @@ jobs:
         run: node tests/runtime-manager-v0.7.0.test.mjs
       - name: Test sync receipts, collisions and tampered replays
         run: node tests/sync-integrity-v0.7.0.test.mjs
+      - name: Verify Hypixel contracts and Bazaar/minion price sides
+        run: node tests/market-contract-v0.7.0.test.mjs
       - name: Minion economics regressions
         run: |
           node tests/minions-v0.6.11.test.mjs
@@ -49,6 +52,9 @@ jobs:
       - name: Test collision handling on Windows
         shell: pwsh
         run: node tests/sync-integrity-v0.7.0.test.mjs
+      - name: Test Hypixel price-side and economic invariants on Windows
+        shell: pwsh
+        run: node tests/market-contract-v0.7.0.test.mjs
 
   package-candidate:
     needs: [runtime-linux, runtime-windows]
