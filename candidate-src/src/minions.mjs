@@ -126,6 +126,8 @@ function acquisitionQuote(itemId, market) {
   return { price, available: price > 0 };
 }
 
+const MINIONS_BY_ID=new Map(Object.values(MINION_DATA.definitions).map(minion=>[upper(minion.id),minion]));
+
 function setupRecipeFor(itemId) {
   const id=upper(itemId);
   const upgrade=MINION_DATA.upgrades?.[id];
@@ -150,7 +152,19 @@ function setupAcquisitionQuote(itemId, context, seen=new Set()) {
   }
 
   if (seen.has(key)) return {price:0,available:false,source:'CYCLE',missing:[id],components:[]};
-  const recipe=setupRecipeFor(key);
+  let recipe=setupRecipeFor(key);
+  let recipeSource='CRAFT';
+  if(!recipe){
+    const match=key.match(/^(.+_GENERATOR)_([0-9]+)$/);
+    const inputMinion=match?MINIONS_BY_ID.get(match[1]):null;
+    if(inputMinion){
+      const resolved=resolveCumulativeTierRecipe(inputMinion,Number(match[2]));
+      if(!resolved.complete)return {price:0,available:false,source:'MINION_RECIPE_UNVERIFIED',
+        missing:resolved.missing||[id],components:[]};
+      recipe=resolved.byTier?.length?resolved.byTier:resolved.recipe;
+      recipeSource='MINION_CRAFT';
+    }
+  }
   if (!recipe) return {price:0,available:false,source:'UNPRICED',missing:[id],components:[]};
 
   const nextSeen=new Set(seen); nextSeen.add(key);
@@ -174,8 +188,8 @@ function setupAcquisitionQuote(itemId, context, seen=new Set()) {
     cost+=total;
     components.push({item:entry.item,amount,unitPrice:q.price,total,source:q.source});
   }
-  if (missing.length) return {price:0,available:false,source:'CRAFT',missing:[...new Set(missing)],components};
-  return {price:cost,available:true,source:'CRAFT',components};
+  if (missing.length) return {price:0,available:false,source:recipeSource,missing:[...new Set(missing)],components};
+  return {price:cost,available:true,source:recipeSource,components};
 }
 
 function compactDropStream(drop, rawUnitsPerDay, useCompactor, collectionIntervalDays = 1) {
