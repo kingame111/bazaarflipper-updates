@@ -1,6 +1,6 @@
 # BazaarFlipper stability roadmap and fault ledger
 
-Status: BLOCKED ON ORIGINAL SOURCE FILES — branch `stabilization/v0.7.0-foundation`.
+Status: VALIDATING INTEGRATED ORIGINAL SOURCES — branch `stabilization/v0.7.0-foundation`.
 Do not merge or release until a fully packaged runtime boots on Windows and Linux.
 
 ## Latest verification 2026-10-15
@@ -9,13 +9,13 @@ Do not merge or release until a fully packaged runtime boots on Windows and Linu
 - Conflicting-origin snapshot preservation, tampered replay rejection and legacy hash schema tests passed.
 - Minion incomplete setup pricing and bounded worker equivalence tests passed.
 - 1.54-million-row historical aggregation test passed.
-- CRITICAL FULL PACKAGING BLOCKER: The update repository only contains partial code bundles.
-  `src/hypixel.mjs`, `src/scoring.mjs`, `src/handoff.mjs`, `src/state.mjs`,
-  `public/app.js`, `public/pending-sync.js`, `public/styles.css`
-  are NOT available in the latest release archives. A clean install cannot boot.
-  Obtain the original source files from an existing user's install (code only, NO data/config/token),
-  commit them to candidate-src, package them, then run full packed-runtime smoke tests.
-  Do NOT reconstruct game calculations from guesses.
+- SOURCE GAP RESOLVED: 7 original runtime files were provided in src.zip, hash-verified
+  and imported into candidate-src on this branch only. No data/config/token was copied.
+  Standalone packaged-runtime tests must still pass before a release.
+- ENGINE MINIMUM ERROR FOUND: package.json previously claimed Node >=22.5 but Node 22.5
+  cannot load node:sqlite with default flags. Node 22.13/22.15 have SQLite but lack
+  its named backup export; supervisor now uses VACUUM INTO fallback and cross-version tests.
+  Reconfirm all supported versions before approving release.
 
 
 ## System contract
