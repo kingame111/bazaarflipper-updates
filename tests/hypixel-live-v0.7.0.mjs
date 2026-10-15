@@ -66,6 +66,7 @@ if(marketPayload?.products&&itemMetadata){
     ...ignored,nonFiniteOrInvalid:weird.slice(0,15),
     minionsTotal:ranking.rows.length,minionsSupported:supported.length,
     incompleteSetup:supported.filter(x=>!x.setupComplete).length,
+    incompleteSetupDetails:supported.filter(x=>!x.setupComplete).map(x=>({minion:x.name,source:x.recipeSource,missing:x.setupMissing})),
     incompleteRecurringEconomics:supported.filter(x=>x.economicsComplete===false).length,
     ranked:supported.filter(x=>Number.isInteger(x.sortRank)).length};
 }
