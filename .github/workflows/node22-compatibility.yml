@@ -25,3 +25,6 @@ jobs:
           node --version
           node --check candidate-src/runtime-manager.mjs
           node --input-type=module -e "import('./candidate-src/runtime-manager.mjs').then(()=>console.log('minimum engine can import supervisor')).catch(e=>{console.error(e);process.exitCode=1})"
+          if ($LASTEXITCODE -ne 0) { throw 'Runtime manager cannot start' }
+          node tests/runtime-manager-v0.7.0.test.mjs
+          if ($LASTEXITCODE -ne 0) { throw 'Runtime update or database backup regression' }
