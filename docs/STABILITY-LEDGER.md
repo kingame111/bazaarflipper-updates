@@ -1,6 +1,22 @@
 # BazaarFlipper stability roadmap and fault ledger
 
-Status: IN PROGRESS — branch `stabilization/v0.7.0-foundation`. No release until acceptance tests pass.
+Status: BLOCKED ON ORIGINAL SOURCE FILES — branch `stabilization/v0.7.0-foundation`.
+Do not merge or release until a fully packaged runtime boots on Windows and Linux.
+
+## Latest verification 2026-10-15
+- Independent supervisor integration tests passed on Linux and Windows.
+- Verified SQLite pre-update backup, forced unhealthy-update rollback, crash journal recovery passed.
+- Conflicting-origin snapshot preservation, tampered replay rejection and legacy hash schema tests passed.
+- Minion incomplete setup pricing and bounded worker equivalence tests passed.
+- 1.54-million-row historical aggregation test passed.
+- CRITICAL FULL PACKAGING BLOCKER: The update repository only contains partial code bundles.
+  `src/hypixel.mjs`, `src/scoring.mjs`, `src/handoff.mjs`, `src/state.mjs`,
+  `public/app.js`, `public/pending-sync.js`, `public/styles.css`
+  are NOT available in the latest release archives. A clean install cannot boot.
+  Obtain the original source files from an existing user's install (code only, NO data/config/token),
+  commit them to candidate-src, package them, then run full packed-runtime smoke tests.
+  Do NOT reconstruct game calculations from guesses.
+
 
 ## System contract
 - One local Node HTTP API on port 3210, Hypixel polling and dynamic market calculations.
