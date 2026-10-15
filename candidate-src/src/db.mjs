@@ -1,6 +1,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 import path from 'node:path';
+import {createHash} from 'node:crypto';
 
 export function openDatabase(filePath, options = {}) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -116,7 +117,17 @@ export function ensureExtendedHistorySchema(db) {
     );
     INSERT OR IGNORE INTO history_snapshot_meta (bucket_ts, origin_id, source_ts, collected_at, ingested_at, product_count, effective_tax_rate, schema_version)
       SELECT ts, origin_id, ts, received_at, received_at, 0, 0, 1 FROM history_snapshots;
+    CREATE TABLE IF NOT EXISTS history_observation_conflicts (
+      ts INTEGER NOT NULL, product_id TEXT NOT NULL, origin_id TEXT NOT NULL,
+      observed_at INTEGER NOT NULL, canonical_json TEXT NOT NULL,
+      incoming_json TEXT NOT NULL,
+      PRIMARY KEY (ts,product_id,origin_id)
+    );
+    CREATE INDEX IF NOT EXISTS idx_history_conflicts_ts ON history_observation_conflicts(ts DESC);
   `);
+  // Existing desktop databases get this column on first startup. No history-table rebuild.
+  const importedColumns=new Set(db.prepare('PRAGMA table_info(sync_imported_snapshots)').all().map(x=>String(x.name)));
+  if(!importedColumns.has('content_hash'))db.exec('ALTER TABLE sync_imported_snapshots ADD COLUMN content_hash TEXT;');
 }
 
 export function insertHistorySnapshot(db,timestamp,rows,originId='LOCAL',meta={}){
@@ -154,32 +165,76 @@ export function exportPendingHistorySnapshots(db,originId='LAPTOP',limit=4){
 }
 
 export function importHistorySnapshots(db,snapshots=[],originId='LAPTOP'){
- const ins=db.prepare(`INSERT OR IGNORE INTO history (ts,product_id,best_buy_order,best_sell_offer,sell_moving_week,buy_moving_week,sell_volume,buy_volume,sell_orders,buy_orders,weighted_buy_price,weighted_sell_price,best_buy_amount,best_sell_amount,buy_depth_1pct,sell_depth_1pct,buy_depth_5pct,sell_depth_5pct) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
+ const ins=db.prepare('INSERT OR IGNORE INTO history (ts,product_id,best_buy_order,best_sell_offer,sell_moving_week,buy_moving_week,sell_volume,buy_volume,sell_orders,buy_orders,weighted_buy_price,weighted_sell_price,best_buy_amount,best_sell_amount,buy_depth_1pct,sell_depth_1pct,buy_depth_5pct,sell_depth_5pct) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+ const current=db.prepare('SELECT best_buy_order,best_sell_offer,sell_moving_week,buy_moving_week,sell_volume,buy_volume,sell_orders,buy_orders,weighted_buy_price,weighted_sell_price,best_buy_amount,best_sell_amount,buy_depth_1pct,sell_depth_1pct,buy_depth_5pct,sell_depth_5pct FROM history WHERE ts=? AND product_id=?');
+ const columns=['bestBuyOrder','bestSellOffer','sellMovingWeek','buyMovingWeek','sellVolume','buyVolume','sellOrders','buyOrders','weightedBuyPrice','weightedSellPrice','bestBuyAmount','bestSellAmount','buyDepth1Pct','sellDepth1Pct','buyDepth5Pct','sellDepth5Pct'];
  const marker=db.prepare('INSERT OR IGNORE INTO history_snapshots (ts,origin_id,received_at) VALUES (?,?,?)');
- const meta=db.prepare(`INSERT INTO history_snapshot_meta (bucket_ts,origin_id,source_ts,collected_at,ingested_at,product_count,effective_tax_rate,schema_version) VALUES (?,?,?,?,?,?,?,?) ON CONFLICT(bucket_ts,origin_id) DO UPDATE SET source_ts=excluded.source_ts,collected_at=excluded.collected_at,ingested_at=excluded.ingested_at,product_count=excluded.product_count,effective_tax_rate=excluded.effective_tax_rate,schema_version=excluded.schema_version`);
- const seen=db.prepare('SELECT 1 yes FROM sync_imported_snapshots WHERE origin_id=? AND ts=?');
- const markSeen=db.prepare('INSERT OR IGNORE INTO sync_imported_snapshots (origin_id,ts,received_at,row_count) VALUES (?,?,?,?)');
- let rowsInserted=0,snapshotsRecorded=0,duplicateSnapshots=0,duplicateRows=0;
+ const meta=db.prepare('INSERT INTO history_snapshot_meta (bucket_ts,origin_id,source_ts,collected_at,ingested_at,product_count,effective_tax_rate,schema_version) VALUES (?,?,?,?,?,?,?,?) ON CONFLICT(bucket_ts,origin_id) DO UPDATE SET source_ts=excluded.source_ts,collected_at=excluded.collected_at,ingested_at=excluded.ingested_at,product_count=excluded.product_count,effective_tax_rate=excluded.effective_tax_rate,schema_version=excluded.schema_version');
+ const seen=db.prepare('SELECT row_count rowCount,content_hash contentHash FROM sync_imported_snapshots WHERE origin_id=? AND ts=?');
+ const markSeen=db.prepare('INSERT INTO sync_imported_snapshots (origin_id,ts,received_at,row_count,content_hash) VALUES (?,?,?,?,?)');
+ const conflict=db.prepare('INSERT OR REPLACE INTO history_observation_conflicts (ts,product_id,origin_id,observed_at,canonical_json,incoming_json) VALUES (?,?,?,?,?,?)');
+ let rowsInserted=0,snapshotsRecorded=0,duplicateSnapshots=0,duplicateRows=0,conflictingObservations=0,verifiedSnapshots=0,legacyUnverified=0;
  db.exec('BEGIN IMMEDIATE;');
  try{
   for(const snap of Array.isArray(snapshots)?snapshots:[]){
-   const ts=Number(snap?.ts);if(!Number.isFinite(ts))continue;
-   const sourceOrigin=String(snap?.originId||originId||'LAPTOP'),list=Array.isArray(snap?.rows)?snap.rows:[];
-   if(seen.get(sourceOrigin,ts)){duplicateSnapshots++;duplicateRows+=list.length;continue;}
+   const ts=Number(snap?.ts);
+   if(!Number.isFinite(ts)||ts<=0)throw Error('Invalid snapshot timestamp');
+   const sourceOrigin=String(snap?.originId||originId||'LAPTOP');
+   if(sourceOrigin!==String(originId))throw Error('Source origin mismatch: '+sourceOrigin);
+   const list=Array.isArray(snap?.rows)?snap.rows:[];
+   if(!list.length)throw Error('Empty snapshot cannot be acknowledged: '+sourceOrigin+'/'+ts);
+   const expectedCount=Number(snap?.meta?.productCount);
+   if(snap?.meta?.productCount!=null && Number.isFinite(expectedCount) && expectedCount>0 && expectedCount!==list.length)
+     throw Error('Snapshot product count mismatch: '+sourceOrigin+'/'+ts);
+   const uniqueProducts=new Set();
+   for(const entry of list){
+     const id=Array.isArray(entry)?entry[0]:entry?.productId;
+     if(typeof id!=='string'||!id.trim()||uniqueProducts.has(id))
+       throw Error('Invalid or repeated snapshot product id: '+String(id));
+     uniqueProducts.add(id);
+     const values=Array.isArray(entry)?entry.slice(1):Object.entries(entry).filter(([k])=>k!=='productId').map(([,v])=>v);
+     for(const value of values)if(typeof value==='number'&&(!Number.isFinite(value)||value<0))
+       throw Error('Invalid snapshot product price, quantity, or volume: '+id);
+   }
+   const digest=createHash('sha256').update(JSON.stringify({ts,originId:sourceOrigin,rows:list})).digest('hex');
+   const prior=seen.get(sourceOrigin,ts);
+   if(prior){
+     if(prior.contentHash && prior.contentHash!==digest)throw Error('Snapshot content conflict; refusing acknowledgement: '+sourceOrigin+'/'+ts);
+     if(!prior.contentHash){
+       if(Number(prior.rowCount)!==list.length)throw Error('Legacy snapshot row count mismatch: '+sourceOrigin+'/'+ts);
+       legacyUnverified++;
+     }else verifiedSnapshots++;
+     duplicateSnapshots++;duplicateRows+=list.length;continue;
+   }
    for(const x of list){
     const r=Array.isArray(x)?{productId:x[0],bestBuyOrder:x[1],bestSellOffer:x[2],sellMovingWeek:x[3],buyMovingWeek:x[4],sellVolume:x[5],buyVolume:x[6],sellOrders:x[7],buyOrders:x[8]}:x;
-    if(!r?.productId)continue;
-    const y=ins.run(ts,String(r.productId),Number(r.bestBuyOrder)||0,Number(r.bestSellOffer)||0,Number(r.sellMovingWeek)||0,Number(r.buyMovingWeek)||0,Number(r.sellVolume)||0,Number(r.buyVolume)||0,Number(r.sellOrders)||0,Number(r.buyOrders)||0,Number(r.weightedBuyPrice)||0,Number(r.weightedSellPrice)||0,Number(r.bestBuyAmount)||0,Number(r.bestSellAmount)||0,Number(r.buyDepth1Pct)||0,Number(r.sellDepth1Pct)||0,Number(r.buyDepth5Pct)||0,Number(r.sellDepth5Pct)||0);
-    rowsInserted+=Number(y.changes)||0;
+    if(!r?.productId)throw Error('Invalid product in snapshot '+ts);
+    const incoming=columns.map(k=>Number(r[k])||0);
+    const result=ins.run(ts,String(r.productId),...incoming);
+    if(Number(result.changes)>0){
+      rowsInserted++;continue;
+    }
+    const previous=current.get(ts,String(r.productId));
+    if(!previous)throw Error('Expected a canonical product after ignored insert');
+    const canonical=Object.values(previous).map(x=>Number(x)||0);
+    if(canonical.some((n,i)=>n!==incoming[i])){
+      conflictingObservations++;
+      conflict.run(ts,String(r.productId),sourceOrigin,Date.now(),
+        JSON.stringify(Object.fromEntries(columns.map((k,i)=>[k,canonical[i]]))),
+        JSON.stringify(Object.fromEntries(columns.map((k,i)=>[k,incoming[i]]))));
+    }
    }
    snapshotsRecorded+=Number(marker.run(ts,sourceOrigin,Date.now()).changes)||0;
-   markSeen.run(sourceOrigin,ts,Date.now(),list.length);
+   markSeen.run(sourceOrigin,ts,Date.now(),list.length,digest);
    const m=snap?.meta||{};
    meta.run(ts,sourceOrigin,Number(m.sourceTs)||ts,Number(m.collectedAt)||ts,Date.now(),Math.max(0,Number(m.productCount)||list.length),Math.max(0,Number(m.effectiveTaxRate)||0),Math.max(1,Number(m.schemaVersion)||1));
+   verifiedSnapshots++;
   }
   db.exec('COMMIT;');
  }catch(e){db.exec('ROLLBACK;');throw e;}
- return{rowsInserted,snapshotsRecorded,duplicateSnapshots,duplicateRows};
+ return{rowsInserted,snapshotsRecorded,duplicateSnapshots,duplicateRows,
+   conflictingObservations,verifiedSnapshots,legacyUnverified,
+   acceptedSnapshots:verifiedSnapshots+legacyUnverified};
 }
 
 export function acknowledgeHistorySnapshots(db, snapshots = [], originId = 'LAPTOP') {
@@ -420,6 +475,8 @@ export function resetCollectedData(db) {
     db.exec('DELETE FROM history_daily;');
     db.exec('DELETE FROM competition_daily;');
     db.exec('DELETE FROM competition_stats;');
+    // Clear obsolete ACK receipts together with the history they refer to.
+    db.exec('DELETE FROM sync_imported_snapshots;');
     db.exec('DELETE FROM meta;');
     db.exec('COMMIT;');
   } catch (error) {

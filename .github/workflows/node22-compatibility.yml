@@ -1,0 +1,30 @@
+name: BazaarFlipper original Node engine compatibility
+on:
+  push:
+    branches: [stabilization/v0.7.0-foundation]
+    paths: [candidate-src/runtime-manager.mjs, .github/workflows/node22-compatibility.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-engine:
+    runs-on: windows-latest
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ['22.13.0','22.15.0','22.21.1','24.0.0']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.version }}
+      - name: Validate built-in SQLite and standalone runtime compatibility
+        shell: pwsh
+        run: |
+          node --version
+          node --check candidate-src/runtime-manager.mjs
+          node --input-type=module -e "import('./candidate-src/runtime-manager.mjs').then(()=>console.log('minimum engine can import supervisor')).catch(e=>{console.error(e);process.exitCode=1})"
+          if ($LASTEXITCODE -ne 0) { throw 'Runtime manager cannot start' }
+          node tests/runtime-manager-v0.7.0.test.mjs
+          if ($LASTEXITCODE -ne 0) { throw 'Runtime update or database backup regression' }
