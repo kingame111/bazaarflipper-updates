@@ -95,6 +95,22 @@ try{
    'Offline desktop must not delete pending laptop data');
  db.close();
  start(desktop);await wait(desktop.http);
+ // Peer handoff API must reject missing/incorrect credentials before touching data.
+ const denied=await fetch('http://127.0.0.1:'+desktop.sync+'/handoff/status',
+   {signal:AbortSignal.timeout(2000)});
+ assert.equal(denied.status,401,'Unprotected LAN peer endpoint exposes synchronization data');
+ const authorized=await fetch('http://127.0.0.1:'+desktop.sync+'/handoff/status',{
+   headers:{'x-bazaarflipper-token':'safe-test-token-not-real-secret'},
+   signal:AbortSignal.timeout(2000)
+ });
+ assert.equal(authorized.status,200,'Correct peer token must work');
+ const forbiddenImport=await fetch('http://127.0.0.1:'+desktop.sync+'/handoff/sync/import',{
+   method:'POST',headers:{'content-type':'application/json'},
+   body:JSON.stringify({sourceRole:'LAPTOP',snapshots:[]}),
+   signal:AbortSignal.timeout(2000)
+ });
+ assert.equal(forbiddenImport.status,401,'Sync import must require a valid token');
+
  const sent=await request(laptop.http,'/api/handoff/sync','POST',Math.max(150000,snapshots*500));
  assert.ok(sent.ok,JSON.stringify(sent).slice(0,300));
  db=openDatabase(path.join(desktop.root,'data','bazaar.sqlite'));
@@ -114,7 +130,7 @@ try{
  db.close();
  console.log(JSON.stringify({PASS:true,realHttpServers:2,offlineRetryTest:true,
    snapshotCount:snapshots,productsPerSnapshot:products,verifiedRows:imported,
-   conflictsRetained:conflicts,allSourceConflicts:allConflicts,offlineDurationMs:Date.now()-downStart}));
+   conflictsRetained:conflicts,allSourceConflicts:allConflicts,peerAuthenticationTested:true,offlineDurationMs:Date.now()-downStart}));
 }catch(error){
  console.error('LAST SERVER LOGS\n'+logLines.slice(-35).join('\n'));
  throw error;
