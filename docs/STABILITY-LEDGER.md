@@ -54,7 +54,7 @@ Do not merge or release until a fully packaged runtime boots on Windows and Linu
 - The published v0.6.13 package is not proof of independent update architecture.
 
 ## Independent uploaded-source audit (2026-10-15)
-The uploaded `src.zip` contains 12 `.mjs`, 3 `.js`, 2 HTML and 2 CSS files from desktop v0.6.13. Standalone Node 22 syntax tests passed on 15 JS/MJS files. This source archive was audited locally; the unmodified originals must still be copied into the release candidate before full clean-install tests.
+The uploaded `src.zip` contains 12 `.mjs`, 3 `.js`, 2 HTML and 2 CSS files from desktop v0.6.13. Standalone Node 22 syntax tests passed on 15 JS/MJS files. This source archive was audited locally; the original runtime files have now been imported and verified in candidate-src. Full packaged-runtime tests are still required before releasing.
 
 **Release blockers confirmed by standalone SQLite tests:**
 - v0.6.13 `history(ts, product_id)` collisions silently discarded a LAPTOP observation with a different price, after which the laptop acknowledgement deleted it; modified retransmits of the same `(origin_id, ts)` were accepted as duplicates.
