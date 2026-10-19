@@ -24,7 +24,7 @@ The catalog regression test `tests/minion-catalog-coverage-v0.7.0.test.mjs` inde
 ### Strict model limitations
 
 - **Flower, Snow:** Tier I auction/gift acquisition cannot be determined from Bazaar; the entire cumulative purchase path must not claim an exact payback.
-- **Fishing Rod:** vanilla craft known, but a safe exact acquisition quote must account for stick/plank crafting batches, source availability and potential merchant prices. No fixed or guessed purchase price is injected.
+- **Fishing Rod:** verified 3 sticks + 2 string crafted from 1 whole oak log and 2 string, using live Bazaar acquisition quotes (the unused planks/stick are not credited). Missing ingredient prices fail closed. This is a documented crafting path, not necessarily the globally cheapest acquisition.
 - **Pelts and North Stars:** source-linked exact quantity, but no universal coin market price. Cumulative coin-only setup cost, ROI and payback must stay N/A in their presence.
 - **Red Sand Reputation:** required 12k Barbarian reputation is a separate eligibility gate, not a Bazaar coin payment.
 - **Inferno:** special fuel and tier mechanics still unsupported as a full economic model.
