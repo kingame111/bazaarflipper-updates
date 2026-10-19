@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {MINION_DATA} from '../candidate-src/src/minion-data.mjs';
 import {VERIFIED_MERCHANT_UPGRADES} from '../candidate-src/src/minion-merchant-recipes.mjs';
+import {VERIFIED_EXTERNAL_STARTER_TIER_XII} from '../candidate-src/src/minion-external-starters.mjs';
 import {resolveCumulativeTierRecipe} from '../candidate-src/src/minion-recipes.mjs';
 import {calculateMinion} from '../candidate-src/src/minions.mjs';
 
@@ -73,6 +74,18 @@ for(const name of ['Snow Minion','Flower Minion']){
   assert.equal(x.complete,false,'Cannot give an exact auction/gift starter cost: '+name+'/T'+tier);
   assert.equal(x.source,'EXTERNAL_STARTER_COST_UNKNOWN');
  }
+}
+assert.deepEqual(VERIFIED_EXTERNAL_STARTER_TIER_XII.SNOW_GENERATOR.items,
+  [{item:'ENCHANTED_SNOW_BLOCK',amount:1024},{item:'COINS',amount:2000000},
+   {item:'NORTH_STARS',amount:500}]);
+assert.equal(VERIFIED_EXTERNAL_STARTER_TIER_XII.FLOWER_GENERATOR.items[0].amount,16);
+assert.ok(VERIFIED_EXTERNAL_STARTER_TIER_XII.FLOWER_GENERATOR.requirements
+  .some(r=>r.kind==='MUSEUM_MILESTONE'&&r.amount===10));
+for(const name of ['Snow Minion','Flower Minion']){
+ const resolved=resolveCumulativeTierRecipe(MINION_DATA.definitions[name],12);
+ assert.equal(resolved.complete,false,'Externally acquired Tier I must remain unpriced');
+ assert.ok(resolved.missing.some(x=>x.includes('Verified Tier XII')),
+   'Known Tier XII materials must be displayed despite unknown starting price');
 }
 console.log(JSON.stringify({PASS:true,sourceAuditedTierXII:29,
   externalGiftOrAuctionTiers:24,noInventedNonBazaarCurrency:true}));
