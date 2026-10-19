@@ -570,45 +570,39 @@ export function importHandoffDatabase(db, sourcePath) {
                margin_samples, margin_mean, margin_m2, updated_ts
         FROM incoming.competition_stats;
       `);
+      // Verify BEFORE committing: a rejected handoff must never alter the
+      // desktop's history or competition data, even temporarily.
+      const missingRows = Number(db.prepare(
+        'SELECT COUNT(*) AS n FROM (SELECT '+incomingHistorySelect+
+        ' FROM incoming.history EXCEPT SELECT '+historyColumns.join(',')+' FROM history)'
+      ).get()?.n || 0);
+      const missingMeta = hasIncomingTable('history_snapshot_meta') ?
+        Number(db.prepare(
+          'SELECT COUNT(*) AS n FROM ('+
+          'SELECT bucket_ts,origin_id,source_ts,collected_at,ingested_at,product_count,effective_tax_rate,schema_version '+
+          'FROM incoming.history_snapshot_meta EXCEPT '+
+          'SELECT bucket_ts,origin_id,source_ts,collected_at,ingested_at,product_count,effective_tax_rate,schema_version '+
+          'FROM history_snapshot_meta)'
+        ).get()?.n||0):0;
+      const statsAfter = competitionCount(db);
+      if(missingRows!==0||missingMeta!==0||statsAfter!==sourceStats){
+        throw Error('Handoff verification failed before commit: missingHistoryRows='+
+          missingRows+', missingMetadataRows='+missingMeta+
+          ', competitionRows='+statsAfter+'/'+sourceStats);
+      }
       db.exec('COMMIT;');
-    } catch (error) {
+      return {
+        sourceHistoryRows:sourceRows,sourceCompetitionRows:sourceStats,
+        missingHistoryRows:0,missingMetadataRows:0,
+        importedMetadataRows:importedMeta,importedHourlyRows:importedHourly,
+        importedDailyRows:importedDaily,
+        importedCompetitionDailyRows:importedCompetitionDaily,
+        competitionRowsAfter:statsAfter,verified:true
+      };
+    } catch(error) {
       db.exec('ROLLBACK;');
       throw error;
     }
-
-    const missingRows = Number(db.prepare(`
-      SELECT COUNT(*) AS n FROM (
-        SELECT ${incomingHistorySelect} FROM incoming.history
-        EXCEPT
-        SELECT ${historyColumns.join(',')} FROM history
-      )
-    `).get()?.n || 0);
-
-    const missingMeta = hasIncomingTable('history_snapshot_meta')
-      ? Number(db.prepare(`
-          SELECT COUNT(*) AS n FROM (
-            SELECT bucket_ts, origin_id, source_ts, collected_at, ingested_at, product_count, effective_tax_rate, schema_version
-            FROM incoming.history_snapshot_meta
-            EXCEPT
-            SELECT bucket_ts, origin_id, source_ts, collected_at, ingested_at, product_count, effective_tax_rate, schema_version
-            FROM history_snapshot_meta
-          )
-        `).get()?.n || 0)
-      : 0;
-
-    const statsAfter = competitionCount(db);
-    return {
-      sourceHistoryRows: sourceRows,
-      sourceCompetitionRows: sourceStats,
-      missingHistoryRows: missingRows,
-      missingMetadataRows: missingMeta,
-      importedMetadataRows: importedMeta,
-      importedHourlyRows: importedHourly,
-      importedDailyRows: importedDaily,
-      importedCompetitionDailyRows: importedCompetitionDaily,
-      competitionRowsAfter: statsAfter,
-      verified: missingRows === 0 && missingMeta === 0 && statsAfter === sourceStats
-    };
   } finally {
     try { db.exec('DETACH DATABASE incoming;'); } catch {}
     checkpointDatabase(db);
