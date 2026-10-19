@@ -45,6 +45,27 @@ try{
   await page.locator('#refreshBtn').click();
   await page.waitForTimeout(450);
 
+  // An older response MUST NOT overwrite the newest tax selection.
+  await page.route('**/api/flips?**',async route=>{
+    const tax=new URL(route.request().url()).searchParams.get('tax');
+    const remote=await route.fetch();
+    const data=await remote.json();
+    data.effectiveTaxPercent=Number(tax);
+    if(tax==='1.125')await new Promise(resolve=>setTimeout(resolve,1400));
+    if(tax==='1')await new Promise(resolve=>setTimeout(resolve,40));
+    await route.fulfill({response:remote,body:JSON.stringify(data)});
+  });
+  await page.locator('#tax').selectOption('1.125');
+  await page.waitForTimeout(100);
+  await page.locator('#tax').selectOption('1');
+  await page.waitForFunction(()=>
+    document.getElementById('taxMeta')?.textContent?.includes('1.000%'),{timeout:12000});
+  await page.waitForTimeout(1700);
+  assert.match(await page.locator('#taxMeta').textContent(),/Effective now: 1\.000%/,
+    'Delayed older Bazaar result overwrote the newer tax filter');
+  await page.unroute('**/api/flips?**');
+
+
   // Intercept this one check, not the updater process, so the UI click path is deterministic.
   await page.route('http://127.0.0.1:3212/check',route=>route.fulfill({
     status:200,contentType:'application/json',
