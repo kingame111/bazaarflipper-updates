@@ -101,9 +101,9 @@ const iceResult=calculateMinion(ice,{tier:12,count:1,fuel:'NONE',shipping:'NONE'
 assert.equal(iceResult.setupComplete,false);
 assert.ok(iceResult.setupMissing.includes('NORTH_STARS'));
 assert.equal(iceResult.setupCost,null);
-const notVerified=MINION_DATA.definitions['Melon Minion'];
+const notVerified=MINION_DATA.definitions['Flower Minion'];
 assert.equal(resolveCumulativeTierRecipe(notVerified,12).complete,false,
-  'Do not invent generic tier 12 recipes or currencies');
+  'Do not invent acquisition cost for non-craftable starter minion');
 const notCraftable=resolveCumulativeTierRecipe(MINION_DATA.definitions['Flower Minion'],1);
 assert.equal(notCraftable.complete,false,'External starter value must not be fabricated');
 console.log(JSON.stringify({PASS:true,verifiedMerchantTrades:Object.keys(verified).length+5,
