@@ -13,7 +13,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 if(process.env.BAZAAR_MANAGED_CHILD!=='1'){
-  const root=path.dirname(fileURLToPath(import.meta.url).replace(/[\\/]src[\\/]supervisor-bootstrap\.mjs$/,''));
+  const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
   const entry=path.join(root,'runtime-manager.mjs');
   const manager=spawn(process.execPath,[entry],{
     cwd:root,
