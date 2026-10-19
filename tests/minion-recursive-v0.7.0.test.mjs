@@ -49,6 +49,10 @@ assert.equal(incomplete.setupComplete,false);
 assert.equal(incomplete.setupCost,null);
 assert.equal(incomplete.paybackDays,null);
 assert.ok(incomplete.setupMissing.includes('ENDER_PEARL'));
+const hardStoneXII=resolveCumulativeTierRecipe(MINION_DATA.definitions['Hard Stone Minion'],12);
+assert.ok(hardStoneXII.byTier.some(x=>x.tier===12&&x.item==='CONCENTRATED_STONE'&&x.amount===32),
+ 'Official Hypixel Concentrated Stone wiki specifies 32 for Hard Stone XII');
+assert.ok(hardStoneXII.byTier.some(x=>x.tier===12&&x.item==='COINS'&&x.amount===2000000));
 const unknown=resolveCumulativeTierRecipe(MINION_DATA.definitions['Revenant Minion'],19);
 assert.equal(unknown.complete,false);
 console.log(JSON.stringify({PASS:true,recursiveMinionCost:true,revenantTier2:revenant.setupCost,
