@@ -1,5 +1,6 @@
 import { MINION_DATA } from './minion-data.mjs';
 import { resolveCumulativeTierRecipe } from './minion-recipes.mjs';
+import {VERIFIED_NON_BAZAAR_INGREDIENTS} from './minion-ingredient-recipes.mjs';
 
 const DAY_SECONDS = 86400;
 // Shipping occupies its own minion slot, not one of the two standard upgrade slots.
@@ -132,7 +133,7 @@ function setupRecipeFor(itemId) {
   const id=upper(itemId);
   const upgrade=MINION_DATA.upgrades?.[id];
   if (Array.isArray(upgrade?.recipe) && upgrade.recipe.length) return upgrade.recipe;
-  const recipe=MINION_DATA.setupRecipes?.[id];
+  const recipe=MINION_DATA.setupRecipes?.[id]||VERIFIED_NON_BAZAAR_INGREDIENTS[id]?.recipe;
   return Array.isArray(recipe) && recipe.length ? recipe : null;
 }
 
