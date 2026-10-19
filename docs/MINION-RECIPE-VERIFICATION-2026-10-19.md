@@ -42,6 +42,10 @@ Each row represents the *additional step* from Tier XI to Tier XII; Tier I–XI 
 | Sunflower | SkyMart | 32 Compacted Sunflowers | [Community recipe](https://hypixelskyblock.minecraft.wiki/w/Sunflower_Minion) |
 | Wheat | Tony | 1024 Enchanted Wheat + 75 Pelts | [Community recipe](https://hypixelskyblock.minecraft.wiki/w/Wheat_Minion) |
 
+## Independent cumulative accounting check
+
+A code-level comparison of **649 exact cumulative Tier I–XI minion recipes** against the sum of their corresponding *per-tier ingredient recipes* found **zero disagreements**. An automated regression now reruns this accounting on both Windows and Linux: `tests/minion-tier-cumulative-v0.7.0.test.mjs`. It checks the actual material switch points instead of assuming all tiers use the original item.
+
 ## Important caveats and user impact
 
 - **Snow I** comes from Gifts; minion acquisition cannot be quoted from regular Bazaar ingredients. Twelve levels retain unknown **starting acquisition cost**. The upgrade material recipes are known, but total payback is not exactly computable from Bazaar: https://hypixelskyblock.minecraft.wiki/w/Snow_Minion
