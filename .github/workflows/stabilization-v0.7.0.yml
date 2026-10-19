@@ -12,6 +12,7 @@ on:
       - tests/minion-quality-v0.7.0.test.mjs
       - tests/market-contract-v0.7.0.test.mjs
       - tests/minion-recursive-v0.7.0.test.mjs
+      - tests/minion-merchant-provenance-v0.7.0.test.mjs
       - tests/minion-merchant-v0.7.0.test.mjs
       - tests/minion-nonbazaar-craft-v0.7.0.test.mjs
       - tests/minion-catalog-coverage-v0.7.0.test.mjs
@@ -52,6 +53,8 @@ jobs:
         run: node tests/market-contract-v0.7.0.test.mjs
       - name: Test nested Slayer minion ingredient recipes
         run: node tests/minion-recursive-v0.7.0.test.mjs
+      - name: Verify 29 NPC Tier XII trades and 24 external starter costs
+        run: node tests/minion-merchant-provenance-v0.7.0.test.mjs
       - name: Source-verified Tier XII NPC costs and coin fees
         run: node tests/minion-merchant-v0.7.0.test.mjs
       - name: Verify craftable Slayer and Vampire starter prices
@@ -91,6 +94,9 @@ jobs:
       - name: Test recursive minion economics on Windows
         shell: pwsh
         run: node tests/minion-recursive-v0.7.0.test.mjs
+      - name: Verify all merchant recipes and non-Bazaar currencies on Windows
+        shell: pwsh
+        run: node tests/minion-merchant-provenance-v0.7.0.test.mjs
       - name: Source-verified Tier XII NPC costs on Windows
         shell: pwsh
         run: node tests/minion-merchant-v0.7.0.test.mjs
