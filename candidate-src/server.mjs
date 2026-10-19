@@ -1,5 +1,6 @@
 import './src/supervisor-bootstrap.mjs';
 import http from 'node:http';
+import {createHash} from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
@@ -21,6 +22,7 @@ import {
   replaceCompetitionStats,
   historyCount,
   checkpointDatabase,
+  createVerifiedHandoffExport,
   resetCollectedData,
   importHandoffDatabase,
   exportPendingHistorySnapshots,
@@ -789,38 +791,51 @@ async function fetchPeerJson(endpoint, options = {}, timeoutMs = 20000) {
   } finally { clearTimeout(timer); }
 }
 
-function uploadDatabaseToPeer() {
-  return new Promise((resolve, reject) => {
-    checkpointDatabase(db);
-    const stat = fs.statSync(dbPath);
-    const target = new URL(`${peerBaseUrl()}/handoff/import-db`);
-    const req = http.request({
-      method: 'POST',
-      hostname: target.hostname,
-      port: target.port || handoff.handoffPort,
-      path: target.pathname,
-      headers: {
-        'x-bazaarflipper-token': handoff.token,
-        'content-type': 'application/octet-stream',
-        'content-length': stat.size
-      }
-    }, (res) => {
-      const chunks = [];
-      res.on('data', (chunk) => chunks.push(chunk));
-      res.on('end', () => {
-        try {
-          const body = JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
-          if (res.statusCode < 200 || res.statusCode >= 300) return reject(new Error(body.error || `Peer returned HTTP ${res.statusCode}`));
-          resolve(body);
-        } catch (error) {
-          reject(error);
+async function fileDigest(filePath){
+  const hasher=createHash('sha256');
+  for await(const chunk of fs.createReadStream(filePath))hasher.update(chunk);
+  return hasher.digest('hex');
+}
+async function uploadDatabaseToPeer(){
+  // A consistent VACUUM INTO snapshot, never stream a live WAL database file.
+  const exportPath=path.join(dataDir,'handoff-export-'+process.pid+'-'+Date.now()+'.sqlite');
+  try{
+    const exported=createVerifiedHandoffExport(db,exportPath);
+    const digest=await fileDigest(exportPath);
+    const target=new URL(peerBaseUrl()+'/handoff/import-db');
+    return await new Promise((resolve,reject)=>{
+      const req=http.request({
+        method:'POST',hostname:target.hostname,
+        port:target.port||handoff.handoffPort,path:target.pathname,
+        headers:{
+          'x-bazaarflipper-token':handoff.token,
+          'x-bazaar-db-sha256':digest,
+          'content-type':'application/octet-stream',
+          'content-length':exported.bytes
         }
+      },res=>{
+        const chunks=[];
+        res.on('data',chunk=>chunks.push(chunk));
+        res.on('end',()=>{
+          try{
+            const body=JSON.parse(Buffer.concat(chunks).toString('utf8')||'{}');
+            if(res.statusCode<200||res.statusCode>=300)
+              return reject(Error(body.error||'Peer returned HTTP '+res.statusCode));
+            if(!body.verified||body.sha256!==digest)
+              return reject(Error('Receiver did not verify the entire handoff snapshot'));
+            resolve(body);
+          }catch(error){reject(error)}
+        });
       });
+      req.setTimeout(15*60*1000,()=>req.destroy(Error('Database transfer timed out')));
+      req.on('error',reject);
+      const stream=fs.createReadStream(exportPath);
+      stream.on('error',error=>req.destroy(error));
+      stream.pipe(req);
     });
-    req.setTimeout(180000, () => req.destroy(new Error('Database transfer timed out')));
-    req.on('error', reject);
-    fs.createReadStream(dbPath).on('error', reject).pipe(req);
-  });
+  }finally{
+    try{fs.rmSync(exportPath,{force:true})}catch{}
+  }
 }
 
 async function syncLaptopToDesktop(manual=false){
@@ -1232,14 +1247,28 @@ async function handleHandoffRequest(req, res) {
     const incomingPath = path.join(dataDir, `handoff-incoming-${Date.now()}.sqlite`);
     pauseCollector();
     try {
-      const bytes = await receiveFile(req, incomingPath);
-      const imported = importHandoffDatabase(db, incomingPath);
+      const declaredDigest=String(req.headers['x-bazaar-db-sha256']||'');
+      if(!/^[a-f0-9]{64}$/i.test(declaredDigest))
+        throw Error('Handoff requires SHA256 checksum from the sender');
+      const allowedBytes=16*1024*1024*1024;
+      const expectedSize=Number(req.headers['content-length']);
+      if(!Number.isSafeInteger(expectedSize)||expectedSize<1||expectedSize>allowedBytes)
+        throw Error('Invalid handoff database size');
+      const free=fs.statfsSync(dataDir);
+      if(Number(free.bavail)*Number(free.bsize)<expectedSize*1.2)
+        throw Error('Not enough disk space for the incoming handoff database');
+      const bytes=await receiveFile(req,incomingPath,allowedBytes);
+      if(bytes!==expectedSize)throw Error('Handoff download length mismatch');
+      const digest=await fileDigest(incomingPath);
+      if(digest.toLowerCase()!==declaredDigest.toLowerCase())
+        throw Error('Handoff SHA256 mismatch; refusing database import');
+      const imported=importHandoffDatabase(db,incomingPath);
       if (!imported.verified) return sendJson(res, { error: 'Imported database failed verification.', ...imported }, 500);
       dynamics = loadCompetitionStats(db);
       void refreshHistoryStatsAsync('database-import',true);
       resetRuntimeMarketState();
       await startCollectorNow();
-      return sendJson(res, { ok: true, bytes, collectorActive, ...imported });
+      return sendJson(res, { ok: true, bytes, sha256:digest, collectorActive, ...imported });
     } catch (error) {
       console.error('[handoff] import failed:', error.message);
       return sendJson(res, { error: error instanceof Error ? error.message : String(error), collectorActive }, 500);
