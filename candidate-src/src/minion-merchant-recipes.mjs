@@ -11,25 +11,25 @@
 export const VERIFIED_MERCHANT_UPGRADES = Object.freeze({
   COBBLESTONE_GENERATOR:{
     12:{
-      vendor:'Bulvar',source:'https://hypixel-skyblock.fandom.com/wiki/Cobblestone_Minion',
+      vendor:'Bulvar',source:'https://hypixelskyblock.minecraft.wiki/w/Cobblestone_Minion',
       items:[{item:'ENCHANTED_COBBLESTONE',amount:1024},{item:'COINS',amount:2000000}]
     }
   },
   COAL_GENERATOR:{
     12:{
-      vendor:'Bulvar',source:'https://wiki.scd.wtf/Coal_Minion_XII',
+      vendor:'Bulvar',source:'https://hypixelskyblock.minecraft.wiki/w/Coal_Minion',
       items:[{item:'ENCHANTED_COAL_BLOCK',amount:16},{item:'COINS',amount:2000000}]
     }
   },
   DIAMOND_GENERATOR:{
     12:{
-      vendor:'Bulvar',source:'https://wiki.scd.wtf/Diamond_Minion_XII',
+      vendor:'Bulvar',source:'https://hypixelskyblock.minecraft.wiki/w/Diamond_Minion',
       items:[{item:'ENCHANTED_DIAMOND_BLOCK',amount:16},{item:'COINS',amount:2000000}]
     }
   },
   HARD_STONE_GENERATOR:{
     12:{
-      vendor:'Bulvar',source:'https://wiki.scd.wtf/Hard_Stone_Minion_XII',
+      vendor:'Bulvar',source:'https://hypixelskyblock.minecraft.wiki/w/Hard_Stone_Minion',
       // The current minion item page lists 16; older item-usage references list 32.
       // Verify against an in-game Bulvar quote if this changes again.
       items:[{item:'CONCENTRATED_STONE',amount:16},{item:'COINS',amount:2000000}]
@@ -37,122 +37,122 @@ export const VERIFIED_MERCHANT_UPGRADES = Object.freeze({
   },
   CACTUS_GENERATOR:{
     12:{
-      vendor:'Tony',source:'https://wiki.scd.wtf/Cactus_Minion_XII',
+      vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Cactus_Minion',
       items:[{item:'ENCHANTED_CACTUS',amount:32},{item:'PELTS',amount:75}]
     }
   },
   CHICKEN_GENERATOR:{
     12:{
-      vendor:'Tony',source:'https://wiki.scd.wtf/Chicken_Minion_XII',
+      vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Chicken_Minion',
       items:[{item:'ENCHANTED_RAW_CHICKEN',amount:1024},{item:'PELTS',amount:75}]
     }
   },
   COW_GENERATOR:{
     12:{
-      vendor:'Tony',source:'https://wiki.scd.wtf/Cow_Minion_XII',
+      vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Cow_Minion',
       items:[{item:'ENCHANTED_LEATHER',amount:1024},{item:'PELTS',amount:75}]
     }
   },
   GOLD_GENERATOR:{
     12:{
-      vendor:'Bulvar',source:'https://wiki.scd.wtf/Gold_Minion_XII',
+      vendor:'Bulvar',source:'https://hypixelskyblock.minecraft.wiki/w/Gold_Minion',
       items:[{item:'ENCHANTED_GOLD_BLOCK',amount:16},{item:'COINS',amount:2000000}]
     }
   },
   EMERALD_GENERATOR:{
     12:{
-      vendor:'Bulvar',source:'https://wiki.scd.wtf/Emerald_Minion_XII',
+      vendor:'Bulvar',source:'https://hypixelskyblock.minecraft.wiki/w/Emerald_Minion',
       items:[{item:'ENCHANTED_EMERALD_BLOCK',amount:16},{item:'COINS',amount:2000000}]
     }
   },
   LAPIS_GENERATOR:{
     12:{
-      vendor:'Bulvar',source:'https://wiki.scd.wtf/Lapis_Minion_XII',
+      vendor:'Bulvar',source:'https://hypixelskyblock.minecraft.wiki/w/Lapis_Minion',
       items:[{item:'ENCHANTED_LAPIS_LAZULI_BLOCK',amount:64},{item:'COINS',amount:2000000}]
     }
   },
   MITHRIL_GENERATOR:{
     12:{
-      vendor:'Bulvar',source:'https://hypixel-skyblock.fandom.com/wiki/Refined_Mithril',
+      vendor:'Bulvar',source:'https://hypixelskyblock.minecraft.wiki/w/Mithril_Minion',
       items:[{item:'REFINED_MITHRIL',amount:16},{item:'COINS',amount:2000000}]
     }
   },
   REDSTONE_GENERATOR:{
     12:{
-      vendor:'Bulvar',source:'https://hypixel-skyblock.fandom.com/wiki/Enchanted_Redstone_Block',
+      vendor:'Bulvar',source:'https://hypixelskyblock.minecraft.wiki/w/Redstone_Minion',
       items:[{item:'ENCHANTED_REDSTONE_BLOCK',amount:32},{item:'COINS',amount:2000000}]
     }
   },
   ICE_GENERATOR:{
     12:{
-      vendor:'Einary',source:'https://skykings.net/wiki/npc/einary-npc',
+      vendor:'Einary',source:'https://hypixelskyblock.minecraft.wiki/w/Ice_Minion',
       items:[{item:'ENCHANTED_ICE',amount:1024},{item:'COINS',amount:1000000},
         {item:'NORTH_STARS',amount:300}]
     }
   },
   COCOA_GENERATOR:{
-    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Cocoa_Beans_Minion',
+    12:{vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Cocoa_Beans_Minion',
       items:[{item:'ENCHANTED_COOKIE',amount:16},{item:'PELTS',amount:75}]}
   },
   MELON_GENERATOR:{
-    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Enchanted_Melon',
+    12:{vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Melon_Minion',
       items:[{item:'ENCHANTED_MELON_BLOCK',amount:32},{item:'PELTS',amount:75}]}
   },
   MUSHROOM_GENERATOR:{
-    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Mushroom_Minion',
+    12:{vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Mushroom_Minion',
       items:[{item:'ENCHANTED_BROWN_MUSHROOM',amount:512},
         {item:'ENCHANTED_RED_MUSHROOM',amount:512},{item:'PELTS',amount:75}]}
   },
   NETHER_WARTS_GENERATOR:{
-    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Nether_Wart_Minion',
+    12:{vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Nether_Wart_Minion',
       items:[{item:'ENCHANTED_NETHER_STALK',amount:1024},{item:'PELTS',amount:75}]}
   },
   PIG_GENERATOR:{
-    12:{vendor:'Tony',source:'https://hyminions.herokuapp.com/minions?showDetails=1',
+    12:{vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Pig_Minion',
       items:[{item:'ENCHANTED_GRILLED_PORK',amount:16},{item:'PELTS',amount:75}]}
   },
   POTATO_GENERATOR:{
-    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Potato_Minion',
+    12:{vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Potato_Minion',
       items:[{item:'ENCHANTED_BAKED_POTATO',amount:32},{item:'PELTS',amount:75}]}
   },
   PUMPKIN_GENERATOR:{
-    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Pumpkin_Minion',
+    12:{vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Pumpkin_Minion',
       items:[{item:'ENCHANTED_PUMPKIN',amount:1024},{item:'PELTS',amount:75}]}
   },
   RABBIT_GENERATOR:{
-    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Rabbit_Minion',
+    12:{vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Rabbit_Minion',
       items:[{item:'ENCHANTED_COOKED_RABBIT',amount:16},{item:'PELTS',amount:75}]}
   },
   RED_SAND_GENERATOR:{
-    12:{vendor:'Marthos',source:'https://hypixel-skyblock.fandom.com/wiki/Red_Sand_Minion',
+    12:{vendor:'Marthos',source:'https://hypixelskyblock.minecraft.wiki/w/Red_Sand_Minion',
       requirements:[{kind:'BARBARIAN_REPUTATION',amount:12000}],
       items:[{item:'ENCHANTED_RED_SAND_CUBE',amount:32},{item:'COINS',amount:2000000}]}
   },
   SHEEP_GENERATOR:{
-    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Sheep_Minion',
+    12:{vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Sheep_Minion',
       items:[{item:'ENCHANTED_COOKED_MUTTON',amount:16},{item:'PELTS',amount:75}]}
   },
   SUGAR_CANE_GENERATOR:{
-    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Sugar_Cane_Minion',
+    12:{vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Sugar_Cane_Minion',
       items:[{item:'ENCHANTED_SUGAR_CANE',amount:32},{item:'PELTS',amount:75}]}
   },
   WHEAT_GENERATOR:{
-    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Wheat_Minion',
+    12:{vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Wheat_Minion',
       items:[{item:'ENCHANTED_WHEAT',amount:1024},{item:'PELTS',amount:75}]}
   },
   SUNFLOWER_GENERATOR:{
-    12:{vendor:'SkyMart',source:'https://skykings.net/wiki/npc/skymart-npc',
+    12:{vendor:'SkyMart',source:'https://hypixelskyblock.minecraft.wiki/w/Sunflower_Minion',
       items:[{item:'COMPACTED_SUNFLOWER',amount:32}]}
   },
   IRON_GENERATOR:{
     12:{
-      vendor:'Bulvar',source:'https://wiki.scd.wtf/Iron_Minion_XII',
+      vendor:'Bulvar',source:'https://hypixelskyblock.minecraft.wiki/w/Iron_Minion',
       items:[{item:'ENCHANTED_IRON_BLOCK',amount:16},{item:'COINS',amount:2000000}]
     }
   },
   CARROT_GENERATOR:{
     12:{
-      vendor:'Tony',source:'https://wiki.scd.wtf/Carrot_Minion_XII',
+      vendor:'Tony',source:'https://hypixelskyblock.minecraft.wiki/w/Carrot_Minion',
       // Pelts are not tradeable Bazaar coins. Their opportunity cost is unknown;
       // show a separate non-coin requirement, never pretend total payback is exact.
       items:[{item:'ENCHANTED_GOLDEN_CARROT',amount:32},{item:'PELTS',amount:75}]
@@ -160,7 +160,7 @@ export const VERIFIED_MERCHANT_UPGRADES = Object.freeze({
   },
   OBSIDIAN_GENERATOR:{
     12:{
-      vendor:'Bulvar',source:'https://wiki.scd.wtf/Obsidian_Minion_XII',
+      vendor:'Bulvar',source:'https://hypixelskyblock.minecraft.wiki/w/Obsidian_Minion',
       items:[{item:'ENCHANTED_OBSIDIAN',amount:1024},{item:'COINS',amount:2000000}]
     }
   }
