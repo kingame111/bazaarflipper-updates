@@ -27,6 +27,20 @@ export const VERIFIED_MERCHANT_UPGRADES = Object.freeze({
       items:[{item:'ENCHANTED_DIAMOND_BLOCK',amount:16},{item:'COINS',amount:2000000}]
     }
   },
+  HARD_STONE_GENERATOR:{
+    12:{
+      vendor:'Bulvar',source:'https://wiki.scd.wtf/Hard_Stone_Minion_XII',
+      items:[{item:'CONCENTRATED_STONE',amount:16},{item:'COINS',amount:2000000}]
+    }
+  },
+  CARROT_GENERATOR:{
+    12:{
+      vendor:'Tony',source:'https://wiki.scd.wtf/Carrot_Minion_XII',
+      // Pelts are not tradeable Bazaar coins. Their opportunity cost is unknown;
+      // show a separate non-coin requirement, never pretend total payback is exact.
+      items:[{item:'ENCHANTED_GOLDEN_CARROT',amount:32},{item:'PELTS',amount:75}]
+    }
+  },
   OBSIDIAN_GENERATOR:{
     12:{
       vendor:'Bulvar',source:'https://wiki.scd.wtf/Obsidian_Minion_XII',
