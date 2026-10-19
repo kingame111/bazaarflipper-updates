@@ -1,4 +1,6 @@
+import './src/supervisor-bootstrap.mjs';
 import http from 'node:http';
+import {createHash} from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
@@ -20,6 +22,7 @@ import {
   replaceCompetitionStats,
   historyCount,
   checkpointDatabase,
+  createVerifiedHandoffExport,
   resetCollectedData,
   importHandoffDatabase,
   exportPendingHistorySnapshots,
@@ -142,6 +145,10 @@ let switching = false;
 let updateApplying = false;
 let updateLastCheckedAt = 0;
 let syncRunning = false;
+let minionWorkersActive=0;
+const minionResultCache=new Map();
+
+let syncDrainTimer=null;
 let shuttingDown=false;
 const runtimeTimers=[];
 const keepTimer=(timer)=>{runtimeTimers.push(timer);timer.unref?.();return timer;};
@@ -253,13 +260,20 @@ function pendingSync(force=false){
   return value;
 }
 function invalidatePendingSyncCache(){ lastPendingSyncCache={at:0,value:null}; }
+// The laptop history queue is DURABLE, even in low-disk conditions.
+// Never delete unsent snapshots to satisfy a free-space threshold.
 function enforceLaptopStoragePolicy(){
-  if (!(dualCollectorEnabled && handoff.role==='LAPTOP')) return;
+  if (!(dualCollectorEnabled && handoff.role==='LAPTOP')) return true;
   const minFreeGB=Math.max(1,Number(config.laptopMinimumFreeDiskGB)||10);
-  let d=diskStats(); if(d.freeBytes==null || d.freeBytes>=minFreeGB*1024**3) return;
-  let dropped=0;
-  for(let i=0;i<100 && d.freeBytes<minFreeGB*1024**3;i++){ const x=dropOldestPendingSnapshots(db,localOriginId,10); if(!x.snapshotsDeleted) break; dropped += x.snapshotsDeleted; if(i%5===4){checkpointDatabase(db); d=diskStats();} }
-  if(dropped){ invalidatePendingSyncCache(); const total=Number(getMeta(db,'laptop_dropped_before_sync')||0)+dropped; setMeta(db,'laptop_dropped_before_sync',total); state.dualSync.droppedBeforeSync=total; console.warn(`[storage] low disk: dropped ${dropped} oldest unsynced laptop snapshots to preserve newer data`); }
+  const d=diskStats();
+  const safe=d.freeBytes==null || d.freeBytes>=minFreeGB*1024**3;
+  state.dualSync.storageBackpressure=!safe;
+  state.dualSync.freeDiskBytes=d.freeBytes;
+  if(safe)return true;
+  if(!syncRunning && Date.now()>=syncRetryAfter)
+    setImmediate(()=>{void syncLaptopToDesktop(false).catch(e=>console.warn('[storage] urgent sync failed: '+e.message));});
+  console.warn('[storage] LOW_DISK: preserving ALL unacknowledged laptop snapshots; new history writes paused until enough disk space is available. freeBytes='+d.freeBytes);
+  return false;
 }
 
 loadLastGoodMarketCache();
@@ -517,7 +531,12 @@ async function pollBazaar() {
     const dueHistory = now - lastHistoryWrite >= config.historyIntervalSeconds * 1000;
 
     if (dueHistory && collectorActive) {
-      if (freeRamMB >= effectiveMinimumFreeRamMB) {
+      if (freeRamMB < effectiveMinimumFreeRamMB) {
+        state.skippedForLowMemory += 1;
+        console.warn('[memory] history write skipped; free RAM '+Math.round(freeRamMB)+' MB');
+      } else if (!enforceLaptopStoragePolicy()) {
+        state.skippedForLowDisk=(state.skippedForLowDisk||0)+1;
+      } else {
         const bucketMs = config.historyIntervalSeconds * 1000;
         const sourceTs = Number(data.lastUpdated) || now;
         const ts = Math.floor(sourceTs / bucketMs) * bucketMs;
@@ -529,10 +548,7 @@ async function pollBazaar() {
         state.dynamicsWrites += 1;
         console.log(`[bazaar] snapshot saved; mode=LIVE source=${new Date(sourceTs).toISOString()} sourceAge=${formatAge(Math.max(0, now-sourceTs))} products=${historyRows.length} fetch=${state.lastFetchDurationMs}ms origin=${localOriginId}`);
         if(handoff.role!=='LAPTOP') void refreshHistoryStatsAsync('snapshot',false);
-        enforceLaptopStoragePolicy();
-      } else {
-        state.skippedForLowMemory += 1;
-        console.warn(`[memory] persistence skipped; free RAM ${Math.round(freeRamMB)} MB`);
+
       }
     }
 
@@ -617,6 +633,7 @@ function handoffStatus() {
     role: handoff.role,
     peerHost: handoff.peerHost,
     handoffPort: handoff.handoffPort,
+    peerPort: handoff.peerPort||handoff.handoffPort,
     collectorActive,
     switching,
     localHistoryRows: handoff.role==='LAPTOP' ? pendingSync().rows : historyRowEstimate(db),
@@ -693,6 +710,7 @@ function statusPayload() {
     historyWrites: state.historyWrites,
     dynamicsWrites: state.dynamicsWrites,
     skippedForLowMemory: state.skippedForLowMemory,
+    skippedForLowDisk: state.skippedForLowDisk||0,
     processRamMB: Math.round(memory.rss / 1024 / 1024),
     systemFreeRamMB: Math.round(os.freemem() / 1024 / 1024),
     databaseSizeMB: Math.round((dbSize / 1024 / 1024) * 10) / 10,
@@ -748,7 +766,7 @@ function serveStatic(req, res) {
 function peerBaseUrl() {
   const host = String(handoff.peerHost || '').replace(/^https?:\/\//i, '').replace(/\/$/, '');
   if (!host) throw new Error('Peer computer is not configured. Run setup-handoff.bat first.');
-  return `http://${host}:${handoff.handoffPort}`;
+  return `http://${host}:${handoff.peerPort||handoff.handoffPort}`;
 }
 
 async function fetchPeerJson(endpoint, options = {}, timeoutMs = 20000) {
@@ -773,41 +791,55 @@ async function fetchPeerJson(endpoint, options = {}, timeoutMs = 20000) {
   } finally { clearTimeout(timer); }
 }
 
-function uploadDatabaseToPeer() {
-  return new Promise((resolve, reject) => {
-    checkpointDatabase(db);
-    const stat = fs.statSync(dbPath);
-    const target = new URL(`${peerBaseUrl()}/handoff/import-db`);
-    const req = http.request({
-      method: 'POST',
-      hostname: target.hostname,
-      port: target.port || handoff.handoffPort,
-      path: target.pathname,
-      headers: {
-        'x-bazaarflipper-token': handoff.token,
-        'content-type': 'application/octet-stream',
-        'content-length': stat.size
-      }
-    }, (res) => {
-      const chunks = [];
-      res.on('data', (chunk) => chunks.push(chunk));
-      res.on('end', () => {
-        try {
-          const body = JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
-          if (res.statusCode < 200 || res.statusCode >= 300) return reject(new Error(body.error || `Peer returned HTTP ${res.statusCode}`));
-          resolve(body);
-        } catch (error) {
-          reject(error);
+async function fileDigest(filePath){
+  const hasher=createHash('sha256');
+  for await(const chunk of fs.createReadStream(filePath))hasher.update(chunk);
+  return hasher.digest('hex');
+}
+async function uploadDatabaseToPeer(){
+  // A consistent VACUUM INTO snapshot, never stream a live WAL database file.
+  const exportPath=path.join(dataDir,'handoff-export-'+process.pid+'-'+Date.now()+'.sqlite');
+  try{
+    const exported=createVerifiedHandoffExport(db,exportPath);
+    const digest=await fileDigest(exportPath);
+    const target=new URL(peerBaseUrl()+'/handoff/import-db');
+    return await new Promise((resolve,reject)=>{
+      const req=http.request({
+        method:'POST',hostname:target.hostname,
+        port:target.port||handoff.handoffPort,path:target.pathname,
+        headers:{
+          'x-bazaarflipper-token':handoff.token,
+          'x-bazaar-db-sha256':digest,
+          'content-type':'application/octet-stream',
+          'content-length':exported.bytes
         }
+      },res=>{
+        const chunks=[];
+        res.on('data',chunk=>chunks.push(chunk));
+        res.on('end',()=>{
+          try{
+            const body=JSON.parse(Buffer.concat(chunks).toString('utf8')||'{}');
+            if(res.statusCode<200||res.statusCode>=300)
+              return reject(Error(body.error||'Peer returned HTTP '+res.statusCode));
+            if(!body.verified||body.sha256!==digest)
+              return reject(Error('Receiver did not verify the entire handoff snapshot'));
+            resolve(body);
+          }catch(error){reject(error)}
+        });
       });
+      req.setTimeout(15*60*1000,()=>req.destroy(Error('Database transfer timed out')));
+      req.on('error',reject);
+      const stream=fs.createReadStream(exportPath);
+      stream.on('error',error=>req.destroy(error));
+      stream.pipe(req);
     });
-    req.setTimeout(180000, () => req.destroy(new Error('Database transfer timed out')));
-    req.on('error', reject);
-    fs.createReadStream(dbPath).on('error', reject).pipe(req);
-  });
+  }finally{
+    try{fs.rmSync(exportPath,{force:true})}catch{}
+  }
 }
 
 async function syncLaptopToDesktop(manual=false){
+  if(shuttingDown)return {ok:false,shutdown:true};
   if(handoff.role!=='LAPTOP') throw new Error('Only the LAPTOP sends pending snapshots to the desktop.');
   if(syncRunning) {
     const pending=pendingSync();
@@ -823,12 +855,13 @@ async function syncLaptopToDesktop(manual=false){
   const before=pendingSync(true);
   try{
     let sentSnapshots=0,sentRows=0,acknowledgedSnapshots=0,deletedRows=0;
-    const maxBatches=manual?500:2;
+    const maxBatches=manual?500:Math.max(2,Math.min(8,Math.ceil(before.snapshots/100)));
     for(let i=0;i<maxBatches;i++){
       const snaps=exportPendingHistorySnapshots(db,localOriginId,Math.max(1,Math.min(4,Number(config.syncBatchSnapshots)||4)));
       if(!snaps.length) break;
       const result=await fetchPeerJson('/handoff/sync/import',{method:'POST',body:JSON.stringify({sourceRole:'LAPTOP',snapshots:snaps})},90000);
-      if(!result?.ok) throw new Error('Desktop did not confirm history import.');
+      if(!result?.ok || Number(result?.acceptedSnapshots)!==snaps.length)
+        throw new Error('Desktop did not confirm every imported snapshot; local data retained.');
       const ack=acknowledgeHistorySnapshots(db,snaps,localOriginId);
       sentSnapshots+=snaps.length;
       sentRows+=snaps.reduce((a,x)=>a+x.rows.length,0);
@@ -847,6 +880,11 @@ async function syncLaptopToDesktop(manual=false){
     state.dualSync.acknowledgedSnapshots+=acknowledgedSnapshots;
     state.dualSync.deletedRows+=deletedRows;
     historyStats=new Map();
+    if(after.snapshots>0&&acknowledgedSnapshots>0&&!manual){
+      if(syncDrainTimer)clearTimeout(syncDrainTimer);
+      syncDrainTimer=setTimeout(()=>{syncDrainTimer=null;void syncLaptopToDesktop(false);},2000);
+      syncDrainTimer.unref?.();
+    }
     if(sentSnapshots>0 || manual) console.log(`[sync] LAPTOP->DESKTOP success; snapshots=${sentSnapshots} rows=${sentRows} acknowledged=${acknowledgedSnapshots}; pending ${before.snapshots}->${after.snapshots} snapshots, ${before.rows}->${after.rows} rows`);
     return {ok:true,cumulative:{...state.dualSync},sentSnapshots,sentRows,acknowledgedSnapshots,deletedRows,pendingSync:after};
   }catch(error){
@@ -874,7 +912,9 @@ async function syncHistoryWithPeer(manual=false){
   const wasReachable=state.dualSync.peerReachable;
   try {
     const result=await fetchPeerJson(`/handoff/sync/push?wait=${manual?'1':'0'}`,{method:'POST'},manual?10*60*1000:20000);
-    Object.assign(state.dualSync,{lastSuccessAt:Date.now(),lastError:null,lastErrorType:null,peerReachable:true});
+    // A successful trigger is not evidence that the laptop transferred anything.
+    Object.assign(state.dualSync,{lastTriggerAcceptedAt:Date.now(),lastError:null,lastErrorType:null,peerReachable:true});
+    if(manual&&Number(result?.acknowledgedSnapshots)>0)state.dualSync.lastSuccessAt=Date.now();
     if(wasReachable===false) console.log('[sync] DESKTOP->LAPTOP trigger RECOVERED; peer reachable again');
     if(manual) console.log(`[sync] manual DESKTOP->LAPTOP trigger completed; started=${Boolean(result?.started)} busy=${Boolean(result?.busy)}`);
     return result;
@@ -945,9 +985,49 @@ async function switchCollectorToPeer() {
   }
 }
 
+async function calculateMinionsOffThread(options, context){
+  const key=JSON.stringify([options,context.marketUpdatedAt,historyStatsLastLoadedAt,itemMeta.size]);
+  const cache=minionResultCache.get(key);
+  if(cache&&Date.now()-cache.at<20000)return cache.result;
+  if(minionWorkersActive>=2)throw Error('Minion calculations are busy, please retry shortly');
+  minionWorkersActive++;
+  try{
+    const result=await new Promise((resolve,reject)=>{
+      const worker=new Worker(new URL('./src/minion-worker.mjs',import.meta.url),{
+        workerData:{options,context:{
+          market:context.market,
+          historyStatsEntries:[...context.historyStats.entries()],
+          itemMetaEntries:[...context.itemMeta.entries()],
+          taxRate:context.taxRate,marketUpdatedAt:context.marketUpdatedAt
+        }}
+      });
+      let settled=false;
+      const settle=(error,value)=>{
+        if(settled)return;
+        settled=true;clearTimeout(timer);
+        if(error)reject(error);else resolve(value);
+      };
+      const timer=setTimeout(()=>{
+        void worker.terminate();
+        settle(Error('Minion worker exceeded 30 second limit'));
+      },30000);
+      worker.once('message',message=>message?.ok?
+        settle(null,message.result):settle(Error(message?.error||'Minion worker returned an invalid result')));
+      worker.once('error',settle);
+      worker.once('exit',code=>{if(!settled)settle(Error('Minion worker exited with code '+code));});
+    });
+    if(minionResultCache.size>16)minionResultCache.clear();
+    minionResultCache.set(key,{at:Date.now(),result});
+    return result;
+  }finally{minionWorkersActive--;}
+}
+
 async function handleMainRequest(req, res) {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
 
+  // Dedicated constant-time health endpoints: never scan SQLite or reach Hypixel.
+  if(url.pathname==='/health/live') return sendJson(res,{ok:true,version:APP_VERSION,pid:process.pid});
+  if(url.pathname==='/health/ready') return sendJson(res,{ok:true,ready:historySchemaReady,version:APP_VERSION,pid:process.pid},historySchemaReady?200:503);
   if (url.pathname === '/api/status') return sendJson(res, statusPayload());
   if (url.pathname === '/api/handoff/status') return sendJson(res, handoffStatus());
   if (url.pathname === '/api/handoff/sync' && req.method === 'POST') {
@@ -1000,13 +1080,15 @@ async function handleMainRequest(req, res) {
       sort: url.searchParams.get('sort') || 'NET',
       // Horizon is supplied by Setup above.
     };
-    const result = calculateMinionRankings(options, {
-      market: latestBazaarProducts,
-      historyStats,
-      itemMeta,
-      taxRate,
-      marketUpdatedAt: state.lastHypixelUpdate
-    });
+    let result;
+    try{
+      result=await calculateMinionsOffThread(options,{
+        market:latestBazaarProducts,historyStats,itemMeta,taxRate,
+        marketUpdatedAt:state.lastHypixelUpdate
+      });
+    }catch(error){
+      return sendJson(res,{error:error instanceof Error?error.message:String(error)},503);
+    }
     return sendJson(res, {
       ...result,
       personalTaxPercent: personalTaxRate * 100,
@@ -1087,6 +1169,12 @@ async function handleMainRequest(req, res) {
     }
   }
 
+  if (url.pathname === '/api/diagnostics/conflicts' && req.method === 'GET') {
+    if(!historySchemaReady)return sendJson(res,{ready:false},503);
+    const total=db.prepare('SELECT COUNT(*) n FROM history_observation_conflicts').get();
+    const recent=db.prepare('SELECT ts,product_id productId,origin_id originId,observed_at observedAt FROM history_observation_conflicts ORDER BY ts DESC LIMIT 20').all();
+    return sendJson(res,{ok:true,conflicts:Number(total?.n)||0,recent});
+  }
   if (url.pathname === '/api/diagnostics/history' && req.method === 'GET') {
     if(!historySchemaReady)return sendJson(res,{ok:false,state:'INITIALIZING'},503);
     const counts=db.prepare('SELECT COUNT(*) AS metadataRows, COUNT(DISTINCT bucket_ts) AS distinctSnapshots, MIN(bucket_ts) AS oldest, MAX(bucket_ts) AS newest FROM history_snapshot_meta').get();
@@ -1121,7 +1209,15 @@ async function handleHandoffRequest(req, res) {
     const body=await readJsonBody(req,64*1024*1024);
     if(String(body?.sourceRole||'').toUpperCase()!=='LAPTOP') return sendJson(res,{error:'Desktop accepts synced history only from LAPTOP.'},409);
     const imported=importHistorySnapshots(db,body?.snapshots,'LAPTOP');
+    if(imported.acceptedSnapshots!==(Array.isArray(body?.snapshots)?body.snapshots.length:0))
+      throw Error('Incomplete snapshot confirmation');
     if(imported.snapshotsRecorded||imported.rowsInserted) scheduleHistoryImportRefresh();
+    if(imported.acceptedSnapshots){
+      state.dualSync.lastTransferAt=Date.now();
+      state.dualSync.lastSuccessAt=Date.now();
+    }
+    state.dualSync.conflictingObservations=(state.dualSync.conflictingObservations||0)+imported.conflictingObservations;
+    state.dualSync.legacyUnverified=(state.dualSync.legacyUnverified||0)+imported.legacyUnverified;
     state.dualSync.receivedSnapshots=(state.dualSync.receivedSnapshots||0)+imported.snapshotsRecorded;
     state.dualSync.receivedRows=(state.dualSync.receivedRows||0)+imported.rowsInserted;
     state.dualSync.duplicateSnapshotsIgnored=(state.dualSync.duplicateSnapshotsIgnored||0)+(imported.duplicateSnapshots||0);
@@ -1149,18 +1245,39 @@ async function handleHandoffRequest(req, res) {
   if (url.pathname === '/handoff/import-db' && req.method === 'POST') {
     if (handoff.role !== 'DESKTOP') return sendJson(res, { error: 'Only the DESKTOP role accepts night database imports.' }, 409);
     const incomingPath = path.join(dataDir, `handoff-incoming-${Date.now()}.sqlite`);
+    const wasActiveBeforeImport=collectorActive;
     pauseCollector();
     try {
-      const bytes = await receiveFile(req, incomingPath);
-      const imported = importHandoffDatabase(db, incomingPath);
+      const declaredDigest=String(req.headers['x-bazaar-db-sha256']||'');
+      if(!/^[a-f0-9]{64}$/i.test(declaredDigest))
+        throw Error('Handoff requires SHA256 checksum from the sender');
+      const allowedBytes=16*1024*1024*1024;
+      const expectedSize=Number(req.headers['content-length']);
+      if(!Number.isSafeInteger(expectedSize)||expectedSize<1||expectedSize>allowedBytes)
+        throw Error('Invalid handoff database size');
+      const free=fs.statfsSync(dataDir);
+      if(Number(free.bavail)*Number(free.bsize)<expectedSize*1.2)
+        throw Error('Not enough disk space for the incoming handoff database');
+      const bytes=await receiveFile(req,incomingPath,allowedBytes);
+      if(bytes!==expectedSize)throw Error('Handoff download length mismatch');
+      const digest=await fileDigest(incomingPath);
+      if(digest.toLowerCase()!==declaredDigest.toLowerCase())
+        throw Error('Handoff SHA256 mismatch; refusing database import');
+      const imported=importHandoffDatabase(db,incomingPath);
       if (!imported.verified) return sendJson(res, { error: 'Imported database failed verification.', ...imported }, 500);
       dynamics = loadCompetitionStats(db);
       void refreshHistoryStatsAsync('database-import',true);
       resetRuntimeMarketState();
       await startCollectorNow();
-      return sendJson(res, { ok: true, bytes, collectorActive, ...imported });
+      return sendJson(res, { ok: true, bytes, sha256:digest, collectorActive, ...imported });
     } catch (error) {
       console.error('[handoff] import failed:', error.message);
+      // A broken upload must not silently leave the desktop collector paused.
+      if(wasActiveBeforeImport){
+        try{await startCollectorNow()}catch(restartError){
+          console.error('[handoff] restore collection after failure:',restartError.message);
+        }
+      }
       return sendJson(res, { error: error instanceof Error ? error.message : String(error), collectorActive }, 500);
     } finally {
       try { fs.rmSync(incomingPath, { force: true }); } catch {}
@@ -1245,5 +1362,5 @@ handoffServer.listen(handoffPort, '0.0.0.0', () => {
   console.log(`Handoff listener: port ${handoffPort} (${handoff.token ? 'token protected' : 'NOT CONFIGURED'})`);
 });
 
-async function gracefulShutdown(signal='shutdown'){if(shuttingDown)return;saveLastGoodMarketCache(true);shuttingDown=true;collectorActive=false;console.log(`[shutdown] requested by ${signal}; stopping collector, sync and servers`);for(const timer of runtimeTimers){try{clearTimeout(timer);clearInterval(timer);}catch{}}const deadline=Date.now()+5000;while((runningPoll||syncRunning)&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));await Promise.allSettled([new Promise(r=>{try{server.close(()=>r());server.closeAllConnections?.();}catch{r();}}),new Promise(r=>{try{handoffServer.close(()=>r());handoffServer.closeAllConnections?.();}catch{r();}})]);try{if(signal!=='update')checkpointDatabase(db);console.log('[shutdown] database checkpoint '+(signal==='update'?'skipped safely for updater':'complete'));}catch{}try{db.close();console.log('[shutdown] database closed');}catch{}releaseInstanceLock();try{console.log('[shutdown] servers stopped; BazaarFlipper stopped safely');}catch{}try{logStream.end();}catch{}process.exit(0);}
+async function gracefulShutdown(signal='shutdown'){if(shuttingDown)return;saveLastGoodMarketCache(true);shuttingDown=true;collectorActive=false;console.log(`[shutdown] requested by ${signal}; stopping collector, sync and servers`);for(const timer of runtimeTimers){try{clearTimeout(timer);clearInterval(timer);}catch{}}if(syncDrainTimer)clearTimeout(syncDrainTimer);const deadline=Date.now()+5000;while((runningPoll||syncRunning)&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));await Promise.allSettled([new Promise(r=>{try{server.close(()=>r());server.closeAllConnections?.();}catch{r();}}),new Promise(r=>{try{handoffServer.close(()=>r());handoffServer.closeAllConnections?.();}catch{r();}})]);try{if(signal!=='update')checkpointDatabase(db);console.log('[shutdown] database checkpoint '+(signal==='update'?'skipped safely for updater':'complete'));}catch{}try{db.close();console.log('[shutdown] database closed');}catch{}releaseInstanceLock();try{console.log('[shutdown] servers stopped; BazaarFlipper stopped safely');}catch{}try{logStream.end();}catch{}process.exit(0);}
 for(const signal of ['SIGINT','SIGTERM','SIGBREAK','SIGHUP'])process.on(signal,()=>{void gracefulShutdown(signal);});

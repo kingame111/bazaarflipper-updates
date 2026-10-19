@@ -1,0 +1,69 @@
+name: Import verified user source files
+on:
+  push:
+    branches: [stabilization/v0.7.0-foundation]
+    paths: [source-import/**, .github/workflows/import-user-source.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: true}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - name: Restore and verify only the seven missing source modules
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {brotliDecompressSync} from 'node:zlib';
+          import {createHash} from 'node:crypto';
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const names=['public/app.js','public/pending-sync.js','public/styles.css',
+            'src/handoff.mjs','src/hypixel.mjs','src/scoring.mjs','src/state.mjs'];
+          const hashes=[
+            'da0eb86032f87ca6fa1a888a760d31d76697e67a50839b39ddff2a563e1ac28e',
+            '723f5962d2e9c3e0f173d0413b287fa6a3049e511dbb8807cfe9be0d1a85dafe',
+            '5472ac9e053c9d4bec4ff061b1383dc62059f07433be3e4ffc65f66085c44cc6',
+            '09632a17ab27c472111c93eaaf6796d5f66a384ef1879a51abb375f4477b7ef1',
+            '1ad3962c03c7dfc54dda3201b99f01b12e1bd2f0a21c96d4dbbf3755d85b75dd',
+            'b6aa1cfa27bc2b89d320950491da72d1ffc2e2e79672eadcf1509e963f240a28',
+            '0e4ba6789f64501f7ce36473d77027c300b74e551d67858b2bba1b702e75d94f'
+          ];
+          const parts=[1,2,3,4].map(i=>'source-import/src.part'+i+'.txt');
+          if(!parts.every(p=>fs.existsSync(p))){
+            console.log('Waiting until all four source upload parts are available');
+            process.exit(0);
+          }
+          const base64=parts.map(p=>fs.readFileSync(p,'utf8').trim()).join('');
+          const packed=Buffer.from(base64,'base64');
+          if(sha(packed)!=='868447a1e2df0a799f7bd478110ae83a93640ed356f2c659a8bf33e5dfb9cc6c')
+            throw Error('Compressed source integrity check failed');
+          const decoded=JSON.parse(brotliDecompressSync(packed,{maxOutputLength:150000}).toString('utf8'));
+          if(Object.keys(decoded).length!==names.length)throw Error('Unexpected source file count');
+          for(let i=0;i<names.length;i++){
+            const n=names[i];
+            if(typeof decoded[n]!=='string')throw Error('Missing source: '+n);
+            const buffer=Buffer.from(decoded[n]);
+            if(sha(buffer)!==hashes[i])throw Error('Hash mismatch: '+n);
+            const target=path.join('candidate-src',n);
+            if(fs.existsSync(target))throw Error('Refusing to overwrite edited candidate: '+target);
+            fs.mkdirSync(path.dirname(target),{recursive:true});
+            fs.writeFileSync(target,buffer);
+            console.log('Restored '+n);
+          }
+          for(const p of parts)fs.unlinkSync(p);
+          JS
+      - name: Verify all imported JavaScript parses
+        run: |
+          test -f candidate-src/src/hypixel.mjs || exit 0
+          for f in candidate-src/src/*.mjs candidate-src/public/*.js; do node --check "$f"; done
+      - name: Commit source files to candidate branch only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add candidate-src/ source-import/
+          git diff --cached --quiet || (git commit -m "Restore seven hash-verified runtime modules from user upload" && git push)

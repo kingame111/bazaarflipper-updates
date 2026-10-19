@@ -11,7 +11,7 @@ const money={
  BUDGET_HOPPER:5000,ENCHANTED_HOPPER:10000
 };
 const market={};
-function q(p){return{buy_summary:[{pricePerUnit:p*0.9}],sell_summary:[{pricePerUnit:p}],quick_status:{buyPrice:p*0.9,sellPrice:p}}}
+function q(p){return{buy_summary:[{pricePerUnit:p}],sell_summary:[{pricePerUnit:p*0.9}],quick_status:{buyPrice:p,sellPrice:p*0.9}}}
 for(const [k,v] of Object.entries(money))market[k]=q(v);
 const ctx={market,historyStats:new Map(),itemMeta:new Map(),taxRate:0,priceMode:'LIVE',sellMethod:'NPC',historyDays:7};
 const base={tier:11,count:1,fuel:'NONE',upgrade1:'NONE',upgrade2:'NONE',sellMethod:'NPC',priceMode:'LIVE',collectionIntervalDays:1,horizonDays:30};
