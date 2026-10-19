@@ -371,19 +371,24 @@ function applyStrategy(next, { loadAfter = true } = {}) {
   if (loadAfter) load();
 }
 
+let lastFlipsRequest = 0;
 async function load() {
+  const requestNumber = ++lastFlipsRequest;
   try {
     const mode = strategy === 'REVERSE_NPC' ? 'REVERSE_NPC' : 'ORDER';
     const params = new URLSearchParams({ tax: val('tax'), mode });
     const res = await fetch(`/api/flips?${params}`, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
+    // Late responses from old tax/mode selections must not replace the newer view.
+    if(requestNumber !== lastFlipsRequest)return;
     flips = data.flips || [];
     status = data.status || null;
     if (status) status.currentEffectiveTaxPercent = data.effectiveTaxPercent;
     updateMetrics();
     render();
   } catch (error) {
+    if(requestNumber !== lastFlipsRequest)return;
     els.statusDot.className = 'dot bad';
     els.statusText.textContent = 'Connection error';
     els.statusMeta.textContent = error.message;
