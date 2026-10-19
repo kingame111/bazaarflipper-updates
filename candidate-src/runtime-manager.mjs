@@ -294,7 +294,7 @@ export function createRuntimeManager({root=projectRoot,port=managerPort(),dataPo
       updating=false;startServer();updating=true;
     }finally{updating=false;}
   }
-  const statePayload=()=>({...state,managerReady:true,serverRunning:isAlive(child),
+  const statePayload=()=>({...state,managerReady:true,managerPid:process.pid,serverRunning:isAlive(child),
     currentVersion:versionAt(root),updateAvailable:manifestCache?.updateAvailable??null,
     latestVersion:manifestCache?.latestVersion??null});
   const api=http.createServer(async(req,res)=>{
