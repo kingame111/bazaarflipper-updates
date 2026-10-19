@@ -1,51 +1,36 @@
 {
-  "version": "0.6.13",
-  "publishedAt": "2026-10-15T01:36:46.503Z",
+  "version": "0.7.0",
+  "publishedAt": "2026-10-19T11:29:39.047Z",
   "notes": [
-    "Replace seven expensive history aggregation passes with one indexed query; tested against 1.54 million SQLite history rows.",
-    "Run long-term history retention and roll-up in a background worker instead of blocking the local HTTP server.",
-    "Debounce history recalculation while large laptop-to-desktop backlogs import.",
-    "Make update downloads checksum-verified, retry transient network failures, and record download/staging diagnostics.",
-    "Avoid a redundant GitHub update check on every click and avoid blocking SQLite checkpoint during update shutdown.",
-    "Bound restarted-server health-check requests so failed restarts can roll back reliably.",
-    "Show the actual running version in the dashboard instead of the previously hardcoded banner."
+    "Independent supervisor on localhost:3212 so updates are available even while the Bazaar data server is stuck.",
+    "Journaled file replacement, rollback on failed health check and recovery after interrupted file swapping.",
+    "Dedicated lightweight /health/live and /health/ready probes without querying history or Hypixel.",
+    "Hash-verified snapshot receipts, conflicting-origin observation audit and rejection of modified replays.",
+    "Accurate distinction between synchronization triggers and confirmed transferred snapshots.",
+    "Adaptive bounded backlog draining, with conservative background pauses between batches.",
+    "Move minion calculation off the HTTP server event loop to bounded worker threads.",
+    "Preserve previous historical-query and DB-maintenance improvements from v0.6.13."
   ],
   "files": [
-    {
-      "path": "server.mjs",
-      "sha256": "3249a07b8e5b2514859a1fb98d7b33837ac1510402cac84cf5388f5b35630105"
-    },
-    {
-      "path": "package.json",
-      "sha256": "3ef70c37e08f236bc4f9fac4fab91bdc17ea4d8c4319ea820e6607dd1eed8a58"
-    },
     {
       "path": "config.example.json",
       "sha256": "6685d15a96a4c68d9013fe4d63bce9b87d5ddbf2c0a6141fd7834d08930bbd4a"
     },
     {
-      "path": "src/db.mjs",
-      "sha256": "e1c4ac42c981e22d2c1bfd1091a47376b785334c82e84f2c9e8080925031d1ad"
+      "path": "package.json",
+      "sha256": "c16d09d03d3b44521c2a29e4c8dfd798d663c85a380c1f39d16a861cb7f0e776"
     },
     {
-      "path": "src/apply-update.mjs",
-      "sha256": "acd966c6f1904bc561a3bbd2d6aed9b591663fc48289867c2957b3e1e5b9ec54"
-    },
-    {
-      "path": "src/history-stats-worker.mjs",
-      "sha256": "859f4b1950cd0e090284a0eaddf253842a3ba91982a803e8bb21ffb4167a3f65"
-    },
-    {
-      "path": "src/minions.mjs",
-      "sha256": "dda8ae64eea9179a11c88f2b7d46a2e795bc2e3468b23ef8a0fa33a22cf4bd27"
-    },
-    {
-      "path": "src/minion-data.mjs",
-      "sha256": "3ce5c7c1e8ad8eec2840c52b057640a450eeec72d24e756dd6d5a7304a69873d"
+      "path": "public/app.js",
+      "sha256": "f242ac728da115b88ecad3eae21f57406d6eafae7352d3a291f19ad8632940ba"
     },
     {
       "path": "public/index.html",
-      "sha256": "5983cdfa703bf452f04472dde126aa071c33abb8a70b9cade19ec7f9cf08fd75"
+      "sha256": "fb922afbf8e1c44a86a48efbe64f7c9d287613cfcf5afd72e3d430a72e0bcc7e"
+    },
+    {
+      "path": "public/minions.css",
+      "sha256": "b7ca9dc09bdcbdb095923079713cd2d6a0476f37078a95d7178fcff826693d76"
     },
     {
       "path": "public/minions.html",
@@ -53,44 +38,107 @@
     },
     {
       "path": "public/minions.js",
-      "sha256": "b4a01563c4488c307a3e2e668a5b1106163fceb8ad3c84f145ad5517275b9e42"
+      "sha256": "88d9722f20c636dd3ab5fd77d62e2e07e4f4d3836e3aa73b2ac1c9e2de621e8d"
     },
     {
-      "path": "public/minions.css",
-      "sha256": "b7ca9dc09bdcbdb095923079713cd2d6a0476f37078a95d7178fcff826693d76"
+      "path": "public/pending-sync.js",
+      "sha256": "723f5962d2e9c3e0f173d0413b287fa6a3049e511dbb8807cfe9be0d1a85dafe"
     },
     {
-      "path": "start-bazaarflip.bat",
-      "sha256": "8ea99b849d16f73121d4ac6b60b2b9c8359a4e64fc9cbb2f39b3037d38888bc0"
+      "path": "public/styles.css",
+      "sha256": "5472ac9e053c9d4bec4ff061b1383dc62059f07433be3e4ffc65f66085c44cc6"
+    },
+    {
+      "path": "public/update-client.js",
+      "sha256": "91a1957824e9f2a18b6f41007915999c481559ad6abb5b6c8d3683ac7a731b90"
+    },
+    {
+      "path": "runtime-manager.mjs",
+      "sha256": "16e8a6520d041d1b18473aecf54a474cd8835ea9732cdc6f33a68d73d6771e47"
+    },
+    {
+      "path": "server.mjs",
+      "sha256": "d5e4847ab53b02e33896a7fc497399422ce2e065a9e338bbb38ddf24c909f7a7"
+    },
+    {
+      "path": "src/apply-update.mjs",
+      "sha256": "acd966c6f1904bc561a3bbd2d6aed9b591663fc48289867c2957b3e1e5b9ec54"
+    },
+    {
+      "path": "src/db.mjs",
+      "sha256": "b79e6c4e4c3b3061a0524c3456c293b8bc438d131eca63538818d1ceafefc02a"
+    },
+    {
+      "path": "src/handoff.mjs",
+      "sha256": "e842a359d15d8424869b1f7739a7066a5fb35ca0b4b93e243ab4bdadc64743fb"
+    },
+    {
+      "path": "src/history-stats-worker.mjs",
+      "sha256": "859f4b1950cd0e090284a0eaddf253842a3ba91982a803e8bb21ffb4167a3f65"
+    },
+    {
+      "path": "src/hypixel.mjs",
+      "sha256": "ac52817d4a5a9d3d55a4115035804bd942badf5df3e5d6a5c8a2a62638dae11e"
+    },
+    {
+      "path": "src/maintenance-worker.mjs",
+      "sha256": "209c68d37b8d62bc46bee70a800c1bc200c9dff4992a9919c893ca694f2e3d01"
+    },
+    {
+      "path": "src/minion-data.mjs",
+      "sha256": "3ce5c7c1e8ad8eec2840c52b057640a450eeec72d24e756dd6d5a7304a69873d"
     },
     {
       "path": "src/minion-recipes.mjs",
       "sha256": "5e561d5b6431c3353303a7492d5e35b559e96526ae0a266d1b45d32dcf5bb549"
     },
     {
+      "path": "src/minion-worker.mjs",
+      "sha256": "555f4a04a9caca8bb93c756e8312f03b8e9b189ac59915493c0665d3c2faf9ea"
+    },
+    {
+      "path": "src/minions.mjs",
+      "sha256": "5a9ffedd9376a8ff5219c77f4933b3ee480e48519c120f510914b7b197aabb59"
+    },
+    {
+      "path": "src/scoring.mjs",
+      "sha256": "b6aa1cfa27bc2b89d320950491da72d1ffc2e2e79672eadcf1509e963f240a28"
+    },
+    {
+      "path": "src/state.mjs",
+      "sha256": "0e4ba6789f64501f7ce36473d77027c300b74e551d67858b2bba1b702e75d94f"
+    },
+    {
+      "path": "src/supervisor-bootstrap.mjs",
+      "sha256": "1f471abc16c33266054982463b54c96714e3a38c02657880c5339205168dcf98"
+    },
+    {
       "path": "src/updater.mjs",
       "sha256": "2123d9ad4f0739ae996cb04674b8b54d1447469db12d3b71844336f050327c91"
     },
     {
-      "path": "src/maintenance-worker.mjs",
-      "sha256": "209c68d37b8d62bc46bee70a800c1bc200c9dff4992a9919c893ca694f2e3d01"
+      "path": "start-bazaarflip.bat",
+      "sha256": "8f0420b86699c05bb1bd6aef445da29955355b96e39776a7a30b6c191ca86ef6"
     }
   ],
   "bundle": {
     "parts": [
-      "./releases/0.6.13/part-001.txt",
-      "./releases/0.6.13/part-002.txt",
-      "./releases/0.6.13/part-003.txt",
-      "./releases/0.6.13/part-004.txt",
-      "./releases/0.6.13/part-005.txt",
-      "./releases/0.6.13/part-006.txt",
-      "./releases/0.6.13/part-007.txt",
-      "./releases/0.6.13/part-008.txt",
-      "./releases/0.6.13/part-009.txt",
-      "./releases/0.6.13/part-010.txt",
-      "./releases/0.6.13/part-011.txt"
+      "./releases/0.7.0/part-001.txt",
+      "./releases/0.7.0/part-002.txt",
+      "./releases/0.7.0/part-003.txt",
+      "./releases/0.7.0/part-004.txt",
+      "./releases/0.7.0/part-005.txt",
+      "./releases/0.7.0/part-006.txt",
+      "./releases/0.7.0/part-007.txt",
+      "./releases/0.7.0/part-008.txt",
+      "./releases/0.7.0/part-009.txt",
+      "./releases/0.7.0/part-010.txt",
+      "./releases/0.7.0/part-011.txt",
+      "./releases/0.7.0/part-012.txt",
+      "./releases/0.7.0/part-013.txt",
+      "./releases/0.7.0/part-014.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "894ae30c18ef85282e417dfbc2b2bc9826d04bba2cb66423beefbbf4022705cb"
+    "sha256": "bdbcf759abdec221f2ffc96dab449b0e425da7347553ef5b6b2631f3009f96a6"
   }
 }
