@@ -1,3 +1,4 @@
+# 2026-10-19 release gate: verify all 29 tier XII merchant recipes and 678 craft tiers.
 name: BazaarFlipper v0.7.0 stabilization candidate
 on:
   push:
