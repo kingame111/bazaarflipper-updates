@@ -29,8 +29,10 @@ export const VERIFIED_MERCHANT_UPGRADES = Object.freeze({
   },
   HARD_STONE_GENERATOR:{
     12:{
-      vendor:'Bulvar',source:'https://wiki.hypixel.net/Concentrated_Stone',
-      items:[{item:'CONCENTRATED_STONE',amount:32},{item:'COINS',amount:2000000}]
+      vendor:'Bulvar',source:'https://wiki.scd.wtf/Hard_Stone_Minion_XII',
+      // The current minion item page lists 16; older item-usage references list 32.
+      // Verify against an in-game Bulvar quote if this changes again.
+      items:[{item:'CONCENTRATED_STONE',amount:16},{item:'COINS',amount:2000000}]
     }
   },
   CACTUS_GENERATOR:{
