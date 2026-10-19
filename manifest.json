@@ -1,6 +1,6 @@
 {
   "version": "0.7.0",
-  "publishedAt": "2026-10-19T11:29:39.047Z",
+  "publishedAt": "2026-10-19T15:13:49.469Z",
   "notes": [
     "Independent supervisor on localhost:3212 so updates are available even while the Bazaar data server is stuck.",
     "Journaled file replacement, rollback on failed health check and recovery after interrupted file swapping.",
@@ -89,8 +89,16 @@
       "sha256": "3ce5c7c1e8ad8eec2840c52b057640a450eeec72d24e756dd6d5a7304a69873d"
     },
     {
+      "path": "src/minion-ingredient-recipes.mjs",
+      "sha256": "545118202fd3eab533b63357bdb25ff862808608ec246ba58c7de905ebea3c43"
+    },
+    {
+      "path": "src/minion-merchant-recipes.mjs",
+      "sha256": "cc9d60b734678a9f7b3b6a0004ca7dc2e538497aed963d90a6058b9e108c0399"
+    },
+    {
       "path": "src/minion-recipes.mjs",
-      "sha256": "5e561d5b6431c3353303a7492d5e35b559e96526ae0a266d1b45d32dcf5bb549"
+      "sha256": "d380d3d11886740124d6de9ad26cd26374d38b2497b34c5df9d70d5d499e6b9e"
     },
     {
       "path": "src/minion-worker.mjs",
@@ -98,7 +106,7 @@
     },
     {
       "path": "src/minions.mjs",
-      "sha256": "5a9ffedd9376a8ff5219c77f4933b3ee480e48519c120f510914b7b197aabb59"
+      "sha256": "67d4027cb6e4ea88f86f56b0b84128cacab220e88a765606c16e538353aa359a"
     },
     {
       "path": "src/scoring.mjs",
@@ -136,9 +144,10 @@
       "./releases/0.7.0/part-011.txt",
       "./releases/0.7.0/part-012.txt",
       "./releases/0.7.0/part-013.txt",
-      "./releases/0.7.0/part-014.txt"
+      "./releases/0.7.0/part-014.txt",
+      "./releases/0.7.0/part-015.txt"
     ],
     "encoding": "gzip-base64",
-    "sha256": "bdbcf759abdec221f2ffc96dab449b0e425da7347553ef5b6b2631f3009f96a6"
+    "sha256": "fe3b2adfe845beff9f3e08ef3781de44cc5a64b71f81a347e5348b508ee060fd"
   }
 }
