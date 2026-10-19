@@ -8,7 +8,7 @@ async function fetchJson(url, timeoutMs) {
   try {
     const response = await fetch(url, {
       signal: controller.signal,
-      headers: { 'user-agent': 'BazaarFlipper-Local/0.5' },
+      headers: { 'user-agent': 'BazaarFlipper-Local/0.7' },
       cache: 'no-store'
     });
     if (!response.ok) throw new Error(`HTTP ${response.status} from Hypixel`);
@@ -20,7 +20,27 @@ async function fetchJson(url, timeoutMs) {
 
 export async function fetchBazaar(timeoutMs = 12_000) {
   const data = await fetchJson(BAZAAR_URL, timeoutMs);
-  if (!data?.success || !data?.products) throw new Error('Hypixel returned an invalid Bazaar payload');
+  // HTTP 200 with success=true is not sufficient: an empty or corrupted book
+  // must NEVER overwrite the last usable market snapshot.
+  if(!data?.success||!data?.products||typeof data.products!=='object'||
+     Array.isArray(data.products)||Object.keys(data.products).length===0)
+    throw Error('Hypixel returned an invalid Bazaar payload');
+  for(const [id,product] of Object.entries(data.products)){
+    if(!product||typeof product!=='object'||Array.isArray(product)||
+       product.product_id!==id||
+       !Array.isArray(product.buy_summary)||!Array.isArray(product.sell_summary)||
+       !product.quick_status||typeof product.quick_status!=='object'){
+      throw Error('Hypixel returned an invalid Bazaar payload (product '+id+')');
+    }
+    for(const name of ['buy_summary','sell_summary']){
+      for(const quote of product[name]){
+        if(!quote||!Number.isFinite(Number(quote.pricePerUnit))||
+           Number(quote.pricePerUnit)<0||
+           !Number.isFinite(Number(quote.amount))||Number(quote.amount)<0)
+          throw Error('Hypixel returned an invalid Bazaar payload (quote '+id+')');
+      }
+    }
+  }
   return data;
 }
 
