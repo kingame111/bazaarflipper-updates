@@ -3,7 +3,8 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {spawn} from 'node:child_process';
-import {openDatabase,insertHistorySnapshot,exportPendingHistorySnapshots,pendingHistoryStats} from '../candidate-src/src/db.mjs';
+import {createHash} from 'node:crypto';
+import {openDatabase,insertHistorySnapshot,exportPendingHistorySnapshots,pendingHistoryStats,createVerifiedHandoffExport} from '../candidate-src/src/db.mjs';
 
 const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'bazaar-2server-sync-'));
 const basePort=44000+(process.pid%1000);
@@ -129,6 +130,36 @@ try{
  assert.equal(exportPendingHistorySnapshots(db,'LAPTOP',snapshots).filter(x=>stamps.includes(x.ts)).length,0,
    'Laptop must not retain data after VERIFIED acknowledgement');
  db.close();
+ // Verify full database upload over the actual authenticated HTTP handoff route,
+ // including SHA validation and collector recovery after a corrupted upload.
+ if(snapshots<=100){
+   const fixtureDb=openDatabase(path.join(tmp,'full-handoff-fixture.sqlite'));
+   const extraTs=T+3600000;
+   insertHistorySnapshot(fixtureDb,extraTs,[{...rows[0],bestBuyOrder:321}],'LAPTOP');
+   const handoffFile=path.join(tmp,'full-handoff-export.sqlite');
+   createVerifiedHandoffExport(fixtureDb,handoffFile);
+   fixtureDb.close();
+   const bytes=fs.readFileSync(handoffFile);
+   const checksum=createHash('sha256').update(bytes).digest('hex');
+   const headers={'x-bazaarflipper-token':'safe-test-token-not-real-secret',
+     'content-type':'application/octet-stream','x-bazaar-db-sha256':checksum};
+   const accepted=await fetch('http://127.0.0.1:'+desktop.sync+'/handoff/import-db',
+     {method:'POST',headers,body:bytes,signal:AbortSignal.timeout(90000)});
+   const body=await accepted.json();
+   assert.equal(accepted.status,200,JSON.stringify(body));
+   assert.equal(body.verified,true);
+   assert.equal(body.sha256,checksum);
+   const afterImport=openDatabase(path.join(desktop.root,'data','bazaar.sqlite'));
+   assert.equal(afterImport.prepare('SELECT best_buy_order p FROM history WHERE ts=? AND product_id=?')
+     .get(extraTs,DATA_ID+'00000').p,321);
+   afterImport.close();
+   const invalid=await fetch('http://127.0.0.1:'+desktop.sync+'/handoff/import-db',
+     {method:'POST',headers:{...headers,'x-bazaar-db-sha256':'0'.repeat(64)},
+      body:bytes,signal:AbortSignal.timeout(90000)});
+   assert.equal(invalid.status,500,'Corrupt SHA must reject full database import');
+   const live=await request(desktop.http,'/api/status','GET',20000);
+   assert.equal(live.collectorActive,true,'Failed import must not stop an active desktop collector');
+ }
  console.log(JSON.stringify({PASS:true,realHttpServers:2,offlineRetryTest:true,
    snapshotCount:snapshots,productsPerSnapshot:products,verifiedRows:imported,
    conflictsRetained:conflicts,allSourceConflicts:allConflicts,peerAuthenticationTested:true,offlineDurationMs:Date.now()-downStart}));
