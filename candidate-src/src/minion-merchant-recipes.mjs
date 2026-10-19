@@ -88,6 +88,60 @@ export const VERIFIED_MERCHANT_UPGRADES = Object.freeze({
         {item:'NORTH_STARS',amount:300}]
     }
   },
+  COCOA_GENERATOR:{
+    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Cocoa_Beans_Minion',
+      items:[{item:'ENCHANTED_COOKIE',amount:16},{item:'PELTS',amount:75}]}
+  },
+  MELON_GENERATOR:{
+    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Enchanted_Melon',
+      items:[{item:'ENCHANTED_MELON_BLOCK',amount:32},{item:'PELTS',amount:75}]}
+  },
+  MUSHROOM_GENERATOR:{
+    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Mushroom_Minion',
+      items:[{item:'ENCHANTED_BROWN_MUSHROOM',amount:512},
+        {item:'ENCHANTED_RED_MUSHROOM',amount:512},{item:'PELTS',amount:75}]}
+  },
+  NETHER_WARTS_GENERATOR:{
+    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Nether_Wart_Minion',
+      items:[{item:'ENCHANTED_NETHER_STALK',amount:1024},{item:'PELTS',amount:75}]}
+  },
+  PIG_GENERATOR:{
+    12:{vendor:'Tony',source:'https://hyminions.herokuapp.com/minions?showDetails=1',
+      items:[{item:'ENCHANTED_GRILLED_PORK',amount:16},{item:'PELTS',amount:75}]}
+  },
+  POTATO_GENERATOR:{
+    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Potato_Minion',
+      items:[{item:'ENCHANTED_BAKED_POTATO',amount:32},{item:'PELTS',amount:75}]}
+  },
+  PUMPKIN_GENERATOR:{
+    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Pumpkin_Minion',
+      items:[{item:'ENCHANTED_PUMPKIN',amount:1024},{item:'PELTS',amount:75}]}
+  },
+  RABBIT_GENERATOR:{
+    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Rabbit_Minion',
+      items:[{item:'ENCHANTED_COOKED_RABBIT',amount:16},{item:'PELTS',amount:75}]}
+  },
+  RED_SAND_GENERATOR:{
+    12:{vendor:'Marthos',source:'https://hypixel-skyblock.fandom.com/wiki/Red_Sand_Minion',
+      requirements:[{kind:'BARBARIAN_REPUTATION',amount:12000}],
+      items:[{item:'ENCHANTED_RED_SAND_CUBE',amount:32},{item:'COINS',amount:2000000}]}
+  },
+  SHEEP_GENERATOR:{
+    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Sheep_Minion',
+      items:[{item:'ENCHANTED_COOKED_MUTTON',amount:16},{item:'PELTS',amount:75}]}
+  },
+  SUGAR_CANE_GENERATOR:{
+    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Sugar_Cane_Minion',
+      items:[{item:'ENCHANTED_SUGAR_CANE',amount:32},{item:'PELTS',amount:75}]}
+  },
+  WHEAT_GENERATOR:{
+    12:{vendor:'Tony',source:'https://hypixel-skyblock.fandom.com/wiki/Wheat_Minion',
+      items:[{item:'ENCHANTED_WHEAT',amount:1024},{item:'PELTS',amount:75}]}
+  },
+  SUNFLOWER_GENERATOR:{
+    12:{vendor:'SkyMart',source:'https://skykings.net/wiki/npc/skymart-npc',
+      items:[{item:'COMPACTED_SUNFLOWER',amount:32}]}
+  },
   IRON_GENERATOR:{
     12:{
       vendor:'Bulvar',source:'https://wiki.scd.wtf/Iron_Minion_XII',
