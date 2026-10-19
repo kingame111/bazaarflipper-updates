@@ -1245,6 +1245,7 @@ async function handleHandoffRequest(req, res) {
   if (url.pathname === '/handoff/import-db' && req.method === 'POST') {
     if (handoff.role !== 'DESKTOP') return sendJson(res, { error: 'Only the DESKTOP role accepts night database imports.' }, 409);
     const incomingPath = path.join(dataDir, `handoff-incoming-${Date.now()}.sqlite`);
+    const wasActiveBeforeImport=collectorActive;
     pauseCollector();
     try {
       const declaredDigest=String(req.headers['x-bazaar-db-sha256']||'');
@@ -1271,6 +1272,12 @@ async function handleHandoffRequest(req, res) {
       return sendJson(res, { ok: true, bytes, sha256:digest, collectorActive, ...imported });
     } catch (error) {
       console.error('[handoff] import failed:', error.message);
+      // A broken upload must not silently leave the desktop collector paused.
+      if(wasActiveBeforeImport){
+        try{await startCollectorNow()}catch(restartError){
+          console.error('[handoff] restore collection after failure:',restartError.message);
+        }
+      }
       return sendJson(res, { error: error instanceof Error ? error.message : String(error), collectorActive }, 500);
     } finally {
       try { fs.rmSync(incomingPath, { force: true }); } catch {}
