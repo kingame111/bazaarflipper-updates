@@ -33,6 +33,30 @@ export const VERIFIED_MERCHANT_UPGRADES = Object.freeze({
       items:[{item:'CONCENTRATED_STONE',amount:16},{item:'COINS',amount:2000000}]
     }
   },
+  CACTUS_GENERATOR:{
+    12:{
+      vendor:'Tony',source:'https://wiki.scd.wtf/Cactus_Minion_XII',
+      items:[{item:'ENCHANTED_CACTUS',amount:32},{item:'PELTS',amount:75}]
+    }
+  },
+  CHICKEN_GENERATOR:{
+    12:{
+      vendor:'Tony',source:'https://wiki.scd.wtf/Chicken_Minion_XII',
+      items:[{item:'ENCHANTED_RAW_CHICKEN',amount:1024},{item:'PELTS',amount:75}]
+    }
+  },
+  COW_GENERATOR:{
+    12:{
+      vendor:'Tony',source:'https://wiki.scd.wtf/Cow_Minion_XII',
+      items:[{item:'ENCHANTED_LEATHER',amount:1024},{item:'PELTS',amount:75}]
+    }
+  },
+  IRON_GENERATOR:{
+    12:{
+      vendor:'Bulvar',source:'https://wiki.scd.wtf/Iron_Minion_XII',
+      items:[{item:'ENCHANTED_IRON_BLOCK',amount:16},{item:'COINS',amount:2000000}]
+    }
+  },
   CARROT_GENERATOR:{
     12:{
       vendor:'Tony',source:'https://wiki.scd.wtf/Carrot_Minion_XII',
