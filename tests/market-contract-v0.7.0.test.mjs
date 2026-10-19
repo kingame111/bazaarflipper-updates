@@ -93,6 +93,15 @@ try{
   await assert.rejects(fetchBazaar(),/HTTP 504/);
   status=200;payload={success:false,products:null};
   await assert.rejects(fetchBazaar(),/invalid Bazaar payload/);
+  payload={success:true,products:{}};
+  await assert.rejects(fetchBazaar(),/invalid Bazaar payload/);
+  payload={success:true,products:{COBBLESTONE:null}};
+  await assert.rejects(fetchBazaar(),/invalid Bazaar payload/);
+  payload={success:true,products:{COBBLESTONE:{...row,
+    sell_summary:[{pricePerUnit:-2,amount:1000}]}}};
+  await assert.rejects(fetchBazaar(),/invalid Bazaar payload/);
+  payload={success:true,products:{COBBLESTONE:{...row,buy_summary:[]}}};
+  assert.equal((await fetchBazaar()).products.COBBLESTONE.product_id,'COBBLESTONE');
   payload={success:true,items:{}};
   await assert.rejects(fetchItemMetadata(),/invalid item metadata/);
   payload={success:false};
