@@ -1,3 +1,4 @@
+import {VERIFIED_MERCHANT_UPGRADES} from './minion-merchant-recipes.mjs';
 // Versioned, data-driven per-tier upgrade recipe resolver.
 // Exact step recipes win; legacy cumulative figures remain a fallback only where explicitly marked exact.
 const key = value => String(value || '').trim().toUpperCase();
@@ -18,7 +19,10 @@ export function resolveCumulativeTierRecipe(minion, tier) {
   if (steps && typeof steps === 'object') {
     const details=[], merged=new Map(), missing=[];
     for (let level=1;level<=selected;level++) {
-      const part=steps[level];
+      // NPC trades do not appear in crafting-only NotEnoughUpdates tier files.
+      // Attach a merchant trade only when its exact requirements have an audit source.
+      const external=VERIFIED_MERCHANT_UPGRADES[minion.id]?.[level];
+      const part=steps[level]||external?.items;
       if (!Array.isArray(part) || !part.length || part.some(row=>!validIngredient(row))) {
         missing.push('Unverified tier '+level+' recipe');
         continue;
@@ -31,7 +35,7 @@ export function resolveCumulativeTierRecipe(minion, tier) {
     }
     return {
       complete:missing.length===0,
-      source:minion.recipeSource||'EXPLICIT_STEPS',
+      source:VERIFIED_MERCHANT_UPGRADES[minion.id]?.[selected]?'VERIFIED_MERCHANT_PLUS_STEPS':(minion.recipeSource||'EXPLICIT_STEPS'),
       recipe:[...merged].map(([item,amount])=>({item,amount})),
       byTier:details,
       missing
