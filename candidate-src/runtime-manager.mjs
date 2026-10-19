@@ -220,7 +220,8 @@ export function createRuntimeManager({root=projectRoot,port=managerPort(),dataPo
   function startServer(){
     if(stopping||updating||disableServer||isAlive(child))return;
     child=spawn(process.execPath,[path.join(root,'server.mjs')],{
-      cwd:root,stdio:['ignore','inherit','inherit'],windowsHide:true
+      cwd:root,stdio:['ignore','inherit','inherit'],windowsHide:true,
+      env:{...process.env,BAZAAR_MANAGED_CHILD:'1'}
     });
     state.childPid=child.pid||null;
     logState('server start pid='+state.childPid+' version='+versionAt(root));
