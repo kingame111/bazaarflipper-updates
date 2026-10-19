@@ -9,7 +9,8 @@ const verified={
  COAL_GENERATOR:['ENCHANTED_COAL_BLOCK',16],
  DIAMOND_GENERATOR:['ENCHANTED_DIAMOND_BLOCK',16],
  OBSIDIAN_GENERATOR:['ENCHANTED_OBSIDIAN',1024],
- HARD_STONE_GENERATOR:['CONCENTRATED_STONE',16]
+ HARD_STONE_GENERATOR:['CONCENTRATED_STONE',16],
+ IRON_GENERATOR:['ENCHANTED_IRON_BLOCK',16]
 };
 const price=17;
 for(const minion of Object.values(MINION_DATA.definitions)){
@@ -58,10 +59,31 @@ const carrotPrice=calculateMinion(carrot,{tier:12,count:1,fuel:'NONE',shipping:'
 assert.equal(carrotPrice.setupComplete,false,'75 Pelts are non-coin currency and must remain unpriced');
 assert.equal(carrotPrice.paybackDays,null,'Cannot calculate exact payback with unpriced Pelts');
 assert.ok(carrotPrice.setupMissing.includes('PELTS'));
-const notVerified=MINION_DATA.definitions['Cactus Minion'];
+for(const [name,item,amount] of [
+ ['Cactus Minion','ENCHANTED_CACTUS',32],
+ ['Chicken Minion','ENCHANTED_RAW_CHICKEN',1024],
+ ['Cow Minion','ENCHANTED_LEATHER',1024]
+]){
+ const definition=MINION_DATA.definitions[name];
+ const t12=resolveCumulativeTierRecipe(definition,12);
+ assert.equal(t12.complete,true,name+' verified NPC materials');
+ assert.deepEqual(t12.byTier.filter(x=>x.tier===12).map(x=>({item:x.item,amount:x.amount})),
+   [{item,amount},{item:'PELTS',amount:75}]);
+ const market=Object.fromEntries(t12.recipe.filter(x=>x.item!=='PELTS')
+   .map(x=>[x.item,{buy_summary:[{pricePerUnit:price,amount:9999999}],
+       sell_summary:[{pricePerUnit:price/2,amount:9999999}]}]));
+ const q=calculateMinion(definition,{tier:12,count:1,fuel:'NONE',shipping:'NONE',
+   upgrade1:'NONE',upgrade2:'NONE',collectionIntervalDays:1},
+   {market,historyStats:new Map(),itemMeta:new Map(),taxRate:0.0125,
+    priceMode:'LIVE',sellMethod:'BEST',historyDays:7});
+ assert.equal(q.setupComplete,false,'No arbitrary Pelt valuation: '+name);
+ assert.ok(q.setupMissing.includes('PELTS'));
+ assert.equal(q.paybackDays,null);
+}
+const notVerified=MINION_DATA.definitions['Mithril Minion'];
 assert.equal(resolveCumulativeTierRecipe(notVerified,12).complete,false,
   'Do not invent generic tier 12 recipes or currencies');
 const notCraftable=resolveCumulativeTierRecipe(MINION_DATA.definitions['Flower Minion'],1);
 assert.equal(notCraftable.complete,false,'External starter value must not be fabricated');
-console.log(JSON.stringify({PASS:true,verifiedMerchantTrades:Object.keys(verified).length+1,
+console.log(JSON.stringify({PASS:true,verifiedMerchantTrades:Object.keys(verified).length+4,
   merchantFeesIncluded:true,previousTiersPreserved:true,noGenericAssumptions:true}));
