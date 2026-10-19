@@ -47,7 +47,8 @@ function install(config){
 }
 function start(config){
  const c=spawn(process.execPath,[path.join(config.root,'server.mjs')],{
-   cwd:config.root,stdio:['ignore','pipe','pipe']
+   cwd:config.root,stdio:['ignore','pipe','pipe'],
+   env:{...process.env,BAZAAR_MANAGED_CHILD:'1'}
  });
  for(const stream of [c.stdout,c.stderr])stream.on('data',x=>{
    for(const l of x.toString().split('\n'))if(l.trim()){
