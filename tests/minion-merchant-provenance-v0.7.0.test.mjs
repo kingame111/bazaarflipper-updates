@@ -45,7 +45,7 @@ for(const [id,[vendor,parts]] of Object.entries(cases)){
  const trade=VERIFIED_MERCHANT_UPGRADES[id]?.[12];
  assert.ok(trade,'Missing merchant Tier XII: '+id);
  assert.equal(trade.vendor,vendor,'Wrong vendor: '+id);
- assert.ok(/^https:\/\//.test(trade.source),'Missing source URL: '+id);
+ assert.match(trade.source,/^https:\/\/hypixelskyblock\.minecraft\.wiki\/w\/[A-Za-z_]+_Minion$/,\n   'Trade lacks cross-checked contemporary wiki source: '+id);
  assert.deepEqual(Object.fromEntries(trade.items.map(x=>[x.item,x.amount])),parts,
    'Tier XII ingredient, currency or number mismatch: '+id);
  const minion=reverse.get(id);
