@@ -119,8 +119,18 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Exercise actual Bazaar and Minion Calculator pages in Chromium
         run: node tests/browser-smoke-v0.7.0.test.mjs
+  live-hypixel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Test live Hypixel Bazaar, Items and Election API and all minion tiers
+        run: node tests/hypixel-live-v0.7.0.mjs
   package-candidate:
-    needs: [runtime-linux, runtime-windows, two-servers-linux, two-servers-stress, browser-ui]
+    needs: [runtime-linux, runtime-windows, two-servers-linux, two-servers-stress, browser-ui, live-hypixel]
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
