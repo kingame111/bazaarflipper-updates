@@ -13,6 +13,7 @@ on:
       - tests/minion-recursive-v0.7.0.test.mjs
       - tests/minion-merchant-v0.7.0.test.mjs
       - tests/minion-nonbazaar-craft-v0.7.0.test.mjs
+      - tests/minion-catalog-coverage-v0.7.0.test.mjs
       - tests/no-data-loss-v0.7.0.test.mjs
       - tests/two-server-sync-v0.7.0.test.mjs
       - tests/browser-smoke-v0.7.0.test.mjs
@@ -54,6 +55,8 @@ jobs:
         run: node tests/minion-merchant-v0.7.0.test.mjs
       - name: Verify craftable Slayer and Vampire starter prices
         run: node tests/minion-nonbazaar-craft-v0.7.0.test.mjs
+      - name: Prove all supported tier recipes and 29 audited NPC trades
+        run: node tests/minion-catalog-coverage-v0.7.0.test.mjs
       - name: Minion economics regressions
         run: |
           node tests/minions-v0.6.11.test.mjs
@@ -93,6 +96,9 @@ jobs:
       - name: Verify nested non-Bazaar ingredients on Windows
         shell: pwsh
         run: node tests/minion-nonbazaar-craft-v0.7.0.test.mjs
+      - name: Prove all supported tier recipes and 29 audited NPC trades on Windows
+        shell: pwsh
+        run: node tests/minion-catalog-coverage-v0.7.0.test.mjs
 
   two-servers-linux:
     runs-on: ubuntu-latest
