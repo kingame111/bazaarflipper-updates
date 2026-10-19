@@ -13,7 +13,9 @@ const verified={
  IRON_GENERATOR:['ENCHANTED_IRON_BLOCK',16],
  GOLD_GENERATOR:['ENCHANTED_GOLD_BLOCK',16],
  EMERALD_GENERATOR:['ENCHANTED_EMERALD_BLOCK',16],
- LAPIS_GENERATOR:['ENCHANTED_LAPIS_LAZULI_BLOCK',64]
+ LAPIS_GENERATOR:['ENCHANTED_LAPIS_LAZULI_BLOCK',64],
+ MITHRIL_GENERATOR:['REFINED_MITHRIL',16],
+ REDSTONE_GENERATOR:['ENCHANTED_REDSTONE_BLOCK',32]
 };
 const price=17;
 for(const minion of Object.values(MINION_DATA.definitions)){
@@ -83,10 +85,26 @@ for(const [name,item,amount] of [
  assert.ok(q.setupMissing.includes('PELTS'));
  assert.equal(q.paybackDays,null);
 }
-const notVerified=MINION_DATA.definitions['Mithril Minion'];
+const ice=MINION_DATA.definitions['Ice Minion'];
+const iceRecipe=resolveCumulativeTierRecipe(ice,12);
+assert.equal(iceRecipe.complete,true);
+assert.deepEqual(iceRecipe.byTier.filter(x=>x.tier===12).map(x=>({item:x.item,amount:x.amount})),[
+ {item:'ENCHANTED_ICE',amount:1024},{item:'COINS',amount:1000000},
+ {item:'NORTH_STARS',amount:300}]);
+const iceMarket=Object.fromEntries(iceRecipe.recipe.filter(x=>!['NORTH_STARS','COINS'].includes(x.item))
+ .map(x=>[x.item,{buy_summary:[{pricePerUnit:price,amount:9999999}],
+   sell_summary:[{pricePerUnit:price/2,amount:9999999}]}]));
+const iceResult=calculateMinion(ice,{tier:12,count:1,fuel:'NONE',shipping:'NONE',
+ upgrade1:'NONE',upgrade2:'NONE',collectionIntervalDays:1},
+ {market:iceMarket,historyStats:new Map(),itemMeta:new Map(),taxRate:0.0125,
+  priceMode:'LIVE',sellMethod:'BEST',historyDays:7});
+assert.equal(iceResult.setupComplete,false);
+assert.ok(iceResult.setupMissing.includes('NORTH_STARS'));
+assert.equal(iceResult.setupCost,null);
+const notVerified=MINION_DATA.definitions['Melon Minion'];
 assert.equal(resolveCumulativeTierRecipe(notVerified,12).complete,false,
   'Do not invent generic tier 12 recipes or currencies');
 const notCraftable=resolveCumulativeTierRecipe(MINION_DATA.definitions['Flower Minion'],1);
 assert.equal(notCraftable.complete,false,'External starter value must not be fabricated');
-console.log(JSON.stringify({PASS:true,verifiedMerchantTrades:Object.keys(verified).length+4,
+console.log(JSON.stringify({PASS:true,verifiedMerchantTrades:Object.keys(verified).length+5,
   merchantFeesIncluded:true,previousTiersPreserved:true,noGenericAssumptions:true}));
