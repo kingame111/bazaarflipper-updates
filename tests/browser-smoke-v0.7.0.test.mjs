@@ -55,6 +55,7 @@ try{
     if(tax==='1')await new Promise(resolve=>setTimeout(resolve,40));
     await route.fulfill({response:remote,body:JSON.stringify(data)});
   });
+  await page.locator('#advancedBtn').click();
   await page.locator('#tax').selectOption('1.125');
   await page.waitForTimeout(100);
   await page.locator('#tax').selectOption('1');
@@ -64,6 +65,7 @@ try{
   assert.match(await page.locator('#taxMeta').textContent(),/Effective now: 1\.000%/,
     'Delayed older Bazaar result overwrote the newer tax filter');
   await page.unroute('**/api/flips?**');
+  await page.locator('#advancedBtn').click();
 
 
   // Intercept this one check, not the updater process, so the UI click path is deterministic.
