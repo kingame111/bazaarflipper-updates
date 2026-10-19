@@ -87,7 +87,14 @@ if(marketPayload?.products&&itemMetadata){
     completeSetups:everyTier.filter(x=>x.setupComplete).length,
     incompleteSetups:everyTier.filter(x=>!x.setupComplete).length,
     incompleteOngoingProfit:everyTier.filter(x=>!x.economicsComplete).length,
-    incompleteExamples:everyTier.filter(x=>!x.setupComplete).slice(0,40)
+    incompleteExamples:everyTier.filter(x=>!x.setupComplete).slice(0,40),
+    incompleteByMissingItem:Object.entries(
+      everyTier.filter(x=>!x.setupComplete).flatMap(x=>(x.missing||[]).map(item=>({item,minion:x.minion,tier:x.tier})))
+        .reduce((acc,x)=>{(acc[x.item]??=[]).push(x.minion+' T'+x.tier);return acc;},{}))
+      .map(([item,affected])=>({item,affectedCount:affected.length,affected}))
+      .sort((a,b)=>b.affectedCount-a.affectedCount),
+    incompleteByTier:Object.entries(everyTier.filter(x=>!x.setupComplete)
+      .reduce((acc,x)=>{acc[x.tier]=(acc[x.tier]||0)+1;return acc;},{}))
   };
   results.economicAudit={status:weird.length||ignored.scored<100?'FAIL':'PASS',
     ...ignored,nonFiniteOrInvalid:weird.slice(0,15),
