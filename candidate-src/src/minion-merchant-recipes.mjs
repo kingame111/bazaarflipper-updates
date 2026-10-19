@@ -69,6 +69,25 @@ export const VERIFIED_MERCHANT_UPGRADES = Object.freeze({
       items:[{item:'ENCHANTED_LAPIS_LAZULI_BLOCK',amount:64},{item:'COINS',amount:2000000}]
     }
   },
+  MITHRIL_GENERATOR:{
+    12:{
+      vendor:'Bulvar',source:'https://hypixel-skyblock.fandom.com/wiki/Refined_Mithril',
+      items:[{item:'REFINED_MITHRIL',amount:16},{item:'COINS',amount:2000000}]
+    }
+  },
+  REDSTONE_GENERATOR:{
+    12:{
+      vendor:'Bulvar',source:'https://hypixel-skyblock.fandom.com/wiki/Enchanted_Redstone_Block',
+      items:[{item:'ENCHANTED_REDSTONE_BLOCK',amount:32},{item:'COINS',amount:2000000}]
+    }
+  },
+  ICE_GENERATOR:{
+    12:{
+      vendor:'Einary',source:'https://skykings.net/wiki/npc/einary-npc',
+      items:[{item:'ENCHANTED_ICE',amount:1024},{item:'COINS',amount:1000000},
+        {item:'NORTH_STARS',amount:300}]
+    }
+  },
   IRON_GENERATOR:{
     12:{
       vendor:'Bulvar',source:'https://wiki.scd.wtf/Iron_Minion_XII',
