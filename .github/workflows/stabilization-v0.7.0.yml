@@ -6,6 +6,7 @@ on:
       - candidate-src/**
       - tests/runtime-manager-v0.7.0.test.mjs
       - tests/legacy-v0613-upgrade-v0.7.0.test.mjs
+      - tests/handoff-db-v0.7.0.test.mjs
       - tests/sync-integrity-v0.7.0.test.mjs
       - tests/minion-quality-v0.7.0.test.mjs
       - tests/market-contract-v0.7.0.test.mjs
@@ -37,6 +38,8 @@ jobs:
         run: node tests/runtime-manager-v0.7.0.test.mjs
       - name: Upgrade a disposable v0.6.13 installation with its old installer
         run: node tests/legacy-v0613-upgrade-v0.7.0.test.mjs
+      - name: WAL-consistent full database handoff, transaction rollback and streaming caps
+        run: node tests/handoff-db-v0.7.0.test.mjs
       - name: Test sync receipts, collisions and tampered replays
         run: node tests/sync-integrity-v0.7.0.test.mjs
       - name: Enforce no-deletion policy for unacknowledged history
@@ -63,6 +66,9 @@ jobs:
       - name: Test 0.6.13 to 0.7.0 bridge using the old Windows updater
         shell: pwsh
         run: node tests/legacy-v0613-upgrade-v0.7.0.test.mjs
+      - name: Verify full SQLite handoff safety on Windows
+        shell: pwsh
+        run: node tests/handoff-db-v0.7.0.test.mjs
       - name: Test collision handling on Windows
         shell: pwsh
         run: node tests/sync-integrity-v0.7.0.test.mjs
