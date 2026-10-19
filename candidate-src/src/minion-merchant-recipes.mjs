@@ -51,6 +51,24 @@ export const VERIFIED_MERCHANT_UPGRADES = Object.freeze({
       items:[{item:'ENCHANTED_LEATHER',amount:1024},{item:'PELTS',amount:75}]
     }
   },
+  GOLD_GENERATOR:{
+    12:{
+      vendor:'Bulvar',source:'https://wiki.scd.wtf/Gold_Minion_XII',
+      items:[{item:'ENCHANTED_GOLD_BLOCK',amount:16},{item:'COINS',amount:2000000}]
+    }
+  },
+  EMERALD_GENERATOR:{
+    12:{
+      vendor:'Bulvar',source:'https://wiki.scd.wtf/Emerald_Minion_XII',
+      items:[{item:'ENCHANTED_EMERALD_BLOCK',amount:16},{item:'COINS',amount:2000000}]
+    }
+  },
+  LAPIS_GENERATOR:{
+    12:{
+      vendor:'Bulvar',source:'https://wiki.scd.wtf/Lapis_Minion_XII',
+      items:[{item:'ENCHANTED_LAPIS_LAZULI_BLOCK',amount:64},{item:'COINS',amount:2000000}]
+    }
+  },
   IRON_GENERATOR:{
     12:{
       vendor:'Bulvar',source:'https://wiki.scd.wtf/Iron_Minion_XII',
