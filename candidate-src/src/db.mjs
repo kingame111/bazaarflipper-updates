@@ -465,6 +465,29 @@ export function checkpointDatabase(db) {
   try { db.exec('PRAGMA wal_checkpoint(TRUNCATE);'); } catch {}
 }
 
+export function createVerifiedHandoffExport(db,destination){
+  // A raw copy of an active WAL-mode database may omit uncheckpointed rows.
+  // VACUUM INTO creates a consistent SQLite snapshot with all committed data.
+  if(fs.existsSync(destination))throw Error('Handoff export file already exists');
+  fs.mkdirSync(path.dirname(destination),{recursive:true});
+  try{
+    db.exec("VACUUM INTO '"+destination.replace(/'/g,"''")+"'");
+    const snapshot=new DatabaseSync(destination,{readOnly:true});
+    try{
+      const check=snapshot.prepare('PRAGMA quick_check').get();
+      if(Object.values(check||{})[0]!=='ok')
+        throw Error('Handoff SQLite snapshot failed quick_check');
+      const sourceRows=Number(db.prepare('SELECT COUNT(*) n FROM history').get()?.n)||0;
+      const exportedRows=Number(snapshot.prepare('SELECT COUNT(*) n FROM history').get()?.n)||0;
+      if(sourceRows!==exportedRows)throw Error('Snapshot lost history rows during export');
+      return {bytes:fs.statSync(destination).size,rows:exportedRows};
+    }finally{snapshot.close();}
+  }catch(error){
+    try{fs.rmSync(destination,{force:true});}catch{}
+    throw error;
+  }
+}
+
 export function resetCollectedData(db) {
   db.exec('BEGIN IMMEDIATE;');
   try {
