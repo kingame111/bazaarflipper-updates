@@ -1,4 +1,5 @@
 import {VERIFIED_MERCHANT_UPGRADES} from './minion-merchant-recipes.mjs';
+import {VERIFIED_EXTERNAL_STARTER_TIER_XII} from './minion-external-starters.mjs';
 // Versioned, data-driven per-tier upgrade recipe resolver.
 // Exact step recipes win; legacy cumulative figures remain a fallback only where explicitly marked exact.
 const key = value => String(value || '').trim().toUpperCase();
@@ -11,10 +12,22 @@ export function resolveCumulativeTierRecipe(minion, tier) {
   // Some Tier I minions (Snow/Flower) are acquired from gifts or auctions
   // rather than the Bazaar. Their legacy cumulative upgrade recipes exclude
   // the starting minion's acquisition cost and must not yield a fake payback.
-  if(minion.starterAcquisition==='EXTERNAL_UNPRICED')return {
-    complete:false,source:'EXTERNAL_STARTER_COST_UNKNOWN',recipe:[],byTier:[],
-    missing:[minion.starterPriceWarning||'Tier I acquisition cost is unverified']
-  };
+  if(minion.starterAcquisition==='EXTERNAL_UNPRICED'){
+    const special=selected===12?VERIFIED_EXTERNAL_STARTER_TIER_XII[minion.id]:null;
+    const requirements=special?.requirements||[];
+    const note=special?
+      'Verified Tier XII '+special.vendor+' step: '+
+        special.items.map(x=>x.amount+' '+x.item).join(', ')+
+        (requirements.some(x=>x.kind==='MUSEUM_MILESTONE')?
+          '; Museum Milestone '+requirements.find(x=>x.kind==='MUSEUM_MILESTONE').amount:'')
+      :null;
+    return {
+      complete:false,source:'EXTERNAL_STARTER_COST_UNKNOWN',recipe:[],byTier:[],
+      missing:[minion.starterPriceWarning||'Tier I acquisition cost is unverified',
+        ...(note?[note]:[])],
+      verifiedSpecialRequirements:special||null
+    };
+  }
   const steps = minion.upgradeRecipes;
   if (steps && typeof steps === 'object') {
     const details=[], merged=new Map(), missing=[];
