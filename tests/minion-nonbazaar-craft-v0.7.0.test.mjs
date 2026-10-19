@@ -3,6 +3,7 @@ import {MINION_DATA} from '../candidate-src/src/minion-data.mjs';
 import {calculateMinion} from '../candidate-src/src/minions.mjs';
 import {VERIFIED_NON_BAZAAR_INGREDIENTS as recipes} from '../candidate-src/src/minion-ingredient-recipes.mjs';
 
+assert.deepEqual(recipes.FISHING_ROD.recipe,[{item:'LOG',amount:1},{item:'STRING',amount:2}]);
 assert.deepEqual(recipes.ZOMBIE_HEART.recipe,[{item:'ENCHANTED_ROTTEN_FLESH',amount:256}]);
 assert.deepEqual(recipes.CRYSTALLIZED_HEART.recipe,[{item:'ENCHANTED_DIAMOND',amount:256},
  {item:'ZOMBIE_HEART',amount:1}]);
@@ -34,5 +35,23 @@ assert.equal(bad.setupComplete,false);
 assert.equal(bad.setupCost,null);
 assert.ok(bad.setupMissing.includes('SPOOKY_SHARD'));
 assert.equal(bad.paybackDays,null);
+const fishingMarket={...market,RAW_FISH:{buy_summary:[{pricePerUnit:12,amount:1e6}],
+ sell_summary:[{pricePerUnit:11,amount:1e6}]},
+ WATER_LILY:{buy_summary:[{pricePerUnit:12,amount:1e6}],
+ sell_summary:[{pricePerUnit:11,amount:1e6}]},
+ LOG:{buy_summary:[{pricePerUnit:40,amount:1e6}],sell_summary:[{pricePerUnit:39,amount:1e6}]},
+ STRING:{buy_summary:[{pricePerUnit:7,amount:1e6}],sell_summary:[{pricePerUnit:6,amount:1e6}]}};
+for(const name of ['Fishing Minion','Lily Pad Minion']){
+ const model=calculate(name,fishingMarket);
+ assert.equal(model.setupComplete,true,'Verified fishing rod craft must be priced: '+name);
+ assert.equal(model.setupCost,64*12+40+2*7,'Full material cost: '+name);
+ const rod=model.setupBreakdown.find(x=>x.item==='FISHING_ROD');
+ assert.equal(rod.unitPrice,54,'Rod cost must use 1 full oak log and 2 strings');
+}
+const noLog={...fishingMarket};delete noLog.LOG;
+const missingRod=calculate('Fishing Minion',noLog);
+assert.equal(missingRod.setupComplete,false);
+assert.equal(missingRod.setupCost,null);
+assert.ok(missingRod.setupMissing.includes('LOG'));
 console.log(JSON.stringify({PASS:true,craftCost:rev.setupCost,batHelmetCost:69*p,
  nonBazaarNestedCraftingVerified:true,missingIngredientFailsClosed:true}));
