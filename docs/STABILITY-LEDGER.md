@@ -3,6 +3,14 @@
 Status: VALIDATING INTEGRATED ORIGINAL SOURCES — branch `stabilization/v0.7.0-foundation`.
 Do not merge or release until a fully packaged runtime boots on Windows and Linux.
 
+## Recipe audit update 2026-10-19
+- Source-linked, exact requirements added for all **29** previously missing tier XII NPC trades, including 75 Pelts / 300 North Stars / vendor coin fees / explicit Red Sand reputation prerequisite. No 11→12 material multiplier was assumed.
+- Reproducible whole-material Fishing Rod craft (1 Oak Log + 2 String) and recursive Zombie Heart / Crystallized Heart / Bat Person Helmet crafting added; quoted only when all market inputs exist.
+- Exhaustive all-tier recipe test on Windows and Linux passed: **678 known craft-tier recipes**, remaining 24 tier outcomes are Snow/Flower external starting acquisitions (12 each), not missing crafting instructions.
+- Live Hypixel audit run 39274900261: **662/702 setup costs fully priced**, **40/702 appropriately N/A**, specifically 24 Snow/Flower acquisition, 15 Pelts and 1 North Stars. A complete recipe is not necessarily an exact coin acquisition price. Inferno remains a separate unsupported special family.
+- Audit provenance and limitations: `docs/MINION-RECIPE-AUDIT-2026-10-19.md`.
+- Do NOT merge while laptop real-PC and user history backup/deployment gates remain incomplete.
+
 ## Latest verification 2026-10-15
 - Independent supervisor integration tests passed on Linux and Windows.
 - Verified SQLite pre-update backup, forced unhealthy-update rollback, crash journal recovery passed.
