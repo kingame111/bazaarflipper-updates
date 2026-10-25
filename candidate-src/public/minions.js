@@ -152,14 +152,15 @@ function render(data){
   if(mismatched){$('updatedText').textContent='Recalculating…';schedule(0);return;}
 
   const supported=(data.rows||[]).filter(r=>r.supported);
-  const topNet=[...supported].sort((a,b)=>b.netDay-a.netDay)[0];
-  const topGross=[...supported].sort((a,b)=>b.grossDay-a.grossDay)[0];
+  const fullyPriced=supported.filter(r=>r.economicsComplete!==false);
+  const topNet=[...fullyPriced].sort((a,b)=>b.netDay-a.netDay)[0];
+  const topGross=[...fullyPriced].sort((a,b)=>b.grossDay-a.grossDay)[0];
   const topPay=[...supported].filter(r=>Number.isFinite(r.paybackDays)).sort((a,b)=>a.paybackDays-b.paybackDays)[0];
   $('mNet').textContent=topNet?fmtCoins(topNet.netDay):'—';$('mNetName').textContent=topNet?.name||'—';
   $('mGross').textContent=topGross?fmtCoins(topGross.grossDay):'—';$('mGrossName').textContent=topGross?.name||'—';
   $('mPayback').textContent=topPay?fmtDays(topPay.paybackDays):'—';$('mPaybackName').textContent=topPay?.name||'Exact setup cost unavailable';
   $('mRows').textContent=supported.length;$('mCoverage').textContent=`${(data.rows||[]).length-supported.length} special/unsupported`;
-  const totalRanked=Number(data.totalRankedRows||supported.length||0);
+  const totalRanked=Number(data.totalRankedRows??0);
   $('resultCount').textContent=(data.options?.search||'').trim()?`${(data.rows||[]).length} shown · ranked among ${totalRanked}`:`${(data.rows||[]).length} minions`;
   $('updatedText').textContent=`Calculated ${new Date(data.generatedAt).toLocaleTimeString()} · collection every ${fmtDays(data.options?.collectionIntervalDays||1)}`;
 
@@ -178,7 +179,7 @@ function render(data){
     const ups=upgradeNames(r),coverage=Number(r.historicalCoverage||0);
     const gap=Number.isFinite(r.netGapToNextDay)&&r.nextNetName?`<span class="gapMeta">+${fmtCoins(r.netGapToNextDay)} vs ${r.nextNetName}</span>`:'';
     const setupTitle=setup==='N/A'?`Missing setup pricing: ${(r.setupMissing||[]).join(', ')||'unknown component'}`:'Complete one-time setup estimate';
-    tr.innerHTML=`<td>${r.sortRank||i+1}</td>
+    tr.innerHTML=`<td>${Number.isInteger(r.sortRank)?r.sortRank:'—'}</td>
       <td><span class="name">${r.name}</span><span class="family">${r.family}</span></td>
       <td><span class="upgradePair"><span class="upgradePill">${ups[0]}</span><span class="upgradePill">${ups[1]}</span></span></td>
       <td>T${r.tier}</td>

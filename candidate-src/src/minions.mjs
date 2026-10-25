@@ -1,5 +1,6 @@
 import { MINION_DATA } from './minion-data.mjs';
 import { resolveCumulativeTierRecipe } from './minion-recipes.mjs';
+import {VERIFIED_NON_BAZAAR_INGREDIENTS} from './minion-ingredient-recipes.mjs';
 
 const DAY_SECONDS = 86400;
 // Shipping occupies its own minion slot, not one of the two standard upgrade slots.
@@ -12,27 +13,42 @@ const safe = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(va
 const clamp = (value, min, max) => Math.max(min, Math.min(max, safe(value)));
 const upper = (value) => String(value || '').trim().toUpperCase();
 
-function firstBookPrice(product, side) {
-  const levels = side === 'BUY'
+// Hypixel names summary sides from the instant transaction perspective:
+// sell_summary = current BUY orders (what an instant seller receives);
+// buy_summary = current SELL offers (what an instant buyer pays).
+// NEU crafting recipes use a legacy ID suffix such as LOG-2;
+// the public Hypixel Bazaar exposes the matching item as LOG:2.
+// Only map to a canonical id if that exact product really exists in the market.
+function canonicalProductId(itemId, mapping) {
+  const id=String(itemId||'').trim();
+  if(mapping?.has?.(id)||Object.hasOwn(mapping||{},id))return id;
+  const canonical=id.replace(/-(\d+)$/,':$1');
+  return canonical!==id && (mapping?.has?.(canonical)||Object.hasOwn(mapping||{},canonical))
+    ? canonical : id;
+}
+
+function firstBookPrice(product, action) {
+  const instantBuy = action === 'INSTANT_BUY';
+  const levels = instantBuy
     ? (Array.isArray(product?.buy_summary) ? product.buy_summary : [])
     : (Array.isArray(product?.sell_summary) ? product.sell_summary : []);
   const price = safe(levels[0]?.pricePerUnit);
   if (price > 0) return price;
   const q = product?.quick_status || {};
-  return side === 'BUY' ? safe(q.buyPrice) : safe(q.sellPrice);
+  return instantBuy ? safe(q.buyPrice) : safe(q.sellPrice);
 }
 
 function currentPrice(productId, market) {
-  const product = market?.[productId];
+  const product = market?.[canonicalProductId(productId,market)];
   return {
-    instantSell: firstBookPrice(product, 'BUY'),
-    sellOrder: firstBookPrice(product, 'SELL'),
-    acquisition: firstBookPrice(product, 'SELL')
+    instantSell: firstBookPrice(product, 'INSTANT_SELL'),
+    sellOrder: firstBookPrice(product, 'INSTANT_BUY'),
+    acquisition: firstBookPrice(product, 'INSTANT_BUY')
   };
 }
 
 function historyPrice(productId, historyStats, days=7) {
-  const h = historyStats?.get?.(productId);
+  const h = historyStats?.get?.(canonicalProductId(productId,historyStats));
   const d=Math.max(1,Math.min(7,Math.round(safe(days,7))));
   return {
     instantSell: safe(h?.[`avgBuy${d}d`]),
@@ -44,7 +60,7 @@ function historyPrice(productId, historyStats, days=7) {
 }
 
 function getNpcPrice(itemId, fallbackNpc, itemMeta) {
-  const meta = itemMeta?.get?.(itemId);
+  const meta = itemMeta?.get?.(canonicalProductId(itemId,itemMeta));
   const candidates = [
     meta?.npcSellPrice, meta?.npc_sell_price, meta?.npcPrice, meta?.npc_price,
     meta?.sellPrice, meta?.sell_price, fallbackNpc
@@ -111,11 +127,13 @@ function acquisitionQuote(itemId, market) {
   return { price, available: price > 0 };
 }
 
+const MINIONS_BY_ID=new Map(Object.values(MINION_DATA.definitions).map(minion=>[upper(minion.id),minion]));
+
 function setupRecipeFor(itemId) {
   const id=upper(itemId);
   const upgrade=MINION_DATA.upgrades?.[id];
   if (Array.isArray(upgrade?.recipe) && upgrade.recipe.length) return upgrade.recipe;
-  const recipe=MINION_DATA.setupRecipes?.[id];
+  const recipe=MINION_DATA.setupRecipes?.[id]||VERIFIED_NON_BAZAAR_INGREDIENTS[id]?.recipe;
   return Array.isArray(recipe) && recipe.length ? recipe : null;
 }
 
@@ -135,7 +153,19 @@ function setupAcquisitionQuote(itemId, context, seen=new Set()) {
   }
 
   if (seen.has(key)) return {price:0,available:false,source:'CYCLE',missing:[id],components:[]};
-  const recipe=setupRecipeFor(key);
+  let recipe=setupRecipeFor(key);
+  let recipeSource='CRAFT';
+  if(!recipe){
+    const match=key.match(/^(.+_GENERATOR)_([0-9]+)$/);
+    const inputMinion=match?MINIONS_BY_ID.get(match[1]):null;
+    if(inputMinion){
+      const resolved=resolveCumulativeTierRecipe(inputMinion,Number(match[2]));
+      if(!resolved.complete)return {price:0,available:false,source:'MINION_RECIPE_UNVERIFIED',
+        missing:resolved.missing||[id],components:[]};
+      recipe=resolved.byTier?.length?resolved.byTier:resolved.recipe;
+      recipeSource='MINION_CRAFT';
+    }
+  }
   if (!recipe) return {price:0,available:false,source:'UNPRICED',missing:[id],components:[]};
 
   const nextSeen=new Set(seen); nextSeen.add(key);
@@ -159,8 +189,8 @@ function setupAcquisitionQuote(itemId, context, seen=new Set()) {
     cost+=total;
     components.push({item:entry.item,amount,unitPrice:q.price,total,source:q.source});
   }
-  if (missing.length) return {price:0,available:false,source:'CRAFT',missing:[...new Set(missing)],components};
-  return {price:cost,available:true,source:'CRAFT',components};
+  if (missing.length) return {price:0,available:false,source:recipeSource,missing:[...new Set(missing)],components};
+  return {price:cost,available:true,source:recipeSource,components};
 }
 
 function compactDropStream(drop, rawUnitsPerDay, useCompactor, collectionIntervalDays = 1) {
@@ -546,13 +576,17 @@ export function calculateMinion(minion, options, context) {
   const recipe = recipeCost(minion,tier,context);
   const extras = setupExtraCost(fuel,upgrades,context,shipping);
   const setupComplete = recipe.complete && extras.complete;
-  const setupPerMinion = recipe.cost == null ? null : recipe.cost + extras.cost;
+  // A partial sum must never be displayed as a verified setup price.
+  const setupPerMinion = setupComplete ? recipe.cost + extras.cost : null;
   const setupCost = setupPerMinion == null ? null : setupPerMinion * count;
   const paybackDays = setupComplete && setupCost != null && netDay > 0 ? setupCost / netDay : null;
   const roi30dPercent = setupComplete && setupCost > 0 ? (netDay*30/setupCost)*100 : null;
 
   const histCoverage = historicalRevenue > 0 ? weightedCoverage / historicalRevenue : 0;
   const cv = historicalRevenue > 0 ? weightedCv / historicalRevenue : 0;
+  const economicsComplete = fuelExpense.available && unpricedOutputs===0;
+  if(!setupComplete)warnings.push('Minion setup cost is incomplete; payback and ROI are unavailable.');
+  if(!economicsComplete)warnings.push('One or more income or recurring expense prices are missing; net profit is an estimate.');
   let confidenceScore = 1;
   if (!setupComplete) confidenceScore -= 0.10;
   if (!fuelExpense.available) confidenceScore -= 0.10;
@@ -562,6 +596,8 @@ export function calculateMinion(minion, options, context) {
     if (fallbackRevenue > 0) confidenceScore -= Math.min(0.35,fallbackRevenue/Math.max(1,grossPerMinionDay)*0.35);
   }
   if (minion.confidence === 'MEDIUM') confidenceScore -= 0.15;
+  if(!setupComplete||!economicsComplete)confidenceScore=Math.min(confidenceScore,0.49);
+  if(minion.confidence==='MEDIUM')confidenceScore=Math.min(confidenceScore,0.74);
   confidenceScore = clamp(confidenceScore,0,1);
 
   return {
@@ -593,6 +629,7 @@ export function calculateMinion(minion, options, context) {
     horizonDays:Math.max(1,Math.min(365,Math.floor(safe(options.horizonDays,30)))),
     horizonProfit:setupComplete&&setupCost!=null ? netDay*Math.max(1,Math.min(365,Math.floor(safe(options.horizonDays,30))))-setupCost : null,
     setupComplete,
+    economicsComplete,
     recipeSource:recipe.source,
     setupMissing:[...new Set([...(recipe.missing||[]),...(extras.missing||[])])],
     setupBreakdown:[...(recipe.details||[]),...(extras.details||[])],
@@ -690,7 +727,7 @@ export function calculateMinionRankings(options = {}, context = {}) {
     row.currentVs7dPercent = row.currentVsHistoryPercent;
     rows.push(row);
   }
-  const netRanked=rows.filter(r=>r.supported).slice().sort((a,b)=>safe(b.netDay,-Infinity)-safe(a.netDay,-Infinity));
+  const netRanked=rows.filter(r=>r.supported&&r.economicsComplete).slice().sort((a,b)=>safe(b.netDay,-Infinity)-safe(a.netDay,-Infinity));
   for(let i=0;i<netRanked.length;i++){
     const row=netRanked[i],next=netRanked[i+1]||null;
     row.netRank=i+1;
@@ -700,7 +737,7 @@ export function calculateMinionRankings(options = {}, context = {}) {
 
   const sort = upper(options.sort || 'NET');
   const metric = (row) => {
-    if (!row.supported) return -Infinity;
+    if (!row.supported||!row.economicsComplete) return -Infinity;
     if (sort === 'PAYBACK') return Number.isFinite(row.paybackDays) ? -row.paybackDays : -Infinity;
     if (sort === 'ROI') return safe(row.roi30dPercent,-Infinity);
     if (sort === 'HORIZON') return Number.isFinite(row.horizonProfit)?row.horizonProfit:-Infinity;
@@ -712,7 +749,7 @@ export function calculateMinionRankings(options = {}, context = {}) {
   rows.sort((a,b)=>metric(b)-metric(a) || String(a.name).localeCompare(String(b.name)));
   let rankedPosition=0;
   for (const row of rows) {
-    if (!row.supported) continue;
+    if (!row.supported||!row.economicsComplete) continue;
     row.sortRank=++rankedPosition;
   }
   const visibleRows = search

@@ -1,0 +1,22 @@
+name: BazaarFlipper full minion recipe gaps (diagnostic only)
+on:
+  push:
+    branches: [stabilization/v0.7.0-foundation]
+    paths:
+      - tests/minion-unverified-breakdown-v0.7.0.mjs
+      - candidate-src/src/minion-merchant-recipes.mjs
+      - candidate-src/src/minion-recipes.mjs
+      - .github/workflows/minion-unverified-diagnostic.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  map-gaps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - name: Split minion price gaps from recipe gaps using live Hypixel market
+        run: node tests/minion-unverified-breakdown-v0.7.0.mjs
