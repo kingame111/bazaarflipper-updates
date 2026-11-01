@@ -35,3 +35,18 @@ function stagesFor(drop,steps,metadata,owner){
     next=more?[more.item,more.ratio]:null;
   }
 }
+export function simulateUpgradeOffline(minion,tier,opts){
+  const base=minion?.tiers?.[tier],fuel=opts.fuel,ups=opts.upgrades||[];
+  const drops=fuel?.forceDrops||minion?.drops;
+  const special=ups.some(u=>u.extraDrops?.length||u.cooldownDrop||u.dropTransforms?.length||u.outputMultiplier);
+  if(!base||!special||!fuel||fuel.duration>0||Number(fuel.drops||1)!==1||!drops?.length)return null;
+  const days=Number(opts.days),interval=Number(opts.secondsPerAction)*(minion.harvestOnly?1:2);
+  if(!(days>0)||!(interval>0))return null;
+  const events=Math.floor(days*86400/interval+1e-8);
+  if(events>100000)return null;
+  const innerSlots=Number(base.storage)/64,extSlots=opts.largeStorage===false?0:15;
+  if(!Number.isInteger(innerSlots)||innerSlots<1)return null;
+  const transform=d=>{
+    const t=ups.flatMap(u=>u.dropTransforms||[]).find(x=>x.from===d.item);
+    return t?{...d,item:t.to,npc:t.npc,enchanted:t.enchanted}:d;
+  };
