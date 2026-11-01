@@ -1,12 +1,93 @@
 import fs from 'node:fs';
 import { MINION_DATA } from '../candidate-src/src/minion-data.mjs';
+
+const BASE='https://hypixelskyblock.minecraft.wiki/w/';
 const definitions=Object.values(MINION_DATA.definitions);
-const decode=s=>s.replace(/&nbsp;|&#160;|&#xA0;/gi,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>');
-function plain(html){return decode(html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,' ').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,' ').replace(/<[^>]*>/g,' ').replace(/\s+/g,' '));}
-const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-async function getWithRetry(url){for(let k=0;k<3;k++){try{let controller=new AbortController();let timeout=setTimeout(()=>controller.abort(),25000);let response;try{response=await fetch(url,{signal:controller.signal,headers:{'User-Agent':'BazaarFlipper-audit/1.0 (independent source verification)','Accept':'text/html'}});}finally{clearTimeout(timeout);}if(response.ok)return {html:await response.text(),status:response.status};if(![429,500,502,503,504].includes(response.status))return {error:'HTTP '+response.status};}catch(e){if(k===2)return {error:String(e)}}await sleep(1000*(k+1));}return {error:'Retry exhausted'};}
-function extract(html){const text=plain(html);let speed=[...text.matchAll(/Cooldown:\s*([0-9]+(?:\.[0-9]+)?)\s*s\b/gi)].map(m=>Number(m[1]));let storage=[...text.matchAll(/Storage:\s*([0-9]+(?:,[0-9]{3})*)/gi)].map(m=>Number(m[1].replaceAll(',','')));let i=text.indexOf('## Stats');let dropIntro=text.match(/Collects\s*\(Average items collected per action\)(.{0,400})/i)?.[1]||'';return {speed,storage,dropIntro,textLength:text.length,htmlLength:html.length,textStart:text.slice(0,1000)};}
-const out={generatedAt:new Date().toISOString(),scope:'Speed and storage tier-by-tier against Hypixel SkyBlock community wiki; not a drop or upgrade proof',totalFamilies:definitions.length,records:[],summary:{},source:'https://hypixelskyblock.minecraft.wiki/w/'};
-let idx=0;const concurrency=4;
-async function worker(){while(idx<definitions.length){const d=definitions[idx++];const url=out.source+encodeURIComponent(d.name.replaceAll(' ','_'));const res=await getWithRetry(url);if(res.error){out.records.push({name:d.name,url,status:'FETCH_FAILED',reason:res.error});continue;}const e=extract(res.html);if(['Clay Minion','Flower Minion','Red Sand Minion','Fishing Minion'].includes(d.name)){const p=plain(res.html);const at=p.search(/Tier\\s+Base Time|Tier\\s+Info|Tier\\s+Requirements|Tier\\s+Stats/i);console.log('SOURCE_DIAGNOSTIC',JSON.stringify({name:d.name,statStart:p.slice(at,at+2100),textStart:p.slice(0,100),htmlAtStats:res.html.slice(res.html.indexOf('id="Stats"'),res.html.indexOf('id="Stats"')+500)}));};const tiers=Object.entries(d.tiers||{}).sort(([a],[b])=>Number(a)-Number(b));const rec={name:d.name,url,status:'OK',tierCount:tiers.length,sourceCooldowns:e.speed.length,sourceStorage:e.storage.length,sourceTextLength:e.textLength,sourceHtmlLength:e.htmlLength,dropIntro:e.dropIntro};if(e.speed.length===tiers.length && tiers.length){rec.speeds=tiers.map(([tier,t],i)=>({tier:Number(tier),local:t.speed,reference:e.speed[i],match:Math.abs(Number(t.speed)-e.speed[i])<0.0001}));rec.speedMismatch=rec.speeds.filter(x=>!x.match);rec.speedVerified=true;}else{rec.speedVerified=false;rec.reason='Source cooldown count does not match local tier count; no ordinal assertion made';rec.observedSourceCooldowns=e.speed.slice(0,18);if(e.speed.length===0)rec.sourceTextStart=e.textStart.slice(0,600);}if(e.storage.length===tiers.length && tiers.length){rec.storage=tiers.map(([tier,t],i)=>({tier:Number(tier),local:t.storage,reference:e.storage[i],match:Number(t.storage)===e.storage[i]}));rec.storageMismatch=rec.storage.filter(x=>!x.match);rec.storageVerified=true;}else rec.storageVerified=false;out.records.push(rec);console.log('CHECK',JSON.stringify({name:d.name,tiers:tiers.length,speeds:e.speed.length,storage:e.storage.length,speedMismatches:rec.speedMismatch?.length??null,storageMismatches:rec.storageMismatch?.length??null,status:rec.status,reason:rec.reason}));}}
-await Promise.all(Array.from({length:concurrency},worker));out.records.sort((a,b)=>a.name.localeCompare(b.name));out.summary={families:out.records.length,verifiedSpeedFamilies:out.records.filter(r=>r.speedVerified).length,verifiedSpeedTiers:out.records.filter(r=>r.speedVerified).reduce((n,r)=>n+r.tierCount,0),mismatchingSpeedTiers:out.records.reduce((n,r)=>n+(r.speedMismatch?.length||0),0),verifiedStorageFamilies:out.records.filter(r=>r.storageVerified).length,mismatchingStorageTiers:out.records.reduce((n,r)=>n+(r.storageMismatch?.length||0),0),fetchFailed:out.records.filter(r=>r.status==='FETCH_FAILED').map(r=>({name:r.name,reason:r.reason})),unverifiedSpeedFamilies:out.records.filter(r=>!r.speedVerified).map(r=>({name:r.name,reason:r.reason,sourceCooldowns:r.sourceCooldowns})),mismatches:out.records.flatMap(r=>(r.speedMismatch||[]).map(m=>({...m,name:r.name}))),storageMismatches:out.records.flatMap(r=>(r.storageMismatch||[]).map(m=>({...m,name:r.name})))};fs.mkdirSync('audits',{recursive:true});fs.writeFileSync('audits/minion-tier-source-audit-results.json',JSON.stringify(out,null,2)+'\n');console.log('REFERENCE_AUDIT_SUMMARY',JSON.stringify(out.summary,null,2));console.log('REFERENCE_AUDIT_REPORT_END');
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const deEntity=s=>s.replace(/&nbsp;|&#160;|&#xA0;/gi,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;|&#039;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+const text=html=>deEntity(html.replace(/<[^>]*>/g,' ')).replace(/\s+/g,' ').trim();
+async function request(url){
+ for(let attempt=0;attempt<3;attempt++){
+  try{
+   const r=await fetch(url,{signal:AbortSignal.timeout(24000),headers:{'User-Agent':'BazaarFlipper reference audit 1.0','Accept':'text/html'}});
+   if(r.ok)return {html:await r.text()};
+   if(![429,500,502,503,504].includes(r.status))return {error:'HTTP '+r.status};
+  }catch(e){if(attempt===2)return {error:String(e)}}
+  await sleep(900*(attempt+1));
+ }
+ return {error:'source retry exhausted'};
+}
+function extract(html){
+ const i=html.indexOf('id="Stats"');
+ if(i<0)return {reason:'Stats section not found'};
+ const start=html.indexOf('<table',i);
+ const end=html.indexOf('</table>',start);
+ if(start<0||end<0)return {reason:'Stats table not found'};
+ const table=html.slice(start,end+8);
+ const rows=[];
+ for(const m of table.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)){
+  const cells=[...m[1].matchAll(/<(?:td|th)\b[^>]*>([\s\S]*?)<\/(?:td|th)>/gi)].map(x=>text(x[1]));
+  if(!cells.length)continue;
+  const first=cells[0].match(/^(XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)(?:\s|$)/);
+  if(!first)continue;
+  const roman=['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+  const tier=roman.indexOf(first[1]);
+  const joined=cells.join(' ');
+  const hasCooldown=joined.match(/Cooldown:\s*([\d.]+)\s*s\b/i);
+  const hasBaseTime=joined.match(/([\d.]+)\s*seconds\b/i);
+  const speed=hasCooldown?Number(hasCooldown[1]):hasBaseTime?Number(hasBaseTime[1]):null;
+  const store=joined.match(/Storage:\s*([\d,]+)/i);
+  const alternate=joined.match(/[\d.]+\s*seconds\s+([\d,]{2,5})\b/i);
+  const storage=store?Number(store[1].replaceAll(',','')):alternate?Number(alternate[1].replaceAll(',','')):null;
+  rows.push({tier,speed,storage,cells:cells.slice(0,3).map(c=>c.slice(0,140))});
+ }
+ const full=text(html);
+ const top=full.indexOf('Collects');
+ const topEnd=full.indexOf('Upgrade with',top);
+ const collects=top>=0&&topEnd>top?full.slice(top,Math.min(topEnd,top+1300)):'';
+ return {rows,collects,tableSize:table.length,tableStart:text(table).slice(0,550)};
+}
+const result={generatedAt:new Date().toISOString(),source:BASE,totalFamilies:definitions.length,records:[],summary:{}};
+let index=0;
+async function worker(){
+ while(index<definitions.length){
+  const d=definitions[index++];
+  const url=BASE+encodeURIComponent(d.name.replaceAll(' ','_'));
+  const r=await request(url);
+  const record={name:d.name,url,localTierCount:Object.keys(d.tiers||{}).length,source:'Hypixel SkyBlock community wiki'};
+  if(r.error){record.status='FETCH_FAILED';record.reason=r.error;result.records.push(record);continue}
+  const ex=extract(r.html);
+  record.sourceTierCount=ex.rows?.length||0;
+  record.collects=ex.collects||'';
+  record.status='OK';
+  if(!ex.rows?.length){record.status='UNVERIFIED';record.reason=ex.reason||'No parseable Stats rows';record.sample=ex.tableStart;}
+  else{
+   record.tiers=Object.entries(d.tiers||{}).map(([tier,info])=>{
+    const t=Number(tier), matches=ex.rows.filter(x=>x.tier===t);
+    const source=matches.length===1?matches[0]:null;
+    return {tier:t,localSpeed:info.speed,sourceSpeed:source?.speed??null,speedMatch:source?.speed==null?null:Math.abs(Number(info.speed)-source.speed)<.00001,
+      localStorage:info.storage,sourceStorage:source?.storage??null,storageMatch:source?.storage==null?null:Number(info.storage)===source.storage,sourceCells:source?.cells||[]};
+   });
+  }
+  if(['Clay Minion','Flower Minion','Red Sand Minion','Fishing Minion','Vampire Minion'].includes(d.name)){
+   console.log('EXAMPLE',JSON.stringify({name:d.name,sourceTiers:record.sourceTierCount,tiers:record.tiers?.slice(0,3),sample:ex.tableStart,collects:record.collects.slice(0,500)}));
+  }
+  result.records.push(record);
+ }
+}
+await Promise.all(Array.from({length:6},worker));
+result.records.sort((a,b)=>a.name.localeCompare(b.name));
+const tiers=result.records.flatMap(r=>(r.tiers||[]).map(t=>({...t,name:r.name,url:r.url})));
+result.summary={
+ totalFamilies:definitions.length,sourceTierRows:result.records.reduce((n,r)=>n+(r.sourceTierCount||0),0),
+ verifiedSpeedTiers:tiers.filter(t=>t.speedMatch!==null).length,
+ mismatchingSpeedTiers:tiers.filter(t=>t.speedMatch===false).map(t=>({name:t.name,tier:t.tier,ours:t.localSpeed,wiki:t.sourceSpeed,url:t.url})),
+ unverifiedSpeedTiers:tiers.filter(t=>t.speedMatch===null).map(t=>({name:t.name,tier:t.tier})),
+ verifiedStorageTiers:tiers.filter(t=>t.storageMatch!==null).length,
+ mismatchingStorageTiers:tiers.filter(t=>t.storageMatch===false).map(t=>({name:t.name,tier:t.tier,ours:t.localStorage,wiki:t.sourceStorage,url:t.url})),
+ failedSources:result.records.filter(x=>x.status!=='OK').map(x=>({name:x.name,reason:x.reason}))
+};
+fs.mkdirSync('audits',{recursive:true});
+fs.writeFileSync('audits/minion-tier-source-audit-results.json',JSON.stringify(result,null,2)+'\n');
+console.log('WIKI_TIER_AUDIT_SUMMARY',JSON.stringify(result.summary,null,2));
+if(result.summary.verifiedSpeedTiers===0)process.exitCode=2;
