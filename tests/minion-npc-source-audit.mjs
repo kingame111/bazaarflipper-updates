@@ -6,7 +6,15 @@ if(!res.ok)throw new Error('Official Hypixel items API returned HTTP '+res.statu
 const source=await res.json();
 if(!source.success||!Array.isArray(source.items))throw new Error('Unexpected official API response');
 const api=new Map(source.items.map(x=>[x.id,x]));
-const all=Object.values(MINION_DATA.definitions).flatMap(d=>(d.drops||[]).map(row=>({minion:d.name,...row})));
+const all=[
+ ...Object.values(MINION_DATA.definitions).flatMap(d=>(d.drops||[]).map(row=>({minion:d.name,...row}))),
+ ...Object.entries(MINION_DATA.upgrades).flatMap(([id,u])=>[
+  ...(u.extraDrops||[]).map(row=>({minion:'UPGRADE:'+id,...row})),
+  ...(u.cooldownDrop?[{minion:'UPGRADE:'+id,...u.cooldownDrop}]:[]),
+  ...(u.dropTransforms||[]).map(row=>({minion:'TRANSFORM:'+id,item:row.to,npc:row.npc}))
+ ]),
+ ...Object.entries(MINION_DATA.fuels).flatMap(([id,f])=>(f.forceDrops||[]).map(row=>({minion:'FUEL:'+id,...row})))
+];
 const normalized=x=>String(x||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const aliases=new Map();
 for(const item of source.items){let k=normalized(item.name);if(!aliases.has(k))aliases.set(k,[]);aliases.get(k).push(item);}
