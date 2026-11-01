@@ -424,7 +424,7 @@ export function calculateMinion(minion, options, context) {
     clamp(options.otherSpeedPercent,0,500)/100
   );
   const secondsPerAction = safe(tierInfo.speed) / (1 + speedBonus);
-  const cyclesPerDay = DAY_SECONDS / (secondsPerAction * 2);
+  const cyclesPerDay = DAY_SECONDS / (secondsPerAction * (minion.harvestOnly ? 1 : 2));
   const fuelDropMultiplier = Math.max(0, safe(fuel.drops, 1));
   const normalOutputMultiplier = upgrades.reduce((m,u)=>m*Math.max(0,safe(u.outputMultiplier,1)),1);
   const useCompactor = upgrades.some((u)=>u.compactor);
