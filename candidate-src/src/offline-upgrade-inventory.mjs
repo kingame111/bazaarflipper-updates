@@ -105,3 +105,27 @@ export function simulateUpgradeOffline(minion,tier,opts){
         chosen=[selected];
       }else chosen=drops.filter(d=>roll()<d.chance);
       let eligible=0;
+      for(const d of chosen){
+        const n=drawAmount(d.amount*outputFactor);
+        eligible+=n;create(d,n);
+      }
+      for(const up of ups){
+        if(up.id==='DIAMOND_SPREADING')continue;
+        for(const d of up.extraDrops||[]){
+          if(roll()<d.chance){
+            const n=drawAmount(d.amount);
+            create(d,n);eligible+=n;
+          }
+        }
+      }
+      for(const up of ups){
+        if(up.id!=='DIAMOND_SPREADING')continue;
+        for(let k=0;k<eligible;k++)
+          for(const d of up.extraDrops||[])
+            if(roll()<d.chance)create(d,drawAmount(d.amount));
+      }
+      if(hasCompactor){
+        compact(inside,steps);
+        if(extSlots)compact(chest,steps);
+      }
+    }
