@@ -5094,6 +5094,72 @@ export const MINION_DATA = {
           "enchanted": {
             "ENCHANTED_POPPY": 576
           }
+        },
+        {
+          "item": "ALLIUM",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "AZURE_BLUET",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "BLUE_ORCHID",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "PEONY",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "OXEYE_DAISY",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "ROSE_BUSH",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "LILAC",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "RED_TULIP",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "WHITE_TULIP",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "PINK_TULIP",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "ORANGE_TULIP",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
         }
       ],
       "confidence": "MEDIUM",
@@ -16553,13 +16619,11 @@ export const MINION_DATA = {
     },
     "EVERBURNING_FLAME": {
       "name": "Everburning Flame",
-      "speed": 0.4,
+      "speed": 0.35,
       "drops": 1,
       "duration": -1,
       "itemId": "EVERBURNING_FLAME",
-      "condition": {
-        "family": "Combat"
-      }
+      "combatBonus": 0.05
     }
   },
   "upgrades": {
@@ -16699,7 +16763,7 @@ export const MINION_DATA = {
       "outputMultiplier": 0.5,
       "cooldownDrop": {
         "item": "RAW_SOULFLOW",
-        "seconds": 90,
+        "seconds": 105,
         "npc": 0,
         "enchanted": {
           "SOULFLOW": 160
@@ -16726,7 +16790,7 @@ export const MINION_DATA = {
       "outputMultiplier": 0.5,
       "cooldownDrop": {
         "item": "RAW_SOULFLOW",
-        "seconds": 180,
+        "seconds": 185,
         "npc": 0,
         "enchanted": {
           "SOULFLOW": 160
