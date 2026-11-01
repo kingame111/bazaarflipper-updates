@@ -47,6 +47,21 @@ function extract(html){
  const collects=top>=0&&topEnd>top?full.slice(top,Math.min(topEnd,top+1300)):'';
  return {rows,collects,tableSize:table.length,tableStart:text(table).slice(0,550)};
 }
+
+function compareDropNumbers(collects, drops){
+ if(!collects)return {status:'UNVERIFIED',reason:'Source collects summary unavailable'};
+ const re=/(\d+(?:\.\d+)?)(?:\s*[-–]\s*(\d+(?:\.\d+)?))?x\s+(.+?)(?:\s*\(([\d.]+)%\))?(?=\s+\d+(?:\.\d+)?(?:\s*[-–]\s*\d+(?:\.\d+)?)?x\s+|$)/g;
+ const source=[...collects.matchAll(re)].map(m=>({item:m[3].trim(),amount:m[2]?(Number(m[1])+Number(m[2]))/2:Number(m[1]),chance:m[4]?Number(m[4])/100:1,range:m[2]?m[1]+'-'+m[2]:null}));
+ const local=(drops||[]).map(d=>({item:d.item,amount:Number(d.amount),chance:Number(d.chance??1)}));
+ const used=new Set(), mismatches=[];
+ for(const expected of local) {
+  const index=source.findIndex((x,i)=>!used.has(i)&&Math.abs(x.amount-expected.amount)<.000001&&Math.abs(x.chance-expected.chance)<.0001);
+  if(index>=0)used.add(index);
+  else mismatches.push(expected);
+ }
+ const extras=source.filter((x,i)=>!used.has(i));
+ return {status:source.length===local.length&&!mismatches.length?'NUMERIC_MATCH':'NUMERIC_MISMATCH',sourceCount:source.length,localCount:local.length,sourceEntries:source,localEntries:local,unmatchedLocal:mismatches,unmatchedSource:extras,note:'Compares drop quantity and chance multiset, not item-ID identity; range quantities interpreted by midpoint'};
+}
 const result={generatedAt:new Date().toISOString(),source:BASE,totalFamilies:definitions.length,records:[],summary:{}};
 let index=0;
 async function worker(){
@@ -58,7 +73,7 @@ async function worker(){
   if(r.error){record.status='FETCH_FAILED';record.reason=r.error;result.records.push(record);continue}
   const ex=extract(r.html);
   record.sourceTierCount=ex.rows?.length||0;
-  record.collects=ex.collects||'';
+  record.collects=ex.collects||'';record.dropComparison=d.drops?.length?compareDropNumbers(record.collects,d.drops):{status:'UNSUPPORTED'};
   record.status='OK';
   if(!ex.rows?.length){record.status='UNVERIFIED';record.reason=ex.reason||'No parseable Stats rows';record.sample=ex.tableStart;}
   else{
@@ -80,6 +95,9 @@ result.records.sort((a,b)=>a.name.localeCompare(b.name));
 const tiers=result.records.flatMap(r=>(r.tiers||[]).map(t=>({...t,name:r.name,url:r.url})));
 result.summary={
  totalFamilies:definitions.length,sourceTierRows:result.records.reduce((n,r)=>n+(r.sourceTierCount||0),0),
+ dropNumericMatches:result.records.filter(r=>r.dropComparison?.status==='NUMERIC_MATCH').map(r=>r.name),
+ dropNumericMismatches:result.records.filter(r=>r.dropComparison?.status==='NUMERIC_MISMATCH').map(r=>({name:r.name,collects:r.collects,comparison:r.dropComparison})),
+ dropUnverified:result.records.filter(r=>r.dropComparison?.status==='UNVERIFIED').map(r=>({name:r.name,reason:r.dropComparison.reason})),
  verifiedSpeedTiers:tiers.filter(t=>t.speedMatch!==null).length,
  mismatchingSpeedTiers:tiers.filter(t=>t.speedMatch===false).map(t=>({name:t.name,tier:t.tier,ours:t.localSpeed,wiki:t.sourceSpeed,url:t.url})),
  unverifiedSpeedTiers:tiers.filter(t=>t.speedMatch===null).map(t=>({name:t.name,tier:t.tier})),
