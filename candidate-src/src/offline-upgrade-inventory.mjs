@@ -35,11 +35,15 @@ function stagesFor(drop,steps,metadata,owner){
     next=more?[more.item,more.ratio]:null;
   }
 }
+const computed=new Map();
+const copy=x=>({...x,outputs:x.outputs.map(row=>({...row}))});
 export function simulateUpgradeOffline(minion,tier,opts){
   const base=minion?.tiers?.[tier],fuel=opts.fuel,ups=opts.upgrades||[];
   const drops=fuel?.forceDrops||minion?.drops;
   const special=ups.some(u=>u.extraDrops?.length||u.cooldownDrop||u.dropTransforms?.length||u.outputMultiplier);
   if(!base||!special||!fuel||fuel.duration>0||Number(fuel.drops||1)!==1||!drops?.length)return null;
+  const key=JSON.stringify([minion.id,tier,opts.days,opts.secondsPerAction,opts.largeStorage,fuel.itemId,ups.map(u=>u.id)]);
+  if(computed.has(key))return copy(computed.get(key));
   const days=Number(opts.days),interval=Number(opts.secondsPerAction)*(minion.harvestOnly?1:2);
   if(!(days>0)||!(interval>0))return null;
   const events=Math.floor(days*86400/interval+1e-8);
@@ -156,11 +160,14 @@ export function simulateUpgradeOffline(minion,tier,opts){
   const expectedDiamonds=ups.some(u=>u.id==='DIAMOND_SPREADING')
     ?(expectedBase+expectedExtras)*.1:0;
   const total=expectedBase+expectedExtras+expectedTimed+expectedDiamonds;
-  return {model:stochastic?'UPGRADE_MONTE_CARLO_12':'UPGRADE_EVENT',
+  const result={model:stochastic?'UPGRADE_MONTE_CARLO_12':'UPGRADE_EVENT',
     outputs,events,samples,overflowQuantity,
     overflowShare:total?overflowQuantity/total:0,
     firstOverflowDay:overflowStarts?overflowStartSum/overflowStarts:null,
     innerSlots,extSlots,
     warning:stochastic?'Upgrade output is a 12-seed stochastic estimate.':
       'Upgrade inventory follows chronological events under documented offline assumptions.'};
+  if(computed.size>=3000)computed.clear();
+  computed.set(key,result);
+  return copy(result);
 }
