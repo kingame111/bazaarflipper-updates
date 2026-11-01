@@ -489,14 +489,31 @@ export function calculateMinion(minion, options, context) {
     // Preserve the expected gross production rate as one stream per source item;
     // inventory and hopper rows must not double-count the same raw output.
     const expectedByItem=new Map();
+    const putExpected=(source,drop,rate)=>{
+      const item=applyUpgradeDropTransforms(drop,upgrades).item;
+      const key=source+'|'+item;
+      expectedByItem.set(key,(expectedByItem.get(key)||0)+rate);
+    };
     for(const d of (fuel.forceDrops||minion.drops||[]))
-      expectedByItem.set(d.item,cyclesPerDay*d.amount*d.chance*fuelDropMultiplier*normalOutputMultiplier);
+      putExpected('MINION',d,cyclesPerDay*d.amount*d.chance*fuelDropMultiplier*normalOutputMultiplier);
+    for(const u of upgrades){
+      for(const d of u.extraDrops||[])
+        putExpected(u.id,d,u.id==='DIAMOND_SPREADING'
+          ?eligibleResourceItemsPerDay*d.amount*d.chance
+          :cyclesPerDay*d.amount*d.chance*fuelDropMultiplier);
+      if(u.cooldownDrop){
+        const rate=DAY_SECONDS/u.cooldownDrop.seconds*fuelDropMultiplier*
+          (minion.id==='VOIDLING_GENERATOR'&&u.id==='SOULFLOW_ENGINE'?1+.03*tier:1);
+        putExpected(u.id,u.cooldownDrop,rate);
+      }
+    }
     const emitted=new Set();
     for(const g of generated){
       g.rawUnitsPerDay=0;
-      if(!emitted.has(g.rawItem)){
-        g.rawUnitsPerDay=expectedByItem.get(g.rawItem)||0;
-        emitted.add(g.rawItem);
+      const key=g.source+'|'+g.rawItem;
+      if(!emitted.has(key)){
+        g.rawUnitsPerDay=expectedByItem.get(key)||0;
+        emitted.add(key);
       }
     }
   }
