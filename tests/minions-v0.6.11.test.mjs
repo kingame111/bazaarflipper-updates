@@ -56,7 +56,7 @@ assert.equal(calculateMinion(flower,base,ctx).paybackDays,null,'Flower Tier I au
 assert.ok(snow);
 const baseSnow=calculateMinion(snow,base,ctx);
 const spread=calculateMinion(snow,{...base,upgrade1:'DIAMOND_SPREADING'},ctx);
-const expectedDiamonds=baseSnow.outputDetails.filter(x=>x.source==='MINION').reduce((n,x)=>n+x.rawUnitsPerDay,0)*0.1;
+const expectedDiamonds=baseSnow.cyclesPerDay*snow.drops.reduce((sum,drop)=>sum+drop.amount*drop.chance,0)*0.1;
 const diamond=spread.outputDetails.find(x=>x.item==='DIAMOND'&&x.source==='DIAMOND_SPREADING');
 assert.ok(diamond);
 assert.ok(Math.abs(diamond.rawUnitsPerDay-expectedDiamonds)<1e-6,'Diamond Spreading per item');
