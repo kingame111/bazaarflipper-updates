@@ -5,7 +5,7 @@ const fmtDays=(n)=>n!=null&&Number.isFinite(Number(n))?`${Number(n)<1?(Number(n)
 const fmtSpan=(ms)=>{const x=Math.max(0,Number(ms)||0),h=x/3600000;return h<1?`${Math.round(x/60000)}m`:h<48?`${h.toFixed(h<10?1:0)}h`:`${(h/24).toFixed(1)}d`;};
 const fmtAgo=(ts)=>{const age=Math.max(0,Date.now()-Number(ts||0));return !ts?'—':age<60000?`${Math.max(1,Math.round(age/1000))}s ago`:age<3600000?`${Math.round(age/60000)}m ago`:`${(age/3600000).toFixed(1)}h ago`;};
 const upgradeNames=(r)=>{const names=(r.upgrades||[]).map(x=>x.name);while(names.length<2)names.push('Empty');return names.slice(0,2);};
-const controls=['tier','count','fuel','shipping','sellMethod','priceMode','compareDays','collectionIntervalDays','optimizeFor','horizonDays','family','search','sort','tax','beacon','crystal','otherSpeed'];
+const controls=['tier','count','fuel','shipping','largeStorage','sellMethod','priceMode','compareDays','collectionIntervalDays','optimizeFor','horizonDays','family','search','sort','tax','beacon','crystal','otherSpeed'];
 let catalog=null,lastData=null,timer=null,requestSeq=0,lastHistoryLoadedAt=null,statusTimer=null;
 const COLUMN_KEY='bazaarflipper.minions.columns.v2',OLD_COLUMN_KEY='bazaarflipper.minions.columns.v1',VIEW_KEY='bazaarflipper.minions.views.v2',COMPARE_KEY='bazaarflipper.minions.compareDays.v1',EXCLUDED_KEY='bazaarflipper.minions.excludedUpgrades.v1';
 const columnNames=['#','Minion','Best upgrades','Tier','Net / day','LIVE comparison','Data coverage','Gross / day','Bazaar tax / day','Recurring / day','Setup (one-time)','Payback','30d ROI','Speed'];
@@ -205,7 +205,7 @@ function showDetail(r){
       <div><span>Effective action</span><strong>${r.effectiveSecondsPerAction.toFixed(2)}s</strong></div>
       <div><span>Cycles / day / minion</span><strong>${fmtCoins(r.cyclesPerDay)}</strong></div>
       <div><span>Shipping</span><strong>${r.shipping?.name||'None'}</strong></div>
-      <div><span>Storage capacity</span><strong>${r.storage?.capacity?fmtCoins(r.storage.capacity):'N/A'}</strong></div>
+      <div><span>Storage capacity</span><strong>${r.storage?.capacity?fmtCoins(r.storage.capacity):'N/A'} items${r.storage?.largeStorageSlots?` (+${r.storage.largeStorageSlots} slots Large Storage)`:''}</strong></div>
       <div><span>Storage fills in</span><strong>${fmtDays(r.storage?.daysToFull)}</strong></div>
       <div><span>Overflow share</span><strong>${fmtPct((r.storage?.overflowShare||0)*100)}</strong></div>
       <div><span>Collection interval</span><strong>${Number(r.collectionIntervalDays||1)<1?(Number(r.collectionIntervalDays||1)*24).toFixed(1)+'h':Number(r.collectionIntervalDays||1).toFixed(1)+'d'}</strong></div>
