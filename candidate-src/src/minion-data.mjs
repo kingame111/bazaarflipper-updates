@@ -940,7 +940,7 @@ export const MINION_DATA = {
           "item": "CACTUS",
           "amount": 3,
           "chance": 1,
-          "npc": 3,
+          "npc": 4,
           "enchanted": {
             "ENCHANTED_CACTUS_GREEN": 160
           }
@@ -2226,7 +2226,7 @@ export const MINION_DATA = {
           "item": "COAL",
           "amount": 1,
           "chance": 1,
-          "npc": 2,
+          "npc": 1,
           "enchanted": {
             "ENCHANTED_COAL": 160
           }
@@ -3972,7 +3972,7 @@ export const MINION_DATA = {
           "item": "EMERALD",
           "amount": 1,
           "chance": 1,
-          "npc": 6,
+          "npc": 4,
           "enchanted": {
             "ENCHANTED_EMERALD": 160
           }
@@ -5918,7 +5918,7 @@ export const MINION_DATA = {
           "item": "GOLD_INGOT",
           "amount": 1,
           "chance": 1,
-          "npc": 4,
+          "npc": 3,
           "enchanted": {
             "ENCHANTED_GOLD": 160
           }
@@ -9038,7 +9038,7 @@ export const MINION_DATA = {
           "item": "NETHER_STALK",
           "amount": 2.5,
           "chance": 1,
-          "npc": 5,
+          "npc": 4,
           "enchanted": {
             "ENCHANTED_NETHER_STALK": 160
           }
@@ -14439,7 +14439,7 @@ export const MINION_DATA = {
           "item": "IRON_INGOT",
           "amount": 1,
           "chance": 0.2,
-          "npc": 3,
+          "npc": 2,
           "enchanted": {
             "ENCHANTED_IRON": 160
           }
