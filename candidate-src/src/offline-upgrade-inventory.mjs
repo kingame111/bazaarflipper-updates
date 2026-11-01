@@ -50,8 +50,9 @@ export function simulateUpgradeOffline(minion,tier,opts){
   if(events>100000)return null;
   const innerSlots=Number(base.storage)/64,extSlots=opts.largeStorage===false?0:15;
   if(!Number.isInteger(innerSlots)||innerSlots<1)return null;
+  const transformRules=new Map(ups.flatMap(u=>u.dropTransforms||[]).map(t=>[t.from,t]));
   const transform=d=>{
-    const t=ups.flatMap(u=>u.dropTransforms||[]).find(x=>x.from===d.item);
+    const t=transformRules.get(d.item);
     return t?{...d,rawItemOriginal:d.item,item:t.to,npc:t.npc,enchanted:t.enchanted}:d;
   };
   const meta=new Map(),steps=[];
@@ -76,7 +77,7 @@ export function simulateUpgradeOffline(minion,tier,opts){
     const inside=new Map(),chest=new Map(),overflow=new Map();
     const nextDue=cooldown.map(u=>u.cooldownDrop.seconds);
     let firstOverflow=null,currentDay=0;
-    const drawAmount=x=>Math.floor(x)+(roll()<x%1?1:0);
+    const drawAmount=x=>{const whole=Math.floor(x),fraction=x-whole;return whole+(fraction>0&&roll()<fraction?1:0);};
     const create=(drop,quantity)=>{
       if(quantity<=0)return;
       const item=transform(drop).item;
@@ -107,7 +108,7 @@ export function simulateUpgradeOffline(minion,tier,opts){
           if(p<accumulated){selected=d;break;}
         }
         chosen=[selected];
-      }else chosen=drops.filter(d=>roll()<d.chance);
+      }else chosen=drops.filter(d=>d.chance===1||roll()<d.chance);
       let eligible=0;
       for(const d of chosen){
         const n=drawAmount(d.amount*outputFactor);
