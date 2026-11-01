@@ -482,7 +482,22 @@ export function calculateMinion(minion, options, context) {
   const offlineOptions={fuel,upgrades,days:collectionIntervalDays,secondsPerAction,largeStorage:options.largeStorage!==false};
   const eventResult = simulateDeterministicOffline(minion,tier,offlineOptions)
     || simulateStochasticOffline(minion,tier,offlineOptions);
-  if(eventResult)generated=eventResult.outputs;
+  if(eventResult){
+    generated=eventResult.outputs;
+    // Preserve the expected gross production rate as one stream per source item;
+    // inventory and hopper rows must not double-count the same raw output.
+    const expectedByItem=new Map();
+    for(const d of (fuel.forceDrops||minion.drops||[]))
+      expectedByItem.set(d.item,cyclesPerDay*d.amount*d.chance*fuelDropMultiplier*normalOutputMultiplier);
+    const emitted=new Set();
+    for(const g of generated){
+      g.rawUnitsPerDay=0;
+      if(!emitted.has(g.rawItem)){
+        g.rawUnitsPerDay=expectedByItem.get(g.rawItem)||0;
+        emitted.add(g.rawItem);
+      }
+    }
+  }
   if(eventResult?.warning)warnings.push(eventResult.warning);
 
   // Model the capacity of the minion's own storage over the collection interval.
