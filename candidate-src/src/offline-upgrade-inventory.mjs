@@ -147,3 +147,20 @@ export function simulateUpgradeOffline(minion,tier,opts){
     outputs.push({item,source:m.source,rawItem:m.rawItem,npc:m.npc,
       unitsPerDay:0,rawUnitsPerDay:0,compacted:false,overflowUnitsPerDay:qty/days});
   }
+  const expectedBase=events*drops.reduce((n,d)=>n+d.amount*d.chance,0)*outputFactor;
+  const expectedExtras=ups.reduce((n,u)=>n+(u.id==='DIAMOND_SPREADING'
+    ?0:(u.extraDrops||[]).reduce((a,d)=>a+d.amount*d.chance,0)*events),0);
+  const expectedTimed=ups.reduce((n,u)=>n+(u.cooldownDrop
+    ?days*86400/u.cooldownDrop.seconds*(minion.id==='VOIDLING_GENERATOR'
+      &&u.id==='SOULFLOW_ENGINE'?1+.03*tier:1):0),0);
+  const expectedDiamonds=ups.some(u=>u.id==='DIAMOND_SPREADING')
+    ?(expectedBase+expectedExtras)*.1:0;
+  const total=expectedBase+expectedExtras+expectedTimed+expectedDiamonds;
+  return {model:stochastic?'UPGRADE_MONTE_CARLO_12':'UPGRADE_EVENT',
+    outputs,events,samples,overflowQuantity,
+    overflowShare:total?overflowQuantity/total:0,
+    firstOverflowDay:overflowStarts?overflowStartSum/overflowStarts:null,
+    innerSlots,extSlots,
+    warning:stochastic?'Upgrade output is a 12-seed stochastic estimate.':
+      'Upgrade inventory follows chronological events under documented offline assumptions.'};
+}
