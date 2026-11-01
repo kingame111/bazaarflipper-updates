@@ -72,3 +72,30 @@ function runOne(m,up1,up2,days,largeStorage,shipping,seed){
   if(remaining>0&&largeStorage)remaining-=place(chest,15,actual.item,remaining);
   if(remaining>0&&shipping==='ENCHANTED_HOPPER')hopperCoins+=remaining*(prices.get(actual.item)||0)*.7;
  };
+ const chanceSum=m.drops.reduce((s,x)=>s+x.chance,0);
+ const exclusive=m.drops.length>1&&m.drops.every(x=>x.chance<1)&&Math.abs(chanceSum-1)<.0002;
+ const outputMultiplier=upgrades.reduce((v,x)=>v*(x.outputMultiplier||1),1);
+ const nextDue=outputs.map(u=>u.cooldownDrop.seconds);
+ for(let cycle=0;cycle<total;cycle++){
+  const time=(cycle+1)*duration;
+  for(let k=0;k<outputs.length;k++){
+   const u=outputs[k];
+   while(nextDue[k]<=time+1e-6&&nextDue[k]<=maxSeconds){
+    let amount=1;
+    if(m.id==='VOIDLING_GENERATOR'&&u.id==='SOULFLOW_ENGINE')amount+=.03*11;
+    addOutput({...u.cooldownDrop,amount});
+    nextDue[k]+=u.cooldownDrop.seconds;
+   }
+  }
+  let chosen=[];
+  if(exclusive){
+   const p=rng();let sum=0,chosenOne=m.drops.at(-1);
+   for(const d of m.drops){sum+=d.chance;if(p<sum){chosenOne=d;break;}}
+   chosen=[chosenOne];
+  }else chosen=m.drops.filter(d=>rng()<d.chance);
+  let eligibleItems=0;
+  for(const d of chosen){
+   const expected=d.amount*outputMultiplier,rounded=Math.floor(expected)+(rng()<expected%1?1:0);
+   eligibleItems+=rounded;
+   if(rounded>0)addOutput({...d,amount:rounded});
+  }
