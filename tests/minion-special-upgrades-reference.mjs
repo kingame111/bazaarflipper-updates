@@ -52,3 +52,23 @@ function recipeSteps(drop,transforms,prices){
   next=more?[more.item,more.ratio]:null;
  }
 }
+
+function runOne(m,up1,up2,days,largeStorage,shipping,seed){
+ const upgrades=[up1,up2].filter(x=>x!=='NONE').map(x=>({id:x,...U[x]}));
+ const rng=random(seed),inventory=new Map(),chest=new Map(),prices=new Map(),steps=[];
+ const base=m.tiers[11],superCompactor=upgrades.some(u=>u.id==='SUPER_COMPACTOR_3000');
+ const speed=upgrades.reduce((n,u)=>n+(u.speed||0),0);
+ const duration=base.speed/(1+speed)*(m.harvestOnly?1:2);
+ const total=Math.floor(days*86400/duration+1e-8),maxSeconds=days*86400;
+ const outputs=upgrades.filter(u=>u.cooldownDrop);
+ let hopperCoins=0;
+ const addOutput=d=>{
+  const transform=upgrades.flatMap(u=>u.dropTransforms||[]).find(t=>t.from===d.item);
+  const actual=transform?{...d,item:transform.to,npc:transform.npc,enchanted:transform.enchanted}:d;
+  const amount=Math.floor(actual.amount)+(rng()<actual.amount%1?1:0);
+  if(amount<=0)return;
+  if(!prices.has(actual.item))recipeSteps(actual,steps,prices);
+  let remaining=amount-place(inventory,base.storage/64,actual.item,amount);
+  if(remaining>0&&largeStorage)remaining-=place(chest,15,actual.item,remaining);
+  if(remaining>0&&shipping==='ENCHANTED_HOPPER')hopperCoins+=remaining*(prices.get(actual.item)||0)*.7;
+ };
