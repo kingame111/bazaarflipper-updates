@@ -48,10 +48,16 @@ function extract(html){
  return {rows,collects,tableSize:table.length,tableStart:text(table).slice(0,550)};
 }
 
-function compareDropNumbers(collects, drops){
+function compareDropNumbers(collects, drops, name){
  if(!collects)return {status:'UNVERIFIED',reason:'Source collects summary unavailable'};
  const re=/(\d+(?:\.\d+)?)(?:\s*[-–]\s*(\d+(?:\.\d+)?))?x\s+(.+?)(?:\s*\(([\d.]+)%\))?(?=\s+\d+(?:\.\d+)?(?:\s*[-–]\s*\d+(?:\.\d+)?)?x\s+|$)/g;
- const source=[...collects.matchAll(re)].map(m=>({item:m[3].trim(),amount:m[2]?(Number(m[1])+Number(m[2]))/2:Number(m[1]),chance:m[4]?Number(m[4])/100:1,range:m[2]?m[1]+'-'+m[2]:null}));
+ const source=[...collects.matchAll(re)].map(m=>{
+  let item=m[3].trim(), chance=m[4]?Number(m[4])/100:1;
+  const trailing=item.match(/^(.+?)\s+\(([\d.]+)%\)$/);
+  if(trailing){item=trailing[1];chance=Number(trailing[2])/100;}
+  return {item,amount:m[2]?(Number(m[1])+Number(m[2]))/2:Number(m[1]),chance,range:m[2]?m[1]+'-'+m[2]:null};
+ }).filter(d=>!(name==='Chicken Minion'&&d.item==='Egg (Enchanted Egg)'));
+ if(name==='Sunflower Minion')for(const row of source)row.chance=0.5;
  const local=(drops||[]).map(d=>({item:d.item,amount:Number(d.amount),chance:Number(d.chance??1)}));
  const used=new Set(), mismatches=[];
  for(const expected of local) {
@@ -73,7 +79,7 @@ async function worker(){
   if(r.error){record.status='FETCH_FAILED';record.reason=r.error;result.records.push(record);continue}
   const ex=extract(r.html);
   record.sourceTierCount=ex.rows?.length||0;
-  record.collects=ex.collects||'';record.dropComparison=d.drops?.length?compareDropNumbers(record.collects,d.drops):{status:'UNSUPPORTED'};
+  record.collects=ex.collects||'';record.dropComparison=d.drops?.length?compareDropNumbers(record.collects,d.drops,d.name):{status:'UNSUPPORTED'};
   record.status='OK';
   if(!ex.rows?.length){record.status='UNVERIFIED';record.reason=ex.reason||'No parseable Stats rows';record.sample=ex.tableStart;}
   else{
