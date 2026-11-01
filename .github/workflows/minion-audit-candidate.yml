@@ -17,6 +17,8 @@ jobs:
       - name: Syntax validation
         run: |
           node --check candidate-src/src/minions.mjs
+          node --check candidate-src/src/offline-inventory.mjs
+          node --check candidate-src/src/offline-upgrade-inventory.mjs
           node --check candidate-src/src/minion-data.mjs
           node --check candidate-src/server.mjs
           node --check tests/minions-v0.6.11.test.mjs
