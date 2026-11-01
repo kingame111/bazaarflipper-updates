@@ -24,12 +24,12 @@ function makeRandom(seed){
 function stagesFor(drop,steps,metadata,owner){
   let from=drop.item,npc=Number(drop.npc||0),next=Object.entries(drop.enchanted||{})[0];
   const seen=new Set([from]);
-  metadata.set(from,{npc,rawItem:drop.item,source:owner});
+  metadata.set(from,{npc,rawItem:drop.rawItemOriginal||drop.item,source:owner});
   while(next&&seen.size<9){
     const [to,n]=next,ratio=Number(n);
     if(!Number.isInteger(ratio)||ratio<1||seen.has(to))break;
     steps.push({from,to,ratio});
-    npc*=ratio;metadata.set(to,{npc,rawItem:drop.item,source:owner});
+    npc*=ratio;metadata.set(to,{npc,rawItem:drop.rawItemOriginal||drop.item,source:owner});
     from=to;seen.add(to);
     const more=MINION_DATA.compactionNext?.[to];
     next=more?[more.item,more.ratio]:null;
@@ -52,7 +52,7 @@ export function simulateUpgradeOffline(minion,tier,opts){
   if(!Number.isInteger(innerSlots)||innerSlots<1)return null;
   const transform=d=>{
     const t=ups.flatMap(u=>u.dropTransforms||[]).find(x=>x.from===d.item);
-    return t?{...d,item:t.to,npc:t.npc,enchanted:t.enchanted}:d;
+    return t?{...d,rawItemOriginal:d.item,item:t.to,npc:t.npc,enchanted:t.enchanted}:d;
   };
   const meta=new Map(),steps=[];
   for(const d of drops)stagesFor(transform(d),steps,meta,'MINION');
