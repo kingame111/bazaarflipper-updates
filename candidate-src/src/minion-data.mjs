@@ -16625,6 +16625,69 @@ export const MINION_DATA = {
       "duration": -1,
       "itemId": "EVERBURNING_FLAME",
       "combatBonus": 0.05
+    },
+    "THORNY_VINES": {
+      "name": "Thorny Vines",
+      "speed": 0.2,
+      "drops": 1,
+      "duration": -1,
+      "itemId": "THORNY_VINES",
+      "condition": {
+        "name": "Flower Minion"
+      },
+      "forceDrops": [
+        {
+          "item": "WILD_ROSE",
+          "amount": 2,
+          "chance": 1,
+          "npc": 4,
+          "enchanted": {
+            "ENCHANTED_WILD_ROSE": 160
+          }
+        }
+      ]
+    },
+    "DAYSWITCH": {
+      "name": "Dayswitch",
+      "speed": 0.2,
+      "drops": 1,
+      "duration": -1,
+      "itemId": "DAYSWITCH",
+      "condition": {
+        "name": "Sunflower Minion"
+      },
+      "forceDrops": [
+        {
+          "item": "DOUBLE_PLANT",
+          "amount": 2,
+          "chance": 1,
+          "npc": 4,
+          "enchanted": {
+            "ENCHANTED_SUNFLOWER": 160
+          }
+        }
+      ]
+    },
+    "NIGHTSWITCH": {
+      "name": "Nightswitch",
+      "speed": 0.2,
+      "drops": 1,
+      "duration": -1,
+      "itemId": "NIGHTSWITCH",
+      "condition": {
+        "name": "Sunflower Minion"
+      },
+      "forceDrops": [
+        {
+          "item": "MOONFLOWER",
+          "amount": 2,
+          "chance": 1,
+          "npc": 4,
+          "enchanted": {
+            "ENCHANTED_MOONFLOWER": 160
+          }
+        }
+      ]
     }
   },
   "upgrades": {
@@ -16994,6 +17057,10 @@ export const MINION_DATA = {
     },
     "ENCHANTED_SUGAR": {
       "item": "ENCHANTED_SUGAR_CANE",
+      "ratio": 160
+    },
+    "ENCHANTED_WILD_ROSE": {
+      "item": "COMPACTED_WILD_ROSE",
       "ratio": 160
     }
   },
