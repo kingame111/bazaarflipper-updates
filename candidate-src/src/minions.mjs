@@ -1,6 +1,6 @@
 import { MINION_DATA } from './minion-data.mjs';
 import { resolveCumulativeTierRecipe } from './minion-recipes.mjs';
-import { simulateDeterministicOffline } from './offline-inventory.mjs';
+import { simulateDeterministicOffline, simulateStochasticOffline } from './offline-inventory.mjs';
 
 const DAY_SECONDS = 86400;
 // Shipping occupies its own minion slot, not one of the two standard upgrade slots.
@@ -479,11 +479,11 @@ export function calculateMinion(minion, options, context) {
 
   // Exact chronological packing for deterministic production. All other cases
   // retain the labeled expectation-based approximation until independently tested.
-  const eventResult = simulateDeterministicOffline(minion,tier,{
-    fuel,upgrades,days:collectionIntervalDays,secondsPerAction,
-    largeStorage:options.largeStorage!==false
-  });
+  const offlineOptions={fuel,upgrades,days:collectionIntervalDays,secondsPerAction,largeStorage:options.largeStorage!==false};
+  const eventResult = simulateDeterministicOffline(minion,tier,offlineOptions)
+    || simulateStochasticOffline(minion,tier,offlineOptions);
   if(eventResult)generated=eventResult.outputs;
+  if(eventResult?.warning)warnings.push(eventResult.warning);
 
   // Model the capacity of the minion's own storage over the collection interval.
   // The NEU item lore supplies item-count capacity for each tier. This linear model
@@ -599,7 +599,7 @@ export function calculateMinion(minion, options, context) {
     cyclesPerDay,
     fuel:{id:fuelId,name:fuel.name,dropMultiplier:fuelDropMultiplier,duration:fuel.duration},
     shipping:{id:shipping.id,name:shipping.name,npcFactor:shipping.npcFactor},
-    storage:{capacity:storageCapacity,baseCapacity:safe(tierInfo.storage,0),largeStorageSlots:extraStorageSlots,daysToFull:storageDaysToFull,overflowShare,model:eventResult?'DETERMINISTIC_EVENT':'ESTIMATED',estimated:!eventResult},
+    storage:{capacity:storageCapacity,baseCapacity:safe(tierInfo.storage,0),largeStorageSlots:extraStorageSlots,daysToFull:storageDaysToFull,overflowShare,model:eventResult?.model||'ESTIMATED',estimated:!eventResult},
     upgrades:upgrades.map(u=>({id:u.id,name:u.name})),
     grossPerMinionDay,
     bazaarTaxPerMinionDay,
