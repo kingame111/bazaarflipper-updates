@@ -1,5 +1,6 @@
 import { MINION_DATA } from './minion-data.mjs';
 import { resolveCumulativeTierRecipe } from './minion-recipes.mjs';
+import { simulateDeterministicOffline } from './offline-inventory.mjs';
 
 const DAY_SECONDS = 86400;
 // Shipping occupies its own minion slot, not one of the two standard upgrade slots.
@@ -435,7 +436,7 @@ export function calculateMinion(minion, options, context) {
   const normalOutputMultiplier = upgrades.reduce((m,u)=>m*Math.max(0,safe(u.outputMultiplier,1)),1);
   const useCompactor = upgrades.some((u)=>u.compactor);
 
-  const generated = [];
+  let generated = [];
   let eligibleResourceItemsPerDay=0;
   const addDrop = (drop, cycles, source, outputMultiplier = 1) => {
     if (!drop || !(safe(drop.amount) > 0) || !(safe(drop.chance,1) > 0) || !(cycles > 0)) return;
@@ -476,6 +477,14 @@ export function calculateMinion(minion, options, context) {
     }
   }
 
+  // Exact chronological packing for deterministic production. All other cases
+  // retain the labeled expectation-based approximation until independently tested.
+  const eventResult = simulateDeterministicOffline(minion,tier,{
+    fuel,upgrades,days:collectionIntervalDays,secondsPerAction,
+    largeStorage:options.largeStorage!==false
+  });
+  if(eventResult)generated=eventResult.outputs;
+
   // Model the capacity of the minion's own storage over the collection interval.
   // The NEU item lore supplies item-count capacity for each tier. This linear model
   // approximates multi-item slot packing and may differ slightly from the game.
@@ -485,11 +494,13 @@ export function calculateMinion(minion, options, context) {
   const storageCapacity = Math.max(0,safe(tierInfo.storage,0)) + extraStorageSlots * 64;
   const totalUnitsPerDay=generated.reduce((sum,g)=>sum+g.unitsPerDay,0);
   const theoreticalUnits=totalUnitsPerDay*collectionIntervalDays;
-  const overflowShare=storageCapacity>0 && theoreticalUnits>storageCapacity?
+  const overflowShare=eventResult ? eventResult.overflowShare :
+    storageCapacity>0 && theoreticalUnits>storageCapacity?
     Math.max(0,1-storageCapacity/theoreticalUnits):0;
-  const storageDaysToFull=totalUnitsPerDay>0 && storageCapacity>0?
+  const storageDaysToFull=eventResult ? eventResult.firstOverflowDay :
+    totalUnitsPerDay>0 && storageCapacity>0?
     storageCapacity/totalUnitsPerDay:null;
-  if(storageCapacity>0&&overflowShare>0){
+  if(storageCapacity>0&&overflowShare>0&&!eventResult){
     for(const output of generated){
       output.overflowUnitsPerDay=output.unitsPerDay*overflowShare;
       output.unitsPerDay*=1-overflowShare;
@@ -588,7 +599,7 @@ export function calculateMinion(minion, options, context) {
     cyclesPerDay,
     fuel:{id:fuelId,name:fuel.name,dropMultiplier:fuelDropMultiplier,duration:fuel.duration},
     shipping:{id:shipping.id,name:shipping.name,npcFactor:shipping.npcFactor},
-    storage:{capacity:storageCapacity,baseCapacity:safe(tierInfo.storage,0),largeStorageSlots:extraStorageSlots,daysToFull:storageDaysToFull,overflowShare,estimated:generated.length>1||useCompactor},
+    storage:{capacity:storageCapacity,baseCapacity:safe(tierInfo.storage,0),largeStorageSlots:extraStorageSlots,daysToFull:storageDaysToFull,overflowShare,model:eventResult?'DETERMINISTIC_EVENT':'ESTIMATED',estimated:!eventResult},
     upgrades:upgrades.map(u=>({id:u.id,name:u.name})),
     grossPerMinionDay,
     bazaarTaxPerMinionDay,
