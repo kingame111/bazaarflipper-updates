@@ -84,3 +84,39 @@ export function simulateDeterministicOffline(minion,tier,opts){
     overflowShare:made?overflowQty/made:0,overflowQty,
     internalSlots,externalSlots,occupiedSlots:used(inside)+used(chest)};
 }
+
+function randomSource(seed){
+  let x=seed>>>0;
+  return ()=>{x^=x<<13;x^=x>>>17;x^=x<<5;return(x>>>0)/4294967296;};
+}
+// Expected-value simulation from independent repeatable random trials.
+// No claim of game-exact RNG or statistically guaranteed long-term earnings.
+export function simulateStochasticOffline(minion,tier,opts){
+ const record=minion?.tiers?.[tier],fuel=opts.fuel,upgrades=opts.upgrades||[];
+ const drops=fuel?.forceDrops||minion?.drops;
+ if(!record||!fuel||fuel.duration>0||Number(fuel.drops||1)!==1||
+   !Array.isArray(drops)||!drops.length||
+   !drops.some(d=>d.chance!==1||!Number.isInteger(d.amount))||
+   upgrades.some(u=>u.id!=='SUPER_COMPACTOR_3000'))return null;
+ const days=Number(opts.days),interval=Number(opts.secondsPerAction)*(minion.harvestOnly?1:2);
+ if(!(days>0)||!(interval>0))return null;
+ const events=Math.floor(days*86400/interval+1e-8);
+ if(events>100000)return null;
+ const internalSlots=record.storage/64,externalSlots=opts.largeStorage===false?0:15;
+ if(!Number.isInteger(internalSlots)||internalSlots<1)return null;
+ const sourceChance=drops.reduce((n,d)=>n+d.chance,0);
+ const exclusive=drops.length>1&&drops.every(d=>d.chance<1)&&Math.abs(sourceChance-1)<.0002;
+ const prices=new Map(),original=new Map(),steps=[];
+ for(const d of drops){
+  let id=d.item,npc=Number(d.npc||0),next=Object.entries(d.enchanted||{})[0],seen=new Set([id]);
+  prices.set(id,npc);original.set(id,id);
+  while(next&&seen.size<9){
+   const [to,r]=next,ratio=Number(r);
+   if(!Number.isInteger(ratio)||ratio<1||seen.has(to))break;
+   steps.push({from:id,to,ratio});npc*=ratio;
+   prices.set(to,npc);original.set(to,d.item);seen.add(to);id=to;
+   const c=MINION_DATA.compactionNext?.[to];next=c?[c.item,c.ratio]:null;
+  }
+ }
+ const inventoryTotal=new Map(),overflowTotal=new Map(),samples=12;
+ let overflowing=0,fullAt=0;
