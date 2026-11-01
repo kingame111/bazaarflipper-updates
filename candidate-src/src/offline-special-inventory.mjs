@@ -13,3 +13,10 @@ function compact(pool,steps){
  }
 }
 function rng(seed){let s=seed>>>0;return()=>{s^=s<<13;s^=s>>>17;s^=s<<5;return(s>>>0)/4294967296;};}
+function recipe(drop,steps,meta){
+ let id=drop.item,npc=Number(drop.npc||0),next=Object.entries(drop.enchanted||{})[0],seen=new Set([id]);
+ meta.set(id,{npc,rawItem:drop.item});
+ while(next&&seen.size<9){
+  const [to,v]=next,ratio=Number(v);
+  if(!Number.isInteger(ratio)||ratio<1||seen.has(to))break;
+  steps.push({from:id,to,ratio});npc*=ratio;
