@@ -169,6 +169,7 @@ export function simulateUpgradeOffline(minion,tier,opts){
     ?(expectedBase+expectedExtras)*.1:0;
   const total=expectedBase+expectedExtras+expectedTimed+expectedDiamonds;
   const result={model:stochastic?'UPGRADE_MONTE_CARLO_12':'UPGRADE_EVENT',
+    dropOrder,dropOrderVerifiedInGame:false,
     outputs,events,samples,overflowQuantity,
     overflowShare:total?overflowQuantity/total:0,
     firstOverflowDay:overflowStarts?overflowStartSum/overflowStarts:null,
