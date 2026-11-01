@@ -14,7 +14,7 @@ const market={};
 function q(p){return{buy_summary:[{pricePerUnit:p*0.9}],sell_summary:[{pricePerUnit:p}],quick_status:{buyPrice:p*0.9,sellPrice:p}}}
 for(const [k,v] of Object.entries(money))market[k]=q(v);
 const ctx={market,historyStats:new Map(),itemMeta:new Map(),taxRate:0,priceMode:'LIVE',sellMethod:'NPC',historyDays:7};
-const base={tier:11,count:1,fuel:'NONE',upgrade1:'NONE',upgrade2:'NONE',sellMethod:'NPC',priceMode:'LIVE',collectionIntervalDays:1,horizonDays:30};
+const base={tier:11,count:1,fuel:'NONE',upgrade1:'NONE',upgrade2:'NONE',sellMethod:'NPC',priceMode:'LIVE',collectionIntervalDays:1,horizonDays:30,largeStorage:false};
 const ghast=MINION_DATA.definitions['Ghast Minion'];
 assert.ok(ghast);
 const exp=960*20+768*100+992*3000;
@@ -125,6 +125,9 @@ const mismatchedPermanent=calculateMinion(ghast,{...base,fuel:'THORNY_VINES'},ct
 assert.equal(mismatchedPermanent.speedBonusPercent,0,'Only Flower Minion may use Thorny Vines');
 assert.ok(!mismatchedPermanent.outputDetails.some(x=>x.rawItem==='WILD_ROSE'));
 
+const largeChecked=calculateMinion(ghast,{...base,largeStorage:true},ctx);
+assert.equal(largeChecked.storage.capacity,1920,'Large Storage adds 15 stacks (960 item units)');
+assert.equal(largeChecked.storage.largeStorageSlots,15);
 const cat=minionCatalog();
 assert.ok(cat.minions.length>=61);
 const srv=fs.readFileSync('candidate-src/server.mjs','utf8');
