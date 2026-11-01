@@ -72,3 +72,5 @@ speedMismatches:result.summary.mismatchingSpeeds,
 storageMismatches:result.summary.mismatchingStorages,
 unverified:result.summary.unverified
 },null,2));
+
+if(result.summary.verified!==requested.length||result.summary.mismatchingSpeeds.length||result.summary.mismatchingStorages.length||result.summary.unverified.length)throw new Error('NEU tier source audit failed; inspect report artifact');
