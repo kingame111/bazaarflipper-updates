@@ -141,3 +141,5 @@ const summary={supportedSetups:setups.length,scenarios:cases.length,independentT
 fs.mkdirSync('audits',{recursive:true});
 fs.writeFileSync('audits/minion-special-upgrade-comparison.json',JSON.stringify({summary,cases},null,2)+'\n');
 console.log('SPECIAL_UPGRADE_OFFLINE_SUMMARY',JSON.stringify(summary,null,2));
+
+if(summary.above5pct>0)throw new Error('Special upgrade profit divergence over 5% in '+summary.above5pct+' tested scenarios');
