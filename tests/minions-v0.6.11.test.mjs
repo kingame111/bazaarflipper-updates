@@ -59,7 +59,7 @@ const spread=calculateMinion(snow,{...base,upgrade1:'DIAMOND_SPREADING'},ctx);
 const expectedDiamonds=baseSnow.cyclesPerDay*snow.drops.reduce((sum,drop)=>sum+drop.amount*drop.chance,0)*0.1;
 const diamond=spread.outputDetails.find(x=>x.item==='DIAMOND'&&x.source==='DIAMOND_SPREADING');
 assert.ok(diamond);
-assert.ok(Math.abs(diamond.rawUnitsPerDay-expectedDiamonds)<1e-6,'Diamond Spreading per item');
+assert.ok(Math.abs(diamond.rawUnitsPerDay-expectedDiamonds)<1e-6,`Diamond Spreading per item; actual=${diamond.rawUnitsPerDay}, expected=${expectedDiamonds}, rows=${JSON.stringify(spread.outputDetails.filter(x=>x.source==='DIAMOND_SPREADING').map(x=>({item:x.item,raw:x.rawItem,rawUnits:x.rawUnitsPerDay})))}`);
 
 const rankedMarket={...missingMarket};
 for(const m of Object.values(MINION_DATA.definitions)){
