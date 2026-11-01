@@ -1,0 +1,28 @@
+name: Minion Reference Verification (no release)
+on:
+  push:
+    branches: [audit/minion-hopper-2026-11-01]
+    paths: ['tests/minion-reference-audit.mjs', '.github/workflows/minion-reference-audit.yml', 'candidate-src/src/minion-data.mjs']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check syntax
+        run: node --check tests/minion-reference-audit.mjs
+      - name: Fetch source and compare all minion speeds and storage tiers
+        run: node tests/minion-reference-audit.mjs
+      - name: Upload detailed per-tier reference report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minion-tier-source-reference
+          path: audits/minion-tier-source-audit-results.json
+          if-no-files-found: warn
