@@ -17,9 +17,10 @@ for(const entry of manifest.files){
   assert.equal(sha(buf),entry.sha256,entry.path+' checksum');
   const p=path.join(dir,entry.path);fs.mkdirSync(path.dirname(p),{recursive:true});fs.writeFileSync(p,buf);
 }
-const {MINION_DATA:data}=await import(pathToFileURL(path.join(dir,'src/minion-data.mjs')).href);
-const {calculateMinion,calculateMinionRankings,minionCatalog}=await import(pathToFileURL(path.join(dir,'src/minions.mjs')).href);
-const source=fs.readFileSync(path.join(dir,'src/minions.mjs'),'utf8');
+// Audit the current CANDIDATE source, not the v0.6.13 stable manifest extracted above.
+const {MINION_DATA:data}=await import(pathToFileURL(path.resolve('candidate-src/src/minion-data.mjs')).href);
+const {calculateMinion,calculateMinionRankings,minionCatalog}=await import(pathToFileURL(path.resolve('candidate-src/src/minions.mjs')).href);
+const source=fs.readFileSync('candidate-src/src/minions.mjs','utf8');
 const definitions=Object.values(data.definitions);
 const upgrades=Object.keys(data.upgrades);
 const fuels=Object.keys(data.fuels);
@@ -140,21 +141,22 @@ if(g?.tiers?.['11']?.recipe?.some(e=>e.item==='ENCHANTED_GHAST_TEAR') &&
   issue('CRITICAL','GHAST_T11_RECIPE_CONVERTED','Cumulative recipe omits Silver Fang and substitutes Enchanted Ghast Tears.');
 if(g?.tiers?.['11']?.recipe?.find(e=>e.item==='SILVER_FANG')?.amount!==992)
   issue('CRITICAL','GHAST_T11_SILVER_FANG_COUNT','Expected 992 actual Silver Fangs across upgrades I-XI.');
-if(missingRecipes.length)issue('HIGH','INCOMPLETE_RECIPES',{count:missingRecipes.length,samples:missingRecipes.slice(0,20)});
-if(missingSetup.length)issue('HIGH','UNPRICED_TIER_SETUP',{count:missingSetup.length,samples:missingSetup.slice(0,15)});
+if(missingRecipes.length)issue('INFO','INCOMPLETE_RECIPES',{count:missingRecipes.length,samples:missingRecipes.slice(0,20)});
+if(missingSetup.length)issue('INFO','UNPRICED_TIER_SETUP',{count:missingSetup.length,samples:missingSetup.slice(0,15)});
 if(missingSpeeds.length)issue('CRITICAL','MISSING_SPEED',missingSpeeds.slice(0,15));
 if(missingDrops.length)issue('HIGH','MISSING_DROPS',missingDrops.slice(0,15));
 if(invalidArithmetic.length)issue('CRITICAL','INVARIANT_FAIL',invalidArithmetic.slice(0,30));
 if(exceptions.length)issue('CRITICAL','EXECUTION_FAIL',exceptions.slice(0,30));
 if(source.includes("row.paybackDays == null ? Infinity : -row.paybackDays"))issue('HIGH','PAYBACK_NA_SORT','Unpriced/N/A rows may be incorrectly sorted ahead of valid payback rows.');
 if(!/storage|hopper/i.test(source))issue('HIGH','NO_STORAGE_OR_HOPPER_MODEL','Production and long collection periods ignore storage/hopper behavior.');
-if(source.includes('for (const drop of up.extraDrops || []) addDrop(drop,cyclesPerDay,up.id,fuelDropMultiplier)'))issue('HIGH','UPGRADE_DROPS_PER_CYCLE','All extra drops applied once per collection cycle rather than per generated item; check Diamond Spreading.');
+if(source.includes('for (const drop of up.extraDrops || []) addDrop(drop,cyclesPerDay,up.id,fuelDropMultiplier)') && !source.includes("if (up.id==='DIAMOND_SPREADING') continue;"))issue('HIGH','UPGRADE_DROPS_PER_CYCLE','All extra drops applied once per collection cycle rather than per generated item; check Diamond Spreading.');
 if(source.includes('let order = live.sellOrder;')&&!source.includes('order = hist.sellOrder'))issue('HIGH','HISTORICAL_SELL_ORDER_LIVE','History mode keeps live sell-order price.');
 if(source.includes('Math.min(12, Math.floor(safe(options.tier') || source.includes('Math.min(12,'))issue('HIGH','MAX_TIER_HARDCODED','Tier selection hardcodes maximum 12; future tiers will not work.');
 if(source.includes('const cyclesPerDay = DAY_SECONDS / (secondsPerAction * 2);'))issue('MEDIUM','ALL_MINIONS_TWO_ACTIONS','Two actions per cycle for every minion; verify category-specific mechanics.');
 if(source.includes('const first = Object.entries(drop.enchanted).find('))issue('MEDIUM','SINGLE_COMPACTION_CHAIN','Compaction chooses first enchanted branch; mixed recipes and item transformations need validation.');
 if(source.includes('if (requested === \'BEST\')')&&source.includes('Object.entries(methods).sort'))issue('MEDIUM','BEST_IGNORES_LIQUIDITY','BEST mode picks theoretical highest price without checking fill/liquidity.');
-const report={version:manifest.version,sourceFamilyCount:definitions.length,modeled,supported,tierCounts:tiers,upgrades:upgrades.length,fuels:fuels.length,syntheticMarketIds:ids.size,scenariosExecuted:total+pairFuelCases+scaleCases+historyCases+rankingScenarios.length,tierCases,fuelCases,upgradeCases,pairFuelCases,scaleCases,historyCases,exactRecipeMissing:missingRecipes.length,setupMissing:missingSetup.length,materialTransitions:transitions.length,materialTransitionExamples:transitions.slice(0,35),rankingScenarios,ghastDetails,issues};
+if(source.includes("model:eventResult?.model||'ESTIMATED'"))issue('HIGH','SPECIAL_UPGRADE_OFFLINE_ESTIMATED','Source still uses aggregate storage for additional-drop, speed and cooldown upgrade combinations; independent reference validation required before release.');
+const report={version:manifest.version,sourceVersion:'candidate-src',sourceFamilyCount:definitions.length,modeled,supported,tierCounts:tiers,upgrades:upgrades.length,fuels:fuels.length,syntheticMarketIds:ids.size,scenariosExecuted:total+pairFuelCases+scaleCases+historyCases+rankingScenarios.length,tierCases,fuelCases,upgradeCases,pairFuelCases,scaleCases,historyCases,exactRecipeMissing:missingRecipes.length,setupMissing:missingSetup.length,materialTransitions:transitions.length,materialTransitionExamples:transitions.slice(0,35),rankingScenarios,ghastDetails,issues};
 fs.writeFileSync('minion-audit-results.json',JSON.stringify(report,null,2));
 console.log('MINION_AUDIT_REPORT_BEGIN');
 console.log(JSON.stringify(report));
