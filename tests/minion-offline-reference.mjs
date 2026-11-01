@@ -79,9 +79,13 @@ function simulation(minion,{days=1,compactor=false,largeStorage=true,shipping='N
       if(units>0&&extensionSlots)units-=place(extension,extensionSlots,d.item,units);
       if(units>0&&shipRate>0){soldToHopper+=units*(npcPrices.get(d.item)||0)*shipRate;hopperUnits+=units;}
     }
-    // SC3000 compacts on produce, within minion inventory. Wiki explicitly
-    // says it does not compact when handed to a completely full minion.
-    if(compactor)compactInventory(internal,recipes);
+    // Reference assumption: SC3000 processes both effective minion inventory
+    // and linked storage, consistent with minion storage behaving as extra slots.
+    // In-game treatment of chest stacks needs separate empirical confirmation.
+    if(compactor){
+      compactInventory(internal,recipes);
+      if(extensionSlots)compactInventory(extension,recipes);
+    }
   }
   let inventoryRevenue=0;
   const valued={};
