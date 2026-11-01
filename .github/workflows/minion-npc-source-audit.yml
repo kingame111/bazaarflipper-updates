@@ -1,0 +1,28 @@
+name: Minion Official NPC Price Source Verification (no release)
+on:
+  push:
+    branches: [audit/minion-hopper-2026-11-01]
+    paths: ['tests/minion-npc-source-audit.mjs', '.github/workflows/minion-npc-source-audit.yml', 'candidate-src/src/minion-data.mjs']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  official-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check syntax
+        run: node --check tests/minion-npc-source-audit.mjs
+      - name: Check all minion drop identifiers and NPC prices against official Hypixel API
+        run: node tests/minion-npc-source-audit.mjs
+      - name: Save NPC source comparison report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minion-npc-official-api-reference
+          path: audits/minion-npc-api-source-audit-results.json
+          if-no-files-found: warn
