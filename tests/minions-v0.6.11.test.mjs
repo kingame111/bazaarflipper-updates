@@ -98,6 +98,33 @@ const bazaarCheck=calculateMinion(ghast,{...base,sellMethod:'INSTANT'},ctx);
 assert.equal(bazaarCheck.outputDetails.find(x=>x.item==='GHAST_TEAR')?.quote.liveInstant,18,'Instant sale must match buy orders');
 const purchased=calculateMinion(ghast,base,ctx);
 assert.equal(purchased.setupBreakdown.find(x=>x.item==='GHAST_TEAR')?.unitPrice,20,'Instant acquisition must match sell offers');
+
+// Production source regressions: base outputs, harvest-only timing, and permanent fuel conversions.
+const fishing=calculateMinion(MINION_DATA.definitions['Fishing Minion'],{...base,upgrade1:'NONE'},ctx);
+const fishRaw=fishing.outputDetails.filter(x=>x.source==='MINION').reduce((n,x)=>n+x.rawUnitsPerDay,0);
+assert.ok(Math.abs(fishRaw-86400/35)<.2,'Fishing minion harvests once per action while unloaded');
+assert.equal(MINION_DATA.definitions['Hard Stone Minion'].drops[0].amount,2);
+assert.equal(MINION_DATA.definitions['Lapis Minion'].drops[0].amount,6);
+assert.equal(MINION_DATA.definitions['Nether Wart Minion'].drops[0].amount,2.5);
+assert.equal(MINION_DATA.definitions['Skeleton Minion'].drops[0].amount,1.5);
+assert.deepEqual(MINION_DATA.definitions['Sunflower Minion'].drops.map(x=>x.amount),[2,2]);
+assert.equal(MINION_DATA.definitions['Cactus Minion'].drops[0].npc,4);
+assert.equal(MINION_DATA.definitions['Coal Minion'].drops[0].npc,1);
+assert.equal(MINION_DATA.definitions['Emerald Minion'].drops[0].npc,4);
+assert.equal(MINION_DATA.definitions['Gold Minion'].drops[0].npc,3);
+assert.equal(MINION_DATA.definitions['Nether Wart Minion'].drops[0].npc,4);
+assert.equal(MINION_DATA.definitions['Tarantula Minion'].drops.find(x=>x.item==='IRON_INGOT').npc,2);
+const roseFuel=calculateMinion(flower,{...base,fuel:'THORNY_VINES'},ctx);
+assert.equal(roseFuel.speedBonusPercent,20);
+assert.ok(roseFuel.outputDetails.filter(x=>x.source==='MINION').every(x=>x.rawItem==='WILD_ROSE'));
+const dayFuel=calculateMinion(MINION_DATA.definitions['Sunflower Minion'],{...base,fuel:'DAYSWITCH'},ctx);
+assert.ok(dayFuel.outputDetails.filter(x=>x.source==='MINION').every(x=>x.rawItem==='DOUBLE_PLANT'));
+const nightFuel=calculateMinion(MINION_DATA.definitions['Sunflower Minion'],{...base,fuel:'NIGHTSWITCH'},ctx);
+assert.ok(nightFuel.outputDetails.filter(x=>x.source==='MINION').every(x=>x.rawItem==='MOONFLOWER'));
+const mismatchedPermanent=calculateMinion(ghast,{...base,fuel:'THORNY_VINES'},ctx);
+assert.equal(mismatchedPermanent.speedBonusPercent,0,'Only Flower Minion may use Thorny Vines');
+assert.ok(!mismatchedPermanent.outputDetails.some(x=>x.rawItem==='WILD_ROSE'));
+
 const cat=minionCatalog();
 assert.ok(cat.minions.length>=61);
 const srv=fs.readFileSync('candidate-src/server.mjs','utf8');
