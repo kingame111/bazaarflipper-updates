@@ -115,3 +115,29 @@ function runOne(m,up1,up2,days,largeStorage,shipping,seed){
  for(const pool of [inventory,chest])for(const [id,qty] of pool)sold+=qty*(prices.get(id)||0);
  return sold;
 }
+
+const cases=[];
+for(let setting=0;setting<setups.length;setting++){
+ const [name,upgrade1,upgrade2]=setups[setting];
+ for(const days of [1,3,7])for(const largeStorage of [false,true])for(const shipping of ['NONE','ENCHANTED_HOPPER']){
+  const options={tier:11,count:1,fuel:'NONE',upgrade1,upgrade2,shipping,largeStorage,
+   sellMethod:'NPC',priceMode:'LIVE',collectionIntervalDays:days,horizonDays:days};
+  const prediction=calculateMinion(D[name],options,ctx).netDay*days;
+  const samples=Array.from({length:8},(_,i)=>runOne(D[name],upgrade1,upgrade2,days,largeStorage,shipping,
+    793019+setting*1033+i*1789));
+  const mean=samples.reduce((a,b)=>a+b,0)/samples.length;
+  const deviation=mean? (prediction-mean)/mean:null;
+  cases.push({name,upgrade1,upgrade2,days,largeStorage,shipping,
+   reference:mean,prediction,deviation,individualTrials:8});
+ }
+}
+const valid=cases.filter(x=>x.deviation!==null);
+const sorted=valid.slice().sort((a,b)=>Math.abs(b.deviation)-Math.abs(a.deviation));
+const summary={supportedSetups:setups.length,scenarios:cases.length,independentTrials:cases.length*8,
+ above5pct:valid.filter(x=>Math.abs(x.deviation)>0.05).length,
+ above20pct:valid.filter(x=>Math.abs(x.deviation)>0.2).length,
+ meanAbsoluteDiscrepancy:valid.reduce((a,x)=>a+Math.abs(x.deviation),0)/valid.length,
+ worst:sorted.slice(0,36)};
+fs.mkdirSync('audits',{recursive:true});
+fs.writeFileSync('audits/minion-special-upgrade-comparison.json',JSON.stringify({summary,cases},null,2)+'\n');
+console.log('SPECIAL_UPGRADE_OFFLINE_SUMMARY',JSON.stringify(summary,null,2));
