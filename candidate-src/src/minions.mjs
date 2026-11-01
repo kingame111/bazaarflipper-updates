@@ -374,7 +374,8 @@ export function minionCatalog() {
       sellMethod: 'BEST',
       priceMode: 'LIVE',
       horizonDays: 1,
-      collectionIntervalDays: 1
+      collectionIntervalDays: 1,
+      largeStorage: true
     }
   };
 }
@@ -478,7 +479,10 @@ export function calculateMinion(minion, options, context) {
   // Model the capacity of the minion's own storage over the collection interval.
   // The NEU item lore supplies item-count capacity for each tier. This linear model
   // approximates multi-item slot packing and may differ slightly from the game.
-  const storageCapacity = Math.max(0,safe(tierInfo.storage,0));
+  // External Large Minion Storage adds 15 stacks; no minion upgrade slot is consumed.
+  // The aggregate overflow math below remains an approximation for mixed outputs.
+  const extraStorageSlots = options.largeStorage === false ? 0 : 15;
+  const storageCapacity = Math.max(0,safe(tierInfo.storage,0)) + extraStorageSlots * 64;
   const totalUnitsPerDay=generated.reduce((sum,g)=>sum+g.unitsPerDay,0);
   const theoreticalUnits=totalUnitsPerDay*collectionIntervalDays;
   const overflowShare=storageCapacity>0 && theoreticalUnits>storageCapacity?
@@ -584,7 +588,7 @@ export function calculateMinion(minion, options, context) {
     cyclesPerDay,
     fuel:{id:fuelId,name:fuel.name,dropMultiplier:fuelDropMultiplier,duration:fuel.duration},
     shipping:{id:shipping.id,name:shipping.name,npcFactor:shipping.npcFactor},
-    storage:{capacity:storageCapacity,daysToFull:storageDaysToFull,overflowShare,estimated:generated.length>1},
+    storage:{capacity:storageCapacity,baseCapacity:safe(tierInfo.storage,0),largeStorageSlots:extraStorageSlots,daysToFull:storageDaysToFull,overflowShare,estimated:generated.length>1||useCompactor},
     upgrades:upgrades.map(u=>({id:u.id,name:u.name})),
     grossPerMinionDay,
     bazaarTaxPerMinionDay,
