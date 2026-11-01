@@ -114,6 +114,7 @@ for(const minion of TYPES){
      const settings={days,compactor,largeStorage,shipping,fuel:'NONE'};
      const oracle=simulation(minion,settings);if(oracle.unsupported)continue;
      const live=engine(minion,settings);
+     if(minion.name==='Ghast Minion'&&days===7&&compactor&&largeStorage)console.log('GHAST_DIAGNOSTIC',JSON.stringify({settings,oracle,live}));
      const delta=live.total-oracle.revenue;
      scenarios.push({name:minion.name,...settings,referenceCoins:oracle.revenue,modelCoins:live.total,
        differenceCoins:delta,relativeError:oracle.revenue>0?delta/oracle.revenue:null,
