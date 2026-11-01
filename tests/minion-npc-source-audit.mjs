@@ -33,3 +33,5 @@ const report={time:new Date().toISOString(),source:url,officialItemCount:source.
 fs.mkdirSync('audits',{recursive:true});
 fs.writeFileSync('audits/minion-npc-api-source-audit-results.json',JSON.stringify(report,null,2)+'\n');
 console.log('NPC_SOURCE_AUDIT_SUMMARY',JSON.stringify(report.summary,null,2));
+
+if(report.summary.noSource.length||report.summary.exactPriceMismatches.length||report.summary.namePriceMismatches.length)throw new Error('Official NPC source audit failed; inspect artifact');
