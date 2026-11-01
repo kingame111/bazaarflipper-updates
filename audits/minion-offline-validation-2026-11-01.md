@@ -44,3 +44,9 @@ Independent seeded random generator in tests/minion-offline-stochastic.mjs, comp
 - Real game inventory state when minion starts with partial stacks, chest-specific compaction order, random correlation and unloaded/loaded transitions were not observed live. Nothing in these reports asserts precise production-game equivalence for these conditions.
 
 **Release status:** No merge, release bundle, manifest or stable database modifications. The audit branch is not deployment-approved without targeted independent validation of upgrade mixtures and actual prices/market liquidity.
+
+## E. Follow-up: mixed upgrade fixes and measured discrepancy reduction
+
+The initial 16-setup independent special-upgrade audit found **20/192 configurations >5%** and **10/192 >20%**. A new event-based special-upgrade inventory implementation has now eliminated all >5% differences in that same audit: **0/192 >5%, mean absolute model-reference deviation ~0.2364%, maximum ~1.8182%**. Evidence: https://github.com/kingame111/bazaarflipper-updates/actions/runs/41278241147
+
+The previous Section D warnings for unmodeled mixed special upgrades now apply only to **unsupported or untested variants**, not all common supported combinations. These synthetic results still do NOT measure error against real Hypixel drops and trades, and do not prove accuracy beyond tested configurations. Full candidate performance/stability tests and representative in-game comparisons remain necessary before release.
