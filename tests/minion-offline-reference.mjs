@@ -155,3 +155,5 @@ const summary={source:'tests/minion-offline-reference.mjs, independent chronolog
 fs.mkdirSync('audits',{recursive:true});
 fs.writeFileSync('audits/minion-offline-comparison.json',JSON.stringify({summary,scenarios},null,2)+'\n');
 console.log('OFFLINE_REFERENCE_SUMMARY',JSON.stringify(summary,null,2));
+
+if(summary.exceeding1pct>0)throw new Error('Chronological reference discrepancy exceeds 1% in '+summary.exceeding1pct+' cases; see artifact');
