@@ -99,3 +99,19 @@ function runOne(m,up1,up2,days,largeStorage,shipping,seed){
    eligibleItems+=rounded;
    if(rounded>0)addOutput({...d,amount:rounded});
   }
+  for(const u of upgrades)for(const d of u.extraDrops||[]){
+   if(u.id==='DIAMOND_SPREADING')continue;
+   if(rng()<d.chance){addOutput(d);eligibleItems+=Math.floor(d.amount);}
+  }
+  if(upgrades.some(x=>x.id==='DIAMOND_SPREADING')){
+   for(let item=0;item<eligibleItems;item++)if(rng()<.1)addOutput(U.DIAMOND_SPREADING.extraDrops[0]);
+  }
+  if(superCompactor){
+   compact(inventory,steps);
+   if(largeStorage)compact(chest,steps);
+  }
+ }
+ let sold=hopperCoins;
+ for(const pool of [inventory,chest])for(const [id,qty] of pool)sold+=qty*(prices.get(id)||0);
+ return sold;
+}
