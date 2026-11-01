@@ -490,8 +490,7 @@ export function calculateMinion(minion, options, context) {
     // inventory and hopper rows must not double-count the same raw output.
     const expectedByItem=new Map();
     const putExpected=(source,drop,rate)=>{
-      const item=applyUpgradeDropTransforms(drop,upgrades).item;
-      const key=source+'|'+item;
+      const key=source+'|'+drop.item;
       expectedByItem.set(key,(expectedByItem.get(key)||0)+rate);
     };
     for(const d of (fuel.forceDrops||minion.drops||[]))
