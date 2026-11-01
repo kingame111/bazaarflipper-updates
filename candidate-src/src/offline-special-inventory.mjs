@@ -41,3 +41,9 @@ export function simulateSpecialOffline(minion,tier,opts){
  if(events>100000)return null;
  const internalSlots=base.storage/64,externalSlots=opts.largeStorage===false?0:15;
  if(!Number.isInteger(internalSlots)||internalSlots<1)return null;
+ const transformed=d=>{
+  const t=ups.flatMap(u=>u.dropTransforms||[]).find(x=>x.from===d.item);
+  return t?{...d,item:t.to,npc:t.npc,enchanted:t.enchanted}:d;
+ };
+ const meta=new Map(),steps=[];
+ for(const d of drops)recipe(transformed(d),steps,meta);
