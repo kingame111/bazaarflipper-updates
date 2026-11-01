@@ -139,6 +139,15 @@ assert.ok(Math.abs(egg.outputDetails.find(x=>x.item==='EGG'&&x.source==='ENCHANT
 const flint=calculateMinion(MINION_DATA.definitions['Gravel Minion'],{...hour,upgrade1:'FLINT_SHOVEL'},ctx);
 assert.ok(flint.outputDetails.some(x=>x.rawItem==='GRAVEL'&&x.item==='FLINT'));
 
+const soul=calculateMinion(ghast,{...hour,upgrade1:'SOULFLOW_ENGINE'},ctx);
+const lesserSoul=calculateMinion(ghast,{...hour,upgrade1:'LESSER_SOULFLOW_ENGINE'},ctx);
+assert.ok(Math.abs(soul.outputDetails.find(x=>x.source==='SOULFLOW_ENGINE').rawUnitsPerDay-86400/105)<1e-6);
+assert.ok(Math.abs(lesserSoul.outputDetails.find(x=>x.source==='LESSER_SOULFLOW_ENGINE').rawUnitsPerDay-86400/185)<1e-6);
+const ghastNoUpgrade=calculateMinion(ghast,hour,ctx);
+assert.ok(Math.abs(soul.outputDetails.find(x=>x.source==='MINION').rawUnitsPerDay-ghastNoUpgrade.cyclesPerDay*.5)<1e-6);
+const berberis=calculateMinion(MINION_DATA.definitions['Carrot Minion'],{...hour,upgrade1:'BERBERIS_FUEL_INJECTOR'},ctx);
+assert.ok(Math.abs(berberis.outputDetails.find(x=>x.item==='LUSH_BERBERIS').rawUnitsPerDay-86400/300)<1e-6);
+
 const cat=minionCatalog();
 assert.ok(cat.minions.length>=61);
 const srv=fs.readFileSync('candidate-src/server.mjs','utf8');
