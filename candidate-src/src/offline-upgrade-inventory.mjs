@@ -129,3 +129,21 @@ export function simulateUpgradeOffline(minion,tier,opts){
         if(extSlots)compact(chest,steps);
       }
     }
+    for(const p of [inside,chest]){
+      for(const [id,n] of p)held.set(id,(held.get(id)||0)+n/samples);
+    }
+    for(const [id,n] of overflow)shipped.set(id,(shipped.get(id)||0)+n/samples);
+    if(firstOverflow!==null){overflowStartSum+=firstOverflow;overflowStarts++;}
+  }
+  const outputs=[];
+  for(const [item,qty] of held){
+    const m=meta.get(item)||{npc:0,rawItem:item,source:'MINION'};
+    outputs.push({item,source:m.source,rawItem:m.rawItem,npc:m.npc,
+      unitsPerDay:qty/days,rawUnitsPerDay:0,
+      compacted:item!==m.rawItem,overflowUnitsPerDay:0});
+  }
+  for(const [item,qty] of shipped){
+    const m=meta.get(item)||{npc:0,rawItem:item,source:'MINION'};
+    outputs.push({item,source:m.source,rawItem:m.rawItem,npc:m.npc,
+      unitsPerDay:0,rawUnitsPerDay:0,compacted:false,overflowUnitsPerDay:qty/days});
+  }
