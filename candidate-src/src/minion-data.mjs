@@ -4952,7 +4952,7 @@ export const MINION_DATA = {
           "storage": 960
         },
         "2": {
-          "speed": 30,
+          "speed": 29,
           "recipe": null,
           "exactRecipe": false,
           "storage": 960
@@ -4969,7 +4969,7 @@ export const MINION_DATA = {
           "storage": 960
         },
         "4": {
-          "speed": 28,
+          "speed": 27,
           "recipe": null,
           "exactRecipe": false,
           "storage": 960
@@ -4990,7 +4990,7 @@ export const MINION_DATA = {
           "storage": 960
         },
         "6": {
-          "speed": 26,
+          "speed": 25,
           "recipe": null,
           "exactRecipe": false,
           "storage": 960
@@ -5011,7 +5011,7 @@ export const MINION_DATA = {
           "storage": 960
         },
         "8": {
-          "speed": 24,
+          "speed": 23,
           "recipe": null,
           "exactRecipe": false,
           "storage": 960
@@ -5032,7 +5032,7 @@ export const MINION_DATA = {
           "storage": 960
         },
         "10": {
-          "speed": 22,
+          "speed": 20,
           "recipe": null,
           "exactRecipe": false,
           "storage": 960
@@ -8602,7 +8602,7 @@ export const MINION_DATA = {
           "storage": 64
         },
         "2": {
-          "speed": 26,
+          "speed": 25,
           "recipe": [
             {
               "item": "MYCEL",
@@ -8624,7 +8624,7 @@ export const MINION_DATA = {
           "storage": 192
         },
         "4": {
-          "speed": 24,
+          "speed": 23,
           "recipe": [
             {
               "item": "MYCEL",
@@ -8654,7 +8654,7 @@ export const MINION_DATA = {
           "storage": 384
         },
         "6": {
-          "speed": 22,
+          "speed": 21,
           "recipe": [
             {
               "item": "MYCEL",
@@ -8684,7 +8684,7 @@ export const MINION_DATA = {
           "storage": 576
         },
         "8": {
-          "speed": 20,
+          "speed": 19,
           "recipe": [
             {
               "item": "MYCEL",
@@ -8714,7 +8714,7 @@ export const MINION_DATA = {
           "storage": 768
         },
         "10": {
-          "speed": 18,
+          "speed": 16,
           "recipe": [
             {
               "item": "MYCEL",
@@ -10927,7 +10927,7 @@ export const MINION_DATA = {
           "storage": 64
         },
         "2": {
-          "speed": 26,
+          "speed": 25,
           "recipe": [
             {
               "item": "SAND-1",
@@ -10949,7 +10949,7 @@ export const MINION_DATA = {
           "storage": 192
         },
         "4": {
-          "speed": 24,
+          "speed": 23,
           "recipe": [
             {
               "item": "SAND-1",
@@ -10979,7 +10979,7 @@ export const MINION_DATA = {
           "storage": 384
         },
         "6": {
-          "speed": 22,
+          "speed": 21,
           "recipe": [
             {
               "item": "SAND-1",
@@ -11009,7 +11009,7 @@ export const MINION_DATA = {
           "storage": 576
         },
         "8": {
-          "speed": 20,
+          "speed": 19,
           "recipe": [
             {
               "item": "SAND-1",
@@ -11039,7 +11039,7 @@ export const MINION_DATA = {
           "storage": 768
         },
         "10": {
-          "speed": 18,
+          "speed": 16,
           "recipe": [
             {
               "item": "SAND-1",
@@ -17009,5 +17009,12 @@ export const MINION_DATA = {
     "withVerifiedStorage": 702,
     "unverifiedMinions": 2,
     "cumulativeDerivedFromExactSteps": true
+  },
+  "speedVerification": {
+    "source": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/master/items",
+    "checkedAt": "2026-11-01",
+    "comparedCandidateTiers": 702,
+    "knownSpeedMismatchesCorrected": 15,
+    "sourceAuditWorkflow": "https://github.com/kingame111/bazaarflipper-updates/actions/runs/41272073665"
   }
 };
