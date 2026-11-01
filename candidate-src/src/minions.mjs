@@ -416,6 +416,7 @@ export function calculateMinion(minion, options, context) {
     .reduce((sum,u)=>sum+Math.max(0,safe(u.speed)),0);
   const speedBonus = Math.max(0,
     safe(fuel.speed) +
+    (fuelId==='EVERBURNING_FLAME' && minion.family==='Combat' && minion.name!=='Spider Minion' ? 0.05 : 0) +
     ordinaryUpgradeSpeed +
     expanderBonus +
     clamp(options.beaconPercent,0,100)/100 +
@@ -465,7 +466,7 @@ export function calculateMinion(minion, options, context) {
       let amountMultiplier = 1;
       if (minion.id === 'VOIDLING_GENERATOR' && up.id === 'SOULFLOW_ENGINE') amountMultiplier = 1 + 0.03*tier;
       const drop={item:up.cooldownDrop.item,amount:amountMultiplier,chance:1,npc:up.cooldownDrop.npc,enchanted:up.cooldownDrop.enchanted};
-      addDrop(drop,DAY_SECONDS/safe(up.cooldownDrop.seconds),up.id,1);
+      addDrop(drop,DAY_SECONDS/safe(up.cooldownDrop.seconds),up.id,fuelDropMultiplier);
     }
   }
 
