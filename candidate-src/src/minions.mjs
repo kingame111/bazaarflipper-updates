@@ -1,6 +1,7 @@
 import { MINION_DATA } from './minion-data.mjs';
 import { resolveCumulativeTierRecipe } from './minion-recipes.mjs';
 import { simulateDeterministicOffline, simulateStochasticOffline } from './offline-inventory.mjs';
+import { simulateUpgradeOffline } from './offline-upgrade-inventory.mjs';
 
 const DAY_SECONDS = 86400;
 // Shipping occupies its own minion slot, not one of the two standard upgrade slots.
@@ -481,7 +482,8 @@ export function calculateMinion(minion, options, context) {
   // retain the labeled expectation-based approximation until independently tested.
   const offlineOptions={fuel,upgrades,days:collectionIntervalDays,secondsPerAction,largeStorage:options.largeStorage!==false};
   const eventResult = simulateDeterministicOffline(minion,tier,offlineOptions)
-    || simulateStochasticOffline(minion,tier,offlineOptions);
+    || simulateStochasticOffline(minion,tier,offlineOptions)
+    || simulateUpgradeOffline(minion,tier,offlineOptions);
   if(eventResult){
     generated=eventResult.outputs;
     // Preserve the expected gross production rate as one stream per source item;
@@ -614,7 +616,7 @@ export function calculateMinion(minion, options, context) {
     cyclesPerDay,
     fuel:{id:fuelId,name:fuel.name,dropMultiplier:fuelDropMultiplier,duration:fuel.duration},
     shipping:{id:shipping.id,name:shipping.name,npcFactor:shipping.npcFactor},
-    storage:{capacity:storageCapacity,baseCapacity:safe(tierInfo.storage,0),largeStorageSlots:extraStorageSlots,daysToFull:storageDaysToFull,overflowShare,model:eventResult?.model||'ESTIMATED',estimated:!eventResult},
+    storage:{capacity:storageCapacity,baseCapacity:safe(tierInfo.storage,0),largeStorageSlots:extraStorageSlots,daysToFull:storageDaysToFull,overflowShare,model:eventResult?.model||'ESTIMATED',estimated:!eventResult||eventResult.samples>1},
     upgrades:upgrades.map(u=>({id:u.id,name:u.name})),
     grossPerMinionDay,
     bazaarTaxPerMinionDay,
