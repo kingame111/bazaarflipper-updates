@@ -71,7 +71,7 @@ export function simulateUpgradeOffline(minion,tier,opts){
     const roll=makeRandom(0x31d9e2af+sample*97973+tier*113+minion.id.length*97);
     const inside=new Map(),chest=new Map(),overflow=new Map();
     const nextDue=cooldown.map(u=>u.cooldownDrop.seconds);
-    let firstOverflow=null;
+    let firstOverflow=null,currentDay=0;
     const drawAmount=x=>Math.floor(x)+(roll()<x%1?1:0);
     const create=(drop,quantity)=>{
       if(quantity<=0)return;
@@ -81,6 +81,27 @@ export function simulateUpgradeOffline(minion,tier,opts){
       if(extra>0){
         overflow.set(item,(overflow.get(item)||0)+extra);
         overflowQuantity+=extra/samples;
-        if(firstOverflow===null)firstOverflow=0;
+        if(firstOverflow===null)firstOverflow=currentDay;
       }
     };
+    for(let cycle=0;cycle<events;cycle++){
+      const time=(cycle+1)*interval;currentDay=time/86400;
+      for(let k=0;k<cooldown.length;k++){
+        const u=cooldown[k];
+        while(nextDue[k]<=time+1e-8&&nextDue[k]<=days*86400){
+          let amount=1;
+          if(minion.id==='VOIDLING_GENERATOR'&&u.id==='SOULFLOW_ENGINE')amount+=tier*.03;
+          create(u.cooldownDrop,drawAmount(amount));
+          nextDue[k]+=u.cooldownDrop.seconds;
+        }
+      }
+      let chosen;
+      if(exclusive){
+        const p=roll();let accumulated=0,selected=drops.at(-1);
+        for(const d of drops){
+          accumulated+=d.chance;
+          if(p<accumulated){selected=d;break;}
+        }
+        chosen=[selected];
+      }else chosen=drops.filter(d=>roll()<d.chance);
+      let eligible=0;
