@@ -6417,7 +6417,7 @@ export const MINION_DATA = {
       "drops": [
         {
           "item": "HARD_STONE",
-          "amount": 1,
+          "amount": 2,
           "chance": 1,
           "npc": 1,
           "enchanted": {
@@ -7439,7 +7439,7 @@ export const MINION_DATA = {
       "drops": [
         {
           "item": "INK_SACK:4",
-          "amount": 4.5,
+          "amount": 6,
           "chance": 1,
           "npc": 1,
           "enchanted": {
@@ -9036,7 +9036,7 @@ export const MINION_DATA = {
       "drops": [
         {
           "item": "NETHER_STALK",
-          "amount": 3,
+          "amount": 2.5,
           "chance": 1,
           "npc": 5,
           "enchanted": {
@@ -12712,7 +12712,7 @@ export const MINION_DATA = {
       "drops": [
         {
           "item": "BONE",
-          "amount": 1,
+          "amount": 1.5,
           "chance": 1,
           "npc": 2,
           "enchanted": {
@@ -16113,7 +16113,7 @@ export const MINION_DATA = {
       "drops": [
         {
           "item": "DOUBLE_PLANT",
-          "amount": 3,
+          "amount": 2,
           "chance": 0.5,
           "npc": 4,
           "enchanted": {
@@ -16122,7 +16122,7 @@ export const MINION_DATA = {
         },
         {
           "item": "MOONFLOWER",
-          "amount": 3,
+          "amount": 2,
           "chance": 0.5,
           "npc": 4,
           "enchanted": {
