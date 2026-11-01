@@ -57,16 +57,17 @@ for(const d of families)for(const days of [1,3,7])
 for(const largeStorage of [false,true])for(const shipping of ['NONE','ENCHANTED_HOPPER'])for(const compactor of [false,true]){
  const predicted=calculateMinion(d,{tier:11,count:1,fuel:'NONE',upgrade1:compactor?'SUPER_COMPACTOR_3000':'NONE',upgrade2:'NONE',
  shipping,largeStorage,sellMethod:'NPC',priceMode:'LIVE',collectionIntervalDays:days,horizonDays:days},ctx).netDay*days;
- const samples=Array.from({length:12},(_,k)=>simulate(d,days,largeStorage,shipping,0x7f3a9ab1+k*1234567+d.id.length*91,compactor));
+ const sampleCount=d.name==='Fishing Minion'&&days===7&&compactor?100:12;
+ const samples=Array.from({length:sampleCount},(_,k)=>simulate(d,days,largeStorage,shipping,0x7f3a9ab1+k*1234567+d.id.length*91,compactor));
  const mean=samples.reduce((a,b)=>a+b,0)/samples.length;
  const sd=Math.sqrt(samples.reduce((a,b)=>a+(b-mean)**2,0)/(samples.length-1));
  const error=mean>0?(predicted-mean)/mean:null;
  cases.push({minion:d.name,days,largeStorage,shipping,compactor,predicted,mean,sd,error,
-   ci95:[mean-1.96*sd/Math.sqrt(samples.length),mean+1.96*sd/Math.sqrt(samples.length)]});
+   sampleCount:samples.length,ci95:[mean-1.96*sd/Math.sqrt(samples.length),mean+1.96*sd/Math.sqrt(samples.length)]});
 }
 const measurable=cases.filter(x=>x.error!=null);
 const worst=measurable.slice().sort((a,b)=>Math.abs(b.error)-Math.abs(a.error)).slice(0,25);
-const summary={families:families.length,configs:cases.length,trials:cases.length*12,
+const summary={families:families.length,configs:cases.length,trials:cases.reduce((n,x)=>n+x.sampleCount,0),
   over5pct:measurable.filter(x=>Math.abs(x.error)>0.05).length,
   over20pct:measurable.filter(x=>Math.abs(x.error)>0.20).length,
   outside95:measurable.filter(x=>x.predicted<x.ci95[0]||x.predicted>x.ci95[1]).length,
