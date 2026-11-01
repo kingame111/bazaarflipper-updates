@@ -115,3 +115,6 @@ fs.mkdirSync('audits',{recursive:true});
 fs.writeFileSync('audits/minion-tier-source-audit-results.json',JSON.stringify(result,null,2)+'\n');
 console.log('WIKI_TIER_AUDIT_SUMMARY',JSON.stringify(result.summary,null,2));
 if(result.summary.verifiedSpeedTiers===0)process.exitCode=2;
+
+const approvedConflict=result.summary.mismatchingSpeedTiers.length===1 && result.summary.mismatchingSpeedTiers[0].name==='Fishing Minion' && result.summary.mismatchingSpeedTiers[0].tier===10 && result.summary.mismatchingSpeedTiers[0].ours===53 && result.summary.mismatchingSpeedTiers[0].wiki===43;
+if(result.summary.verifiedSpeedTiers!==702||result.summary.verifiedStorageTiers!==702||result.summary.mismatchingStorageTiers.length||result.summary.dropNumericMatches.length!==60||result.summary.dropNumericMismatches.length||result.summary.dropUnverified.length||(!approvedConflict && result.summary.mismatchingSpeedTiers.length))throw new Error('Unexpected minion source mismatch, see audit report');
