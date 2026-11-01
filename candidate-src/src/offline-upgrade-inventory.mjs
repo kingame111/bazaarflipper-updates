@@ -67,3 +67,20 @@ export function simulateUpgradeOffline(minion,tier,opts){
   const hasCompactor=ups.some(u=>u.id==='SUPER_COMPACTOR_3000');
   const held=new Map(),shipped=new Map();
   let overflowQuantity=0,overflowStartSum=0,overflowStarts=0;
+  for(let sample=0;sample<samples;sample++){
+    const roll=makeRandom(0x31d9e2af+sample*97973+tier*113+minion.id.length*97);
+    const inside=new Map(),chest=new Map(),overflow=new Map();
+    const nextDue=cooldown.map(u=>u.cooldownDrop.seconds);
+    let firstOverflow=null;
+    const drawAmount=x=>Math.floor(x)+(roll()<x%1?1:0);
+    const create=(drop,quantity)=>{
+      if(quantity<=0)return;
+      const item=transform(drop).item;
+      let extra=quantity-place(inside,innerSlots,item,quantity);
+      if(extra>0&&extSlots)extra-=place(chest,extSlots,item,extra);
+      if(extra>0){
+        overflow.set(item,(overflow.get(item)||0)+extra);
+        overflowQuantity+=extra/samples;
+        if(firstOverflow===null)firstOverflow=0;
+      }
+    };
