@@ -42,7 +42,8 @@ export function simulateUpgradeOffline(minion,tier,opts){
   const drops=fuel?.forceDrops||minion?.drops;
   const special=ups.some(u=>u.extraDrops?.length||u.cooldownDrop||u.dropTransforms?.length||u.outputMultiplier);
   if(!base||!special||!fuel||fuel.duration>0||Number(fuel.drops||1)!==1||!drops?.length)return null;
-  const key=JSON.stringify([minion.id,tier,opts.days,opts.secondsPerAction,opts.largeStorage,fuel.itemId,ups.map(u=>u.id)]);
+  const dropOrder=opts.dropOrder==='EXTERNAL_FIRST'?'EXTERNAL_FIRST':'MINION_FIRST';
+  const key=JSON.stringify([minion.id,tier,opts.days,opts.secondsPerAction,opts.largeStorage,fuel.itemId,ups.map(u=>u.id),dropOrder]);
   if(computed.has(key))return copy(computed.get(key));
   const days=Number(opts.days),interval=Number(opts.secondsPerAction)*(minion.harvestOnly?1:2);
   if(!(days>0)||!(interval>0))return null;
@@ -91,12 +92,15 @@ export function simulateUpgradeOffline(minion,tier,opts){
     };
     for(let cycle=0;cycle<events;cycle++){
       const time=(cycle+1)*interval;currentDay=time/86400;
+      // Production precedence: native minion resources enter inventory before upgrade-generated resources.
+      // This is a provisional game-behavior assumption until directly tested in-game.
+      const nativeOutputs=[],externalOutputs=[];
       for(let k=0;k<cooldown.length;k++){
         const u=cooldown[k];
         while(nextDue[k]<=time+1e-8&&nextDue[k]<=days*86400){
           let amount=1;
           if(minion.id==='VOIDLING_GENERATOR'&&u.id==='SOULFLOW_ENGINE')amount+=tier*.03;
-          create(u.cooldownDrop,drawAmount(amount));
+          externalOutputs.push([u.cooldownDrop,drawAmount(amount)]);
           nextDue[k]+=u.cooldownDrop.seconds;
         }
       }
@@ -112,14 +116,14 @@ export function simulateUpgradeOffline(minion,tier,opts){
       let eligible=0;
       for(const d of chosen){
         const n=drawAmount(d.amount*outputFactor);
-        eligible+=n;create(d,n);
+        eligible+=n;nativeOutputs.push([d,n]);
       }
       for(const up of ups){
         if(up.id==='DIAMOND_SPREADING')continue;
         for(const d of up.extraDrops||[]){
           if(roll()<d.chance){
             const n=drawAmount(d.amount);
-            create(d,n);eligible+=n;
+            externalOutputs.push([d,n]);eligible+=n;
           }
         }
       }
@@ -127,8 +131,11 @@ export function simulateUpgradeOffline(minion,tier,opts){
         if(up.id!=='DIAMOND_SPREADING')continue;
         for(let k=0;k<eligible;k++)
           for(const d of up.extraDrops||[])
-            if(roll()<d.chance)create(d,drawAmount(d.amount));
+            if(roll()<d.chance)externalOutputs.push([d,drawAmount(d.amount)]);
       }
+      const orderedOutputs=dropOrder==='EXTERNAL_FIRST'
+        ?[...externalOutputs,...nativeOutputs]:[...nativeOutputs,...externalOutputs];
+      for(const [drop,quantity] of orderedOutputs)create(drop,quantity);
       if(hasCompactor){
         compact(inside,steps);
         if(extSlots)compact(chest,steps);
