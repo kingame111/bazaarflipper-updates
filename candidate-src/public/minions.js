@@ -206,6 +206,7 @@ function showDetail(r){
       <div><span>Cycles / day / minion</span><strong>${fmtCoins(r.cyclesPerDay)}</strong></div>
       <div><span>Shipping</span><strong>${r.shipping?.name||'None'}</strong></div>
       <div><span>Storage capacity</span><strong>${r.storage?.capacity?fmtCoins(r.storage.capacity):'N/A'} items${r.storage?.largeStorageSlots?` (+${r.storage.largeStorageSlots} slots Large Storage)`:''}</strong></div>
+      <div><span>Offline inventory model</span><strong>${r.storage?.model==='DETERMINISTIC_EVENT'?'Event-by-event':r.storage?.model==='STOCHASTIC_MONTE_CARLO_12'?'12-seed estimate':'Approximation (not independently verified)'}</strong></div>
       <div><span>Storage fills in</span><strong>${fmtDays(r.storage?.daysToFull)}</strong></div>
       <div><span>Overflow share</span><strong>${fmtPct((r.storage?.overflowShare||0)*100)}</strong></div>
       <div><span>Collection interval</span><strong>${Number(r.collectionIntervalDays||1)<1?(Number(r.collectionIntervalDays||1)*24).toFixed(1)+'h':Number(r.collectionIntervalDays||1).toFixed(1)+'d'}</strong></div>
