@@ -95,7 +95,7 @@ function simulation(minion,{days=1,compactor=false,largeStorage=true,shipping='N
 }
 function engine(minion,{days=1,compactor=false,largeStorage=true,shipping='NONE',fuel='NONE'}={}){
  const base={tier:11,count:1,fuel,upgrade1:compactor?'SUPER_COMPACTOR_3000':'NONE',upgrade2:'NONE',
- shipping,sellMethod:'NPC',priceMode:'LIVE',collectionIntervalDays:days,horizonDays:days};
+ shipping,largeStorage,sellMethod:'NPC',priceMode:'LIVE',collectionIntervalDays:days,horizonDays:days};
  const r=calculateMinion(minion,base,ctx);
  return {total:r.netDay*days,enginePerDay:r.netDay,engineCapacity:r.storage?.capacity,
     warnings:r.warnings,outputCount:r.outputDetails?.length};
