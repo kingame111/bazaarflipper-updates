@@ -128,6 +128,17 @@ assert.ok(!mismatchedPermanent.outputDetails.some(x=>x.rawItem==='WILD_ROSE'));
 const largeChecked=calculateMinion(ghast,{...base,largeStorage:true},ctx);
 assert.equal(largeChecked.storage.capacity,1920,'Large Storage adds 15 stacks (960 item units)');
 assert.equal(largeChecked.storage.largeStorageSlots,15);
+const hour={...base,largeStorage:true,collectionIntervalDays:1/24};
+const soil=calculateMinion(MINION_DATA.definitions['Zombie Minion'],{...hour,upgrade1:'CORRUPT_SOIL'},ctx);
+for(const item of ['SULPHUR_ORE','CORRUPTED_FRAGMENT']){
+ const x=soil.outputDetails.find(g=>g.item===item&&g.source==='CORRUPT_SOIL');
+ assert.ok(x&&Math.abs(x.rawUnitsPerDay-soil.cyclesPerDay)<1e-6,'Offline Corrupt Soil adds one '+item+' per cycle');
+}
+const egg=calculateMinion(MINION_DATA.definitions['Chicken Minion'],{...hour,upgrade1:'ENCHANTED_EGG'},ctx);
+assert.ok(Math.abs(egg.outputDetails.find(x=>x.item==='EGG'&&x.source==='ENCHANTED_EGG').rawUnitsPerDay-egg.cyclesPerDay)<1e-6);
+const flint=calculateMinion(MINION_DATA.definitions['Gravel Minion'],{...hour,upgrade1:'FLINT_SHOVEL'},ctx);
+assert.ok(flint.outputDetails.some(x=>x.rawItem==='GRAVEL'&&x.item==='FLINT'));
+
 const cat=minionCatalog();
 assert.ok(cat.minions.length>=61);
 const srv=fs.readFileSync('candidate-src/server.mjs','utf8');
