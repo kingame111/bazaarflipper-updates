@@ -6,7 +6,7 @@ const DAY_SECONDS = 86400;
 const SHIPPING = {
   NONE:{id:'NONE',name:'No hopper',npcFactor:0},
   BUDGET_HOPPER:{id:'BUDGET_HOPPER',name:'Budget Hopper',npcFactor:0.5},
-  ENCHANTED_HOPPER:{id:'ENCHANTED_HOPPER',name:'Enchanted Hopper',npcFactor:0.9}
+  ENCHANTED_HOPPER:{id:'ENCHANTED_HOPPER',name:'Enchanted Hopper',npcFactor:0.7}
 };
 const safe = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 const clamp = (value, min, max) => Math.max(min, Math.min(max, safe(value)));
