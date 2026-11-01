@@ -17,3 +17,21 @@ function compact(p,recipes){
     p.set(to,(p.get(to)||0)+made);
   }
 }
+function makeRandom(seed){
+  let s=seed>>>0;
+  return ()=>{s^=s<<13;s^=s>>>17;s^=s<<5;return(s>>>0)/4294967296;};
+}
+function stagesFor(drop,steps,metadata,owner){
+  let from=drop.item,npc=Number(drop.npc||0),next=Object.entries(drop.enchanted||{})[0];
+  const seen=new Set([from]);
+  metadata.set(from,{npc,rawItem:drop.item,source:owner});
+  while(next&&seen.size<9){
+    const [to,n]=next,ratio=Number(n);
+    if(!Number.isInteger(ratio)||ratio<1||seen.has(to))break;
+    steps.push({from,to,ratio});
+    npc*=ratio;metadata.set(to,{npc,rawItem:drop.item,source:owner});
+    from=to;seen.add(to);
+    const more=MINION_DATA.compactionNext?.[to];
+    next=more?[more.item,more.ratio]:null;
+  }
+}
