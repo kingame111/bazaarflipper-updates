@@ -75,3 +75,5 @@ const summary={families:families.length,configs:cases.length,trials:cases.reduce
 fs.mkdirSync('audits',{recursive:true});
 fs.writeFileSync('audits/minion-offline-stochastic-results.json',JSON.stringify({summary,cases},null,2)+'\n');
 console.log('STOCHASTIC_REFERENCE_SUMMARY',JSON.stringify(summary,null,2));
+
+if(summary.over5pct>0)throw new Error('Stochastic reference comparison exceeds 5% in '+summary.over5pct+' cases; see artifact');
