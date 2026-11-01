@@ -406,6 +406,11 @@ export function calculateMinion(minion, options, context) {
     fuel = MINION_DATA.fuels.NONE;
   }
 
+  if (fuel.condition?.name && String(fuel.condition.name).toLowerCase() !== String(minion.name).toLowerCase()) {
+    warnings.push(`${fuel.name} is not compatible with ${minion.name}; fuel bonus ignored.`);
+    fuel = MINION_DATA.fuels.NONE;
+  }
+
   const { selected: upgrades, warnings: upgradeWarnings } = normalizeUpgrades([options.upgrade1, options.upgrade2], minion);
   warnings.push(...upgradeWarnings);
 
@@ -450,7 +455,7 @@ export function calculateMinion(minion, options, context) {
     });
   };
 
-  for (const drop of minion.drops || []) addDrop(drop,cyclesPerDay,'MINION',fuelDropMultiplier*normalOutputMultiplier);
+  for (const drop of (fuel.forceDrops || minion.drops || [])) addDrop(drop,cyclesPerDay,'MINION',fuelDropMultiplier*normalOutputMultiplier);
   // First process all other drops. Diamond Spreading rolls per resource unit,
   // including additional resource drops, not once per minion collection cycle.
   for (const up of upgrades) {
