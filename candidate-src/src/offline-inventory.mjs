@@ -120,3 +120,48 @@ export function simulateStochasticOffline(minion,tier,opts){
  }
  const inventoryTotal=new Map(),overflowTotal=new Map(),samples=12;
  let overflowing=0,fullAt=0;
+ for(let iteration=0;iteration<samples;iteration++){
+  const random=randomSource(0x9e3779b9+iteration*99991+tier*117+minion.id.length*97);
+  const inside=new Map(),chest=new Map(),overflow=new Map();
+  let foundFull=null;
+  for(let cycle=0;cycle<events;cycle++){
+   let chosen;
+   if(exclusive){
+    const roll=random();let total=0,selected=drops.at(-1);
+    for(const d of drops){total+=d.chance;if(roll<total){selected=d;break;}}
+    chosen=[selected];
+   }else chosen=drops.filter(d=>random()<d.chance);
+   for(const d of chosen){
+    const whole=Math.floor(d.amount),quantity=whole+(random()<d.amount-whole?1:0);
+    if(quantity===0)continue;
+    let extra=quantity-store(inside,internalSlots,d.item,quantity);
+    if(extra>0&&externalSlots)extra-=store(chest,externalSlots,d.item,extra);
+    if(extra>0){
+     overflow.set(d.item,(overflow.get(d.item)||0)+extra);
+     overflowing+=extra;
+     if(foundFull===null)foundFull=(cycle+1)*interval/86400;
+    }
+   }
+   if(upgrades.some(u=>u.id==='SUPER_COMPACTOR_3000')){
+    compact(inside,steps);
+    if(externalSlots)compact(chest,steps);
+   }
+  }
+  for(const pool of [inside,chest])for(const [id,qty] of pool)inventoryTotal.set(id,(inventoryTotal.get(id)||0)+qty/samples);
+  for(const [id,qty] of overflow)overflowTotal.set(id,(overflowTotal.get(id)||0)+qty/samples);
+  if(foundFull!==null)fullAt+=foundFull/samples;
+ }
+ const outputs=[];
+ for(const [item,qty] of inventoryTotal){
+  const raw=original.get(item)||item;
+  outputs.push({source:'MINION',rawItem:raw,item,unitsPerDay:qty/days,
+   rawUnitsPerDay:0,npc:prices.get(item)||0,compacted:item!==raw,overflowUnitsPerDay:0});
+ }
+ for(const [item,qty] of overflowTotal)outputs.push({source:'MINION',rawItem:item,item,unitsPerDay:0,
+   rawUnitsPerDay:0,npc:prices.get(item)||0,compacted:false,overflowUnitsPerDay:qty/days});
+ const expectedProduction=events*drops.reduce((n,d)=>n+d.amount*d.chance,0);
+ return {model:'STOCHASTIC_MONTE_CARLO_12',outputs,events,firstOverflowDay:fullAt||null,
+   overflowShare:expectedProduction?overflowing/(samples*expectedProduction):0,
+   overflowQty:overflowing/samples,internalSlots,externalSlots,samples,
+   warning:'Stochastic drop sizes and compaction simulated with seeded trials, not certified in-game RNG'};
+}
