@@ -92,6 +92,12 @@ if(MINION_DATA.definitions['Acacia Minion'].upgradeRecipes){
   assert.equal(missingLegacy.paybackDays,null);
 }
 
+const bothExpanders=calculateMinion(ghast,{...base,upgrade1:'MINION_EXPANDER',upgrade2:'MINION_EXPANDER'},ctx);
+assert.ok(Math.abs(bothExpanders.speedBonusPercent-10)<1e-9,'Two expanders must give additive +10%, not 10.25%');
+const bazaarCheck=calculateMinion(ghast,{...base,sellMethod:'INSTANT'},ctx);
+assert.equal(bazaarCheck.outputDetails.find(x=>x.item==='GHAST_TEAR')?.quote.liveInstant,18,'Instant sale must match buy orders');
+const purchased=calculateMinion(ghast,base,ctx);
+assert.equal(purchased.setupBreakdown.find(x=>x.item==='GHAST_TEAR')?.unitPrice,20,'Instant acquisition must match sell offers');
 const cat=minionCatalog();
 assert.ok(cat.minions.length>=61);
 const srv=fs.readFileSync('candidate-src/server.mjs','utf8');
