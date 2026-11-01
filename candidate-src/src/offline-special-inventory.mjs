@@ -25,3 +25,19 @@ function recipe(drop,steps,meta){
   next=continuation?[continuation.item,continuation.ratio]:null;
  }
 }
+export function simulateSpecialOffline(minion,tier,opts){
+ const base=minion?.tiers?.[tier],fuel=opts.fuel,ups=opts.upgrades||[];
+ const known=new Set(['SUPER_COMPACTOR_3000','DIAMOND_SPREADING','MINION_EXPANDER',
+ 'FLYCATCHER_UPGRADE','CORRUPT_SOIL','SOULFLOW_ENGINE','LESSER_SOULFLOW_ENGINE',
+ 'BERBERIS_FUEL_INJECTOR','ENCHANTED_EGG','FLINT_SHOVEL']);
+ if(!base||!fuel||fuel.duration>0||Number(fuel.drops||1)!==1||ups.some(u=>!known.has(u.id)))return null;
+ const hasSpecial=ups.some(u=>u.extraDrops?.length||u.cooldownDrop||u.dropTransforms?.length||u.outputMultiplier);
+ if(!hasSpecial)return null;
+ const drops=fuel.forceDrops||minion.drops;
+ if(!drops?.length)return null;
+ const days=Number(opts.days),interval=Number(opts.secondsPerAction)*(minion.harvestOnly?1:2);
+ if(!(days>0)||!(interval>0))return null;
+ const events=Math.floor(days*86400/interval+1e-8);
+ if(events>100000)return null;
+ const internalSlots=base.storage/64,externalSlots=opts.largeStorage===false?0:15;
+ if(!Number.isInteger(internalSlots)||internalSlots<1)return null;
