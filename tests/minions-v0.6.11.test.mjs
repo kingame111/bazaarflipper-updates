@@ -31,7 +31,8 @@ assert.ok(r11.storage.overflowShare>0,'One-day un-compacted Ghast fills before c
 const budget=calculateMinion(ghast,{...base,shipping:'BUDGET_HOPPER'},ctx);
 const enchanted=calculateMinion(ghast,{...base,shipping:'ENCHANTED_HOPPER'},ctx);
 assert.ok(budget.netDay>r11.netDay,'Budget Hopper earns overflow');
-assert.ok(enchanted.netDay>budget.netDay,'Enchanted Hopper receives 90% NPC vs 50%');
+assert.equal(enchanted.shipping.npcFactor,0.7);
+assert.ok(enchanted.netDay>budget.netDay,'Enchanted Hopper receives 70% NPC vs 50%');
 assert.equal(budget.setupCost,r11.setupCost+5000,'Hopper must increase one-time setup');
 assert.equal(enchanted.setupCost,r11.setupCost+10000);
 assert.ok(enchanted.outputDetails.some(x=>x.quote.method==='HOPPER'));
