@@ -54,14 +54,14 @@ function simulate(d,days,largeStorage,shipping,seed,compactor=false){
 
 const cases=[];
 for(const d of families)for(const days of [1,3,7])
-for(const largeStorage of [false,true])for(const shipping of ['NONE','ENCHANTED_HOPPER']){
- const predicted=calculateMinion(d,{tier:11,count:1,fuel:'NONE',upgrade1:'NONE',upgrade2:'NONE',
+for(const largeStorage of [false,true])for(const shipping of ['NONE','ENCHANTED_HOPPER'])for(const compactor of [false,true]){
+ const predicted=calculateMinion(d,{tier:11,count:1,fuel:'NONE',upgrade1:compactor?'SUPER_COMPACTOR_3000':'NONE',upgrade2:'NONE',
  shipping,largeStorage,sellMethod:'NPC',priceMode:'LIVE',collectionIntervalDays:days,horizonDays:days},ctx).netDay*days;
- const samples=Array.from({length:12},(_,k)=>simulate(d,days,largeStorage,shipping,0x7f3a9ab1+k*1234567+d.id.length*91));
+ const samples=Array.from({length:12},(_,k)=>simulate(d,days,largeStorage,shipping,0x7f3a9ab1+k*1234567+d.id.length*91,compactor));
  const mean=samples.reduce((a,b)=>a+b,0)/samples.length;
  const sd=Math.sqrt(samples.reduce((a,b)=>a+(b-mean)**2,0)/(samples.length-1));
  const error=mean>0?(predicted-mean)/mean:null;
- cases.push({minion:d.name,days,largeStorage,shipping,predicted,mean,sd,error,
+ cases.push({minion:d.name,days,largeStorage,shipping,compactor,predicted,mean,sd,error,
    ci95:[mean-1.96*sd/Math.sqrt(samples.length),mean+1.96*sd/Math.sqrt(samples.length)]});
 }
 const measurable=cases.filter(x=>x.error!=null);
