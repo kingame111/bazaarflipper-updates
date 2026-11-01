@@ -27,7 +27,7 @@ const recs=all.map(row=>{
 });
 const report={time:new Date().toISOString(),source:url,officialItemCount:source.items.length,records:recs,summary:{
  totalDrops:recs.length,foundExactId:recs.filter(r=>r.method==='EXACT_ID').length,foundByName:recs.filter(r=>r.method==='NAME_NORMALIZED').length,
- noSource:recs.filter(r=>!r.apiId),exactPriceMismatches:recs.filter(r=>r.method==='EXACT_ID'&&r.equal===false),
+ noSource:recs.filter(r=>!r.apiId),priceUnavailable:recs.filter(r=>r.equal==null),exactPriceMismatches:recs.filter(r=>r.method==='EXACT_ID'&&r.equal===false),
  namePriceMismatches:recs.filter(r=>r.method==='NAME_NORMALIZED'&&r.equal===false),matches:recs.filter(r=>r.equal===true).length
 }};
 fs.mkdirSync('audits',{recursive:true});
