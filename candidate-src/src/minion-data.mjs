@@ -4797,7 +4797,7 @@ export const MINION_DATA = {
         {
           "item": "RAW_FISH",
           "amount": 1,
-          "chance": 0.6666666666666666,
+          "chance": 0.54,
           "npc": 6,
           "enchanted": {
             "ENCHANTED_RAW_FISH": 160
@@ -4806,7 +4806,7 @@ export const MINION_DATA = {
         {
           "item": "RAW_FISH:1",
           "amount": 1,
-          "chance": 0.16666666666666666,
+          "chance": 0.225,
           "npc": 10,
           "enchanted": {
             "ENCHANTED_RAW_SALMON": 160
@@ -4815,7 +4815,7 @@ export const MINION_DATA = {
         {
           "item": "RAW_FISH:3",
           "amount": 1,
-          "chance": 0.08,
+          "chance": 0.117,
           "npc": 15,
           "enchanted": {
             "ENCHANTED_PUFFERFISH": 160
@@ -4824,7 +4824,7 @@ export const MINION_DATA = {
         {
           "item": "RAW_FISH:2",
           "amount": 1,
-          "chance": 0.02666666666666667,
+          "chance": 0.036,
           "npc": 20,
           "enchanted": {
             "ENCHANTED_CLOWNFISH": 160
@@ -4833,7 +4833,7 @@ export const MINION_DATA = {
         {
           "item": "PRISMARINE_CRYSTALS",
           "amount": 1,
-          "chance": 0.02,
+          "chance": 0.02734,
           "npc": 5,
           "enchanted": {
             "ENCHANTED_PRISMARINE_CRYSTALS": 80
@@ -4842,7 +4842,7 @@ export const MINION_DATA = {
         {
           "item": "PRISMARINE_SHARD",
           "amount": 1,
-          "chance": 0.02,
+          "chance": 0.02734,
           "npc": 5,
           "enchanted": {
             "ENCHANTED_PRISMARINE_SHARD": 80
@@ -4851,8 +4851,8 @@ export const MINION_DATA = {
         {
           "item": "SPONGE",
           "amount": 1,
-          "chance": 0.02,
-          "npc": 5,
+          "chance": 0.02734,
+          "npc": 50,
           "enchanted": {
             "ENCHANTED_SPONGE": 40
           }
@@ -4937,7 +4937,8 @@ export const MINION_DATA = {
           }
         ]
       },
-      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items"
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "harvestOnly": true
     },
     "Flower Minion": {
       "id": "FLOWER_GENERATOR",
