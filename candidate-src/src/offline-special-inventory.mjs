@@ -20,3 +20,8 @@ function recipe(drop,steps,meta){
   const [to,v]=next,ratio=Number(v);
   if(!Number.isInteger(ratio)||ratio<1||seen.has(to))break;
   steps.push({from:id,to,ratio});npc*=ratio;
+  meta.set(to,{npc,rawItem:drop.item});id=to;seen.add(to);
+  const continuation=MINION_DATA.compactionNext?.[to];
+  next=continuation?[continuation.item,continuation.ratio]:null;
+ }
+}
