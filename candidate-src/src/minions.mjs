@@ -410,7 +410,7 @@ export function calculateMinion(minion, options, context) {
   warnings.push(...upgradeWarnings);
 
   const expanderCount = upgrades.filter((u)=>u.id==='MINION_EXPANDER').length;
-  const expanderBonus = expanderCount > 0 ? Math.pow(1.05,expanderCount)-1 : 0;
+  const expanderBonus = expanderCount > 0 ? 0.05*expanderCount : 0;
   const ordinaryUpgradeSpeed = upgrades
     .filter((u)=>u.id!=='MINION_EXPANDER')
     .reduce((sum,u)=>sum+Math.max(0,safe(u.speed)),0);
