@@ -1,0 +1,30 @@
+name: Independent Minion Special Upgrade Offline Verification (no release)
+on:
+  push:
+    branches: [audit/minion-hopper-2026-11-01]
+    paths: ['tests/minion-special-upgrades-reference.mjs', '.github/workflows/minion-special-upgrades-reference.yml', 'candidate-src/src/minions.mjs', 'candidate-src/src/offline-upgrade-inventory.mjs']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax validation
+        run: |
+          node --check tests/minion-special-upgrades-reference.mjs
+          node --check candidate-src/src/offline-upgrade-inventory.mjs
+      - name: Compare special upgrades against event reference
+        run: node tests/minion-special-upgrades-reference.mjs
+      - name: Upload full scenario comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: special-upgrade-offline-reference
+          path: audits/minion-special-upgrade-comparison.json
+          if-no-files-found: warn

@@ -1,0 +1,28 @@
+name: Minion NEU Tier Source Verification (no release)
+on:
+  push:
+    branches: [audit/minion-hopper-2026-11-01]
+    paths: ['tests/minion-neu-source-audit.mjs', '.github/workflows/minion-neu-source-audit.yml', 'candidate-src/src/minion-data.mjs']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check syntax
+        run: node --check tests/minion-neu-source-audit.mjs
+      - name: Compare each tier speed and storage with independent NEU repository
+        run: node tests/minion-neu-source-audit.mjs
+      - name: Save all 702 comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minion-neu-independent-reference
+          path: audits/minion-neu-source-audit-results.json
+          if-no-files-found: warn

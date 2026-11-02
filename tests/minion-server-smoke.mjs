@@ -19,7 +19,7 @@ try{
  let started=false;
  for(let n=0;n<100;n++){
   if(child.exitCode!==null)throw Error('Server exited prematurely: '+output.slice(-1500));
-  try{const r=await request('/api/status');if(r.ok){const status=await r.json();assert.equal(status.version,'0.6.11');started=true;break;}}
+  try{const r=await request('/api/status');if(r.ok){const status=await r.json();assert.equal(status.version,'0.6.13');started=true;break;}}
   catch{}
   await sleep(100);
  }
@@ -37,8 +37,8 @@ try{
  const check=await request('/api/minions?tier=11&fuel=NONE&shipping=ENCHANTED_HOPPER&sellMethod=NPC&family=Combat&search=Ghast&optimizeFor=PAYBACK');
  assert.ok(check.ok);
  const second=await check.json();
- assert.equal(second.rows[0].shipping.npcFactor,0.9);
- console.log('PASS HTTP smoke: v0.6.11 startup, 61-family catalog, Ghast T11, hopper and horizon optimizer');
+ assert.equal(second.rows[0].shipping.npcFactor,0.7);
+ console.log('PASS HTTP smoke: v0.6.13 startup, 61-family catalog, Ghast T11, hopper and horizon optimizer');
 }finally{
  child.kill('SIGTERM');
  await Promise.race([new Promise(resolve=>child.once('exit',resolve)),sleep(2000)]);

@@ -1,12 +1,14 @@
 import { MINION_DATA } from './minion-data.mjs';
 import { resolveCumulativeTierRecipe } from './minion-recipes.mjs';
+import { simulateDeterministicOffline, simulateStochasticOffline } from './offline-inventory.mjs';
+import { simulateUpgradeOffline } from './offline-upgrade-inventory.mjs';
 
 const DAY_SECONDS = 86400;
 // Shipping occupies its own minion slot, not one of the two standard upgrade slots.
 const SHIPPING = {
   NONE:{id:'NONE',name:'No hopper',npcFactor:0},
   BUDGET_HOPPER:{id:'BUDGET_HOPPER',name:'Budget Hopper',npcFactor:0.5},
-  ENCHANTED_HOPPER:{id:'ENCHANTED_HOPPER',name:'Enchanted Hopper',npcFactor:0.9}
+  ENCHANTED_HOPPER:{id:'ENCHANTED_HOPPER',name:'Enchanted Hopper',npcFactor:0.7}
 };
 const safe = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 const clamp = (value, min, max) => Math.max(min, Math.min(max, safe(value)));
@@ -374,7 +376,8 @@ export function minionCatalog() {
       sellMethod: 'BEST',
       priceMode: 'LIVE',
       horizonDays: 1,
-      collectionIntervalDays: 1
+      collectionIntervalDays: 1,
+      largeStorage: true
     }
   };
 }
@@ -406,16 +409,22 @@ export function calculateMinion(minion, options, context) {
     fuel = MINION_DATA.fuels.NONE;
   }
 
+  if (fuel.condition?.name && String(fuel.condition.name).toLowerCase() !== String(minion.name).toLowerCase()) {
+    warnings.push(`${fuel.name} is not compatible with ${minion.name}; fuel bonus ignored.`);
+    fuel = MINION_DATA.fuels.NONE;
+  }
+
   const { selected: upgrades, warnings: upgradeWarnings } = normalizeUpgrades([options.upgrade1, options.upgrade2], minion);
   warnings.push(...upgradeWarnings);
 
   const expanderCount = upgrades.filter((u)=>u.id==='MINION_EXPANDER').length;
-  const expanderBonus = expanderCount > 0 ? Math.pow(1.05,expanderCount)-1 : 0;
+  const expanderBonus = expanderCount > 0 ? 0.05*expanderCount : 0;
   const ordinaryUpgradeSpeed = upgrades
     .filter((u)=>u.id!=='MINION_EXPANDER')
     .reduce((sum,u)=>sum+Math.max(0,safe(u.speed)),0);
   const speedBonus = Math.max(0,
     safe(fuel.speed) +
+    (fuelId==='EVERBURNING_FLAME' && minion.family==='Combat' && minion.name!=='Spider Minion' ? 0.05 : 0) +
     ordinaryUpgradeSpeed +
     expanderBonus +
     clamp(options.beaconPercent,0,100)/100 +
@@ -423,12 +432,12 @@ export function calculateMinion(minion, options, context) {
     clamp(options.otherSpeedPercent,0,500)/100
   );
   const secondsPerAction = safe(tierInfo.speed) / (1 + speedBonus);
-  const cyclesPerDay = DAY_SECONDS / (secondsPerAction * 2);
+  const cyclesPerDay = DAY_SECONDS / (secondsPerAction * (minion.harvestOnly ? 1 : 2));
   const fuelDropMultiplier = Math.max(0, safe(fuel.drops, 1));
   const normalOutputMultiplier = upgrades.reduce((m,u)=>m*Math.max(0,safe(u.outputMultiplier,1)),1);
   const useCompactor = upgrades.some((u)=>u.compactor);
 
-  const generated = [];
+  let generated = [];
   let eligibleResourceItemsPerDay=0;
   const addDrop = (drop, cycles, source, outputMultiplier = 1) => {
     if (!drop || !(safe(drop.amount) > 0) || !(safe(drop.chance,1) > 0) || !(cycles > 0)) return;
@@ -449,7 +458,7 @@ export function calculateMinion(minion, options, context) {
     });
   };
 
-  for (const drop of minion.drops || []) addDrop(drop,cyclesPerDay,'MINION',fuelDropMultiplier*normalOutputMultiplier);
+  for (const drop of (fuel.forceDrops || minion.drops || [])) addDrop(drop,cyclesPerDay,'MINION',fuelDropMultiplier*normalOutputMultiplier);
   // First process all other drops. Diamond Spreading rolls per resource unit,
   // including additional resource drops, not once per minion collection cycle.
   for (const up of upgrades) {
@@ -465,21 +474,70 @@ export function calculateMinion(minion, options, context) {
       let amountMultiplier = 1;
       if (minion.id === 'VOIDLING_GENERATOR' && up.id === 'SOULFLOW_ENGINE') amountMultiplier = 1 + 0.03*tier;
       const drop={item:up.cooldownDrop.item,amount:amountMultiplier,chance:1,npc:up.cooldownDrop.npc,enchanted:up.cooldownDrop.enchanted};
-      addDrop(drop,DAY_SECONDS/safe(up.cooldownDrop.seconds),up.id,1);
+      addDrop(drop,DAY_SECONDS/safe(up.cooldownDrop.seconds),up.id,fuelDropMultiplier);
     }
   }
+
+  // Exact chronological packing for deterministic production. All other cases
+  // retain the labeled expectation-based approximation until independently tested.
+  const offlineOptions={fuel,upgrades,days:collectionIntervalDays,secondsPerAction,largeStorage:options.largeStorage!==false};
+  const eventResult = simulateDeterministicOffline(minion,tier,offlineOptions)
+    || simulateStochasticOffline(minion,tier,offlineOptions)
+    || simulateUpgradeOffline(minion,tier,offlineOptions);
+  if(eventResult){
+    generated=eventResult.outputs;
+    // Preserve the expected gross production rate as one stream per source item;
+    // inventory and hopper rows must not double-count the same raw output.
+    const expectedByItem=new Map();
+    const putExpected=(source,drop,rate)=>{
+      const key=source+'|'+drop.item;
+      expectedByItem.set(key,(expectedByItem.get(key)||0)+rate);
+    };
+    for(const d of (fuel.forceDrops||minion.drops||[]))
+      putExpected('MINION',d,cyclesPerDay*d.amount*d.chance*fuelDropMultiplier*normalOutputMultiplier);
+    for(const u of upgrades){
+      for(const d of u.extraDrops||[])
+        putExpected(u.id,d,u.id==='DIAMOND_SPREADING'
+          ?eligibleResourceItemsPerDay*d.amount*d.chance
+          :cyclesPerDay*d.amount*d.chance*fuelDropMultiplier);
+      if(u.cooldownDrop){
+        const rate=DAY_SECONDS/u.cooldownDrop.seconds*fuelDropMultiplier*
+          (minion.id==='VOIDLING_GENERATOR'&&u.id==='SOULFLOW_ENGINE'?1+.03*tier:1);
+        putExpected(u.id,u.cooldownDrop,rate);
+      }
+    }
+    const emitted=new Set();
+    for(const g of generated){
+      g.rawUnitsPerDay=0;
+      const key=g.source+'|'+g.rawItem;
+      if(!emitted.has(key)){
+        g.rawUnitsPerDay=expectedByItem.get(key)||0;
+        emitted.add(key);
+      }
+    }
+  }
+  if(eventResult?.warning)warnings.push(eventResult.warning);
+  if(eventResult?.dropOrderVerifiedInGame===false && eventResult.overflowShare>0)
+    warnings.push('Full-storage estimate assumes native minion drops are stored before extra upgrade drops; in-game priority is not yet confirmed.');
+  if(shipping.npcFactor===0 && eventResult?.overflowShare>0)
+    warnings.push('No Hopper: after one output cannot be stored, the simulation continues filling compatible stacks; real minion stop behavior is not confirmed, so collected revenue may be overstated.');
 
   // Model the capacity of the minion's own storage over the collection interval.
   // The NEU item lore supplies item-count capacity for each tier. This linear model
   // approximates multi-item slot packing and may differ slightly from the game.
-  const storageCapacity = Math.max(0,safe(tierInfo.storage,0));
+  // External Large Minion Storage adds 15 stacks; no minion upgrade slot is consumed.
+  // The aggregate overflow math below remains an approximation for mixed outputs.
+  const extraStorageSlots = options.largeStorage === false ? 0 : 15;
+  const storageCapacity = Math.max(0,safe(tierInfo.storage,0)) + extraStorageSlots * 64;
   const totalUnitsPerDay=generated.reduce((sum,g)=>sum+g.unitsPerDay,0);
   const theoreticalUnits=totalUnitsPerDay*collectionIntervalDays;
-  const overflowShare=storageCapacity>0 && theoreticalUnits>storageCapacity?
+  const overflowShare=eventResult ? eventResult.overflowShare :
+    storageCapacity>0 && theoreticalUnits>storageCapacity?
     Math.max(0,1-storageCapacity/theoreticalUnits):0;
-  const storageDaysToFull=totalUnitsPerDay>0 && storageCapacity>0?
+  const storageDaysToFull=eventResult ? eventResult.firstOverflowDay :
+    totalUnitsPerDay>0 && storageCapacity>0?
     storageCapacity/totalUnitsPerDay:null;
-  if(storageCapacity>0&&overflowShare>0){
+  if(storageCapacity>0&&overflowShare>0&&!eventResult){
     for(const output of generated){
       output.overflowUnitsPerDay=output.unitsPerDay*overflowShare;
       output.unitsPerDay*=1-overflowShare;
@@ -578,7 +636,7 @@ export function calculateMinion(minion, options, context) {
     cyclesPerDay,
     fuel:{id:fuelId,name:fuel.name,dropMultiplier:fuelDropMultiplier,duration:fuel.duration},
     shipping:{id:shipping.id,name:shipping.name,npcFactor:shipping.npcFactor},
-    storage:{capacity:storageCapacity,daysToFull:storageDaysToFull,overflowShare,estimated:generated.length>1},
+    storage:{capacity:storageCapacity,baseCapacity:safe(tierInfo.storage,0),largeStorageSlots:extraStorageSlots,daysToFull:storageDaysToFull,overflowShare,model:eventResult?.model||'ESTIMATED',estimated:!eventResult||eventResult.samples>1},
     upgrades:upgrades.map(u=>({id:u.id,name:u.name})),
     grossPerMinionDay,
     bazaarTaxPerMinionDay,

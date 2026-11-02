@@ -1,0 +1,32 @@
+name: Independent Minion Offline Inventory Audit (no release)
+on:
+  push:
+    branches: [audit/minion-hopper-2026-11-01]
+    paths:
+      - 'tests/minion-offline-reference.mjs'
+      - '.github/workflows/minion-offline-reference.yml'
+      - 'candidate-src/src/minions.mjs'
+      - 'candidate-src/src/minion-data.mjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chronological:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check syntax
+        run: node --check tests/minion-offline-reference.mjs
+      - name: Compare chronological slots, stacking, compaction, hopper at 1d/3d/7d
+        run: node tests/minion-offline-reference.mjs
+      - name: Upload full per-scenario discrepancy and rankings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: independent-offline-inventory-audit
+          path: audits/minion-offline-comparison.json
+          if-no-files-found: warn

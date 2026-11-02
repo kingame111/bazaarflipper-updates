@@ -1,0 +1,28 @@
+name: Offline Stochastic Minion Audit (no release)
+on:
+  push:
+    branches: [audit/minion-hopper-2026-11-01]
+    paths: ['tests/minion-offline-stochastic.mjs', '.github/workflows/minion-offline-stochastic.yml', 'candidate-src/src/minions.mjs']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  stochastic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify syntax
+        run: node --check tests/minion-offline-stochastic.mjs
+      - name: Run independent stochastic inventory simulations
+        run: node tests/minion-offline-stochastic.mjs
+      - name: Upload per-scenario results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-stochastic-inventory
+          path: audits/minion-offline-stochastic-results.json
+          if-no-files-found: warn

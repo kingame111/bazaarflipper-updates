@@ -14,7 +14,7 @@ const market={};
 function q(p){return{buy_summary:[{pricePerUnit:p*0.9}],sell_summary:[{pricePerUnit:p}],quick_status:{buyPrice:p*0.9,sellPrice:p}}}
 for(const [k,v] of Object.entries(money))market[k]=q(v);
 const ctx={market,historyStats:new Map(),itemMeta:new Map(),taxRate:0,priceMode:'LIVE',sellMethod:'NPC',historyDays:7};
-const base={tier:11,count:1,fuel:'NONE',upgrade1:'NONE',upgrade2:'NONE',sellMethod:'NPC',priceMode:'LIVE',collectionIntervalDays:1,horizonDays:30};
+const base={tier:11,count:1,fuel:'NONE',upgrade1:'NONE',upgrade2:'NONE',sellMethod:'NPC',priceMode:'LIVE',collectionIntervalDays:1,horizonDays:30,largeStorage:false};
 const ghast=MINION_DATA.definitions['Ghast Minion'];
 assert.ok(ghast);
 const exp=960*20+768*100+992*3000;
@@ -31,7 +31,8 @@ assert.ok(r11.storage.overflowShare>0,'One-day un-compacted Ghast fills before c
 const budget=calculateMinion(ghast,{...base,shipping:'BUDGET_HOPPER'},ctx);
 const enchanted=calculateMinion(ghast,{...base,shipping:'ENCHANTED_HOPPER'},ctx);
 assert.ok(budget.netDay>r11.netDay,'Budget Hopper earns overflow');
-assert.ok(enchanted.netDay>budget.netDay,'Enchanted Hopper receives 90% NPC vs 50%');
+assert.equal(enchanted.shipping.npcFactor,0.7);
+assert.ok(enchanted.netDay>budget.netDay,'Enchanted Hopper receives 70% NPC vs 50%');
 assert.equal(budget.setupCost,r11.setupCost+5000,'Hopper must increase one-time setup');
 assert.equal(enchanted.setupCost,r11.setupCost+10000);
 assert.ok(enchanted.outputDetails.some(x=>x.quote.method==='HOPPER'));
@@ -55,10 +56,10 @@ assert.equal(calculateMinion(flower,base,ctx).paybackDays,null,'Flower Tier I au
 assert.ok(snow);
 const baseSnow=calculateMinion(snow,base,ctx);
 const spread=calculateMinion(snow,{...base,upgrade1:'DIAMOND_SPREADING'},ctx);
-const expectedDiamonds=baseSnow.outputDetails.filter(x=>x.source==='MINION').reduce((n,x)=>n+x.rawUnitsPerDay,0)*0.1;
+const expectedDiamonds=baseSnow.cyclesPerDay*snow.drops.reduce((sum,drop)=>sum+drop.amount*drop.chance,0)*0.1;
 const diamond=spread.outputDetails.find(x=>x.item==='DIAMOND'&&x.source==='DIAMOND_SPREADING');
 assert.ok(diamond);
-assert.ok(Math.abs(diamond.rawUnitsPerDay-expectedDiamonds)<1e-6,'Diamond Spreading per item');
+assert.ok(Math.abs(diamond.rawUnitsPerDay-expectedDiamonds)<1e-6,`Diamond Spreading per item; actual=${diamond.rawUnitsPerDay}, expected=${expectedDiamonds}, rows=${JSON.stringify(spread.outputDetails.filter(x=>x.source==='DIAMOND_SPREADING').map(x=>({item:x.item,raw:x.rawItem,rawUnits:x.rawUnitsPerDay})))}`);
 
 const rankedMarket={...missingMarket};
 for(const m of Object.values(MINION_DATA.definitions)){
@@ -90,6 +91,62 @@ if(MINION_DATA.definitions['Acacia Minion'].upgradeRecipes){
   assert.equal(missingLegacy.setupComplete,false);
   assert.equal(missingLegacy.paybackDays,null);
 }
+
+const bothExpanders=calculateMinion(ghast,{...base,upgrade1:'MINION_EXPANDER',upgrade2:'MINION_EXPANDER'},ctx);
+assert.ok(Math.abs(bothExpanders.speedBonusPercent-10)<1e-9,'Two expanders must give additive +10%, not 10.25%');
+const bazaarCheck=calculateMinion(ghast,{...base,sellMethod:'INSTANT'},ctx);
+assert.equal(bazaarCheck.outputDetails.find(x=>x.item==='GHAST_TEAR')?.quote.liveInstant,18,'Instant sale must match buy orders');
+const purchased=calculateMinion(ghast,base,ctx);
+assert.equal(purchased.setupBreakdown.find(x=>x.item==='GHAST_TEAR')?.unitPrice,20,'Instant acquisition must match sell offers');
+
+// Production source regressions: base outputs, harvest-only timing, and permanent fuel conversions.
+const fishing=calculateMinion(MINION_DATA.definitions['Fishing Minion'],{...base,upgrade1:'NONE'},ctx);
+const fishRaw=fishing.outputDetails.filter(x=>x.source==='MINION').reduce((n,x)=>n+x.rawUnitsPerDay,0);
+assert.ok(Math.abs(fishRaw-86400/35)<.2,'Fishing minion harvests once per action while unloaded');
+assert.equal(MINION_DATA.definitions['Hard Stone Minion'].drops[0].amount,2);
+assert.equal(MINION_DATA.definitions['Lapis Minion'].drops[0].amount,6);
+assert.equal(MINION_DATA.definitions['Nether Wart Minion'].drops[0].amount,2.5);
+assert.equal(MINION_DATA.definitions['Skeleton Minion'].drops[0].amount,1.5);
+assert.deepEqual(MINION_DATA.definitions['Sunflower Minion'].drops.map(x=>x.amount),[2,2]);
+assert.equal(MINION_DATA.definitions['Cactus Minion'].drops[0].npc,4);
+assert.equal(MINION_DATA.definitions['Coal Minion'].drops[0].npc,1);
+assert.equal(MINION_DATA.definitions['Emerald Minion'].drops[0].npc,4);
+assert.equal(MINION_DATA.definitions['Gold Minion'].drops[0].npc,3);
+assert.equal(MINION_DATA.definitions['Nether Wart Minion'].drops[0].npc,4);
+assert.equal(MINION_DATA.definitions['Tarantula Minion'].drops.find(x=>x.item==='IRON_INGOT').npc,2);
+const roseFuel=calculateMinion(flower,{...base,fuel:'THORNY_VINES'},ctx);
+assert.equal(roseFuel.speedBonusPercent,20);
+assert.ok(roseFuel.outputDetails.filter(x=>x.source==='MINION').every(x=>x.rawItem==='WILD_ROSE'));
+const dayFuel=calculateMinion(MINION_DATA.definitions['Sunflower Minion'],{...base,fuel:'DAYSWITCH'},ctx);
+assert.ok(dayFuel.outputDetails.filter(x=>x.source==='MINION').every(x=>x.rawItem==='DOUBLE_PLANT'));
+const nightFuel=calculateMinion(MINION_DATA.definitions['Sunflower Minion'],{...base,fuel:'NIGHTSWITCH'},ctx);
+assert.ok(nightFuel.outputDetails.filter(x=>x.source==='MINION').every(x=>x.rawItem==='MOONFLOWER'));
+const mismatchedPermanent=calculateMinion(ghast,{...base,fuel:'THORNY_VINES'},ctx);
+assert.equal(mismatchedPermanent.speedBonusPercent,0,'Only Flower Minion may use Thorny Vines');
+assert.ok(!mismatchedPermanent.outputDetails.some(x=>x.rawItem==='WILD_ROSE'));
+
+const largeChecked=calculateMinion(ghast,{...base,largeStorage:true},ctx);
+assert.equal(largeChecked.storage.capacity,1920,'Large Storage adds 15 stacks (960 item units)');
+assert.equal(largeChecked.storage.largeStorageSlots,15);
+const hour={...base,largeStorage:true,collectionIntervalDays:1/24};
+const soil=calculateMinion(MINION_DATA.definitions['Zombie Minion'],{...hour,upgrade1:'CORRUPT_SOIL'},ctx);
+for(const item of ['SULPHUR_ORE','CORRUPTED_FRAGMENT']){
+ const x=soil.outputDetails.find(g=>g.item===item&&g.source==='CORRUPT_SOIL');
+ assert.ok(x&&Math.abs(x.rawUnitsPerDay-soil.cyclesPerDay)<1e-6,'Offline Corrupt Soil adds one '+item+' per cycle');
+}
+const egg=calculateMinion(MINION_DATA.definitions['Chicken Minion'],{...hour,upgrade1:'ENCHANTED_EGG'},ctx);
+assert.ok(Math.abs(egg.outputDetails.find(x=>x.item==='EGG'&&x.source==='ENCHANTED_EGG').rawUnitsPerDay-egg.cyclesPerDay)<1e-6);
+const flint=calculateMinion(MINION_DATA.definitions['Gravel Minion'],{...hour,upgrade1:'FLINT_SHOVEL'},ctx);
+assert.ok(flint.outputDetails.some(x=>x.rawItem==='GRAVEL'&&x.item==='FLINT'));
+
+const soul=calculateMinion(ghast,{...hour,upgrade1:'SOULFLOW_ENGINE'},ctx);
+const lesserSoul=calculateMinion(ghast,{...hour,upgrade1:'LESSER_SOULFLOW_ENGINE'},ctx);
+assert.ok(Math.abs(soul.outputDetails.find(x=>x.source==='SOULFLOW_ENGINE').rawUnitsPerDay-86400/105)<1e-6);
+assert.ok(Math.abs(lesserSoul.outputDetails.find(x=>x.source==='LESSER_SOULFLOW_ENGINE').rawUnitsPerDay-86400/185)<1e-6);
+const ghastNoUpgrade=calculateMinion(ghast,hour,ctx);
+assert.ok(Math.abs(soul.outputDetails.find(x=>x.source==='MINION').rawUnitsPerDay-ghastNoUpgrade.cyclesPerDay*.5)<1e-6);
+const berberis=calculateMinion(MINION_DATA.definitions['Carrot Minion'],{...hour,upgrade1:'BERBERIS_FUEL_INJECTOR'},ctx);
+assert.ok(Math.abs(berberis.outputDetails.find(x=>x.item==='LUSH_BERBERIS').rawUnitsPerDay-86400/300)<1e-6);
 
 const cat=minionCatalog();
 assert.ok(cat.minions.length>=61);

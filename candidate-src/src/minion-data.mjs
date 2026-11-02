@@ -940,7 +940,7 @@ export const MINION_DATA = {
           "item": "CACTUS",
           "amount": 3,
           "chance": 1,
-          "npc": 3,
+          "npc": 4,
           "enchanted": {
             "ENCHANTED_CACTUS_GREEN": 160
           }
@@ -2226,7 +2226,7 @@ export const MINION_DATA = {
           "item": "COAL",
           "amount": 1,
           "chance": 1,
-          "npc": 2,
+          "npc": 1,
           "enchanted": {
             "ENCHANTED_COAL": 160
           }
@@ -3972,7 +3972,7 @@ export const MINION_DATA = {
           "item": "EMERALD",
           "amount": 1,
           "chance": 1,
-          "npc": 6,
+          "npc": 4,
           "enchanted": {
             "ENCHANTED_EMERALD": 160
           }
@@ -4797,7 +4797,7 @@ export const MINION_DATA = {
         {
           "item": "RAW_FISH",
           "amount": 1,
-          "chance": 0.6666666666666666,
+          "chance": 0.54,
           "npc": 6,
           "enchanted": {
             "ENCHANTED_RAW_FISH": 160
@@ -4806,7 +4806,7 @@ export const MINION_DATA = {
         {
           "item": "RAW_FISH:1",
           "amount": 1,
-          "chance": 0.16666666666666666,
+          "chance": 0.225,
           "npc": 10,
           "enchanted": {
             "ENCHANTED_RAW_SALMON": 160
@@ -4815,7 +4815,7 @@ export const MINION_DATA = {
         {
           "item": "RAW_FISH:3",
           "amount": 1,
-          "chance": 0.08,
+          "chance": 0.117,
           "npc": 15,
           "enchanted": {
             "ENCHANTED_PUFFERFISH": 160
@@ -4824,7 +4824,7 @@ export const MINION_DATA = {
         {
           "item": "RAW_FISH:2",
           "amount": 1,
-          "chance": 0.02666666666666667,
+          "chance": 0.036,
           "npc": 20,
           "enchanted": {
             "ENCHANTED_CLOWNFISH": 160
@@ -4833,7 +4833,7 @@ export const MINION_DATA = {
         {
           "item": "PRISMARINE_CRYSTALS",
           "amount": 1,
-          "chance": 0.02,
+          "chance": 0.02734,
           "npc": 5,
           "enchanted": {
             "ENCHANTED_PRISMARINE_CRYSTALS": 80
@@ -4842,7 +4842,7 @@ export const MINION_DATA = {
         {
           "item": "PRISMARINE_SHARD",
           "amount": 1,
-          "chance": 0.02,
+          "chance": 0.02734,
           "npc": 5,
           "enchanted": {
             "ENCHANTED_PRISMARINE_SHARD": 80
@@ -4851,8 +4851,8 @@ export const MINION_DATA = {
         {
           "item": "SPONGE",
           "amount": 1,
-          "chance": 0.02,
-          "npc": 5,
+          "chance": 0.02734,
+          "npc": 50,
           "enchanted": {
             "ENCHANTED_SPONGE": 40
           }
@@ -4937,7 +4937,8 @@ export const MINION_DATA = {
           }
         ]
       },
-      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items"
+      "recipeSource": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/c4f7d4757641f3a11c74d3d77cec76c100abaf98/items",
+      "harvestOnly": true
     },
     "Flower Minion": {
       "id": "FLOWER_GENERATOR",
@@ -4952,7 +4953,7 @@ export const MINION_DATA = {
           "storage": 960
         },
         "2": {
-          "speed": 30,
+          "speed": 29,
           "recipe": null,
           "exactRecipe": false,
           "storage": 960
@@ -4969,7 +4970,7 @@ export const MINION_DATA = {
           "storage": 960
         },
         "4": {
-          "speed": 28,
+          "speed": 27,
           "recipe": null,
           "exactRecipe": false,
           "storage": 960
@@ -4990,7 +4991,7 @@ export const MINION_DATA = {
           "storage": 960
         },
         "6": {
-          "speed": 26,
+          "speed": 25,
           "recipe": null,
           "exactRecipe": false,
           "storage": 960
@@ -5011,7 +5012,7 @@ export const MINION_DATA = {
           "storage": 960
         },
         "8": {
-          "speed": 24,
+          "speed": 23,
           "recipe": null,
           "exactRecipe": false,
           "storage": 960
@@ -5032,7 +5033,7 @@ export const MINION_DATA = {
           "storage": 960
         },
         "10": {
-          "speed": 22,
+          "speed": 20,
           "recipe": null,
           "exactRecipe": false,
           "storage": 960
@@ -5094,6 +5095,72 @@ export const MINION_DATA = {
           "enchanted": {
             "ENCHANTED_POPPY": 576
           }
+        },
+        {
+          "item": "ALLIUM",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "AZURE_BLUET",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "BLUE_ORCHID",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "PEONY",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "OXEYE_DAISY",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "ROSE_BUSH",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "LILAC",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "RED_TULIP",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "WHITE_TULIP",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "PINK_TULIP",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
+        },
+        {
+          "item": "ORANGE_TULIP",
+          "amount": 1,
+          "chance": 0.045454545454545456,
+          "npc": 1
         }
       ],
       "confidence": "MEDIUM",
@@ -5851,7 +5918,7 @@ export const MINION_DATA = {
           "item": "GOLD_INGOT",
           "amount": 1,
           "chance": 1,
-          "npc": 4,
+          "npc": 3,
           "enchanted": {
             "ENCHANTED_GOLD": 160
           }
@@ -6350,7 +6417,7 @@ export const MINION_DATA = {
       "drops": [
         {
           "item": "HARD_STONE",
-          "amount": 1,
+          "amount": 2,
           "chance": 1,
           "npc": 1,
           "enchanted": {
@@ -7372,7 +7439,7 @@ export const MINION_DATA = {
       "drops": [
         {
           "item": "INK_SACK:4",
-          "amount": 4.5,
+          "amount": 6,
           "chance": 1,
           "npc": 1,
           "enchanted": {
@@ -8536,7 +8603,7 @@ export const MINION_DATA = {
           "storage": 64
         },
         "2": {
-          "speed": 26,
+          "speed": 25,
           "recipe": [
             {
               "item": "MYCEL",
@@ -8558,7 +8625,7 @@ export const MINION_DATA = {
           "storage": 192
         },
         "4": {
-          "speed": 24,
+          "speed": 23,
           "recipe": [
             {
               "item": "MYCEL",
@@ -8588,7 +8655,7 @@ export const MINION_DATA = {
           "storage": 384
         },
         "6": {
-          "speed": 22,
+          "speed": 21,
           "recipe": [
             {
               "item": "MYCEL",
@@ -8618,7 +8685,7 @@ export const MINION_DATA = {
           "storage": 576
         },
         "8": {
-          "speed": 20,
+          "speed": 19,
           "recipe": [
             {
               "item": "MYCEL",
@@ -8648,7 +8715,7 @@ export const MINION_DATA = {
           "storage": 768
         },
         "10": {
-          "speed": 18,
+          "speed": 16,
           "recipe": [
             {
               "item": "MYCEL",
@@ -8969,9 +9036,9 @@ export const MINION_DATA = {
       "drops": [
         {
           "item": "NETHER_STALK",
-          "amount": 3,
+          "amount": 2.5,
           "chance": 1,
-          "npc": 5,
+          "npc": 4,
           "enchanted": {
             "ENCHANTED_NETHER_STALK": 160
           }
@@ -10861,7 +10928,7 @@ export const MINION_DATA = {
           "storage": 64
         },
         "2": {
-          "speed": 26,
+          "speed": 25,
           "recipe": [
             {
               "item": "SAND-1",
@@ -10883,7 +10950,7 @@ export const MINION_DATA = {
           "storage": 192
         },
         "4": {
-          "speed": 24,
+          "speed": 23,
           "recipe": [
             {
               "item": "SAND-1",
@@ -10913,7 +10980,7 @@ export const MINION_DATA = {
           "storage": 384
         },
         "6": {
-          "speed": 22,
+          "speed": 21,
           "recipe": [
             {
               "item": "SAND-1",
@@ -10943,7 +11010,7 @@ export const MINION_DATA = {
           "storage": 576
         },
         "8": {
-          "speed": 20,
+          "speed": 19,
           "recipe": [
             {
               "item": "SAND-1",
@@ -10973,7 +11040,7 @@ export const MINION_DATA = {
           "storage": 768
         },
         "10": {
-          "speed": 18,
+          "speed": 16,
           "recipe": [
             {
               "item": "SAND-1",
@@ -12645,7 +12712,7 @@ export const MINION_DATA = {
       "drops": [
         {
           "item": "BONE",
-          "amount": 1,
+          "amount": 1.5,
           "chance": 1,
           "npc": 2,
           "enchanted": {
@@ -14372,7 +14439,7 @@ export const MINION_DATA = {
           "item": "IRON_INGOT",
           "amount": 1,
           "chance": 0.2,
-          "npc": 3,
+          "npc": 2,
           "enchanted": {
             "ENCHANTED_IRON": 160
           }
@@ -16046,7 +16113,7 @@ export const MINION_DATA = {
       "drops": [
         {
           "item": "DOUBLE_PLANT",
-          "amount": 3,
+          "amount": 2,
           "chance": 0.5,
           "npc": 4,
           "enchanted": {
@@ -16055,7 +16122,7 @@ export const MINION_DATA = {
         },
         {
           "item": "MOONFLOWER",
-          "amount": 3,
+          "amount": 2,
           "chance": 0.5,
           "npc": 4,
           "enchanted": {
@@ -16553,13 +16620,74 @@ export const MINION_DATA = {
     },
     "EVERBURNING_FLAME": {
       "name": "Everburning Flame",
-      "speed": 0.4,
+      "speed": 0.35,
       "drops": 1,
       "duration": -1,
       "itemId": "EVERBURNING_FLAME",
+      "combatBonus": 0.05
+    },
+    "THORNY_VINES": {
+      "name": "Thorny Vines",
+      "speed": 0.2,
+      "drops": 1,
+      "duration": -1,
+      "itemId": "THORNY_VINES",
       "condition": {
-        "family": "Combat"
-      }
+        "name": "Flower Minion"
+      },
+      "forceDrops": [
+        {
+          "item": "WILD_ROSE",
+          "amount": 2,
+          "chance": 1,
+          "npc": 4,
+          "enchanted": {
+            "ENCHANTED_WILD_ROSE": 160
+          }
+        }
+      ]
+    },
+    "DAYSWITCH": {
+      "name": "Dayswitch",
+      "speed": 0.2,
+      "drops": 1,
+      "duration": -1,
+      "itemId": "DAYSWITCH",
+      "condition": {
+        "name": "Sunflower Minion"
+      },
+      "forceDrops": [
+        {
+          "item": "DOUBLE_PLANT",
+          "amount": 2,
+          "chance": 1,
+          "npc": 4,
+          "enchanted": {
+            "ENCHANTED_SUNFLOWER": 160
+          }
+        }
+      ]
+    },
+    "NIGHTSWITCH": {
+      "name": "Nightswitch",
+      "speed": 0.2,
+      "drops": 1,
+      "duration": -1,
+      "itemId": "NIGHTSWITCH",
+      "condition": {
+        "name": "Sunflower Minion"
+      },
+      "forceDrops": [
+        {
+          "item": "MOONFLOWER",
+          "amount": 2,
+          "chance": 1,
+          "npc": 4,
+          "enchanted": {
+            "ENCHANTED_MOONFLOWER": 160
+          }
+        }
+      ]
     }
   },
   "upgrades": {
@@ -16699,7 +16827,7 @@ export const MINION_DATA = {
       "outputMultiplier": 0.5,
       "cooldownDrop": {
         "item": "RAW_SOULFLOW",
-        "seconds": 90,
+        "seconds": 105,
         "npc": 0,
         "enchanted": {
           "SOULFLOW": 160
@@ -16726,7 +16854,7 @@ export const MINION_DATA = {
       "outputMultiplier": 0.5,
       "cooldownDrop": {
         "item": "RAW_SOULFLOW",
-        "seconds": 180,
+        "seconds": 185,
         "npc": 0,
         "enchanted": {
           "SOULFLOW": 160
@@ -16930,6 +17058,10 @@ export const MINION_DATA = {
     "ENCHANTED_SUGAR": {
       "item": "ENCHANTED_SUGAR_CANE",
       "ratio": 160
+    },
+    "ENCHANTED_WILD_ROSE": {
+      "item": "COMPACTED_WILD_ROSE",
+      "ratio": 160
     }
   },
   "recipeDataVersion": {
@@ -16945,5 +17077,12 @@ export const MINION_DATA = {
     "withVerifiedStorage": 702,
     "unverifiedMinions": 2,
     "cumulativeDerivedFromExactSteps": true
+  },
+  "speedVerification": {
+    "source": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/master/items",
+    "checkedAt": "2026-11-01",
+    "comparedCandidateTiers": 702,
+    "knownSpeedMismatchesCorrected": 15,
+    "sourceAuditWorkflow": "https://github.com/kingame111/bazaarflipper-updates/actions/runs/41272073665"
   }
 };

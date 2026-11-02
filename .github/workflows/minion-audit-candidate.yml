@@ -1,0 +1,41 @@
+name: Minion Audit Candidate (no release)
+on:
+  push:
+    branches: [audit/minion-hopper-2026-11-01]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax validation
+        run: |
+          node --check candidate-src/src/minions.mjs
+          node --check candidate-src/src/offline-inventory.mjs
+          node --check candidate-src/src/offline-upgrade-inventory.mjs
+          node --check candidate-src/src/minion-data.mjs
+          node --check candidate-src/server.mjs
+          node --check tests/minions-v0.6.11.test.mjs
+      - name: Standalone regression tests
+        run: node tests/minions-v0.6.11.test.mjs
+      - name: Full synthetic family and upgrade audit (without packaging)
+        run: node tests/minion-audit-v0.6.11.mjs
+      - name: Large database, update retry and rollback regression
+        run: node tests/reliability-v0.6.13.test.mjs
+      - name: Startup and sync regression
+        run: node tests/startup-sync-v0.6.12.test.mjs
+      - name: Block release on unresolved high-severity minion findings
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const report=JSON.parse(fs.readFileSync('minion-audit-results.json','utf8'));
+          const high=(report.issues||[]).filter(x=>x.severity==='HIGH');
+          console.log(JSON.stringify({scenarios:report.scenariosExecuted,highSeverity:high.map(x=>({id:x.id,details:x.data}))},null,2));
+          if(high.length)throw Error('Release blocked: '+high.length+' high-severity audit categories');
+          NODE

@@ -1,0 +1,33 @@
+name: Minion Drop Order Sensitivity (no release)
+on:
+  push:
+    branches: [audit/minion-hopper-2026-11-01]
+    paths:
+      - 'tests/minion-drop-order-sensitivity.mjs'
+      - 'candidate-src/src/offline-upgrade-inventory.mjs'
+      - '.github/workflows/minion-drop-order-sensitivity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check candidate and reference syntax
+        run: |
+          node --check tests/minion-drop-order-sensitivity.mjs
+          node --check candidate-src/src/offline-upgrade-inventory.mjs
+      - name: Calculate priority-dependent revenue and verify chest compaction
+        run: node tests/minion-drop-order-sensitivity.mjs
+      - name: Save scenario-by-scenario report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minion-drop-order-sensitivity
+          path: audits/minion-drop-order-sensitivity.json
+          if-no-files-found: warn

@@ -991,6 +991,7 @@ async function handleMainRequest(req, res) {
       sellMethod: url.searchParams.get('sellMethod') || 'BEST',
       priceMode: url.searchParams.get('priceMode') || 'LIVE',
       collectionIntervalDays: numberParam('collectionIntervalDays', 1),
+      largeStorage: url.searchParams.get('largeStorage') !== 'false',
       compareDays: Math.max(1, Math.min(7, Math.round(numberParam('compareDays', 7)))),
       optimizeFor: url.searchParams.get('optimizeFor') || 'NET',
       horizonDays: Math.max(1, Math.min(365, Math.round(numberParam('horizonDays', 30)))),
