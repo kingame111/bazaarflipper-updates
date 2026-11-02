@@ -156,6 +156,12 @@ if(source.includes('const cyclesPerDay = DAY_SECONDS / (secondsPerAction * 2);')
 if(source.includes('const first = Object.entries(drop.enchanted).find('))issue('MEDIUM','SINGLE_COMPACTION_CHAIN','Compaction chooses first enchanted branch; mixed recipes and item transformations need validation.');
 if(source.includes('if (requested === \'BEST\')')&&source.includes('Object.entries(methods).sort'))issue('MEDIUM','BEST_IGNORES_LIQUIDITY','BEST mode picks theoretical highest price without checking fill/liquidity.');
 if(source.includes("model:eventResult?.model||'ESTIMATED'"))issue('HIGH','SPECIAL_UPGRADE_OFFLINE_ESTIMATED','Source still uses aggregate storage for additional-drop, speed and cooldown upgrade combinations; independent reference validation required before release.');
+const currentOfflineCode=fs.readFileSync('candidate-src/src/offline-upgrade-inventory.mjs','utf8');
+if(currentOfflineCode.includes('for(const [drop,quantity] of orderedOutputs)create(drop,quantity);')
+    && !currentOfflineCode.includes('stopAtFirstUnplaceable')){
+  issue('HIGH','NO_HOPPER_FULL_INVENTORY_STOP_UNVERIFIED',
+    'Candidate continues filling existing stacks after rejecting a different drop when no Hopper is installed. The game may stop the entire minion at the first blocked item. In Sheep XI + Corrupt Soil + Diamond Spreading, this changes native-first vs upgrade-first gap from 6.19% to 0.12% in alternative simulations. Gameplay verification required.');
+}
 const report={version:manifest.version,sourceVersion:'candidate-src',sourceFamilyCount:definitions.length,modeled,supported,tierCounts:tiers,upgrades:upgrades.length,fuels:fuels.length,syntheticMarketIds:ids.size,scenariosExecuted:total+pairFuelCases+scaleCases+historyCases+rankingScenarios.length,tierCases,fuelCases,upgradeCases,pairFuelCases,scaleCases,historyCases,exactRecipeMissing:missingRecipes.length,setupMissing:missingSetup.length,materialTransitions:transitions.length,materialTransitionExamples:transitions.slice(0,35),rankingScenarios,ghastDetails,issues};
 fs.writeFileSync('minion-audit-results.json',JSON.stringify(report,null,2));
 console.log('MINION_AUDIT_REPORT_BEGIN');
