@@ -1,0 +1,31 @@
+name: Minion Full-Inventory Stop Policy Sensitivity (no release)
+on:
+  push:
+    branches: [audit/minion-hopper-2026-11-01]
+    paths:
+      - 'tests/minion-overflow-stop-sensitivity.mjs'
+      - '.github/workflows/minion-overflow-stop-sensitivity.yml'
+      - 'candidate-src/src/minion-data.mjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify syntax
+        run: node --check tests/minion-overflow-stop-sensitivity.mjs
+      - name: Compare full-inventory stop policies and exact 6.19% figure
+        run: node tests/minion-overflow-stop-sensitivity.mjs
+      - name: Save complete inventory and policy differences
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minion-full-inventory-stop-policy
+          path: audits/minion-overflow-stop-sensitivity.json
+          if-no-files-found: warn
