@@ -519,6 +519,8 @@ export function calculateMinion(minion, options, context) {
   if(eventResult?.warning)warnings.push(eventResult.warning);
   if(eventResult?.dropOrderVerifiedInGame===false && eventResult.overflowShare>0)
     warnings.push('Full-storage estimate assumes native minion drops are stored before extra upgrade drops; in-game priority is not yet confirmed.');
+  if(shipping.npcFactor===0 && eventResult?.overflowShare>0)
+    warnings.push('No Hopper: after one output cannot be stored, the simulation continues filling compatible stacks; real minion stop behavior is not confirmed, so collected revenue may be overstated.');
 
   // Model the capacity of the minion's own storage over the collection interval.
   // The NEU item lore supplies item-count capacity for each tier. This linear model
